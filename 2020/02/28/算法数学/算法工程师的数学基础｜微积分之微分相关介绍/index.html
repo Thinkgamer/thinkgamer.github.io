@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜微积分之微分相关介绍 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导数与线性化"><span class="toc-text">导数与线性化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微分的定义"><span class="toc-text">微分的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本初等函数的微分公式和运算法则"><span class="toc-text">基本初等函数的微分公式和运算法则</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#微分公式"><span class="toc-text">微分公式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运算法则"><span class="toc-text">运算法则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微分的几何意义"><span class="toc-text">微分的几何意义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微分在近似计算中的应用"><span class="toc-text">微分在近似计算中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#微分近似计算的理论基础"><span class="toc-text">微分近似计算的理论基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常见的近似计算的基本公式"><span class="toc-text">常见的近似计算的基本公式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微分中值定理和导数的应用"><span class="toc-text">微分中值定理和导数的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#费马引理"><span class="toc-text">费马引理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#罗尔定理"><span class="toc-text">罗尔定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#拉格朗日中值定理"><span class="toc-text">拉格朗日中值定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#柯西中值定理"><span class="toc-text">柯西中值定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#洛必达法则"><span class="toc-text">洛必达法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#泰勒中值定理"><span class="toc-text">泰勒中值定理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜微积分之微分相关介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 22:58:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>接下来将会有两篇文章分别介绍下微积分中的微分和积分，内容来自网上公开资料、相关书籍和个人见解。</p>
+<p><strong>微积分</strong> 是对无穷小量的研究。无穷小量，简单说就是大小无限趋向于 0 的量， 很多整体分析太过复杂的物理量可以用无穷小量分析，其原因是无穷小量可以被线性化。</p>
+<p>如果我们用 $\epsilon$ 来表示无穷小量，那么微积分可以被分为两大类，微分和积分。 </p>
+<ul>
+<li>微分主要研究两个无穷小量的比值，形如 $\frac {\epsilon_1}{\epsilon_2}$ </li>
+<li>积分学主要研究无限多的无穷小量之和，也就是 $\epsilon_1 + \epsilon_2 + \epsilon_3 + … = \underset{ n \rightarrow \infty }{ \lim } \sum_{k=1}^{n} \epsilon_k$</li>
+</ul>
+<p>本篇主要介绍微分！内容注重理解微分的概念和与导数的区别，不像导数篇中那样用公式贯穿全文！</p>
+<hr>
+<h3 id="导数与线性化"><a href="#导数与线性化" class="headerlink" title="导数与线性化"></a>导数与线性化</h3><p>微积分之所以在数学、物理学和工程学中有如此重要的地位，是因为在这些学科中有很多情况不好直接分析，而通过微积分可以把这些情况线性化。然而，在线性化的同时，研究对象就会变成无穷小量。</p>
+<p>eg 1：一个正方形金属薄片受热后面积的改变量<br><img src="https://img-blog.csdnimg.cn/20200305101723274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="正方形金属薄片受热后面积的改变量"></p>
+<p>设边长由 $x_0$ 变成 $x_0 + \Delta x$，则正方形的面积由$x_0 ^2$ 变成 $(x_0 + \Delta x)^2$，那么面积之差为：</p>
+<script type="math/tex; mode=display">
+\Delta A = (x_0 + \Delta x)^2 - x_0 ^2
+\\
+= 2 x_0 \Delta x + (\Delta x)^2</script><p>上式中</p>
+<ul>
+<li>加号左侧为 $\Delta x$的线性部分，且为$\Delta A$的主要组成部分</li>
+<li>加号右侧为 $\Delta x$的高阶无穷小，当$\Delta x$很小时，可以忽略</li>
+</ul>
+<p>从上面的例子中，可以看出函数线性化的那么一丁点意思了，接着看另外一个例子。</p>
+<p>eg 2：假设一辆正在行驶的汽车，其走过的路程与时间满足关系 $x(t) = t ^2$，那么在$t=1$时刻，如何知道他的速度？</p>
+<p>由于平均速度$v = \frac {\Delta x}{ \Delta t} = \frac{x_1 - x_0}{ t_1 - t_0}$，带入 $t_0=1$得到从时刻$1\rightarrow t$的平均速度为：</p>
+<script type="math/tex; mode=display">
+\frac{x(t) - x(1)}{ t-1 }</script><p>如果让 $t=1.1$，那么这个平均速度就很接近$t=1$这一时刻的瞬间速度了。那么有理由相信在 $t$无限接近于1时，这个平均速度就很接近$t$时刻的瞬间速度了。</p>
+<p>从平均速度的定义来看，从$1\rightarrow t$的平均速度等价于连接$(1,1)$ 和 $(t,t^2)$两点直线的斜率，所以当 $t$越来越接近于1的时候，这条直线的斜率就变成了在$(1,1)$切线的斜率。</p>
+<p>而从导数的概念可以知道，函数在某点的斜率等于改点的导数，结合 eg 2可知</p>
+<script type="math/tex; mode=display">
+f'(t) = 2t = \frac{\Delta y}{ \Delta x}</script><script type="math/tex; mode=display">
+\Rightarrow \Delta y = 2 t \Delta x</script><p>和 eg 1中，当 $\Delta x$趋向于无穷小时的表达式是一样的，我们可以认为 $\Delta y$是关于$\Delta x$的线性化函数。</p>
+<h3 id="微分的定义"><a href="#微分的定义" class="headerlink" title="微分的定义"></a>微分的定义</h3><p>设函数$y=f(x)$在某区间内有定义，且 $x_0$ 及 $x_0 + \Delta x$在这区间内，如果下面的公式成立（其中$A$是与$\Delta$无关的常数），则称 $y = f(x)$在点$x_0$处可微，并且称$A \Delta x$为函数$y = f(x)$ 在点$x_0$相应于自变量增量$\Delta x$的微分，计作：$dy|_{x=x_0}$ 或 $df(x_0)$，即：$dy|_{x=x_0} = A \Delta x$</p>
+<script type="math/tex; mode=display">
+\Delta y = f(x_0 + \Delta x) - f(x_0) = A\Delta x + o(\Delta x_0)</script><p><strong>微分$dy$ 叫做函数增量$\Delta y$的线性主部。这也是微分的实质：微分 本质是一个微小的线性变化量，用一个线性函数作为原函数变化的逼近。</strong></p>
+<p>由上面的定义可知：</p>
+<ul>
+<li>$dy$是自变量的改变量$\Delta x$的线性函数</li>
+<li>$\Delta y - dy = o(\Delta x)$是比$\Delta x$的高阶无穷小</li>
+<li>当$A \neq 0$时，$dy$与$\Delta y$是等价无穷小，因为：$\frac {\Delta y}{ dy} = 1 + \frac{o(\Delta x)}{dy} \rightarrow  1(\Delta x \rightarrow 0)$</li>
+<li>$A$是与$\Delta x$无关的常数，但与$f(x)$和$x_0$有关</li>
+<li>当$\Delta x$很小时，$\Delta y \approx dy$（线性主部）</li>
+</ul>
+<blockquote>
+<p>从微分的定义中也可以看出微分和导数的最大区别为：导数是指函数在某一点变化的快慢，是一种变化率；微分是指函数在某一点处的变化量，是一种变化的量。</p>
+</blockquote>
+<h3 id="基本初等函数的微分公式和运算法则"><a href="#基本初等函数的微分公式和运算法则" class="headerlink" title="基本初等函数的微分公式和运算法则"></a>基本初等函数的微分公式和运算法则</h3><h4 id="微分公式"><a href="#微分公式" class="headerlink" title="微分公式"></a>微分公式</h4><p>$cotx$ ：余切函数，$cotx = \frac {1}{ tan x}$</p>
+<p>$secx$ ：正割函数，$secx = \frac {1}{ cos x}$</p>
+<p>$cscx$ ：余割函数，$cscx = \frac {1}{ sin x}$</p>
+<script type="math/tex; mode=display">
+d(C)=0</script><script type="math/tex; mode=display">
+d(x^\mu) = \mu x^{\mu-1} dx</script><script type="math/tex; mode=display">
+d(sin\,x) = cos\,x\,dx
+\\
+d(cos\,x) = -sin\,x\,dx
+\\
+d(tan\,x) = sec^2\,x\,dx
+\\
+d(cot\,x) = -csc \, x dx
+\\
+d(sec\,x) = sec\,x \,tan\,x dx
+\\
+d(csc\,x) = - csc\,x cot\,x\,d x</script><script type="math/tex; mode=display">
+d(a^x) = a^xln a dx</script><script type="math/tex; mode=display">
+d(e^x) = e^x dx</script><script type="math/tex; mode=display">
+d(log_a x) = \frac{1}{ ln a} dx</script><script type="math/tex; mode=display">
+d(lnx)=\frac{1}{x} dx</script><script type="math/tex; mode=display">
+d(arc sinx) = \frac{1}{\sqrt{1-x^2}}dx</script><script type="math/tex; mode=display">
+d(arc cosx) = - \frac{1}{\sqrt{1-x^2}}dx</script><script type="math/tex; mode=display">
+d(arc tanx) =  \frac{1}{1+x^2}dx</script><script type="math/tex; mode=display">
+d(arc cotx) = - \frac{1}{1+x^2}dx</script><h4 id="运算法则"><a href="#运算法则" class="headerlink" title="运算法则"></a>运算法则</h4><script type="math/tex; mode=display">
+d(u \pm v) = d(u)\pm d(v)</script><script type="math/tex; mode=display">
+d(Cu) = Cd(u)</script><script type="math/tex; mode=display">
+d(uv) = vd(u) + ud(v)</script><script type="math/tex; mode=display">
+d(\frac{u}{v}) = \frac{vd(u) - ud(v)}{v^2}</script><h3 id="微分的几何意义"><a href="#微分的几何意义" class="headerlink" title="微分的几何意义"></a>微分的几何意义</h3><p><img src="https://img-blog.csdnimg.cn/20200305181003882.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="微分的几何意义"></p>
+<p>当$\Delta y$是曲线的纵坐标的增量时，$dy$ 是切线纵坐标对应的增量，当$\Delta x$很小时，在点$M$附近，切线段$MP$可近似代替曲线段$MN$</p>
+<p>在局部范围内用线性函数近似代替非线性函数，在几何上就是局部用切线段代替曲线段，这在数学上称之为非线性函数的<strong>局部线性化</strong>，这就是微分学的基本思想之一。</p>
+<h3 id="微分在近似计算中的应用"><a href="#微分在近似计算中的应用" class="headerlink" title="微分在近似计算中的应用"></a>微分在近似计算中的应用</h3><h4 id="微分近似计算的理论基础"><a href="#微分近似计算的理论基础" class="headerlink" title="微分近似计算的理论基础"></a>微分近似计算的理论基础</h4><p>当$\Delta x$很小时</p>
+<script type="math/tex; mode=display">
+\Delta y \approx dy = f'(x_0) \Delta x</script><p>上面的公式也可以写为：</p>
+<script type="math/tex; mode=display">
+\Delta y = f(x_0 + \Delta x) -f(x_0) \approx f'(x_0) \Delta x</script><p>或</p>
+<script type="math/tex; mode=display">
+f(x_0 + \Delta x) = f(x_0) + f'(x_0) \Delta x</script><p>将上式中的 $x_0 + \Delta x$ 用 $x$代替，则可以改写为：</p>
+<script type="math/tex; mode=display">
+f(x) = f(x_0) + f'(x_0) (x-x_0)</script><h4 id="常见的近似计算的基本公式"><a href="#常见的近似计算的基本公式" class="headerlink" title="常见的近似计算的基本公式"></a>常见的近似计算的基本公式</h4><script type="math/tex; mode=display">
+\sqrt[n]{ 1+x} \approx  + \frac{1}{n} x</script><script type="math/tex; mode=display">
+sin x \approx x</script><script type="math/tex; mode=display">
+tan x \approx x</script><script type="math/tex; mode=display">
+e^x \approx 1+x</script><script type="math/tex; mode=display">
+ln(1+x) \approx x</script><h3 id="微分中值定理和导数的应用"><a href="#微分中值定理和导数的应用" class="headerlink" title="微分中值定理和导数的应用"></a>微分中值定理和导数的应用</h3><h4 id="费马引理"><a href="#费马引理" class="headerlink" title="费马引理"></a>费马引理</h4><p>设 函数f(x)在点 $x_0$的某邻域$U(x_0)$内有定义，并且再$x_0$处可导，如果对任意的$x\in U(x_0)$有：$f(x) \leqslant  f(x_0)$ 或 $f(x) \geqslant f(x_0)$，那么$f’(x_0) = 0$</p>
+<h4 id="罗尔定理"><a href="#罗尔定理" class="headerlink" title="罗尔定理"></a>罗尔定理</h4><p>如果函数$f(x)$满足</p>
+<ul>
+<li>在闭区间$[a,b]$上连续</li>
+<li>在开区间$(a,b)$内可导</li>
+<li>在区间端点处的函数值相等，即$f(a)=f(b)$</li>
+</ul>
+<p>那么$(a,b)$上至少有一点$\varepsilon(a&lt;\varepsilon &lt; b)$使得$f’(\varepsilon)=0$。</p>
+<h4 id="拉格朗日中值定理"><a href="#拉格朗日中值定理" class="headerlink" title="拉格朗日中值定理"></a>拉格朗日中值定理</h4><p>如果函数$f(x)$满足：</p>
+<ul>
+<li>在闭区间$[a,b]$上连续</li>
+<li>在开区间$(a,b)$内可导<br>那么在$(a,b)$内至少有一点$\varepsilon(a&lt;\varepsilon &lt; b)$使得$f(b)-f(a)=f’(\varepsilon)(b-a)$成立。</li>
+</ul>
+<h4 id="柯西中值定理"><a href="#柯西中值定理" class="headerlink" title="柯西中值定理"></a>柯西中值定理</h4><p>如果函数$f(x)$及$F(x)$满足：</p>
+<ul>
+<li>在闭区间$[a,b]$上连续</li>
+<li>在开区间$(a,b)$内可导</li>
+<li>对任一 $x \in (a,b), F’(x) \neq 0$</li>
+</ul>
+<p>那么在$(a,b)$内至少有一点$\varepsilon$，使下面等式成立。</p>
+<script type="math/tex; mode=display">
+\frac{f(b)-f(a)}{F(b)-F(a)} = \frac{f'(\varepsilon)}{F'(\varepsilon)}</script><h4 id="洛必达法则"><a href="#洛必达法则" class="headerlink" title="洛必达法则"></a>洛必达法则</h4><p>设：</p>
+<ul>
+<li>当$x -&gt; a$时，函数$f(x)$及$F(x)$都趋向于零</li>
+<li>在点$a$的某去心邻域内，$f’(x)$及$F’(x)$都存在且$F’(x) \neq 0$</li>
+<li>$\lim_{x \rightarrow a} \frac{f(x)}{F(x)}$存在（或为无穷大）<br>那么：<script type="math/tex; mode=display">
+\lim_{x \rightarrow a} \frac{f(x)}{F(x)}=\lim_{x \rightarrow a} \frac{f'(x)}{F'(x)}</script></li>
+</ul>
+<p>这种在一定条件下通过分子分母分别求导再求导极限来确定未定式的值的方法称为洛必达法则。</p>
+<h4 id="泰勒中值定理"><a href="#泰勒中值定理" class="headerlink" title="泰勒中值定理"></a>泰勒中值定理</h4><p>如果函数$f(x)$在含有$x_0$的某个开区间$(a,b)$内具有直到$(n+1)$阶的导数，则对任一$x \in (a,b)$，有：</p>
+<script type="math/tex; mode=display">
+f(x) = f(x_0) + f'(x_0)(x-x_0) + \frac{f''(x_0)}{2!} (x-x_0)^2 + ... + \frac{f^n(x_0)}{n!} (x-x_0)^n + R_n(x)</script><p>其中</p>
+<script type="math/tex; mode=display">
+R_n(x) = \frac{f^{n+1} ( \varepsilon  )}{ (n +1)!} (x-x_0) ^{n+1}</script><p>这里$\varepsilon$为 $x_0$和$x$之间的某个值。</p>
+<p>上述公式中$f(x)$表达式为 $f(x)$按$(x-x_0)$的幂展开的带有拉格朗日型余项的$n$阶泰勒公式，$R_n(x)$的表达式称为拉格朗日型余项。</p>
+<blockquote>
+<p>OK，关于微积分中的微分部分已经介绍完毕！期待下篇的积分吧！</p>
+</blockquote>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://blog.csdn.net/weixin_40163242/article/details/89004822" target="_blank" rel="external">https://blog.csdn.net/weixin_40163242/article/details/89004822</a></li>
+<li><a href="https://www.zhihu.com/question/336322284" target="_blank" rel="external">https://www.zhihu.com/question/336322284</a></li>
+<li><a href="https://www.zhihu.com/question/264955988?sort=created" target="_blank" rel="external">https://www.zhihu.com/question/264955988?sort=created</a></li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+        <span><a href="https://www.a2data.cn/">牛人之A2Data</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

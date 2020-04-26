@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜微积分之积分相关介绍 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#积分"><span class="toc-text">积分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不定积分"><span class="toc-text">不定积分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原函数"><span class="toc-text">原函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原函数存在定理"><span class="toc-text">原函数存在定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#不定积分定义"><span class="toc-text">不定积分定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#不定积分性质"><span class="toc-text">不定积分性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常见的不定积分公式"><span class="toc-text">常见的不定积分公式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#不定积分的线性运算法则"><span class="toc-text">不定积分的线性运算法则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定积分"><span class="toc-text">定积分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定积分性质"><span class="toc-text">定积分性质</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反常积分"><span class="toc-text">反常积分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#反常积分的定义"><span class="toc-text">反常积分的定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#两个易错反常积分公式"><span class="toc-text">两个易错反常积分公式</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜微积分之积分相关介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 22:59:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>接下来将会有两篇文章分别介绍下微积分中的微分和积分，内容来自网上公开资料、相关书籍和个人见解。</p>
+<p><strong>微积分</strong> 是对无穷小量的研究。无穷小量，简单说就是大小无限趋向于 0 的量， 很多整体分析太过复杂的物理量可以用无穷小量分析，其原因是无穷小量可以被线性化。</p>
+<p>如果我们用 $\epsilon$ 来表示无穷小量，那么微积分可以被分为两大类，微分和积分。 </p>
+<ul>
+<li>微分主要研究两个无穷小量的比值，形如 $ \frac {\epsilon_1}{\epsilon_2}$ </li>
+<li>积分学主要研究无限多的无穷小量之和，也就是 $\epsilon_1 + \epsilon_2 + \epsilon_3 + … = \underset{ n \rightarrow \infty }{ \lim } \sum_{k=1}^{n} \epsilon_k$</li>
+</ul>
+<p>本篇主要介绍积分！</p>
+<hr>
+<h3 id="积分"><a href="#积分" class="headerlink" title="积分"></a>积分</h3><p>在 <a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">算法工程师的数学基础｜微积分之微分相关介绍</a> 中 介绍了微分的概念、微分和导数的关系，概括起来说就是微分是求一函数的导数，而积分则是知道一个函数的导数，求这一函数，所以积分和微分互为逆运算。</p>
+<p>实际上积分还可以分为两部分：</p>
+<p>1、不定积分</p>
+<p>即单纯的积分，也就是已知函数的导数，求原函数。比如 $F(x)$的导数是$f(x)$，那么$F(x) + C$（C为常数）的导数也是$f(x)$，即把$f(x)$进行积分，不一定能得到$F(x)$，因为$F(x)+C$的导数也是$f(x)$，所以$f(x)$的积分有无限多个，是不确定的，一律用$F(x) + C$代替，这就被称为不定积分。</p>
+<p>2、定积分</p>
+<p>所谓定积分，形式如：$\int_{a}^{b} f(x)dx$，存在上下限[a,b]，之所以称为定积分，是因为它积分后的值是确定的，是一个数，而不是一个函数。</p>
+<p>定积分的正式名称是黎曼积分，就是把直角坐标系上的图像用平行于y轴的直线和x轴的直线<br>将其分割成无数个矩形，然后把某个区间$[a,b]$上的矩形累加起来，所得到的就是这个函数的图像在区间$[a,b]$上的面积。</p>
+<p>3、积分与定积分的关系</p>
+<p>定积分的本质是把图像无限分割，然后进行累加，而积分的本质是求解一个函数的原函数，那么为什么要把积分写成定积分的形式呢？</p>
+<p>定积分与积分看起来风马牛不相及，但是由于一个数学上重要的理论支撑，使他们有了本质的联系，这个理论就是：<strong>牛顿-布莱尼兹公式</strong></p>
+<p>若：<br>$F’(x) = f(x)$</p>
+<p>则：$\int_{a}^{b} f(x)dx = F(b) - F(a)$</p>
+<p>其中$F(b)$即为积分形式，而$F(b) - F(a)$则为定积分的等价转换。</p>
+<h3 id="不定积分"><a href="#不定积分" class="headerlink" title="不定积分"></a>不定积分</h3><h4 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h4><p>设函数$F(x)$与$f(x)$在区间$I$上有定义，若在$I$上：</p>
+<script type="math/tex; mode=display">
+F'(x)= f(x)</script><p>则称函数$F(x)$为$f(x)$在区间$I$上的<strong>一个原函数</strong>。</p>
+<h4 id="原函数存在定理"><a href="#原函数存在定理" class="headerlink" title="原函数存在定理"></a>原函数存在定理</h4><p>如果函数$f(x)$在区间$I$上连续，则$f(x)$在区间$I$上存在原函数$F(x)$，即连续函数一定存在原函数。</p>
+<h4 id="不定积分定义"><a href="#不定积分定义" class="headerlink" title="不定积分定义"></a>不定积分定义</h4><p>原函数$f(x)$在区间$I$上的全体原函数称为$f(x)$在$I$上的不定积分，计作$\int f(x) dx$。即：</p>
+<script type="math/tex; mode=display">
+\int f(x) dx = F(x) + C</script><p>其中：</p>
+<ul>
+<li>$\int$ 表示积分号</li>
+<li>$f(x)dx$ 表示被积表达式</li>
+<li>$f(x)$ 表示被积函数</li>
+<li>$x$ 表示积分变量</li>
+<li>$C$ 表示积分常数</li>
+</ul>
+<p>不定积分$\int f(x)d(x)$是一个函数簇$F(x)+C$</p>
+<h4 id="不定积分性质"><a href="#不定积分性质" class="headerlink" title="不定积分性质"></a>不定积分性质</h4><p>1、不定积分的导数等于被积函数<br>$[\int f(x)d(x)]’ = f(x)$</p>
+<p>2、函数的导数（或微分）的不定积分等于该函数与任意常数之和 $\int f(x)dx = F(x) +C$</p>
+<h4 id="常见的不定积分公式"><a href="#常见的不定积分公式" class="headerlink" title="常见的不定积分公式"></a>常见的不定积分公式</h4><ul>
+<li>$\int 0 dx = C$</li>
+<li>$\int dx = x + C$</li>
+<li>$\int x^a dx = \frac {x^{a+1}}{a+1} +C(a\neq -1,x&gt;0)$</li>
+<li>$\int \frac{1}{x}dx = ln |x| +C (x\neq =0)$</li>
+<li>$\int e^x dx = e^x + C$</li>
+<li>$\int a^x dx = \frac {a^x}{ln a} +C$</li>
+<li>$\int cos \, x \, dx = sin \, x + C$</li>
+<li>$\int sin\, x \, dx = -cos \, x + C$</li>
+<li>$\int sec^2 \, x \, dx = tan \, x + C$</li>
+<li>$\int csc^2 \, x \, dx = - cot \, x + C$</li>
+<li>$\int sec \, x tan\, x = sec \, x +C$</li>
+<li>$\int csc\, c \, cot \, x = -csc \, x + C$</li>
+<li>$\int \frac {1}{ \sqrt {1- x^2}}dx = arcsin\,x + C = -arc cos\,x +C$</li>
+<li>$\int \frac {1}{ 1+ x^2}dx = arc tan\,x + C = -arc cot\,x +C$</li>
+</ul>
+<h4 id="不定积分的线性运算法则"><a href="#不定积分的线性运算法则" class="headerlink" title="不定积分的线性运算法则"></a>不定积分的线性运算法则</h4><ul>
+<li>若函数$f(x)、g(x)$在区间$I$上的原函数都存在，则$f(x) \pm  g(x)$在区间$I$上的原函数也存在。即：</li>
+</ul>
+<script type="math/tex; mode=display">
+\int (f(x)  \pm  g(x))= \int f(x) \pm  \int g(x)</script><ul>
+<li>若函数$f(x)$在区间$I$上的原函数存在，则$kf(x)$在区间$I$上的原函数也存在， $k$为实数且$k\neq 0$<script type="math/tex; mode=display">
+\int k f(x)dx = k \int f(x) dx</script></li>
+</ul>
+<h3 id="定积分"><a href="#定积分" class="headerlink" title="定积分"></a>定积分</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>设 $f(x)$是定义在区间$[a,b]$上的有界函数，用点$a=x_0 &lt; x_1 &lt; x_2 … &lt; x_n=b$将区间$[a,b]$任意分割成$n$个子区间$[x_i, x_{i-1}], i=[1,2,3…,n]$，这些子区间及长度均计作$\Delta x_i = x_i - x_{i-1},i=[1,2,3…,n]$，在每个子区间$\Delta x_i$上任取一点$\xi _i$，作$n$个乘积$f(\xi _i)\Delta x_i$的和式：</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^{n} f(\xi _i)\Delta x_i</script><p>如果当$n \rightarrow \infty$，同时最大子区间的长度$\lambda = max\{\Delta x_i\} \rightarrow 0$和$\sum_{i=1}^{n} f(\xi _i)\Delta x_i$的极限存在，并且其极限值与$[a,b]$的分割法和$\xi_i$的取法无关，则该极限值称为函数$f(x)$在区间$[a,b]$上的定积分，计作:</p>
+<script type="math/tex; mode=display">
+\int _{a}^{b} f(x)dx = \lim_{ n \rightarrow \infty, \lambda \rightarrow 0 }  \sum_{i=1}^{n} f(\xi_i) \Delta x</script><p>其中：</p>
+<ul>
+<li>$f(x)$被积函数</li>
+<li>$a$ 积分下界，$b$积分上界</li>
+<li>$f(x) dx$ 被积表达式</li>
+<li>$x$ 积分变量</li>
+<li>$\lim_{ n \rightarrow \infty, \lambda \rightarrow 0 }  \sum_{i=1}^{n} f(\xi_i) \Delta x$ 积分和</li>
+</ul>
+<h4 id="定积分性质"><a href="#定积分性质" class="headerlink" title="定积分性质"></a>定积分性质</h4><p>1、若$f(x)$在区间$[a,b]$上可积，$k$为常数，则$kf(x)$在区间$[a,b]$上也可积，且$\int _{a}^{b} kf(x)dx = k \int _{a}^{b} f(x)dx $</p>
+<p>2、若$f(x)$在区间$[a,b]$上可积，则$f(x) \pm g(x)$在区间$[a,b]$上也可积，且 $\int _{a}^{b} (f(x) \pm g(x)) dx =\int _{a}^{b} f(x) dx \pm \int_{a}^{b} g(x) dx$</p>
+<p>3、【积分区间可加性】有界函数$f(x)$在$[a,c]、[c,b]$上都可积的充要条件是 $f(x)$在$[a,b]$上也可积，且$\int _{a}^{b} f(x) dx = \int _{a}^{c} f(x) dx + \int _{c}^{b} f(x) dx$ </p>
+<p>4、【保序性】设$f(x)、g(x)$为定义在$[a,b]$上的两个可积函数，若$f(x) \leq g(x), x\in [a,b]$，则$\int _{a}^{b}f(x)dx \leq \int _{a}^{b}g(x)dx$</p>
+<p>5、【推论】若$f(x) \geq 0, x \in [a,b]$，则$\int_{a}^{b} f(x)dx \geq 0$</p>
+<p>6、【有界性】设$m, M$分别是 $f(x)$在 $[a,b]$上的最小值和最大值，若$f(x)$在$[a,b]$上可积，则$m(b-a) \leq \int_{a}^{b} f(x)dx \leq M(b-a)$</p>
+<p>7、【绝对值不等式】若$f(x)$在区间$[a,b]$上可积，则$|f(x)|$在区间$[a,b]$上也可积，且：$\left | \int_{a}^{b} f(x) dx \right | \leq \int_{a}^{b} f(x) dx$</p>
+<p>8、【积分中值定理】若函数$f(x)$在$[a,b]$上连续，则在$[a,b]$上至少存在一点$\xi$使得$\int_{a}^{b} f(x) dx = f(\xi) (b-a)$</p>
+<p>9、补充规定1：当$a=b$时，令$\int _{a}^{b} f(x) d(x) = 0$</p>
+<p>10、补充规定2：当$a&gt;b$且 $\int_{a}^{b}f(x)d(x)$存在时，令$\int _{a}^{b} f(x) d(x) = -\int _{b}^{a} f(x) d(x)$</p>
+<h3 id="反常积分"><a href="#反常积分" class="headerlink" title="反常积分"></a>反常积分</h3><h4 id="反常积分的定义"><a href="#反常积分的定义" class="headerlink" title="反常积分的定义"></a>反常积分的定义</h4><p>称无穷区间上的积分和无解函数的积分为广义积分或者反常积分，而定积分则称为常义积分或者正常积分。</p>
+<p>常见的反常类型包括：</p>
+<ul>
+<li>无限区间：$[a, +\infty), (-\infty,b],(-\infty, +\infty)$</li>
+<li>被积函数$f(x)$在区间$[a,b]$内不连续：<ul>
+<li>在左端点$a$处不连续</li>
+<li>在右端点$b$处不连续</li>
+<li>在区间$[a,b]$的某点处间断</li>
+</ul>
+</li>
+</ul>
+<h4 id="两个易错反常积分公式"><a href="#两个易错反常积分公式" class="headerlink" title="两个易错反常积分公式"></a>两个易错反常积分公式</h4><p>1、无穷限的反常积分 $\int_{-\infty}^{+\infty}  sinx dx \neq 0$</p>
+<p>2、被积函数具有无穷间断点的反常积分 $\int _{-1}^{1} \frac{1}{x} dx \neq ln|x| |_{-1}^{+1} = 0$</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+        <span><a href="https://www.a2data.cn/">牛人之A2Data</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

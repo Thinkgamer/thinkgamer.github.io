@@ -135,13 +135,6 @@
     </div>
     <div class="post-content no-indent">
         <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/100709422" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/100709422</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
-<hr>
-<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>常见的五种神经网络系列第三种，主要介绍循环神经网络，分为上中下三篇进行介绍，本文主为（中）篇，涉及内容如下：</p>
-<ul>
-<li>循环神经网络中的参数学习</li>
-<li>RNN中的长期依赖问题</li>
-<li>常见的循环神经网络结构</li>
-</ul>
 <p>该系列的其他文章：</p>
 <ul>
 <li><a href="https://blog.csdn.net/Gamer_gyt/article/details/89459131" target="_blank" rel="external">常见的五种神经网络(1)-前馈神经网络</a></li>
@@ -155,6 +148,12 @@
 <li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
 </ul>
 <hr>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>常见的五种神经网络系列第三种，主要介绍循环神经网络，分为上中下三篇进行介绍，本文主为（中）篇，涉及内容如下：</p>
+<ul>
+<li>循环神经网络中的参数学习</li>
+<li>RNN中的长期依赖问题</li>
+<li>常见的循环神经网络结构</li>
+</ul>
 <h3 id="参数学习"><a href="#参数学习" class="headerlink" title="参数学习"></a>参数学习</h3><p>循环神经网络的参数可以通过梯度下降方法来学习。给定一个样本(x,y)，其中$x_{1:T}=(x_1, x_2, … ,x_T)$为长度是T的输入序列，其中$y_{1:T}=(y_1, y_2, … ,y_T)$是长度为T的标签序列，在每个时刻t，都有一个监督信息$y_t$，定义时刻t的损失函数为（公式1-1）：</p>
 <script type="math/tex; mode=display">
 L_t = L(y_t, g(h_t))</script><p>其中$g(h_t)$为第t时刻的输出，L为可微分的损失函数，比如交叉熵，整个序列上的损失函数为（公式1-2）：</p>

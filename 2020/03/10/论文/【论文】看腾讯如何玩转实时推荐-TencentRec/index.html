@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】看腾讯如何玩转实时推荐-TencentRec - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#架构概述"><span class="toc-text">架构概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#平台选择"><span class="toc-text">平台选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据处理"><span class="toc-text">数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#状态数据存储"><span class="toc-text">状态数据存储</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法设计"><span class="toc-text">算法设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ItemCF实现"><span class="toc-text">ItemCF实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#传统的ItemCF"><span class="toc-text">传统的ItemCF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式反馈优化"><span class="toc-text">隐式反馈优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可扩展的增量更新机制"><span class="toc-text">可扩展的增量更新机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实时修剪技术"><span class="toc-text">实时修剪技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据稀疏性问题"><span class="toc-text">数据稀疏性问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实时过滤机制"><span class="toc-text">实时过滤机制</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实现细节"><span class="toc-text">实现细节</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实践效果"><span class="toc-text">实践效果</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】看腾讯如何玩转实时推荐-TencentRec
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-03-10 10:29:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>今天要分享的一篇论文是有关腾讯如何利用协同过滤（Collaborative Filtering）、基于内容和图进行实时推荐的，我们都知道协同过滤是传统的推荐算法，但在实际应用中取得的效果却很好，因此在各大公司应用的也非常广泛。</p>
+<p>协同过滤的改进经常出现了各种硕士研究生的毕业论文中，那都属于学术界的研究和实现，且是离线的，在工业界的CF算法实现和如何实时基于CF进行推荐的资料却是少之又少，接下来的内容将会带领你真正了解一下腾讯是如何在工业界进行实时的CF推荐。这里把论文中涉及算法和架构称之为 <strong>TencentRec框架</strong></p>
+<blockquote>
+<p>论文（TencentRec Real-time Stream Recommendation in Practice）获取，公众号（搜索与推荐Wiki）内回复【TencentRec】获得。</p>
+</blockquote>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>其实本篇文章的开篇也简单说明了TencentRec的背景，接下来再补充说明一下。</p>
+<p>推荐系统在工业界应用的十分广泛，但在大数据背景下，如何将实时、准确度结合在一起却十分的难，因为这几者本身是互斥的。而腾讯技术团队则基于Storm，并设计研发了相关架构优化了ItemCF、ContentBased、Graph几种算法解决了推荐系统中的大数据、实时性、准确度的问题。</p>
+<h1 id="架构概述"><a href="#架构概述" class="headerlink" title="架构概述"></a>架构概述</h1><h2 id="平台选择"><a href="#平台选择" class="headerlink" title="平台选择"></a>平台选择</h2><p>在腾讯内部，日活用户早已突破了1亿（2015年），每天产生的用户行为数据达到了PB级别，为了处理庞大的数据，一个分布式的数据计算集群是不可或缺的，对于计算平台的选型有三点要求：</p>
+<ul>
+<li>能够进行实时计算</li>
+<li>线性伸缩且可扩展</li>
+<li>具有一定的容错能力</li>
+</ul>
+<p>在调研了Yahoo S4，Spark Streaming和Storm之后，选择了Storm作为计算平台，主要是因为以下三点：</p>
+<ul>
+<li>Storm支持实时数据流计算</li>
+<li>Storm具有良好的可扩展性，可以动态增加或者删除集群中的节点</li>
+<li>Storm具有容错功能，可快速的进行故障恢复</li>
+</ul>
+<p>下图简单说明了Storm集群的架构</p>
+<p><img src="https://img-blog.csdnimg.cn/2020030912560771.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="Structure of Storm Cluster"></p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>TencentRec框架设计的目的是作为一个通用的推荐框架，并应用在各种应用中。因此一个关键的因素是如何处理不同应用的非格式化的庞大的数据，因此研发了一个Tencent Data Acess模块，提供数据收集和分发的接口，并把数据源和数据处理系统进行解耦。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309130807511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="The Architecture of TDAccess"></p>
+<p>上图展示了TDA（Tencent Data Acess）的架构，将发布/订阅模型作为通信模型。生产者是各个应用，消费者是数据处理系统。数据服务器（Data Server）负责数据缓存、数据的发布和订阅、生产者和消费者之间的通信。</p>
+<p>上图展示了两个Master服务器（Active、Standby），Standy是备用服务器，当Active的服务器出现宕机或者故障的时候能够代替，从而保证系统的稳定性和可用性，这一点的设计和Yarn集群是类似的。</p>
+<p>设计和实现TDAccess的关键因素如下：</p>
+<ul>
+<li>数据服务器不需要共享由主服务器管理的数据状态</li>
+<li>在缺少计算资源或者需要历史数据进行离线计算的情况下会把数据换存在硬盘上</li>
+<li>为了实现更好的并行，将数据换存在机器上的许多分区上</li>
+</ul>
+<h2 id="状态数据存储"><a href="#状态数据存储" class="headerlink" title="状态数据存储"></a>状态数据存储</h2><p>Storm由于是一个无状态的系统，因此具有强大的缓存能力，但是推荐系统需要保持记录的历史数据的状态，最直接的解决办法是将状态数据和程序一起存储在程序中，但是这将导致以下问题：</p>
+<ul>
+<li>限制了程序的设计。不同的工作人员需要不同的状态数据，因此需要在程序中管理状态数据的分配和转换，同时需要保证数据的一致性。</li>
+<li>降低系统的健壮性。如果机器无法保证状态数据将会导致错误的计算结果。</li>
+</ul>
+<p>为了解决这些问题，设计了基于内存的分布式键值数据存储模块（Tencent Data Store， TDS）用来保存推荐计算中使用的状态数据。通过这种方式，保证了TencentRec的鲁棒性，Storm保证程序的运行，TDS保证状态数据的恢复。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309134740167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="The Framework of TDStore"></p>
+<p>上图展示了TDS的架构，图中分为两部分：</p>
+<ul>
+<li>配置服务器：由主机配置服务器和备份配置服务器组成，它们管理路由表并跟踪数据服务器。</li>
+<li>数据服务器：负责数据存储，支持内存数据库（MDB），级别数据库（LDB），Redis数据库（RDB）和文件数据库（FDB）存储引擎。每个实例数据都有多个备份。</li>
+</ul>
+<h1 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h1><p>为了实现可扩展的推荐，实时推荐系统中常用的方式是进行数据采样，以此满足在有限的计算资源内产生推荐，但会降低结果的准确性。因此将所有数据都应用在计算中则是必须的。出于这样的考虑，将传统的推荐算法进行了分布式实现。</p>
+<h2 id="ItemCF实现"><a href="#ItemCF实现" class="headerlink" title="ItemCF实现"></a>ItemCF实现</h2><p>由于篇幅的限制，论文中只介绍了ItemCF的详细实现。首先回顾一下CF的思想，CF算法包括：</p>
+<ul>
+<li>UserCF：首先计算出用户的相似用户，再把相似用户有行为的物品推荐给用户</li>
+<li>ItemCF：首先计算出物品的相似物品，再把用户有行为物品的相似推荐推荐给用户</li>
+</ul>
+<p>为了在实践中使用ItemCF算法，同时满足“大数据”、“准确度”、“实时性”三方面的要求，主要考虑以下三方面的优化：</p>
+<ul>
+<li>隐式反馈优化问题</li>
+<li>可扩展的增量更新机制</li>
+<li>实时修剪技术</li>
+</ul>
+<h3 id="传统的ItemCF"><a href="#传统的ItemCF" class="headerlink" title="传统的ItemCF"></a>传统的ItemCF</h3><p>传统的ItemCF算法分为：物品的相似度计算和产生推荐两步。具体的算法逻辑这里就不解释了，感兴趣的可以阅读：<a href="https://blog.csdn.net/Gamer_gyt/article/details/51346159" target="_blank" rel="external">https://blog.csdn.net/Gamer_gyt/article/details/51346159</a></p>
+<p>物品的相似度计算公式如下（公式1.1）：</p>
+<script type="math/tex; mode=display">
+sim(i_p,i_q) = \frac{  \vec{i_p} \cdot  \vec{i_q} } { \left \| i_p \right \| ^2  \left \| i_q \right \| ^2} = \frac{ \sum_{u \in U} r_{u,p} r_{u,q} }{ \sqrt{r_{u,p}^2} \sqrt{r_{u,q}^2} }</script><p>预测用户对物品的评分如下（公式1.2）：</p>
+<script type="math/tex; mode=display">
+\hat{r_{u,q}} = \frac{  \sum_{i_q \in N^k(i_p)} sim(i_p,i_q) r_{u,i_q}  }{ \sum_{i_q \in N^k(i_p)}sim(i_p,i_q)  }</script><h3 id="隐式反馈优化"><a href="#隐式反馈优化" class="headerlink" title="隐式反馈优化"></a>隐式反馈优化</h3><p>精准的推荐算法通常需要根据用户对物品的评分来捕获用户对物品的偏好，但是在实际情况下，并非总是可以获取明显的反馈。大部分都是隐式反馈，即间接反应用户对物品的喜好程度。</p>
+<p>在腾讯内部的场景中，用户对物品的行为包括点击，浏览，购买，共享，评论等。不同的用户行为代表着不同程度的用户兴趣，并且应该对推荐算法产生不同的影响。因此，我们为不同的动作类型设置了不同的权重（例如，点击行为计作一分，购买行为计作三分）。<strong>如果一个用户对一个物品表现出了多种行为，我们将最大权重的行为权重值作为用户对物品的评分，这样可以减小各种凌乱的隐式反馈带来的噪音。</strong></p>
+<p>用户对物品$i_p,i_q$的协同评分被定义为用户对物品评分中的最小权重值，如下公式所示（公式1.3）</p>
+<script type="math/tex; mode=display">
+co\_rating(i_p, i_q) = min(r_{u,p}, r_{u,q})</script><p>其中$r_{u,p}$表示用户$u$对物品$i_p$的行为中的最大权重值。</p>
+<p>则物品$i_p,i_q$的相似度被重新定义为如下公式（公式1.4）：</p>
+<script type="math/tex; mode=display">
+sim(i_p, i_q) = \frac{\sum_{u \in U} min(r_{u,p}, r_{u,q})}{ \sqrt{\sum_{r_{u,p}}} \sqrt{\sum_{r_{u,q}}}}</script><h3 id="可扩展的增量更新机制"><a href="#可扩展的增量更新机制" class="headerlink" title="可扩展的增量更新机制"></a>可扩展的增量更新机制</h3><p>在传统的推荐系统中，协同过滤算法会采用定期更新的机制，但这种策略并不难满足实时推荐系统的需求，因为在TencentRec中设计了可扩展的增量更新机制。</p>
+<p>在论文【Scalable collaborative filtering using incremental update and local link prediction】中，作者提出了一种用于连续显式评级的基于增量项的CF方法，受这种增量更新机制的启发，TencentRec在实践中将相似度的计算分为三个部分。</p>
+<p>首先物品$i_p, i_q$的相似度定义为（公式1.5）：</p>
+<script type="math/tex; mode=display">
+sim(i_p, i_q) = \frac{pairCount(i_p, i_q)}{ \sqrt{itemCount(i_p)} \sqrt{itemCount(i_q)}}</script><p>其中：</p>
+<script type="math/tex; mode=display">
+itemCount(i_p) = \sum_{u \in U} r_{u,p}</script><script type="math/tex; mode=display">
+pairCount(i_p, i_q) = \sum_{u \in U} co\_rating(i_p, i_q)</script><blockquote>
+<p>公式1.5 和 公式1.4的定义是一样的。</p>
+</blockquote>
+<p>在公式1.5中，物品的相似度可以通过$ pairount(i_p, i_q)、itemCount(i_p)、itemCount(i_q)$进行计算，而这三项也可以很自然的进行更新。我们可以独立的计算这三项的新增值，并将这些值融合道公式1.5中重新计算相似度。</p>
+<p>计算的表达式如下（公式1.6）：</p>
+<script type="math/tex; mode=display">
+sim(i_p, i_q)' = \frac{pairCount(i_p, i_q)'}{ \sqrt{itemCount(i_p)'} \sqrt{itemCount(i_q)'}}
+\\
+= \frac{pairCount(i_p, i_q) + \Delta co\_rating(i_p, i_q)}{ \sqrt{itemCount(i_p) + \Delta r_{u,p}} \sqrt{itemCount(i_q) + \Delta r_{u,q}}}</script><p>其中$sim(i_p, i_q)’$表示新的物品间相似度。</p>
+<p>整个实时更新的计算流程图如下所示：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309145555148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="The Multi-layer Item-based CF"></p>
+<h3 id="实时修剪技术"><a href="#实时修剪技术" class="headerlink" title="实时修剪技术"></a>实时修剪技术</h3><p>在ItemCF算法中，如果用户倾向于对两个物品进行评分，则将其视为相关。这里设置了链接时间，即在链接时间内有行为的两个物品才视为相关。在腾讯内部，每天有很多用户物品的行为记录，以新闻为例，平均每个用户每天会对十个以上的新闻产生行为，如果把新闻之间的链接时间设置为6个小时，则对出现在6个小时内的新闻构建物品对。</p>
+<p>对于大多数情况，比如电商网站，链接时间通常设置为3天或者7天，每个用户操作会生成近一百个物品对，此时，每个用户的操作都会导致数百次计算，由于大部分物品对并不相似或者没有那么相似，因此大多数操作是没有必要的，会浪费大量的计算资源。</p>
+<p>为了解决这个问题，TencentRec基于霍夫边界（Hoeffding Bound）理论开发一种实时修剪技术。其表达为：$x$表示<br>实数$R$范围内的一个实数值（在相似度中范围市0-1），假设对该变量进行了$n$次独立观察，并计算出了他们的均值$\hat{x}$，霍夫边界以$1-\delta$的概率认为该变量的真实均值最大为：$\hat{x} + \epsilon$，其中$\epsilon $为（公式1.7）：</p>
+<script type="math/tex; mode=display">
+\epsilon = \sqrt{ \frac{R^2 ln(1/\delta)}{2n}}</script><p>其中$\delta$需要自己进行设定，在实践中$\hat{x}$用$t$代替。</p>
+<p>ItemCF的实时修剪算法如下：<br><img src="https://img-blog.csdnimg.cn/20200309151156131.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="Item-based CF Algorithm with Real-time Prun- ing"></p>
+<h2 id="数据稀疏性问题"><a href="#数据稀疏性问题" class="headerlink" title="数据稀疏性问题"></a>数据稀疏性问题</h2><p>在真实的实践中，数据往往是非常稀疏的，在进行计算时，会消耗大量的计算资源，也会影响推荐系统的效果。TencentRec采用了两种机制来解决数据的稀疏性问题：</p>
+<ul>
+<li>人口统计聚类：根据用户的属性（例如年龄、性别、学历）将其分为不同的组。通常认为不同的组内具有相同的兴趣偏好。在不同的组内运行推荐算法，往往能获得更加准确的结果。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200309152214958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="User-item Matrix in Big Data Era"></p>
+<ul>
+<li>基于人口统计学的补充：对于历史行为数据很少的用户，TencentRec提出了基于人口统计学的算法以进一步完善推荐结果，旨在根据用户群向用户进行推荐。具体来说，我们会计算每个用户所属组的热门物品，即该组中最受欢迎的物品推荐给用户。</li>
+</ul>
+<h2 id="实时过滤机制"><a href="#实时过滤机制" class="headerlink" title="实时过滤机制"></a>实时过滤机制</h2><p>在类似TencentRec的实时推荐系统中，推荐结果会不断的发生变化，我们利用两种技术来捕获用户的实时兴趣，包括：滑动窗口和实时个性化过滤。使用滑动窗口技术捕获全局实时趋势，并使用实时个性化过滤来满足个人用户的实时需求。</p>
+<p>滑动窗口技术是实时数据计算流中用于丢弃旧数据的一种常用技术，滑动窗口处理当前时间窗口中的数据，然后丢弃一小部分，继续处理接下来的一部分数据。在TencentRec中将时间窗口划分为几个会话，并且在相似度计算中只考虑了最近的$W$个会话，例如在滑动窗口内计算实时ItemCF算法中的$pairCount、itemCount$，计算公式如下（公式1.8）：</p>
+<script type="math/tex; mode=display">
+sim(i_p, i_q) = \frac{ \sum_{w \in W} pairCount_w(i_p, i_q)}{ \sqrt{ \sum_{w \in W} itemCount_w(i_p)} \sqrt{\sum_{w \in W} itemCount_w(i_q)}}</script><p>通过这种方式，用户可以自定义滑动窗口的大小和会话个数。</p>
+<p>除了滑动窗口技术之外，还提出了一种实时的个性化过滤技术来满足不同用户的个性化需求。 对于每个用户，记录他最感兴趣的$k$个物品。因为随着时间的流逝，我们认为用户只对最近的$k$个物品感兴趣。因此在考虑用户对未知物品的评分时，只考虑有行为的最近$k$个项目即可。</p>
+<p>在ItemCF算法中，如果计算的物品对之间相似度过低时，可以采用基于组内热门数据补充的方法进行补充。</p>
+<h1 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h1><p>实现细节这里就不着重说了，但需要注意的有两点：</p>
+<ul>
+<li>行为爆发：在某些特殊的时间节点，用户对物品的行为数据要比以往更高。具体的解决办法是，采用流分组技术将相同的key映射到一个机器上，确保缓存的有效性，如果有其他程序需要读取数据，首先从缓存中读取，然后再进行缓存和TDS中的数据更新。</li>
+<li>热门物品：采用组合器技术来解决热门物品的问题。即对相同健值对的记录进行部分合并，合并的操作包括：增量、加法、最大化。</li>
+</ul>
+<p>当然这里还提到了一些其他的优化技巧，比如多重哈希技术，即保证同一用户的操作分配给一个机器，继而保证数据更新的准确性。</p>
+<h1 id="实践效果"><a href="#实践效果" class="headerlink" title="实践效果"></a>实践效果</h1><p>TencentRec在自己内部的很多产品上进行了上线测试，涉及的产品有：<br><img src="https://img-blog.csdnimg.cn/20200309162010189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="Some Applications Applying TencentRec"></p>
+<p>为了评估TencentRec的效果，采用了ABTest，其base组是：离线计算或者近实时计算，没有实时过滤机制，而实验组的话就是论文中主要描述的TencentRec，经过一个月的实验，对表效果如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309162224879.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="Overall Performance Improvement"></p>
+<p>在新闻网站上实验一周后的数据效果如下：<br><img src="https://img-blog.csdnimg.cn/20200309162331933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="CTR of Tencent News in One Week"></p>
+<p>在易迅网上的两个推荐位进行对比的结果如下：<br><img src="https://img-blog.csdnimg.cn/20200309162438807.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="CTR of Similar Price Recommendation in YiXun"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200309162506675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="CTR of Similar Purchase Recommendation in YiXun"></p>
+<p>好了，到这里这篇论文的分享已经完了，通过这篇论文我们可以学到很多思路，可以应用到我们实际的生产环境中，当然对于离线的ItemCF算法Spark中也有实现-ALS算法，感兴趣的可以阅读这两篇文章：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/WCRPv3Fl8vlpl9cVh4-xwQ" target="_blank" rel="external">终于搞明白了什么是交替最小二乘法(ALS算法)</a></li>
+<li><a href="https://mp.weixin.qq.com/s/3mXF5R-Cs8g7KKCdJhW1xg" target="_blank" rel="external">Spark排序算法系列之ALS算法实现分析</a></li>
+</ul>
+<p>如果你觉得这篇文章不错，请分享给更多人！</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+        <span><a href="https://www.a2data.cn/">牛人之A2Data</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

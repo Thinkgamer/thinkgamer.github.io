@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜概率论 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#样本空间"><span class="toc-text">样本空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件和概率"><span class="toc-text">事件和概率</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#随机变量"><span class="toc-text">随机变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#离散型随机变量"><span class="toc-text">离散型随机变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连续型随机变量"><span class="toc-text">连续型随机变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#累积分布函数"><span class="toc-text">累积分布函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机向量"><span class="toc-text">随机向量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#离散随机向量"><span class="toc-text">离散随机向量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连续随机向量"><span class="toc-text">连续随机向量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#边际分布"><span class="toc-text">边际分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#条件概率分布"><span class="toc-text">条件概率分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#独立与条件独立"><span class="toc-text">独立与条件独立</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#期望和方差"><span class="toc-text">期望和方差</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#随机过程"><span class="toc-text">随机过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#马尔可夫过程"><span class="toc-text">马尔可夫过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高斯过程"><span class="toc-text">高斯过程</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜概率论
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 23:01:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>概率论主要研究的是大量随机现象中的数学规律，应用十分广泛，比如贝叶斯、多分类等。</p>
+<h2 id="样本空间"><a href="#样本空间" class="headerlink" title="样本空间"></a>样本空间</h2><p>样本空间是一个随机实验所有可能结果的集合。比如在抛硬币实验中，样本空间为：{正面，反面}；掷骰子实验中，样本空间为：{1,2,3,4,5,6}。随机实验中的每个可能结果都称为样本点。</p>
+<p>有些实验可能包含两个或者多个样本空间。比如在扑克牌的抽取实验中，样本空间可以是数字A到K，也可以是花色（红黑方梅）。此时，如果需要完整的描述一张扑克牌，需要花色+数字，这时样本空间可以通过构建上述两个样本的笛卡尔积来得到。</p>
+<p>样本空间中的样本涉及 <strong>总体方差和样本方差分母为$N、N-1$</strong>以及<strong>无偏估计</strong>问题，这里我们简单进行说明。</p>
+<ul>
+<li><p>总体方差（variance）：总体中变量离其平均值距离的平均。比如一组数据$x_1, x_2, …, x_n$，则其方差表达式为：</p>
+<script type="math/tex; mode=display">
+\sigma ^2 = \frac{ \sum_{i=1}^{n} (x_i - \mu)^2 }{ n }</script></li>
+<li><p>样本方差（variance）：样本中变量离其平均值距离的平均。比如一组样本数据为$x_1, x_2, …, x_n$，则其方差表达式为：</p>
+<script type="math/tex; mode=display">
+S ^2 = \frac{ \sum_{i=1}^{n} (x_i - \bar {x})^2 }{ n -1}</script></li>
+</ul>
+<p>到这你可能会想：为什么样本方差中分母是n-1而不是n？直接的原因是：样本方差已经利用到n个数，在求方差时，只有$n-1$个数和均值信息是不相关的，即第$n$个数可以有其余的$n-1$个数和均值来唯一确定，实际上并没有什么信息量。所以在计算方差时，分母是$n-1$。</p>
+<p>下面从公式上解释一下，这里假设样本方差$S^2$的分母为$n$。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+S^2 & = \frac{1}{n} \sum_{i=1}^{n} (x_i - \bar x)^2 \\
+ & = \frac{1}{n} \sum_{i=1}^{n} ((x_i -  \mu ) - ( \bar x - \mu ))^2 \\
+ & = \frac{1}{n} \sum_{i=1}^{n} ((x_i -  \mu )^2- 2(x_i -  \mu )( \bar x - \mu ) + ( \bar x - \mu )^2) \\
+ & = \frac{1}{n}  \sum_{i=1}^{n} (x_i -  \mu )^2 +  \frac {2}{n}  ( \bar x - \mu ) *( \sum_{i=1}^{n} x_i - n \mu ) + ( \bar x - \mu )^2 \\
+ & = \frac{1}{n}  \sum_{i=1}^{n} (x_i -  \mu )^2 - \frac {2}{n}  ( \bar x - \mu ) * n * ( \frac{1}{n} \sum_{i=1}^{n} x_i - \mu ) + ( \bar x - \mu )^2 \\
+ & = \frac{1}{n}  \sum_{i=1}^{n} (x_i -  \mu )^2 - \frac {2}{n}  ( \bar x - \mu ) * n * ( \bar x - \mu ) + ( \bar x - \mu )^2 \\
+ & = \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu) ^ 2 - (\bar x - \mu)^2 \\
+ & = \sigma ^ 2 - \frac{1}{n}(\sum_{i=1}^{n} x_i - n \mu) ^2 \\
+ & = \sigma ^ 2 - \frac{1}{n} * \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu) ^2 \\
+ & = \sigma ^ 2 - \frac{1}{n} \sigma ^ 2  \\
+ & = \frac {n-1}{n} \sigma ^ 2 <  \sigma ^ 2
+\end{aligned}</script><p>从公式推理上可以看出，如果分母是$n$的话得到的方差会比总体的方差小那么一点。接下来进行一个修正，上述公式两边同时乘上$\frac{n}{n-1}$得：</p>
+<script type="math/tex; mode=display">
+\frac{n}{n-1} S^2 = \frac{n}{n-1} \frac{n-1}{n} \sigma ^2 =  \sigma ^2</script><p>进行转化如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{n}{n-1} S^2 & =\sigma ^2 \\
+\frac{n}{n-1}  \frac{1}{n} \sum_{i=1}^{n}(x_i - \bar x) &= \sigma ^2 \\
+\frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar x) &= \sigma ^2
+\end{aligned}</script><p>所以$\frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar x)$是总体方差得无偏估计量，而不能使用$\frac{1}{n}\sum_{i=1}^{n}(x_i - \bar x)$</p>
+<h2 id="事件和概率"><a href="#事件和概率" class="headerlink" title="事件和概率"></a>事件和概率</h2><p>随机事件（或简称事件）指的是一个被赋予概率的事物集合，也就是样本空间中的一个子集。概率表示一个随机事件发生可能性的大小，为0到1之间的一个非负实数。比如0.5表示一个事件有50%的可能性发生。</p>
+<p>对于一个机会均等的抛硬币事件来讲，其样本空间为正面或者负面，我们可以定义各个随机事件，并计算其概率。比如：</p>
+<ul>
+<li>{正面}：概率为0.5</li>
+<li>{负面}：概率为0.5</li>
+<li>空集：即不是正面，也不是负面，概率为0</li>
+<li>{正面 | 负面}：正面或者负面，概率为1</li>
+</ul>
+<h3 id="随机变量"><a href="#随机变量" class="headerlink" title="随机变量"></a>随机变量</h3><p>在随机实验中，实验的结果可以用一个数X表示，这个数X是随着实验结果的不同而变化的，是样本点的一个函数，我们把这种数称为随机变量。例如随机投掷一枚骰子，得到的点数就可以看作是一个随机变量X，X的取值为$\{1,2,3,4,5,6\}$。</p>
+<p>如果投掷两枚骰子，整个事件空间$\Omega$可以由36个元素组成：</p>
+<script type="math/tex; mode=display">
+\Omega = \{(i,j) | i=1,2,3,4,5,6; j=1,2,3,4,5,6\}</script><p>一个随机事件也可以定义多个随机变量。比如在掷两个骰子的随机实验中，可以定义随机变量$X$为获得的两个骰子的点数和，也可以定义随机变量$Y$为获得的两个骰子的点数差。随机变量$X$可以有11个整数值，而随机变量Y只有6个。</p>
+<h4 id="离散型随机变量"><a href="#离散型随机变量" class="headerlink" title="离散型随机变量"></a>离散型随机变量</h4><p>如果随机变量$X$所有可能取的值为有限可列举的，有n个有限取值：$\{x_1,…,x_n\}$，则称$X$为离散型随机变量。</p>
+<p>要了解$X$的统计规律，就必须要知道他取每种可能取值的$x_i$的概率，即：</p>
+<script type="math/tex; mode=display">
+P(X=x_i)=p(x_i) , \forall i \in [1,n]</script><p>$p(x_1),…,p(x_n)$称为离散型随机变量$X$的概率分布（Probability Distributuin）或分布，并且满足：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+\sum_{i=1}^{n} p(x_i)  &=1  & \\ 
+ p(x_i) & \geq 0   &,\forall i \in [0,1]
+\end{matrix}</script><p>常见的离散型随机变量概率分布有：</p>
+<ul>
+<li>伯努利分布</li>
+<li>二项分布</li>
+</ul>
+<p><strong>伯努利分布</strong><br>在一次实验中，事件$A$出现的概率为$\mu$，不出现的概率为$1- \mu$，若用变量$X$表示事件$A$出现的次数，则$X$的取值为0或1，其相应的分布为：</p>
+<script type="math/tex; mode=display">
+p(x) = \mu^x (1-\mu)^{1-x}</script><p>这个分布称为伯努利分布（Bernoulli Distribution），又名两点分布或者0-1分布。</p>
+<p><strong>二项分布</strong><br>在$n$项伯努利分布中，若以变量$X$表示事件$A$出现的次数，则$X$的取值为：$\{0,1,2,3,…,n\}$，其相应的分布为二项分布（Binomial Distribution）。</p>
+<script type="math/tex; mode=display">
+P(X=k)=\binom{n}{k} \mu^k(1-\mu)^{n-k}, k=1,2,....,n</script><p>其中$\binom{n}{k}$为二项式系数（这就是二项式分布的名称的由来），表示从$n$个元素中取出$k$个元素而不考虑其顺序的组合的总数。</p>
+<h4 id="连续型随机变量"><a href="#连续型随机变量" class="headerlink" title="连续型随机变量"></a>连续型随机变量</h4><p>与离散型随机变量不同，一些随机变量$X$的取值是不可列举的，由全部实数或者由一部分区间组成，比如：</p>
+<script type="math/tex; mode=display">
+X=\{x |  a \leq x \leq b\}, -\infty < a < b < \infty</script><p>则称$X$为连续随机变量，连续随机变量的值是不可数或者无穷尽的。</p>
+<p>对于连续型随机变量$X$，他取一个具体值$x_i$的概率为0，这和离散随机变量截然不同，因此用列举连续随机变量取某个值的概率来描述这种随机变量不但做不到，也毫无意义。</p>
+<p>连续随机变量$X$的概率分布一般用<strong>概率密度函数（probability density function，PDF）</strong>$p(x)$来描述，$p(x)$为可积函数，并满足：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+\int_{-\infty }^{\infty} p(x) d(x)  & =1 \\ 
+p(x) & \geq 0
+\end{matrix}</script><p>给定概率密度函数$p(x)$，便可以计算出随机变量落入某一区间的概率，而$p(x)$本身反映了随机变量取值落入$x$的非常小的邻近区间中的概率大小。</p>
+<p>常见的连续随机变量的概率分布有：</p>
+<ul>
+<li>均匀分布</li>
+<li>正态分布</li>
+</ul>
+<p><strong>均匀分布</strong></p>
+<p>若$a,b$为有限数，则$[a,b]$上的均匀分布（uniform distribution）概率密度函数定义为：</p>
+<script type="math/tex; mode=display">
+p(x) = \left\{\begin{matrix}
+\frac{1}{b-a} &, a \leq x \leq b \\ 
+0 &, x >a \, or \, x < b 
+\end{matrix}\right.</script><p><strong>正态分布</strong><br>正态分布（Normal Distribution），又名高斯分布（Guassian Distribution），是最常见的一种分布，并且具有很多良好的性质，其概率密度函数为：</p>
+<script type="math/tex; mode=display">
+p(x) = \frac{1}{ \sigma \sqrt{2\pi} } exp(- \frac{(x-\mu)^2}{\sigma^2})</script><p>其中$\sigma&gt;0$，$\mu,\sigma$均为常数。若随机变量$X$服从一个参数为$\sigma$和$\mu$的概率分布，简记为：$X~N(\mu, \sigma^2)$，其中$\mu$为均值，$\sigma^2$为方差。</p>
+<p>当$\mu=0, \sigma=1$称为标准正态分布（Standard Normal Distribution）。</p>
+<p>均匀分布和正态分布的图像如下图所示：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200404230716285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="均匀分布和正态分布的图像"></p>
+<h4 id="累积分布函数"><a href="#累积分布函数" class="headerlink" title="累积分布函数"></a>累积分布函数</h4><p>对于一个随机变量$X$，其累积分布函数（Cumulative Distribution Function，CDF）是随机变量$X$的取值小于等于$x$的概率。</p>
+<script type="math/tex; mode=display">
+cdf(x) = P(X\leq x)</script><p>以随机变量$X$为例，累积分布函数定义为：</p>
+<script type="math/tex; mode=display">
+cdf(x) = \int_{a}^{b} p(t)d(t)</script><p>其中$p(x)$为概率密度函数，下图给出了标准正态分布的累积分布函数：<br><img src="https://img-blog.csdnimg.cn/20200404231453789.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="标准正态分布的累积分布函数"></p>
+<h3 id="随机向量"><a href="#随机向量" class="headerlink" title="随机向量"></a>随机向量</h3><p>随机向量是指一组随机变量构成的向量，如果$[x_1,x_2,…,x_n]$为$n$个随机变量，那么称$[x_1,x_2,…,x_n]$为一个$n$维随机向量，一维随机向量称为随机变量。</p>
+<p>随机向量也分为离散随机向量和连续随机向量。</p>
+<h4 id="离散随机向量"><a href="#离散随机向量" class="headerlink" title="离散随机向量"></a>离散随机向量</h4><p>离散随机变量的联合概率分布（Joint Probability Distribution）为：</p>
+<script type="math/tex; mode=display">
+P(X_1 = x_1, X_2 = x_2, ..., X_n = x_n) = p(x_1, x_2, ..., x_n)</script><p>其中$x_i \in w_i$为变量$X_i$的取值，$w_i$为变量$X_i$的样本空间。</p>
+<p>和离散随机变量类似，离散随机向量的概率分布满足：</p>
+<script type="math/tex; mode=display">
+p(x_1, x_2, ..., x_n) \geq 0, \forall x_1 \in w_1,x_2 \in w_2, ..., x_n \in w_n
+\\
+\sum_{x_1 \in w_1}\sum_{x_2 \in w_2}...\sum_{x_n \in w_n} p(x_1, x_2, ..., x_n) \geq 0</script><p><strong>多项分布</strong><br>一个常见的离散随机向量概率分布为多项分布（Multinomial Distribution），多项分布是二项分布在随机向量的推广。假设一个袋子中装了很多球，总共有$K$个不同颜色，我们从袋子中取出$n$个球，每次取出一个球时，就在袋子中放入一个同样颜色的球，这样保证同一颜色的球在不同实验中被取出的概率是相等的。</p>
+<p>令$X$为一个$K$维随机向量，每个元素$X_k（k=1,2,3,…,K）$为取出的$K$个球中颜色为$k$的球的数量，则$X$服从多项分布，其概率分布为：</p>
+<script type="math/tex; mode=display">
+p(x_1,x_2,...,x_K|\mu) = \frac{n!}{ x_1! ... x_K!} \mu_1^{x_1},...,\mu_K^{x_K}</script><p>其中$\mu=[\mu_1, …, \mu_K]^T$分别为每次抽取的球的颜色为1,…,$K$的概率，$x_1,…,x_K$为非负整数，并且满足$\sum_{k=1}^{K}x_k=n$。</p>
+<p>多项分布的概率分布也可以用gamma函数表示：</p>
+<script type="math/tex; mode=display">
+p(x_1,x_2,...,x_K|\mu) = \frac{ \Gamma (\sum_{k} x_k + 1)  }{ \Pi _k \Gamma(x_k+1)  } \Pi _{k=1}^{K} \mu_k ^{x_k}</script><p>其中$\Gamma(z) = \int_{0}^{\infty}\frac{t^{z-1}}{exp(t)}d(t) $为gamma函数，这种表示形式和Dirichlet分布类似，而Derichlet分布可以作为多项分布的共轭先验。</p>
+<h4 id="连续随机向量"><a href="#连续随机向量" class="headerlink" title="连续随机向量"></a>连续随机向量</h4><p>连续随机向量的联合概率密度函数（Joint Probability Density Function）满足：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+p(x) =p(x_1, ...,x_n) & \geq 0 \\ 
+\int_{-\infty}^{\infty} ... \int_{-\infty}^{\infty} p(x_1,...,x_n)dx_1...dx_n & =1 
+\end{matrix}</script><p><strong>多元正态分布</strong><br>一个常见的连续随机向量分布为多元正态分布（Multivariate Normal Distribution），也称为多元高斯分布（Multivariate Gaussian Distribution）。若$n$维随机向量$X=[X_1, …, X_n]^T$服从$n$元正态分布，其密度函数为：</p>
+<script type="math/tex; mode=display">
+p(x) = \frac{1}{ (2\pi)^{n/2} |\Sigma| ^{1/2} } exp( -\frac{1}{2} (x-\mu)^T \Sigma^{-1}(x-\mu) )</script><p>其中$\mu$为多元正态分布的均值向量，$\Sigma$为多元正态分布的协方差矩阵，$|\Sigma|$表示$\Sigma$的行列式。</p>
+<p><strong>各项同性高斯分布</strong></p>
+<p>如果一个多元高斯分布的协方差矩阵简化为$\Sigma=\sigma^2 I$，即每一维随机变量都独立并且方差相同，那么这个多元高斯分布称为<strong>各项同性高斯分布（Isotropic Guassian Distribution）</strong></p>
+<p><strong>Dirichlet分布</strong></p>
+<p>一个$n$维随机向量$X$的Dirichlet分布为：</p>
+<script type="math/tex; mode=display">
+p(x|a) = \frac{ \Sigma(a_0) }{ \Sigma(a_1) ... \Sigma(a_n) } \Pi_{i=1}^{n} x_i ^{a_i-1}</script><p>其中$a=[a_1, …, a_K]^T$为Dirichlet分布的参数。</p>
+<h3 id="边际分布"><a href="#边际分布" class="headerlink" title="边际分布"></a>边际分布</h3><p>对于二维离散随机向量$(X,Y)$，假设$X$取值空间为$\Omega_x$，$Y$取值空间为$\Omega_y$，其联合概率分布满足</p>
+<script type="math/tex; mode=display">
+p(x,y) >0, \sum_{x \in \Omega_x} \sum_{y \in \Omega_y} p(x_i, y_j)=1</script><p>对于联合概率分布$p(x,y)$，我们可以分别对$x$和$y$进行求和。</p>
+<p>（1）对于固定的$x$：$\sum_{y \in \Omega_y} p(x,y)=P(X=x)=p(x)$</p>
+<p>（2）对于固定的$y$：$\sum_{x \in \Omega_x} p(x,y)=P(Y=y)=p(y)$</p>
+<p>由离散随机向量$(X,Y)$的联合概率分布，对$Y$的所有取值进行求和得到$X$的概率分布，而对$X$的所有取值进行求和得到$Y$的概率分布。这里$p(x),p(y)$就称为$p(x,y)$的边际分布（Marginal Distribution）。</p>
+<p>对于二维连续随机向量$(X,Y)$，其边际分布为：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+p(x) & = \int_{-\infty}^{ \infty}p(x,y) dy \\ 
+p(y) & = \int_{-\infty}^{ \infty}p(x,y) dx
+\end{matrix}</script><p>一个二元正态分布的边际分布仍为正态分布。</p>
+<h3 id="条件概率分布"><a href="#条件概率分布" class="headerlink" title="条件概率分布"></a>条件概率分布</h3><p>对于离散随机向量$(X,Y)$，已知$X=x$的条件下，随机变量$Y=y$的条件概率（Conditional Probability）为：</p>
+<script type="math/tex; mode=display">
+p(y|x) = P(Y=y|X=x) = \frac{p(x,y)}{p(x)}</script><p>这个公式定义了随机变量$Y$关于随机变量$X$的条件概率分布（Conditional Probability Distribution），简称条件分布。</p>
+<p>对于二维连续随机向量$(X,Y)$，已知$X=x$的条件下，随机变量$Y=y$的条件概率密度函数（Contidional Probability Density Function）为：</p>
+<script type="math/tex; mode=display">
+p(y|x) = \frac{p(x,y)}{p(x)}</script><p>同理，已知$Y=y$的条件下，随机变量$X=x$的条件概率密度函数为：</p>
+<script type="math/tex; mode=display">
+p(x|y) = \frac{p(x,y)}{p(y)}</script><p>通过上边的两个公式，我们可以得到两个条件概率$p(y|x)$和$p(x|y)$之间的关系。</p>
+<script type="math/tex; mode=display">
+p(y|x) = \frac{p(x|y) p(y)}{p(x)}</script><p>这个公式称为贝叶斯定理（Bayes’ theirem）或者贝叶斯公式。</p>
+<h3 id="独立与条件独立"><a href="#独立与条件独立" class="headerlink" title="独立与条件独立"></a>独立与条件独立</h3><p>对于两个离散（或连续）随机变量$X,Y$，如果其联合概率（或联合概率密度函数）$p(x,y)$满足：</p>
+<script type="math/tex; mode=display">
+p(x,y)=p(x)p(y)</script><p>则称$X,Y$相互独立（independence），记为$X \perp Y$</p>
+<p>对于三个离散（或连续）随机变量$X,Y,Z$，如果条件概率（或联合概率密度函数）$p(x,y|z)$满足：</p>
+<script type="math/tex; mode=display">
+p(x,y|z)=P(X=x,Y=y|Z=z)=p(x|z)p(y|z)</script><p>则称在给定变量$Z$时，$X,Y$条件独立（conditional independence）记为：$X \perp Y \perp Z$</p>
+<h3 id="期望和方差"><a href="#期望和方差" class="headerlink" title="期望和方差"></a>期望和方差</h3><p><strong>期望</strong> </p>
+<p>对于离散变量$X$，其概率分布为$p(x_1), …, p(x_n)$，$X$的期望（expection）或均值定义为：</p>
+<script type="math/tex; mode=display">
+E[X]=\sum_{i=1}^{n}x_i p(x_i)</script><p>对于连续随机变量$X$，概率密度函数为$p(x)$，其期望定义为：</p>
+<script type="math/tex; mode=display">
+E[X]=\int_{R} xp(x)dx</script><p><strong>方差</strong><br>随机变量$X$的方差（variance）用来定义他的概率分布的离散程度，定义为：</p>
+<script type="math/tex; mode=display">
+var(X) = E[(X-E[X])^2]</script><p>随机变量$X$的方差也称为他的二阶距。$\sqrt{var(X)}$称为$X$的根方差或标准差。</p>
+<p><strong>协方差</strong></p>
+<p>两个连续随机变量$X,Y$的协方差（covariance）用来衡量两个随机变量的分布之间的总体变化性，定义为：</p>
+<script type="math/tex; mode=display">
+cov(X,Y) = E[(X-E[X])(Y-E[Y])]</script><p>协方差经常也用来衡量两个随机变量之间的线性相关性。如果两个随机变量的协方差为0，那么称这两个随机变量是线性不相关。两个随机变量之间没有线性相关性，并非表示它们之间独立的，可能存在某种非线性的函数关系。反之，如果$X,Y$是统计独立的，那么它们之间的协方差一定为0。</p>
+<p><strong>协方差矩阵</strong></p>
+<p>两个$m$和$n$维连续随机向量$X$和$Y$，它们的协方差（covariance）为$m*n$的矩阵，定义为：</p>
+<script type="math/tex; mode=display">
+cov(X,Y) = e[(X-E[X])(Y-E[Y])^T]</script><p>协方差矩阵$cov(X,Y)$的第$(i,j)$个元素等于随机变量$X_i$和$Y_j$的协方差。两个向量变量的协方差$cov(X,Y)$与$cov(Y,X)$互为转置关系。</p>
+<p>如果两个随机向量的协方差矩阵为对角阵，那么称这两个随机向量时无关的。</p>
+<p>单个随机向量$X$的协方差矩阵定义为：</p>
+<script type="math/tex; mode=display">
+cov(X)=cov(X,X)</script><h2 id="随机过程"><a href="#随机过程" class="headerlink" title="随机过程"></a>随机过程</h2><p>随机过程（Stochastic Process）是一组随机变量$X_t$的集合，其中$t$属于一个索引（index）集合$\tau$。索引集合$\tau$可以定义在时间域或者空间域，但一般为时间域，以实数或正数表示。当$t$为实数时，随机过程为连续随机过程；当$t$为整数时，为离散随机过程。</p>
+<p>日常生活中的很多例子包括股票的波动、语音信号、身高的变化等都可以看作是随机过程。常见的和时间相关的随机过程模型包括：伯努利分布过程、随机游走、马尔可夫过程等。和空间相关的随机过程常称为随机场（Random Field）。比如一张二维的照片，每个像素点（变量）通过空间的位置进行索引，这些像素就组成了一个随机过程。</p>
+<h3 id="马尔可夫过程"><a href="#马尔可夫过程" class="headerlink" title="马尔可夫过程"></a>马尔可夫过程</h3><p><strong>马尔科夫性质</strong></p>
+<p>在随机过程中，马尔科夫性质（Markov Property）是指一个随机过程在给定现在状态及所有过去状态情况下，其未来状态的条件概率分布仅依赖于当前状态。</p>
+<p>以离散随机过程为例，假设随机变量$X_0,X_1,…,X_T$构成一个随机过程。这些随机变量的所有可能取值的集合被称为状态空间（State Space）。如果$X_{t+1}$对于过去状态的条件概率分布仅是$X_t$的一个函数，则：</p>
+<script type="math/tex; mode=display">
+P(X_{t+1} = x_{t+1}|X_{0:t} = x_{0:t}) = P(X_{t+1} = x_{t+1}|X_t=x_t)</script><p>其中$X_0:t$表示变量集合$X_0, X_1, …, X_t$，$x_{0:t}$为状态空间中的状态序列。</p>
+<p>马尔可夫性质也可以描述为给定当前状态时，将来的状态与过去状态是条件独立的。</p>
+<p><strong>马尔可夫链</strong><br>离散时间的马尔可夫过程也称为马尔可夫链（Markov Chain）。如果一个马尔可夫链的条件概率为：</p>
+<script type="math/tex; mode=display">
+P(X_{t+1} = s_i | X_t=s_j) = T(s_i, s_j)</script><p>在不同时间都是不变的，即和时间$t$无关，则称为时间同质的马尔可夫链（Time Homogeneous Markov Chain）。如果状态空间是有限的，$T(s_i, s_j)$也可以用一个矩阵$T$表示，称为状态转移矩阵（Transition Matrix），其中元素$t_{ij}$表示状态$s_i$转移到状态$s_j$的概率。</p>
+<p><strong>平稳分布</strong>假设状态空间大小为$M$，向量$\pi = [\pi_1, …, \pi_M]^T$为状态空间中的一个分布，满足$0 \geq \pi_i \geq 1$和$\sum_{i=1}^{M}\pi_i = 1$。</p>
+<p>对于状态转移矩阵为$T$的时间同质的马尔可夫链，如果存在一个分布$\pi$满足：</p>
+<script type="math/tex; mode=display">
+\pi = T\pi</script><p>即分布$\pi$就称为该马尔可夫链的平稳分布（Stationary Distribution）。根据特征向量的定义可知，$\pi$为矩阵$T$的（归一化）的对应特征值为1的特征向量。</p>
+<p>如果一个马尔可夫链的状态转移矩阵$T$满足所有状态可遍历性以及非周期性，那么对于任意一个初始状态分布$\pi^{(0)}$，将经过一定时间的状态转移之后，都会收敛到平稳分布，即：</p>
+<script type="math/tex; mode=display">
+\pi = \lim_{N \rightarrow \infty} T^N\pi^{(0)}</script><p><strong>细致平稳条件（Detailed Balance Condition）</strong> 如果一个马尔可夫链满足：</p>
+<script type="math/tex; mode=display">
+\pi_i t_{ij} = \pi_j t_{ji}</script><p>则一定会收敛到平稳分布$\pi$。</p>
+<p>细致平稳条件保证了从状态$i$转移到状态$j$的数量和从状态$j$转移到状态$i$的数量相一致，相互抵消，所以数量不发生改变。</p>
+<p>细致平稳条件只是马尔可夫链收敛的充分条件，不是必要条件。</p>
+<h3 id="高斯过程"><a href="#高斯过程" class="headerlink" title="高斯过程"></a>高斯过程</h3><p><strong>高斯过程（Gaussian Process）</strong> </p>
+<p>高斯过程也是一种应用广泛的随机过程模型。假设有一组连续随机变量$X_0, X_1,…,X_T$，如果由这组随机变量构成的任一有限集合：</p>
+<script type="math/tex; mode=display">
+X_{t_1,...,t_k} = [X_{t_1}, ...,X_{t_n}]^T</script><p>都服从一个多元正态分布，那么这组随机变量为一个随机过程。高斯过程也可以定义为：如果$X_{t_1,…,t_k}$的任一线性组合都服从一元正态分布，那么这组随机变量为一个随机过程。</p>
+<p><strong>高斯过程回归</strong><br>高斯过程回归（Gaussion Process Regression）是利用高斯过程来对一个函数分布进行建模。和机器学习中参数化建模（比如贝叶斯线性回归）相比，高斯过程是一种非参数模型，可以拟合一个黑盒函数，并给出拟合结果的置信度。</p>
+<p>假设一个未知函数$f(x)$服从高斯过程，且为平滑函数。如果两个样本$x_1,x_2$比较接近，那么对应的$f(x_1), f(x_2)$也比较接近。假设从函数$f(x)$中采样有限个样本$X=[x_1, x_2, …, x_N]$，这$N$个点服从一个多元正态分布，记作：</p>
+<script type="math/tex; mode=display">
+[f(x_1), f(x_2), ..., f(x_N)]^T \sim  N(\mu(X), K(X,X))</script><p>其中$\mu(X)=[\mu(x_1), \mu(x_2), …, \mu(x_N)]^T$是均值向量，$K(X,X)=[k(x_i, x_j)]_{N*N}$是协方差矩阵，$k(x_i, x_j)$为核函数，可以衡量两个样本的相似度。</p>
+<p>在高斯过程回归，一个常用的核函数是平方指数（Squard Exponential）函数：</p>
+<script type="math/tex; mode=display">
+k(x_i, x_j) = exp(\frac{- ||x_i - x_j||^2}{2l^2})</script><p>其中$l$为超参数。当$x_i$和$x_j$越接近，其核函数的值越大，表明$f(x_i)$和$f(x_j)$越相关。</p>
+<p>假设$f(x)$的一组带噪声的观测值为$\{ (x_n, y_n)\}_{n=1}^{N}$，其中$y_n \sim  N(f(x_n), \sigma^2)$为正态分布，$\sigma$为噪声方差。</p>
+<p>对于一个新的样本点$x^<em>$，我们希望预测函数$y^</em>=f(x^<em>)$。令$y=[y_1, y_2,…,y_n]$为已有的观测值，根据高斯过程的假设，$[y; y^</em>]$满足：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+y \\ 
+y^*
+\end{bmatrix} \sim  N( \begin{bmatrix}
+\mu(X) \\ 
+\mu(x^*)
+\end{bmatrix},
+\begin{bmatrix}
+K(X,X)+\sigma^2 I  &  K(x^*, X)^T\\ 
+K(x^*, X)  & k(x^*, x^*)
+\end{bmatrix}
+  )</script><p>其中$K(x^<em>, X)=[k(x^</em>, x_1), …, k(x^*, x_n)]$。</p>
+<p>根据上面的联合分布，$y^*$的后验分布为：</p>
+<script type="math/tex; mode=display">
+p(y^* |X, y) = N(\tilde {\mu}, \tilde{\sigma}^2)</script><p>其中均值$\tilde {\mu}$和方差$\tilde{\sigma}$为：</p>
+<script type="math/tex; mode=display">
+\tilde{\mu} = K(x^*, X)(K(X,X) + \sigma^2 I)^{-1}(y-\mu(X)) + \mu(x^*)
+\\
+\tilde{\sigma}^2 = k(x^*, x^*) - K(x^*, X)(K(X,X) + \sigma^2 I)^{-1} K(x^*, X)^T</script><p>从上面的公式可以看出，均值函数$\mu(x)$可以近似地互相抵消。在实际应用中，一般假设$\mu(x)=0$，均值$\tilde{\mu}$可以化简为：</p>
+<script type="math/tex; mode=display">
+\tilde {\mu} = K(x^*, X)( K(X,X) + \sigma^2 I )^{-1} y</script><p>高斯过程回归可以认为是一种有效的贝叶斯优化方法，广泛地应用于机器学习中。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+        <span><a href="https://www.a2data.cn/">牛人之A2Data</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

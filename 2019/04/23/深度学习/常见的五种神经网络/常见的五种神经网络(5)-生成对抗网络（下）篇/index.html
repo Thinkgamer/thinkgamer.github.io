@@ -147,10 +147,9 @@
 <li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（上篇）</a></li>
 <li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
 </ul>
-<blockquote>
+<hr>
 <p>在上一篇文章中介绍了<a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">生成模型的基本结构、功能和变分自动编码器</a>，在本篇文章中主要介绍一下生成对抗网络（Generative Adversaarial Networks，GAN）</p>
 <h1 id="KL散度、JS散度、Wassertein距离"><a href="#KL散度、JS散度、Wassertein距离" class="headerlink" title="KL散度、JS散度、Wassertein距离"></a>KL散度、JS散度、Wassertein距离</h1><h2 id="KL散度"><a href="#KL散度" class="headerlink" title="KL散度"></a>KL散度</h2><p>KL散度又称相对熵，信息散度，信息增益。KL散度是两个概率分布P和Q差别的非对称性的度量。在经典境况下，P表示数据的真实分布，Q表示数据的理论分布，模型分布。</p>
-</blockquote>
 <script type="math/tex; mode=display">
 D_{KL}(P \parallel Q)= \sum_{i=1}^{n}P_i log(\frac{P_i}{Q_i})</script><h2 id="JS散度"><a href="#JS散度" class="headerlink" title="JS散度"></a>JS散度</h2><p>JS散度是度量两个概率分布的相似度，是基于KL散度的变体，解决了KL散度非对称的问题。</p>
 <script type="math/tex; mode=display">

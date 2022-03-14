@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        常见的五种神经网络(1)-前馈神经网络 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参数学习"><span class="toc-text">参数学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反向传播算法"><span class="toc-text">反向传播算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动梯度计算"><span class="toc-text">自动梯度计算</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数值微分"><span class="toc-text">数值微分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#符号微分"><span class="toc-text">符号微分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动微分"><span class="toc-text">自动微分</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        常见的五种神经网络(1)-前馈神经网络
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-23 16:36:41</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#常见的五种神经网络" title="常见的五种神经网络">常见的五种神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/100943664" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/100943664</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
+<p>该系列的其他文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/89459131" target="_blank" rel="external">常见的五种神经网络(1)-前馈神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100531593" target="_blank" rel="external">常见的五种神经网络(2)-卷积神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100600661" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100709422" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(中篇)</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/100943664" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103231385" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103437985" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（上篇）</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
+</ul>
+<blockquote>
+<p>给定一组神经元，我们可以以神经元为节点来构建一个网络。不同的神经网络模型有着不同网络连接的拓扑结构。一种比较直接的拓扑结构是前馈网络。前馈神经网络（Feedforward Neural Network，FNN）是最早发明的简单人工神经网络。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>在前馈神经网络中，不同的神经元属于不同的层，每一层的神经元可以接受到前一层的神经元信号，并产生信号输出到下一层。第0层叫做输入层，最后一层叫做输出层，中间的叫做隐藏层，整个网络中无反馈，信号从输入层到输出层单向传播，可用一个有用无环图表示。</p>
+<p>前馈神经网络也成为多层感知器（Mutlti-Layer Perceptron，MLP）。但是多层感知器的叫法并不准确，因为前馈神经网络其实是由多层Logistic回归模型（连续的非线性模型）组成，而不是有多层感知器模型（非连续的非线性模型）组成。</p>
+<p>下图为简单的前馈神经网络图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190422193716850.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="多层前馈神经网络"></p>
+<p>神经网络中涉及的多个概念：</p>
+<ul>
+<li>L：表示神经网络的层数</li>
+<li>m^l：表示第 l 层神经元个数</li>
+<li>f_l(.)：表示第 l 层神经元的激活函数</li>
+<li>W^l：表示第 l-1 层到第 l 层的权重矩阵</li>
+<li>b^l：表示第 l-1 层到第 l 层的偏置</li>
+<li>z^l：表示第 l 层神经元的净输入（净活性值）</li>
+<li>a^l：表示第l层的神经元输出（活性值）</li>
+</ul>
+<p>神经网络的信息传播公式如下（公式1-1）</p>
+<script type="math/tex; mode=display">
+z^l  = W^l \cdot a^{l-1} + b^l
+\\
+a^l = f_l(z^l)</script><p>公式1-1也可以合并写为（公式1-2）：</p>
+<script type="math/tex; mode=display">
+z^l = W^l \cdot f_{l-1}(z^{l-1}) + b^l</script><p>或者（公式1-3）</p>
+<script type="math/tex; mode=display">
+a^l = f_l(W^l \cdot a^{l-1} + b^l)</script><p>这样神经网络可以通过逐层的信息传递，得到网络最后的输出a^L。整个网络可以看做一个符合函数</p>
+<script type="math/tex; mode=display">
+\phi (x; W,b)</script><p>将向量x作为第一层的输入a^0，将第 l 层的输入a^0，将第L层的输出a^L 作为整个函数的输出。</p>
+<script type="math/tex; mode=display">
+x = a^0 \rightarrow z^1 \rightarrow a^1 \rightarrow z^2 .... \rightarrow a^{L-1} \rightarrow  z^L \rightarrow  a^L = \phi (x;W,b)</script><p>其中W, b表示网络中所有层的连接权重和偏置。</p>
+<h1 id="参数学习"><a href="#参数学习" class="headerlink" title="参数学习"></a>参数学习</h1><p>如果采用交叉熵损失函数，对于样本(x，y)，其损失函数为（公式1-4）：</p>
+<script type="math/tex; mode=display">
+L(y,\hat{y}) = -y^T log (\hat{y})</script><p>其中 y 属于{0,1}^T为标签y对应的one-hot向量。</p>
+<p>给定训练集D={(x^n,y^n)}, N &gt;= n &gt;=0，将每个样本x^n输入给前馈神经网络，得到网络输出为y^n，其在数据集D上的结构化风险函数为（公式1-5）：</p>
+<script type="math/tex; mode=display">
+R(W,b)=\frac{1}{N}\sum_{n=1}^{N} L(y^n,\hat{y}^n) + \frac{1}{2}\lambda \left \| W \right \|_F^2</script><p>其中W和b分别表示网络中所有的权重矩阵和偏置向量， (||W||_F)^2是正则化项，用来防止过拟合，lambda是为正数的超参数，lambda越大，W越接近于0。这里的(||W||_F)^2一般使用Frobenius范数：</p>
+<script type="math/tex; mode=display">
+\left \| W \right \|_F^2= \sum_{l=1}^{L} \sum_{i=1}^{m^l} \sum_{j=1}^{m^{l-1}} (W_{ij}^l)^2</script><p>有了学习准则和训练样本，网络参数可以通过梯度下降法来进行学习。在梯度下降方法的每次迭代过程中，第l层的参数 W^l 和 b^l 参数更新方式为（公式1-6）：</p>
+<script type="math/tex; mode=display">
+W^l \leftarrow W^l - \alpha \frac{\partial R(W,b)}{\partial W^l}
+=W^l - \alpha ( \frac{1}{N} \sum_{n=1}^{N}(\frac{\partial L(y^n,\hat{y}^n)}{\partial W^l}) + \lambda W^l )
+\\
+b^l \leftarrow b^l - \alpha \frac{\partial R(W,b)}{\partial b^l}
+=b^l - \alpha ( \frac{1}{N} \sum_{n=1}^{N}(\frac{\partial L(y^n,\hat{y}^n)}{\partial b^l}) )</script><p>其中alpha为学习参数。</p>
+<p>梯度下降法需要计算损失函数对参数的偏导数，如果通过链式法则逐一对每个参数进行求偏导效率比较低。在神经网络的训练中经常使用反向传播算法来高效的计算梯度。</p>
+<h1 id="反向传播算法"><a href="#反向传播算法" class="headerlink" title="反向传播算法"></a>反向传播算法</h1><p>基于误差的反向传播算法（backpropagation，BP）的前馈神经网络训练过程可以分为以下三步：</p>
+<ul>
+<li>前馈计算每一层的净输入z^l  和激活值 a^l，直到最后一层</li>
+<li>反向传播计算每一层的误差项</li>
+<li>计算每一层参数的偏导数，并更新参数</li>
+</ul>
+<p>其具体训练过程如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190423152427560.png" alt="image"></p>
+<h1 id="自动梯度计算"><a href="#自动梯度计算" class="headerlink" title="自动梯度计算"></a>自动梯度计算</h1><p>神经网络中的参数主要是通过梯度下降来进行优化的。当确定了风险函数及网络结构后，我们就可以手动用链式法则来计算风险函数对每个参数的梯度，并用代码进行实现。</p>
+<p>目前几乎所有的深度学习框架都包含了自动梯度计算的功能，在使用框架进行神经网络开发时，我们只需要考虑网络的结构并用代码实现，其梯度可以自动进行计算，无需人工干预，这样开发效率就大大提高了。</p>
+<p>自动梯度计算方法分为以下三种：</p>
+<h2 id="数值微分"><a href="#数值微分" class="headerlink" title="数值微分"></a>数值微分</h2><p>数值微分（Numerical Differentiation）是用数值方法计算函数f(x)的导数。函数f(x)的点x的导数定义为：</p>
+<script type="math/tex; mode=display">
+f'(x) = \underset{\Delta x \rightarrow 0}{ lim } \frac{ f(x + \Delta x) -f(x) }{ \Delta x }</script><p>要计算f(x)在点x的导数，可以对x加上一个很少的非零扰动，然后通过上述定义来直接计算函数f(x)的梯度。数值微分方法非常容易实现，但找到一个合适扰动非常难，如果扰动过小会引起数值计算问题，比如<strong>舍入误差</strong>；如果扰动过大，会增加<strong>截断误差</strong>，使得导数计算不准确，因此数值微分的实用性比较差，在实际应用中，常用以下公式来计算梯度可以减少截断误差。</p>
+<script type="math/tex; mode=display">
+f'(x) = \underset{\Delta x \rightarrow 0}{ lim } \frac{ f(x + \Delta x) -f(x -\Delta x) }{2 \Delta x }</script><ul>
+<li>舍入误差：是指数值计算中由于数字舍入造成的近似值和精确值之间的差异，比如用浮点数来表示实数。</li>
+<li>截断误差：数学模型的理论解与数值计算问题的精确解之间的误差</li>
+</ul>
+<h2 id="符号微分"><a href="#符号微分" class="headerlink" title="符号微分"></a>符号微分</h2><p>符号微分（Symbolic Differentiation）是一种基于符号计算的自动求导方法。符号计算，也叫代数计算，是指用计算机来处理带有变量的数学表达式。</p>
+<p>符号计算的输入和输出都是数学表达式的化简、因式分解、微分、积分、解代数方程、求解常微分方程等运算。</p>
+<p>比如数学表达式的化简</p>
+<ul>
+<li>输入：3x-x+2x+1</li>
+<li>输出：4x+1</li>
+</ul>
+<p>符号计算一般来讲是对输入的表达式，通过迭代或递归使用一些事先定义的规则进行转换。当转换结果不能再继续使用变换规则时，便停止计算。</p>
+<h2 id="自动微分"><a href="#自动微分" class="headerlink" title="自动微分"></a>自动微分</h2><p>自动微分（Automatic Differentiation，AD）是一种可以对一个（程序）函数进行计算导数的方法。符号微分的处理对象是数学表达式，而自动微分的处理对象是一个函数或一段程序。而自动微分可以直接在原始程序代码进行微分。自动微分的基本原理是所有的数值计算可以分解为一些基本操作，包含+,−,×, / 和一些初等函数exp, log, sin, cos 等。</p>
+<p>自动微分也是利用链式法则来自动计算一个复合函数的梯度。我们以一个神经网络中常见的复合函数的例子来说明自动微分的过程。为了简单起见，令复合函数f(x;w, b) 为</p>
+<script type="math/tex; mode=display">
+f(x;w,b)=\frac{1}{ exp(-(wx+b))+1 }</script><p>其中x 为输入标量，w和b 分别为权重和偏置参数。</p>
+<p>复合函数f(x;w,b) 可以拆解为：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190423161240321.png" alt="image"></p>
+<p>继而就可以通过链式求导法则进行复合函数求导。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

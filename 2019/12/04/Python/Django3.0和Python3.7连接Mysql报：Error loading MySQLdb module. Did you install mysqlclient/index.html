@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        Django3.0和Python3.7连接Mysql报：Error loading MySQLdb module. Did you install mysqlclient - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境说明"><span class="toc-text">环境说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目说明"><span class="toc-text">项目说明</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        Django3.0和Python3.7连接Mysql报：Error loading MySQLdb module. Did you install mysqlclient
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-04 15:45:02</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Python" title="Python">Python</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h1><ul>
+<li>Python 3.7.3</li>
+<li>Django 3.0<ul>
+<li>安装：pip3 install -U Django</li>
+<li>文档：<a href="https://docs.djangoproject.com/zh-hans/3.0/contents/" target="_blank" rel="external">https://docs.djangoproject.com/zh-hans/3.0/contents/</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h1><p>创建项目</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">django-admin startproject mysite</span></span><br></pre></td></tr></table></figure>
+<p>配置Mysql<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DATABASES = &#123;</span><br><span class="line">    'default': &#123;</span><br><span class="line">        'ENGINE': 'django.db.backends.mysql',</span><br><span class="line">        'NAME': 'mysite',</span><br><span class="line">        'USER': 'root',</span><br><span class="line">        'PASSWORD': '<span class="number">123456</span>',</span><br><span class="line">        'HOST': '127.0.0.1',</span><br><span class="line">        'PORT': '<span class="number">3306</span>',</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>创建视图<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">python3</span> manage.<span class="keyword">py</span> startapp <span class="built_in">index</span></span><br></pre></td></tr></table></figure></p>
+<p>报错<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">[MeetUpRec] python3 manage.py startapp index                                                                                                           14:45:34  ☁  master ☂ ✭</span><br><span class="line">Traceback (most recent <span class="keyword">call</span> <span class="keyword">last</span>):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/backends/mysql/base.py"</span>, line <span class="number">16</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    <span class="keyword">import</span> MySQLdb <span class="keyword">as</span> <span class="keyword">Database</span></span><br><span class="line">ModuleNotFoundError: <span class="keyword">No</span> <span class="keyword">module</span> named <span class="string">'MySQLdb'</span></span><br><span class="line"></span><br><span class="line">The above <span class="keyword">exception</span> was the direct cause <span class="keyword">of</span> the <span class="keyword">following</span> <span class="keyword">exception</span>:</span><br><span class="line"></span><br><span class="line">Traceback (most recent <span class="keyword">call</span> <span class="keyword">last</span>):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"manage.py"</span>, line <span class="number">21</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    <span class="keyword">main</span>()</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"manage.py"</span>, line <span class="number">17</span>, <span class="keyword">in</span> <span class="keyword">main</span></span><br><span class="line">    execute_from_command_line(sys.argv)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/core/management/__init__.py"</span>, line <span class="number">401</span>, <span class="keyword">in</span> execute_from_command_line</span><br><span class="line">    utility.execute()</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/core/management/__init__.py"</span>, line <span class="number">377</span>, <span class="keyword">in</span> <span class="keyword">execute</span></span><br><span class="line">    django.setup()</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/__init__.py"</span>, line <span class="number">24</span>, <span class="keyword">in</span> setup</span><br><span class="line">    apps.populate(settings.INSTALLED_APPS)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/apps/registry.py"</span>, line <span class="number">114</span>, <span class="keyword">in</span> populate</span><br><span class="line">    app_config.import_models()</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/apps/config.py"</span>, line <span class="number">211</span>, <span class="keyword">in</span> import_models</span><br><span class="line">    self.models_module = import_module(models_module_name)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/lib/python3.7/importlib/__init__.py"</span>, line <span class="number">127</span>, <span class="keyword">in</span> import_module</span><br><span class="line">    <span class="keyword">return</span> _bootstrap._gcd_import(<span class="keyword">name</span>[<span class="keyword">level</span>:], <span class="keyword">package</span>, <span class="keyword">level</span>)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;frozen importlib._bootstrap&gt;"</span>, line <span class="number">1006</span>, <span class="keyword">in</span> _gcd_import</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;frozen importlib._bootstrap&gt;"</span>, line <span class="number">983</span>, <span class="keyword">in</span> _find_and_load</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;frozen importlib._bootstrap&gt;"</span>, line <span class="number">967</span>, <span class="keyword">in</span> _find_and_load_unlocked</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;frozen importlib._bootstrap&gt;"</span>, line <span class="number">677</span>, <span class="keyword">in</span> _load_unlocked</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;frozen importlib._bootstrap_external&gt;"</span>, line <span class="number">728</span>, <span class="keyword">in</span> exec_module</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;frozen importlib._bootstrap&gt;"</span>, line <span class="number">219</span>, <span class="keyword">in</span> _call_with_frames_removed</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/contrib/auth/models.py"</span>, line <span class="number">2</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    <span class="keyword">from</span> django.contrib.auth.base_user <span class="keyword">import</span> AbstractBaseUser, BaseUserManager</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/contrib/auth/base_user.py"</span>, line <span class="number">47</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    <span class="keyword">class</span> AbstractBaseUser(models.Model):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/models/base.py"</span>, line <span class="number">121</span>, <span class="keyword">in</span> __new__</span><br><span class="line">    new_class.add_to_class(<span class="string">'_meta'</span>, Options(meta, app_label))</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/models/base.py"</span>, line <span class="number">325</span>, <span class="keyword">in</span> add_to_class</span><br><span class="line">    value.contribute_to_class(cls, <span class="keyword">name</span>)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/models/options.py"</span>, line <span class="number">208</span>, <span class="keyword">in</span> contribute_to_class</span><br><span class="line">    self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/__init__.py"</span>, line <span class="number">28</span>, <span class="keyword">in</span> __getattr__</span><br><span class="line">    <span class="keyword">return</span> getattr(connections[DEFAULT_DB_ALIAS], item)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/utils.py"</span>, line <span class="number">207</span>, <span class="keyword">in</span> __getitem__</span><br><span class="line">    backend = load_backend(db[<span class="string">'ENGINE'</span>])</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/utils.py"</span>, line <span class="number">111</span>, <span class="keyword">in</span> load_backend</span><br><span class="line">    <span class="keyword">return</span> import_module(<span class="string">'%s.base'</span> % backend_name)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/lib/python3.7/importlib/__init__.py"</span>, line <span class="number">127</span>, <span class="keyword">in</span> import_module</span><br><span class="line">    <span class="keyword">return</span> _bootstrap._gcd_import(<span class="keyword">name</span>[<span class="keyword">level</span>:], <span class="keyword">package</span>, <span class="keyword">level</span>)</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/usr/local/lib/python3.7/site-packages/django/db/backends/mysql/base.py"</span>, line <span class="number">21</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    ) <span class="keyword">from</span> err</span><br><span class="line">django.core.exceptions.ImproperlyConfigured: <span class="keyword">Error</span> loading MySQLdb module.</span><br><span class="line">Did you <span class="keyword">install</span> mysqlclient?</span><br></pre></td></tr></table></figure></p>
+<p>原因：在Python2中用的是mysqldb，但在Python3中用的是 mysqlclient</p>
+<p>尝试解决：执行mysqlclient安装命令<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 <span class="keyword">install</span> mysqlclient</span><br></pre></td></tr></table></figure></p>
+<p>报错：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Collecting mysqlclient</span><br><span class="line">  Using cached <span class="keyword">https</span>://<span class="built_in">files</span>.pythonhosted.org/packages/d0/<span class="number">97</span>/<span class="number">7326248</span>ac8d5049968bf4ec708a5d3d4806e412a42e74160d7f266a3e03a/mysqlclient<span class="number">-1.4</span><span class="number">.6</span>.tar.gz</span><br><span class="line">    ERROR: Complete output <span class="built_in">from</span> <span class="keyword">command</span> <span class="title">python</span> <span class="title">setup</span>.<span class="title">py</span> <span class="title">egg_info</span>:</span><br><span class="line">    ERROR: /bin/sh: mysql_config: <span class="keyword">command</span> <span class="title">not</span> <span class="title">found</span></span><br><span class="line">    /bin/sh: mariadb_config: <span class="keyword">command</span> <span class="title">not</span> <span class="title">found</span></span><br><span class="line">    /bin/sh: mysql_config: <span class="keyword">command</span> <span class="title">not</span> <span class="title">found</span></span><br><span class="line">    Traceback (most recent call <span class="keyword">last</span>):</span><br><span class="line">      File <span class="string">"&lt;string&gt;"</span>, <span class="built_in">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      File <span class="string">"/private/var/folders/sc/tw1zhq750h510tgxd4g32_dw0000gn/T/pip-install-9cqr2rno/mysqlclient/setup.py"</span>, <span class="built_in">line</span> <span class="number">16</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">        metadata, options = get_config()</span><br><span class="line">      File <span class="string">"/private/var/folders/sc/tw1zhq750h510tgxd4g32_dw0000gn/T/pip-install-9cqr2rno/mysqlclient/setup_posix.py"</span>, <span class="built_in">line</span> <span class="number">61</span>, <span class="keyword">in</span> get_config</span><br><span class="line">        libs = mysql_config(<span class="string">"libs"</span>)</span><br><span class="line">      File <span class="string">"/private/var/folders/sc/tw1zhq750h510tgxd4g32_dw0000gn/T/pip-install-9cqr2rno/mysqlclient/setup_posix.py"</span>, <span class="built_in">line</span> <span class="number">29</span>, <span class="keyword">in</span> mysql_config</span><br><span class="line">        raise EnvironmentError(<span class="string">"%s not found"</span> % (<span class="title">_mysql</span>_config_path,))</span><br><span class="line">    OSError: mysql_config <span class="keyword">not</span> found</span><br><span class="line">    <span class="comment">----------------------------------------</span></span><br><span class="line">ERROR: Command <span class="string">"python setup.py egg_info"</span> failed <span class="keyword">with</span> error code <span class="number">1</span> <span class="keyword">in</span> /<span class="keyword">private</span>/var/<span class="built_in">folders</span>/sc/tw1zhq750h510tgxd4g32_dw0000gn/T/pip-install<span class="number">-9</span>cqr2rno/mysqlclient/</span><br></pre></td></tr></table></figure></p>
+<p>没找到mysql配置，解决如下：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=<span class="variable">$PATH</span><span class="symbol">:/usr/local/mysql/bin</span></span><br></pre></td></tr></table></figure>
+<p>再次安装，成功</p>
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<center>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+
+---
+
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center></center></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

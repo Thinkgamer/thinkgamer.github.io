@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜线性代数中的向量和向量空间 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#向量和向量空间"><span class="toc-text">向量和向量空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向量"><span class="toc-text">向量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向量空间"><span class="toc-text">向量空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范数"><span class="toc-text">范数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见的向量"><span class="toc-text">常见的向量</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜线性代数中的向量和向量空间
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 22:54:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>线性代数主要包含向量、向量空间（或称线性空间）以及向量的线性变换和有限维的线性方程组。本篇文章主要介绍线性代数部分中的向量和向量空间。</p>
+<h2 id="向量和向量空间"><a href="#向量和向量空间" class="headerlink" title="向量和向量空间"></a>向量和向量空间</h2><h3 id="向量"><a href="#向量" class="headerlink" title="向量"></a>向量</h3><p>标量（Scalar）是一个实数，只有大小，没有方向。而向量（Vector）是由一组实数组成的有序数组，同时具有大小和方向。</p>
+<p>一个$n$维向量$a$是由$n$个有序实数组成，表示为：</p>
+<script type="math/tex; mode=display">
+a=[a_1, a_2,...,a_n]</script><p>其中$a_i$称为向量的第$i$个分量，或者第$i$维。向量符号一般用黑色小写字母$a、b、c$或者小写字母$\alpha、\beta、\gamma$表示。</p>
+<blockquote>
+<p>为了书写方便期见，本系列文章向量并没有进行黑色加粗，但读者也要进行区分。</p>
+</blockquote>
+<h3 id="向量空间"><a href="#向量空间" class="headerlink" title="向量空间"></a>向量空间</h3><p><strong>向量空间（Vector Space）</strong> 也称为线性空间（Linear Space），是指由向量组成的集合，并满足以下的两个条件：</p>
+<ul>
+<li>向量加法+：向量空间$V$中的两个向量$a、b$，他们的和$a+b$也属于向量空间</li>
+<li>标量乘法$\cdot$：向量空间$V$中的任一向量$a$和任一标量$c$，他们的乘积$c \cdot a$也属于向量空间</li>
+</ul>
+<p><strong>欧式空间（Euclidean Space）</strong> 是一个常用的线性空间，通常表示为$R^n$，其中$n$为空间维度（Dimension）。欧式空间中向量加法和标量乘法定义为：</p>
+<script type="math/tex; mode=display">
+[a_1,a_2,...,a_n] + [b_1,b_2,...,b_n]=[a_1+b_1, a_2+b_2,...,a_n+b_n]
+\\
+c[a_1,a_2,...,a_n] = [c\,a_1,c\,a_2,...,c\,a_n]</script><p>其中向量加法需要满足两个向量的维度必须一致。</p>
+<p><strong>线性子空间</strong> 向量空间$V$的线性子空间$U$是$V$的一个子集，并且满足向量空间的两个条件（向量加法和标量乘法）。</p>
+<p><strong>线性无关</strong> 线性空间$V$中的一组向量$\{ v_1, v_2, …., v_n\}$，如果对任意的一组标量$\lambda_1, \lambda_2, …, \lambda_n$，满足$\lambda_1\,v_1 + \lambda_2\,v_2, …, \lambda_n\,v_n=0$，则必然$\lambda_1=\lambda_2=…=\lambda_n=0$，那么$\{ v_1, v_2, …, v_n\}$是线性无关的，也称为线性独立。</p>
+<blockquote>
+<p>注意$\lambda_1\,v_1 + \lambda_2\,v_2, …, \lambda_n\,v_n=0$ 中 0 表示 $n$维的0向量</p>
+</blockquote>
+<p>线性相关性是线性代数的重要概念，因为线性无关的一组向量可以生成一个向量空间，而这组向量则是这向量空间的基。</p>
+<p>补充wiki上的线性相关性判断：</p>
+<ul>
+<li>含有零向量的向量组，必定线性相关。若有向量组${\displaystyle a_{1},a_{2},…,a_{s}}$，其中${\displaystyle a_{1}=0}$，则${\displaystyle a_{1}=0\cdot a_{2}+…+0\cdot a_{s}}$。</li>
+<li>含有两个相等向量的向量组，必定线性相关。若有向量组${\displaystyle a_{1},a_{2},…,a_{s}}$，其中${\displaystyle a_{1}=a_{2}}$，则${\displaystyle a_{1}=1\cdot a_{2}+0\cdot a_{3}+…+0\cdot a_{s}}$。</li>
+<li>若一向量组相关，则加上任意个向量后，仍然线性相关；即局部线性相关，整体必线性相关。</li>
+<li>整体线性无关，局部必线性无关。</li>
+<li>向量个数大于向量维数，则此向量组线性相关。</li>
+<li>若一向量组线性无关，即使每一向量都在同一位置处增加一分量，仍然线性无关。</li>
+<li>若一向量组线性相关，即使每一向量都在同一位置处减去一分量，仍然线性相关。</li>
+<li>若${\displaystyle a_{1},a_{2},…,a_{s}}$线性无关，而${\displaystyle b,a_{1},a_{2},…,a_{s}}$线性相关，则${\displaystyle b}$，b必可由${\displaystyle a_{1},a_{2},…,a_{s}}$线性表示，且表示系数唯一。</li>
+<li>有向量组${\displaystyle {\textrm {I}}\{a_{1},a_{2},…,a_{s}\}}$和${\displaystyle {\textrm {II}}\{b_{1},b_{2},…,b_{t}\}}$，其中${\displaystyle t&gt;s}$，且${\displaystyle {\textrm {II}}}$中每个向量都可由${\displaystyle {\textrm {I}}}$线性表示，则向量组${\displaystyle {\textrm {II}}}$必线性相关。即向量个数多的向量组，若可被向量个数少的向量组线性表示，则向量个数多的向量组必线性相关。</li>
+<li>若一向量组${\displaystyle b_{1},b_{2},…,b_{t}}$可由向量组${\displaystyle a_{1},a_{2},…,a_{s}}$线性表示，且${\displaystyle b_{1},b_{2},…,b_{t}}$线性无关，则${\displaystyle t\leq s}$。即线性无关的向量组，无法以向量个数较少的向量组线性表示。</li>
+</ul>
+<p><strong>基向量</strong><br>向量空间$V$的基（bases）$B=\{ e_1, e_2, e_3, …, e_n\}$是$V$的有限子集，其元素之间线性无关。向量空间$V$所有的向量都可以按唯一的方式表达为$B$中向量的线性组合。对任意$v\in V$，存在一组标量$(\lambda_1,\lambda_2,…,\lambda_n)$使得：</p>
+<script type="math/tex; mode=display">
+v = \lambda_1 \, e_1 + \lambda_2 \, e_2 + ... + \lambda_n \, e_n</script><p>其中基$B$中的向量称为基向量（base vector）。如果基向量是有序的，则标量$(\lambda_1,\lambda_2,…,\lambda_n)$称为向量$v$关于基$B$的坐标（coordinates）。</p>
+<p>$n$维空间$V$的一组<strong>标准基（standard basis）</strong> 为：</p>
+<script type="math/tex; mode=display">
+e_1 = [1,0,0,...,0]
+\\
+e_2 = [0,1,0,...,0]
+\\
+...
+\\
+e_n = [0,0,0,...,1]</script><p>$V$中的任一向量$v=[v_1, v_2, v_3, .., v_n]$可以唯一表示为：</p>
+<script type="math/tex; mode=display">
+[v_1, v_2, v_3, .., v_n] = v_1\,e_1 + v_2\,e_2 +  ...  v_n\,e_n</script><p>$v_1, v_2, v_3, .., v_n$ 也称为向量$v$的笛卡尔坐标（Carterian coordinates）。</p>
+<p>向量空间中的每个向量可以看作是一个线性空间中的笛卡儿坐标。</p>
+<p><strong>内积</strong> 一个$n$ 维线性空间中的两个向量$a,b$，其内积为：</p>
+<script type="math/tex; mode=display">
+<a,b> = \sum_{i=1}^{n} a_i\, b_i</script><p><strong>正交</strong> 如果向量空间中两个向量的内积为0，则他们正交（orthogonal）。如果向量空间中一个向量$v$与子空间$U$中的每个向量都正交，那么向量$v$和子空间$U$正交。</p>
+<h3 id="范数"><a href="#范数" class="headerlink" title="范数"></a>范数</h3><p>范数（norm）是一个表示向量长度得函数，为向量空间内得所有向量赋予非零得正长度或大小。对于一个$n$维向量$v$，一个常见得范数函数为$l_p$范数</p>
+<script type="math/tex; mode=display">
+l_p(v) = \left \| v \right \|_p = (\sum_{i=1}^{n} |v_i|^p)^{1/p}</script><p>其中$p\geq0$为一个标量的参数。常用的$p$的取值有$1,2,\infty$等。</p>
+<p><strong>$l_1$范数</strong> 为向量各个元素的绝对值之和。</p>
+<script type="math/tex; mode=display">
+  \left \| v \right \|_1 = \sum_{i=1}^{n} |v_i|</script><p><strong>$l_2$范数</strong> 为向量各个元素的平方和再开方</p>
+<script type="math/tex; mode=display">
+  \left \| v \right \|_2 =\sqrt{\sum_{i=1}^{n} v_i^2}  = \sqrt{v^Tv}</script><p>$l_2$范数又称为Euclidean范数或者Frobenius。从几何角度，向量也可以表示为从原点出发的一个带箭头的有向线段，其$l_2$范数为线段的长度，也常称为向量的模。</p>
+<p><strong>$l_{\infty}$范数</strong>  为向量各个元素的最大绝对值。</p>
+<script type="math/tex; mode=display">
+  \left \| v \right \|_{\infty}=max\{v_1, v_2, ..., v_n\}</script><p>下图给出了常见的不同范数示例。<br><img src="https://img-blog.csdnimg.cn/20200108183249461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="常见的不同范数示例"></p>
+<h3 id="常见的向量"><a href="#常见的向量" class="headerlink" title="常见的向量"></a>常见的向量</h3><p><strong>全0向量</strong> 指所有元素都为0的向量，用0表示。全0向量为笛卡尔坐标系中的原点。</p>
+<p><strong>全1向量</strong> 指所有元素都为1的向量，用1表示。</p>
+<p><strong>one-hot向量</strong> 为有且已有一个元素为1，其余元素都为0的向量。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

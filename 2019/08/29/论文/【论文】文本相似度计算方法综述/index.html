@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】文本相似度计算方法综述 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文本相似度定义"><span class="toc-text">文本相似度定义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文本相似度计算方法"><span class="toc-text">文本相似度计算方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基于字符串的方法"><span class="toc-text">基于字符串的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于语料库的方法"><span class="toc-text">基于语料库的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于词袋"><span class="toc-text">基于词袋</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VSM"><span class="toc-text">VSM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LSA，PLSA"><span class="toc-text">LSA，PLSA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LDA"><span class="toc-text">LDA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于神经网络"><span class="toc-text">基于神经网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于搜索引擎"><span class="toc-text">基于搜索引擎</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于世界知识的方法"><span class="toc-text">基于世界知识的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于本体知识"><span class="toc-text">基于本体知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于网络知识"><span class="toc-text">基于网络知识</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他方法"><span class="toc-text">其他方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】文本相似度计算方法综述
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-08-29 08:19:14</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在信息爆炸时代，人们迫切希望从海量信息中获取与自身需要和兴趣吻合度高的内容，为了满足此需求，出现了多种技术，如：搜索引擎、推荐系统、问答系统、文档分类与聚类、文献查重等，而这些应用场景的关键技术之一就是文本相似度计算技术。因此了解文本相似度的计算方法是很有必要的。</p>
+<h1 id="文本相似度定义"><a href="#文本相似度定义" class="headerlink" title="文本相似度定义"></a>文本相似度定义</h1><p>文本相似度在不同领域被广泛讨论，由于应用场景不同，其内涵有所差异，故没有统一、公认的定义。</p>
+<p>Lin从信息论的角度阐明相似度与文本之间的共性和差异有关，共性越大、差异越小、则相似度越高；共性越小、差异越大、则相似度越低。相似度最大的情况是文本完全相同。同时提出基于假设推论出相似度定理，如下所示：</p>
+<script type="math/tex; mode=display">
+Sim(A,B) = \frac{ log P(common(A,B)) } {log P(description(A,B))}</script><p>其中，common(A,B)是A和B的共性信息，description(A,B)是描述A和B的全部信息，上述公式表达出相似度与文本共性成正相关。 由于没有限制领域，此定义被采用较多。</p>
+<blockquote>
+<p>相关度与相似度是容易混淆的概念，大量学者没有对此做过对比说明。相关度体现在文本共现或者以任何形式相互关联（包括上下位关系、同义关系、反义关系、部件-整体关系、值-属性关系等）反映出文本的组合特点。而相似度是相关度的一种特殊情况，包括上下位关系和同义关系。由此得出，文本的相似度越高，则相关度越大，但是相关度越大并不能说明相似度高。</p>
+</blockquote>
+<p>相似度一般用[0,1]表示，该实数可以通过语义距离计算获得。相似度与语义距离呈反比关系，语义距离越小，相似度越高；语义距离越大，相似度越低。通常用下面的公式表示相似度与语义距离的关系。</p>
+<script type="math/tex; mode=display">
+Sim(S_A,S_B) = \frac {\alpha} { Dis(S_A,S_B) + \alpha }</script><p>其中，$Dis(S_A,S_B)$表示文本$S_A,S_B$之间的非负语义距离，$\alpha$为调节因子，保证了当语义距离为0时上述公式的意义。</p>
+<p>文本相似度计算中还有一个重要的概念是文本表示，代表对文本的基本处理，目的是将半结构化或非结构化的文本转化为计算机可读形式。<strong>文本相似度计算方法的不同本质是文本表示方法不同</strong></p>
+<h1 id="文本相似度计算方法"><a href="#文本相似度计算方法" class="headerlink" title="文本相似度计算方法"></a>文本相似度计算方法</h1><p><img src="https://img-blog.csdnimg.cn/20191105152528460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="文本相似度计算方法"></p>
+<p>文本相似度计算方法可分为四大类：</p>
+<ul>
+<li>基于字符串的方法（String-Based）</li>
+<li>基于语料库的方法（Corpus-Based）</li>
+<li>基于世界知识的方法（Knowledge-Based）</li>
+<li>其他方法</li>
+</ul>
+<h2 id="基于字符串的方法"><a href="#基于字符串的方法" class="headerlink" title="基于字符串的方法"></a>基于字符串的方法</h2><p>该方法从字符串匹配度出发，以字符串共现和重复程度为相似度的衡量标准。根据计算粒度不同，可以将该方法分为<strong>基于字符的方法</strong>和<strong>基于词语的方法</strong>。下图列出两种方法常见的算法以及思路</p>
+<p><img src="https://img-blog.csdnimg.cn/20191105153106412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="基于字符串的方法"></p>
+<p>基于字符串的方法是在字面层次上的文本比较，文本表示即为原始文本，该方法原理简单，易于实现，现已成为其他方法的计算基础。</p>
+<p>但不足的是将字符或词语作为独立的知识单元，并未考虑词语本身的含义和词语之间的关系。以同义词为例，尽管表达不同，但具有相同的含义，而这类词语的相似度依靠基于字符串的方法并不能准确计算。</p>
+<h2 id="基于语料库的方法"><a href="#基于语料库的方法" class="headerlink" title="基于语料库的方法"></a>基于语料库的方法</h2><p>基于语料库的方法利用语料库中获取的信息计算文本相似度。基于语料库的方法可以划分为：</p>
+<ul>
+<li>基于词袋模型的方法</li>
+<li>基于神经网络的方法</li>
+<li>基于搜索引擎的方法</li>
+</ul>
+<h3 id="基于词袋"><a href="#基于词袋" class="headerlink" title="基于词袋"></a>基于词袋</h3><p>词袋模型（Bag of Words Model，BOW）建立在分布假说的基础上，即“词语所处的上下文语境相似，其语义则相似”。其基本思想是：不考虑词语在文档中出现的顺序，将文档表示成一系列词语的组合。</p>
+<p>根据考虑的语义成程度不同，基于词袋模型的方法主要包括：</p>
+<ul>
+<li>向量空间模型（Vector Space Model，VSM）</li>
+<li>潜在语义分析（Latent Semantic Analysis，LSA）</li>
+<li>概率潜在语义分析（Probabilistic Latent Semantic Analysis，PLSA）</li>
+<li>潜在狄利克雷分布（Latent Dirichlet Allocation，LDA）</li>
+</ul>
+<h4 id="VSM"><a href="#VSM" class="headerlink" title="VSM"></a>VSM</h4><p>VSM模型的基本思想是将每篇文档表示成一个基于词频或者词频-逆文档频率权重的实值向量，那么N篇文档则构成n维实值空间，其中空间的每一维都对用词项，每一篇文档表示该空间的一个点或者向量。两个文档之间的相似度就是两个向量的距离，一般采用余弦相似度方法计算。</p>
+<p>VSM有两个明显的缺点：一是该方法基于文本中的特征项进行相似度计算，当特征项较多时，产生的高维稀疏矩阵导致计算效率不高；二是向量空间模型算法的假设是文本中抽取的特征项没有关联，不符合文本语义表达。</p>
+<h4 id="LSA，PLSA"><a href="#LSA，PLSA" class="headerlink" title="LSA，PLSA"></a>LSA，PLSA</h4><p>LSA算法的基本思想是将文本从稀疏的高维词汇空间映射到低维的潜在语义空间，在潜在的语义空间计算相似性。LSA是基于VSM提出的，两种方法都是采用空间向量表示文本，但LSA使用潜在语义空间，利用奇异值分解提高对高维的词条-文档矩阵进行处理，去除了原始向量空间的某些“噪音”，使数据不再稀疏。Hofmann在LSA的基础上引入主题层，采用期望最大化算法（EM）训练主题。</p>
+<p>LSA本质上是通过降维提高计算准确度，但该算法复杂度比较高，可移植性差，比较之下，PLSA具备统计基础，多义词和同义词在PLSA中分别被训练到不同的主题和相同的主题，从而避免了多义词，同义词的影响，使得计算结构更加准确，但不适用于大规模文本。</p>
+<h4 id="LDA"><a href="#LDA" class="headerlink" title="LDA"></a>LDA</h4><p>LDA主题模型是一个三层的贝叶斯概率网络，包含词、主题和文档三层结构。采用LDA计算文本相似性的基本思想是对文本进行主题建模，并在主题对应的词语分布中遍历抽取文本中的词语，得到文本的主题分布，通过此分布计算文本相似度。</p>
+<p>以上三类尽管都是采用词袋模型实现文本表示，但是不同方法考虑的语义程度有所不同。基于向量空间建模的方法语义程度居中，加入潜在语义空间概念，解决了向量空间模型方法的稀疏矩阵问题并降低了多义词，同义词的影响。基于LDA的主题模型的方法语义程度最高，基于相似词语可能属于统一主题的理论，主题经过训练得到，从而保证了文本的语义性。</p>
+<h3 id="基于神经网络"><a href="#基于神经网络" class="headerlink" title="基于神经网络"></a>基于神经网络</h3><p>基于神经网络生成词向量计算文本相似度是近些年提的比较多的。不少产生词向量的模型和工具也被提出，比如Word2Vec和GloVe等。词向量的本质是从未标记的非结构文本中训练出一种低维实数向量，这种表达方式使得类似的词语在距离上更为接近，同时较好的解决了词袋模型由于词语独立带来的维数灾难和语义不足问题。</p>
+<p>基于神经网络方法与词袋模型方法的不同之处在于表达文本的方式。词向量是经过训练得到的低维实数向量，维数可以认为限制，实数值可根据文本距离调整，这种文本表示符合人理解文本的方式，所以基于词向量判断文本相似度的效果有进一步研究空间。</p>
+<h3 id="基于搜索引擎"><a href="#基于搜索引擎" class="headerlink" title="基于搜索引擎"></a>基于搜索引擎</h3><p>基本原理是给定搜索关键词$x,y$，搜索引擎返回包含 $x,y$的网页数量$f(x),f(y)$以及同时包含$x,y$的网页数量$f(x,y)$，计算谷歌相似度距离如下所示:</p>
+<script type="math/tex; mode=display">
+NGD(x,y) = \frac { G(x,y) - min(G(x),G(y)) } { max(G(x),G(y)}
+\\
+= \frac {max\{ log \,f(x), log\,f(y) \} - log \, f(x,y)} { log \, N - min{log \,f(x), log \, f(y)} }</script><p>但是该方法最大的不足是计算结果完全取决于搜索引擎的查询效果, 相似度因搜索引擎而异</p>
+<h2 id="基于世界知识的方法"><a href="#基于世界知识的方法" class="headerlink" title="基于世界知识的方法"></a>基于世界知识的方法</h2><p>基于世界知识的方法是利用具有规范组织体系的知识库计算文本相似度，一般分为两种：基于本体知识和基于网络知识。</p>
+<h3 id="基于本体知识"><a href="#基于本体知识" class="headerlink" title="基于本体知识"></a>基于本体知识</h3><p>文本相似度计算方法使用的本体不是严格的本体概念, 而指广泛的词典、叙词表、词汇表以及狭义的本体。由于本体能够准确地表示概念含义并能反映出概念之间的关系, 所以本体成为文本相似度的研究基础[7]。最常利用的本体是通用词典, 例如 WordNet、《知网》(HowNet)和《同义词词林》等, 除了词典还有一些领域本体, 例如医疗本体、电子商务本体、地理本体、农业本体等。</p>
+<p>结合Hliaoutaki、Batet等的研究，将基于本体的文本相似度算法概括为四种：</p>
+<ul>
+<li>基于距离</li>
+<li>基于内容</li>
+<li>基于属性</li>
+<li>混合式相似度</li>
+</ul>
+<p>下表列出了各种方法的基本原理、代表方法和特点<br><img src="https://img-blog.csdnimg.cn/20191105162644574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="基于本体的文本相似度算法"></p>
+<h3 id="基于网络知识"><a href="#基于网络知识" class="headerlink" title="基于网络知识"></a>基于网络知识</h3><p>由于本体中词语数量的限制，有些学者开始转向基于网络知识方法的研究，原因是后者覆盖范围广泛、富含丰富的语义信息、更新速度相对较快，使用最多的网络知识是维基百科、百度百科。网络知识一般包括两种结构，分别是词条页面之间的链接和词条之间的层次结构。</p>
+<p>基于网络知识的文本相似度计算方法大多利用页面链接或层次结构，能较好的反映出词条的语义关系。但其不足在于：词条与词条的信息完备程度差异较大，不能保证计算准确度，网络知识的生产方式是大众参与，导致文本缺少一定的专业性。</p>
+<h2 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h2><p>除了基于字符串、基于语料库和基于世界知识的方法, 文本相似度计算还有一些其他方法，比如：</p>
+<ul>
+<li>句法分析</li>
+<li>混合方法</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文总结了文本相似度计算的四种方法，以及他们的优缺点。作者认为今后文本相似度的计算方法趋势有三个方向，分别是：</p>
+<ul>
+<li>基于神经网络的方法研究将更加丰富</li>
+<li>网络资源为文本相似度计算方法研究提供更多支持</li>
+<li>针对特定领域以及跨领域文本的相似度计算将成为今后发展的重点</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        基于协同的ALS算法原理介绍与实现 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#最小二乘法（Least-Squares）"><span class="toc-text">最小二乘法（Least Squares）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交替最小二乘法（Alternating-Least-Squares）"><span class="toc-text">交替最小二乘法（Alternating Least Squares）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本原理"><span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型抽象"><span class="toc-text">模型抽象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代价函数"><span class="toc-text">代价函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#隐式反馈代价函数"><span class="toc-text">隐式反馈代价函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法求解"><span class="toc-text">算法求解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面试点"><span class="toc-text">面试点</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        基于协同的ALS算法原理介绍与实现
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-08-08 23:41:20</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Spark与推荐系统" title="Spark与推荐系统">Spark与推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>ALS也是一种协同算法，其全称是交替最小二乘法（Alternating Least Squares），由于简单高效，已被广泛应用在推荐场景中，目前已经被集成到Spark MLlib和ML库中，在下一篇文章会对其使用方式进行详细介绍，本篇文章主要介绍ALS的底层算法原理。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="最小二乘法（Least-Squares）"><a href="#最小二乘法（Least-Squares）" class="headerlink" title="最小二乘法（Least Squares）"></a>最小二乘法（Least Squares）</h3><p>在介绍ALS算法之前，先来了解LS，即最小二乘法。LS算法是ALS的基础，是一种数学优化技术，也是一种常用的机器学习算法，他通过最小化误差平方和寻找数据的最佳匹配，利用最小二乘法寻找最优的未知数据，保证求的数据与已知的数据误差最小。</p>
+<p>LS也被用于拟合曲线，比如所熟悉的线性模型。下面以简单的线性一元线性回归模型说明最小二乘法。<br>假设我们有一组数据{(x1,y1),(x2,y2),(x3,y3)…}其符合线性回归，假设其符合的函数为如下：</p>
+<script type="math/tex; mode=display">
+y = w_0 + w_1 x</script><p>我们使用一个平方差函数来表达参数的好坏，平方差函数如下：</p>
+<script type="math/tex; mode=display">
+L_n = (y_n - f(x;w_0,w_1))^2</script><p>其中f(.) 表示我们假设的线性回归函数。显然Ln越小越好，Ln越小表示误差越小。假设有N个样本，则N个样本的平均平方差为：</p>
+<script type="math/tex; mode=display">
+L = \frac{1}{N} \sum_{n=1}^{N} (y_n - f(x;w_0,w_1))^2</script><p>L越小表示参数w越精确，而这里最关键的就是寻找到最合适的w0和w1，则此时的数学表达式为：</p>
+<script type="math/tex; mode=display">
+\underset{w_0,w_1}{arg \ min}  \frac{1}{N} \sum_{n=1}^{N} (y_n - f(x;w_0,w_1))^2</script><p>将先行回归函数代入到最小二乘损失函数中，得到的结果为：</p>
+<script type="math/tex; mode=display">
+L = \frac{1}{N} \sum_{n=1}^{N} (y_n - w_0 - w_1 x_n)^2
+\\
+\frac{1}{N} \sum_{n=1}^{N} (w_1 ^2x_n^2 + 2w_1x_n(w_0 - y_n) + w_0^2 - 2w_0y_n + y_n^2)</script><p>L函数取得最小值时，w0和w1的一阶偏导数一定是0（因为误差平方和是一个大于等于0的数，是没有最大值的，所以取得最小值时，一阶偏导数一定为0）。因为对L函数分别求偏导，使其等于0，并对w0和w1求解，即可。</p>
+<h3 id="交替最小二乘法（Alternating-Least-Squares）"><a href="#交替最小二乘法（Alternating-Least-Squares）" class="headerlink" title="交替最小二乘法（Alternating Least Squares）"></a>交替最小二乘法（Alternating Least Squares）</h3><p>ALS算法本质上是基于物品的协同，近年来，基于模型的推荐算法ALS(交替最小二乘)在Netflix成功应用并取得显著效果提升，ALS使用机器学习算法建立用户和物品间的相互作用模型，进而去预测新项。</p>
+<h4 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h4><p>用户对物品的打分行为可以用一个矩阵（R）来表示：<br><img src="https://img-blog.csdnimg.cn/20190808233244547.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>矩阵中的打分值 r_ij表示用户 u_i 对物品 v_j 的打分，其中”?”表示用户没有打分，这也就是要通过机器学习的方法去预测这个打分值，从而达到推荐的目的。</p>
+<h4 id="模型抽象"><a href="#模型抽象" class="headerlink" title="模型抽象"></a>模型抽象</h4><p>根绝协同过滤的思想，R矩阵的行向量对应每个用户U，列向量对应每个物品V。ALS的核心思想是：将用户和物品都投射到k维空间，也就是说假设有k个隐向量特征，至于这个k个隐向量是什么不用关系（可能是标签，年龄，性别等），将每个用户和每个物品都用k维的向量来表示，把他们的内积近似为打分值，这样便可以得到近似的评分。</p>
+<script type="math/tex; mode=display">
+R \approx UV^T</script><p>其中：</p>
+<ul>
+<li>R为打分矩阵（m*n，m表示用户个数，n表示物品个数）</li>
+<li>U表示用户对隐含特征的偏好矩阵（m*k）</li>
+<li>V表示物品对隐含特征的归属矩阵（n*K）</li>
+</ul>
+<p>上述模型的参数就是U和V，求得U和V之后，就可以近似的得到用户对未评分物品的评分。</p>
+<h4 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h4><p>求上述公式中的U和V，就需要一个代价函数来衡量参数的拟合程度。用户对物品的行为分为显式行为和隐式行为，两种不同类型的行为下，对应的代价函数也是不一样的。</p>
+<blockquote>
+<p>关于显式行为和隐式行为的介绍可以餐考 我的《推荐系统开发实战》一书。</p>
+</blockquote>
+<p><strong>显式反馈代价函数</strong><br>如果用户对物品有明确的评分行为，那么可以对比重构出来的评分矩阵和实际的评分矩阵，便可得到误差。由于用户对物品的评分却失很多，仅以有评分行为的物品去计算误差。下面是显式反馈的代价函数。</p>
+<script type="math/tex; mode=display">
+J(U,V) = \sum_{i}^{m} \sum_{j}^{n}[(r_{ij} - u_iv_j^T) ^2 + \lambda ( ||u_i||^2 + ||v_j||^2 ) ]</script><p>其中：λ 为正则项系数</p>
+<h4 id="隐式反馈代价函数"><a href="#隐式反馈代价函数" class="headerlink" title="隐式反馈代价函数"></a>隐式反馈代价函数</h4><p><strong><em>隐式反馈对应的ALS算法即：ALS-WR（Alternating Least Squares With Weighted-λ -regularization）</em></strong></p>
+<p>很多情况下，用户并没有明确反馈对物品的偏好，需要通过用户的相关行为去推测其对物品的偏好，比如在电商网站中，用户是否点击物品，点击的话在一定程度上表示喜欢，未点击的话可能是不喜欢，也可能是没有看到该物品。这种形式下的反馈就被称为隐式反馈。即矩阵R为隐式反馈矩阵，引入变量p_ij表示用户u_i对物品v_j的置信度，如果隐式反馈大于0，置信度为，反之置信度为0。</p>
+<script type="math/tex; mode=display">
+p_{ij} = \left\{\begin{matrix}
+1  & r_{ij} >0 \\ 
+0 & r_{ij} =0
+\end{matrix}\right.</script><p>上文也提到了，隐式反馈为0，不代表用户完全不喜欢，也可能是用户没有看到该物品。另外用户点击一个物品，也不代表是喜欢他，可能是误点，所以需要一个信任等级来显示用户喜欢某个物品，一般情况下，r_ij越大(用户行为的次数)，越能暗示用户喜欢某个物品，因此引入变量c_ij，来衡量p_ij的信任度。</p>
+<script type="math/tex; mode=display">
+c_{ij} = 1 + \alpha r_{ij}</script><p>α 为置信度系数，那么代价函数变为如下形式：</p>
+<script type="math/tex; mode=display">
+J(U,V) = \sum_{i}^{m} \sum_{j}^{n}[c_{ij}(p_{ij} - u_iv_j^T) ^2 + \lambda ( ||u_i||^2 + ||v_j||^2 ) ]</script><h4 id="算法求解"><a href="#算法求解" class="headerlink" title="算法求解"></a>算法求解</h4><p>无论是隐式代价函数求解还是显式代价函数求解，他们都是凸函数，而且变量耦合在一起，常规的梯度下降算法不能求解。但是先固定U求V，再固定V求U，如此迭代下去，问题就可以解决了。</p>
+<script type="math/tex; mode=display">
+U^0 \rightarrow V^1 \rightarrow U^1 \rightarrow V^2 \rightarrow U^2 ....</script><p>固定一个变量，求另外一个变量，用什么方法求解呢？梯度下降？可以，但是比较麻烦。这其实是一个最小二乘的问题，由于一般隐含的特征k不会太大，可以直接当做是正规方程去解决。如此的交替的使用最小二乘去求解，所以名字就叫做交替最小二乘法。</p>
+<p><strong>显氏反馈求解</strong><br>固定V求解U，对公式进行求导化简，可得：</p>
+<script type="math/tex; mode=display">
+U ^T = \left( V^T V + \lambda I \right)^{-1} V^T R^T</script><p>同理，固定U求解V，对公式进行求导化简，可得：</p>
+<script type="math/tex; mode=display">
+V ^T = \left( U^T U + \lambda I \right)^{-1} U^T R</script><p><strong>隐式反馈求解</strong><br>固定V求解U，对公式进行求导化简，可得：</p>
+<script type="math/tex; mode=display">
+U ^T = \left( V^T C_v V + \lambda I \right)^{-1} V^T C_v R^T</script><p>同理，固定U求解V，对公式进行求导化简，可得：</p>
+<script type="math/tex; mode=display">
+V ^T = \left( U^T C_u U + \lambda I \right)^{-1} U^T C_u R</script><hr>
+<h3 id="面试点"><a href="#面试点" class="headerlink" title="面试点"></a>面试点</h3><ol>
+<li><p>最小二乘法英文名字是什么？解释及其对应的数学原理</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Least</span> Squares</span><br><span class="line">参考上文</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ALS全称是什么？为什么叫交替最小二乘法？</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Alternaing</span> Least Squares</span><br><span class="line">参考上文</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>隐式反馈和显氏反馈的区别？两种形式下ALS的代价函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">《推荐系统开发实战》中有对其的介绍</span><br><span class="line"> 两种形式下的代价函数参考上文</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代价函数中的正则项及其含义？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">参考上文</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过拟合和欠拟合的含义？在ALS中什么情况会出现过拟合和欠拟合？对应的解决办法？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">欠拟合定义：拟合的函数与训练集误差较大，</span><br><span class="line">过拟合定义：拟合的函数与训练集完美匹配（误差很小）</span><br><span class="line">合适拟合定义：拟合的函数与训练集误差较小</span><br><span class="line"></span><br><span class="line">欠拟合出现原因：数据规模太小，特征太多，正则化项系数较小</span><br><span class="line">过拟合出现原因：数据特征太少，正则化项系数较大</span><br><span class="line"></span><br><span class="line">欠拟合解决办法：增大数据规模、减小数据特征数（维数）、增大正则化系数λ</span><br><span class="line">过拟合解决办法：增多数据特征数、添加高次多项式特征、减小正则化系数λ</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Spark实现ALS可调节的参数有哪些？分别表示什么含义？</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">maxIters <span class="comment">// 最大迭代次数，默认10 </span></span><br><span class="line"><span class="built_in">rank</span> <span class="comment">// 隐向量的长度，默认是10，一般远小于m，n</span></span><br><span class="line">numBlocks <span class="comment">// 数据分区的个数，默认是10</span></span><br><span class="line">regParam <span class="comment">// ALS中的正则化参数，默认是1.0</span></span><br><span class="line">alpha <span class="comment">// ALS隐氏反馈变量的参数，置信度系数，默认是1.0</span></span><br><span class="line">userCol <span class="comment">// 用户列名</span></span><br><span class="line">itemCol <span class="comment">// item列名</span></span><br><span class="line">rateCol <span class="comment">// 评分列名</span></span><br><span class="line">implicitPrefs <span class="comment">// 显氏反馈 还是 隐氏反馈，默认false，意味显氏反馈</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

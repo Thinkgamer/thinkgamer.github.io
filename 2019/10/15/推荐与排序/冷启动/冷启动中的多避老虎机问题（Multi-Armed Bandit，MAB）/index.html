@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        冷启动中的多避老虎机问题（Multi-Armed Bandit，MAB） - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bandit算法与推荐系统"><span class="toc-text">Bandit算法与推荐系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bandit算法来源"><span class="toc-text">Bandit算法来源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thompson-sampling"><span class="toc-text">Thompson sampling</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、Beta分布"><span class="toc-text">1、Beta分布</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、Beta分布的例子"><span class="toc-text">2、Beta分布的例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、Thompson-Smapling"><span class="toc-text">3、Thompson Smapling</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、TS的Python实现"><span class="toc-text">4、TS的Python实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UCB"><span class="toc-text">UCB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、UCB的原理"><span class="toc-text">1、UCB的原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、UCB的Python实现"><span class="toc-text">2、UCB的Python实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、UCB的推导"><span class="toc-text">3、UCB的推导</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Epsilon-Greedy"><span class="toc-text">Epsilon-Greedy</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、算法原理"><span class="toc-text">1、算法原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、Python实现"><span class="toc-text">2、Python实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#朴素Bandit算法"><span class="toc-text">朴素Bandit算法</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        冷启动中的多避老虎机问题（Multi-Armed Bandit，MAB）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-10-15 10:50:47</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#冷启动" title="冷启动">冷启动</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/102560272" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/102560272</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
+<hr>
+<p>推荐系统中有两个很重要的问题：EE问题和冷启动。在实际的场景中很好的解决这两个问题又很难，比如冷启动，我们可以基于热门、用户、第三方等信息进行半个性化的推荐，但很难去获得用户的真实兴趣分布。那么有没有一种算法可以很好的解决这个问题呢？答案就是：Bandit。</p>
+<h3 id="Bandit算法与推荐系统"><a href="#Bandit算法与推荐系统" class="headerlink" title="Bandit算法与推荐系统"></a>Bandit算法与推荐系统</h3><p>在推荐系统领域里，有两个比较经典的问题常被人提起，一个是EE问题，另一个是用户冷启动问题。</p>
+<p>EE问题又叫Exploit-Explore。</p>
+<ul>
+<li>Exploit表示的是对于用户已经确定的兴趣当然要迎合。</li>
+<li>Explore表示的如果仅对用户进行兴趣投放，很快就会看厌，所以要不断的探索用户的新兴趣</li>
+</ul>
+<p>所以在进行物品推荐时，不仅要投其所好，还要进行适当的长尾物品挖掘。</p>
+<p>用户冷启动问题，也就是面对新用户时，如何能够通过若干次实验，猜出用户的大致兴趣。</p>
+<p>这两个问题本质上都是如何选择用户感兴趣的主题进行推荐，比较符合Bandit算法背后的MAB问题。</p>
+<p>比如，用Bandit算法解决冷启动的大致思路如下：用分类或者Topic来表示每个用户兴趣，也就是MAB问题中的臂（Arm），我们可以通过几次试验，来刻画出新用户心目中对每个Topic的感兴趣概率。这里，如果用户对某个Topic感兴趣（提供了显式反馈或隐式反馈），就表示我们得到了收益，如果推给了它不感兴趣的Topic，推荐系统就表示很遗憾（regret）了。如此经历“选择-观察-更新-选择”的循环，理论上是越来越逼近用户真正感兴趣的Topic的。</p>
+<h3 id="Bandit算法来源"><a href="#Bandit算法来源" class="headerlink" title="Bandit算法来源"></a>Bandit算法来源</h3><p>Bandit算法来源于历史悠久的赌博学，它要解决的问题是这样的：</p>
+<p>一个赌徒，要去摇老虎机，走进赌场一看，一排老虎机，外表一模一样，但是每个老虎机吐钱的概率可不一样，他不知道每个老虎机吐钱的概率分布是什么，那么每次该选择哪个老虎机可以做到最大化收益呢？这就是多臂赌博机问题（Multi-armed bandit problem, K-armed bandit problem, MAB）。</p>
+<p>怎么解决这个问题呢？最好的办法是去试一试，不是盲目地试，而是有策略地快速试一试，这些策略就是Bandit算法。</p>
+<p>这个多臂问题，推荐系统里很多问题都与它类似：</p>
+<ul>
+<li>假设一个用户对不同类别的内容感兴趣程度不同，那么我们的推荐系统初次见到这个用户时，怎么快速地知道他对每类内容的感兴趣程度？这就是推荐系统的冷启动。</li>
+<li>假设我们有若干广告库存，怎么知道该给每个用户展示哪个广告，从而获得最大的点击收益？是每次都挑效果最好那个么？那么新广告如何才有出头之日？</li>
+<li>我们的算法工程师又想出了新的模型，有没有比A/B test更快的方法知道它和旧模型相比谁更靠谱？</li>
+<li>如果只是推荐已知的用户感兴趣的物品，如何才能科学地冒险给他推荐一些新鲜的物品？</li>
+</ul>
+<p>Bandit算法需要量化一个核心问题：错误的选择到底有多大的遗憾？能不能遗憾少一些？常见Bandit算法有哪些呢？往下看</p>
+<h3 id="Thompson-sampling"><a href="#Thompson-sampling" class="headerlink" title="Thompson sampling"></a>Thompson sampling</h3><h4 id="1、Beta分布"><a href="#1、Beta分布" class="headerlink" title="1、Beta分布"></a>1、Beta分布</h4><p>Thompson Sampling是基于Beta分布进行的，所以首先看下什么是Beta分布？</p>
+<p>Beta分布可以看作是一个概率的概率分布，当你不知道一个东西的具体概率是多少时，他可以给出所有概率出现的可能性。Beta是一个非固定的公式，其表示的是一组分布（这一点和距离计算中的闵可夫斯基距离类似）。</p>
+<p>比如：</p>
+<p>二项分布（抛n次硬币，正面出现k次的概率）</p>
+<script type="math/tex; mode=display">
+P(S=k)=\binom{n}{k} p^k (1-p)^{n-k}</script><p>几何分布（抛硬币，第一次抛出正面所需的次数的概率）</p>
+<script type="math/tex; mode=display">
+P(T=t)= (1-p)^{t-1} p</script><p>帕斯卡分布（抛硬币，第k次出现正面所需次数的概率）</p>
+<script type="math/tex; mode=display">
+P(Y_k=t)=\binom{t-1}{k-1} p^{k-1} (1-p)^{t-k}p</script><p>去找一个统一的公式去描述这些分布，就是Beta分布：</p>
+<script type="math/tex; mode=display">
+Beta(x| \alpha,\beta) = \frac{1}{B(\alpha, \beta)} x^{\alpha-1} (1-x)^\beta</script><p>其中 $B(\alpha, \beta)$是标准化函数，他的作用是使总概率和为1，$\alpha, \beta$为形状参数，不同的参数对应的图像形状不同，他不但可以表示常见的二项分布、几何分布等，还有一个好处就是，不需要去关系某次实验结果服从什么分布，而是利用<br>$\alpha, \beta$的值就可以计算出我们想要的统计量。</p>
+<p>常见的参数对应的图形为：</p>
+<p><img src="https://img-blog.csdnimg.cn/20191015085055652.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="Beta分布"></p>
+<p>$Beta(\alpha, \beta)$的常见的统计量为：</p>
+<ul>
+<li>众数为：$\frac {\alpha-1}{\alpha + \beta -1}$</li>
+<li>期望为：$\mu = E(x)= \frac {\alpha} {\alpha + \beta}$</li>
+<li>方差为：$Var(x) = E(x - \mu)^2 = \frac { \alpha \beta } { (\alpha + \beta)^2 (\alpha + \beta +1) }$</li>
+</ul>
+<h4 id="2、Beta分布的例子"><a href="#2、Beta分布的例子" class="headerlink" title="2、Beta分布的例子"></a>2、Beta分布的例子</h4><p>网上资料中一个很常见的例子是棒球运动员的，这里进行借鉴。</p>
+<p>棒球运动有一个指标是棒球击球率(batting average)，就是用一个运动员击中的球数除以击球的总数，我们一般认为0.266是正常水平的击球率，而如果击球率高达0.3就被认为是非常优秀的。</p>
+<p>现在有一个棒球运动员，我们希望能够预测他在这一赛季中的棒球击球率是多少。你可能就会直接计算棒球击球率，用击中的数除以击球数，但是如果这个棒球运动员只打了一次，而且还命中了，那么他就击球率就是100%了，这显然是不合理的，因为根据棒球的历史信息，我们知道这个击球率应该是0.215到0.36之间才对啊。</p>
+<p>对于这个问题，我们可以用一个二项分布表示（一系列成功或失败），一个最好的方法来表示这些经验（在统计中称为先验信息）就是用beta分布，这表示在我们没有看到这个运动员打球之前，我们就有了一个大概的范围。beta分布的定义域是(0,1)这就跟概率的范围是一样的。</p>
+<p>接下来我们将这些先验信息转换为beta分布的参数，我们知道一个击球率应该是平均0.27左右，而他的范围是0.21到0.35，那么根据这个信息，我们可以取$\alpha$=81,$\beta$=219</p>
+<p><img src="https://img-blog.csdnimg.cn/20191015090126646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="棒球运动员Beta分布例子"></p>
+<p>之所以取这两个参数是因为：</p>
+<ul>
+<li>beta分布的均值是：$\frac{81} {81 + 219}=0.27$</li>
+<li>从图中可以看到这个分布主要落在了(0.2,0.35)间，这是从经验中得出的合理的范围。</li>
+</ul>
+<blockquote>
+<p>在这个例子里，我们的x轴就表示各个击球率的取值，x对应的y值就是这个击球率所对应的概率。也就是说beta分布可以看作一个概率的概率分布。</p>
+</blockquote>
+<p>有了这样的初始值，随着运动的进行，其表达式可以表示为：</p>
+<script type="math/tex; mode=display">
+Beta(\alpha_0 + hits , \beta_0 + misses)</script><p>其中 $\alpha_0, \beta_0$是一开始的参数，值为81，219。当击中一次球是 hits + 1，misses不变，当未击中时，hits不变，misses+1。这样就可以在每次击球后求其最近的平均水平了。</p>
+<h4 id="3、Thompson-Smapling"><a href="#3、Thompson-Smapling" class="headerlink" title="3、Thompson Smapling"></a>3、Thompson Smapling</h4><p>Thompson sampling算法简单实用，简单介绍一下它的原理，要点如下：</p>
+<ul>
+<li>假设每个臂是否产生收益，其背后有一个概率分布，产生收益的概率为p。</li>
+<li>我们不断地试验，去估计出一个置信度较高的“概率p的概率分布”就能近似解决这个问题了。</li>
+<li>怎么能估计“概率p的概率分布”呢？ 答案是假设概率p的概率分布符合beta(wins, lose)分布，它有两个参数: wins, lose。</li>
+<li>每个臂都维护一个beta分布的参数。每次试验后，选中一个臂，摇一下，有收益则该臂的wins增加1，否则该臂的lose增加1。</li>
+<li>每次选择臂的方式是：计算每个臂现有的beta分布的平均水平，选择所有臂产生的随机数中最大的那个臂去摇。</li>
+</ul>
+<h4 id="4、TS的Python实现"><a href="#4、TS的Python实现" class="headerlink" title="4、TS的Python实现"></a>4、TS的Python实现</h4><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import numpy as <span class="built_in">np</span></span><br><span class="line">import <span class="built_in">random</span></span><br><span class="line"></span><br><span class="line">def ThompsonSampling(wins, trials):</span><br><span class="line">    pbeta = [<span class="number">0</span>] * N</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, len(trials)):</span><br><span class="line">        pbeta[i] = <span class="built_in">np</span>.<span class="built_in">random</span>.<span class="built_in">beta</span>(wins[i] + <span class="number">1</span>, trials[i] - wins[i] + <span class="number">1</span>)</span><br><span class="line">    choice = <span class="built_in">np</span>.argmax(pbeta)</span><br><span class="line">    trials[choice] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">random</span>.<span class="built_in">random</span>() &gt; <span class="number">0.5</span>:</span><br><span class="line">        wins[choice] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">T = <span class="number">10000</span>  # 实验次数</span><br><span class="line">N = <span class="number">10</span>  # 类别个数</span><br><span class="line"># 臂的选择总次数</span><br><span class="line">trials = <span class="built_in">np</span>.<span class="built_in">array</span>([<span class="number">0</span>] * N )</span><br><span class="line"># 臂的收益</span><br><span class="line">wins = <span class="built_in">np</span>.<span class="built_in">array</span>([<span class="number">0</span>] * N )</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, T):</span><br><span class="line">    ThompsonSampling(wins, trials)</span><br><span class="line"><span class="built_in">print</span>(trials)</span><br><span class="line"><span class="built_in">print</span>(wins)</span><br><span class="line"><span class="built_in">print</span>(wins/trials)</span><br></pre></td></tr></table></figure>
+<h3 id="UCB"><a href="#UCB" class="headerlink" title="UCB"></a>UCB</h3><h4 id="1、UCB的原理"><a href="#1、UCB的原理" class="headerlink" title="1、UCB的原理"></a>1、UCB的原理</h4><p>UCB（Upper Confidence Bound，置信区间上界）可以理解为不确定性的程度，区间越宽，越不确定，反之就越确定，其表达式如下：</p>
+<script type="math/tex; mode=display">
+score(i) = \frac {N_i}{T} + \sqrt{ \frac{2 ln T}{N_i}}</script><p>其中 Ni 表示第i个臂收益为 1 的次数，T表示选择的总次数</p>
+<p>公式分为左右两部分，左侧（+左侧部分）表示的是候选臂i到目前为止的平均收益，反应的是它的效果。右侧（+右侧部分）叫做Bonus，本质上是均值的标准差，反应的是候选臂效果的不确定性，就是置信区间的上边界。</p>
+<blockquote>
+<p>统计学中的一些统计量表达的含义</p>
+</blockquote>
+<p>如果一个臂的收益很少，即Ni很小，那么他的不确定性就越大，在最后排序输出时就会有优势，bouns越大，候选臂的平均收益置信区间越宽，越不稳定，就需要更多的机会进行选择。反之如果平均收益很大，即+号左侧户数很大，在选择时也会有被选择的机会。</p>
+<h4 id="2、UCB的Python实现"><a href="#2、UCB的Python实现" class="headerlink" title="2、UCB的Python实现"></a>2、UCB的Python实现</h4><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">import numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义 T = 1000 个用户，即总共进行1000次实现</span></span><br><span class="line">T = <span class="number">1000</span></span><br><span class="line"><span class="comment"># 定义 N = 10 个标签，即 N 个 物品</span></span><br><span class="line">N = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 保证结果可复现，设置随机数种子</span></span><br><span class="line">np.<span class="built_in">random</span>.seed(<span class="number">888</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每个物品的累积点击率（理论概率）</span></span><br><span class="line">true_rewards = np.<span class="built_in">random</span>.uniform(low=<span class="number">0</span>, high=<span class="number">1</span>, size= N)</span><br><span class="line"><span class="comment"># true_rewards = np.array([0.5] * N)</span></span><br><span class="line"><span class="comment"># 每个物品的当前点击率</span></span><br><span class="line">now_rewards = np.zeros(N)</span><br><span class="line"><span class="comment"># 每个物品的点击次数</span></span><br><span class="line">chosen_count = np.zeros(N)</span><br><span class="line"></span><br><span class="line">total_reward = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算ucb的置信区间宽度</span></span><br><span class="line">def calculate_delta(T, <span class="keyword">item</span>):</span><br><span class="line">    <span class="keyword">if</span> chosen_count[<span class="keyword">item</span>] == <span class="number">0</span>:</span><br><span class="line">        <span class="literal">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="literal">return</span> np.<span class="built_in">sqrt</span>( <span class="number">2</span> * np.<span class="built_in">log</span>( T ) / chosen_count[<span class="keyword">item</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算UCB</span></span><br><span class="line">def ucb(t, N):</span><br><span class="line">    <span class="comment"># ucb得分</span></span><br><span class="line">    upper_bound_probs = [ now_rewards[<span class="keyword">item</span>] + calculate_delta(t,<span class="keyword">item</span>) <span class="keyword">for</span> <span class="keyword">item</span> <span class="keyword">in</span> range(N) ]</span><br><span class="line">    <span class="keyword">item</span> = np.argmax(upper_bound_probs)</span><br><span class="line">    <span class="comment"># 模拟伯努利收益</span></span><br><span class="line">    <span class="comment"># reward = sum(np.random.binomial(n =1, p = true_rewards[item], size=20000)==1 ) / 20000</span></span><br><span class="line">    reward = np.<span class="built_in">random</span>.binomial(n =<span class="number">1</span>, p = true_rewards[<span class="keyword">item</span>])</span><br><span class="line">    <span class="literal">return</span> <span class="keyword">item</span>, reward</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>,T+<span class="number">1</span>):</span><br><span class="line">    <span class="comment"># 为第 t个用户推荐一个物品</span></span><br><span class="line">    <span class="keyword">item</span>, reward = ucb(t, N)</span><br><span class="line">    <span class="comment"># print("item is %s, reward is %s" % (item, reward))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 一共有多少用户接受了推荐的物品</span></span><br><span class="line">    total_reward += reward</span><br><span class="line">    chosen_count[<span class="keyword">item</span>] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新物品的当前点击率</span></span><br><span class="line">    now_rewards[<span class="keyword">item</span>] =  ( now_rewards[<span class="keyword">item</span>] * (t<span class="number">-1</span>) + reward) /  t</span><br><span class="line">    <span class="comment"># print("更新后的物品点击率为：%s" % (now_rewards[item]))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出当前点击率 / 累积点击率</span></span><br><span class="line">    <span class="comment"># print("当前点击率为: %s" % now_rewards)</span></span><br><span class="line">    <span class="comment"># print("累积点击率为: %s" % true_rewards)</span></span><br><span class="line"></span><br><span class="line">    diff =  np.<span class="built_in">subtract</span>( true_rewards, now_rewards)</span><br><span class="line">    print(diff[<span class="number">0</span>])</span><br><span class="line">    print(total_reward)</span><br></pre></td></tr></table></figure>
+<h4 id="3、UCB的推导"><a href="#3、UCB的推导" class="headerlink" title="3、UCB的推导"></a>3、UCB的推导</h4><p>观测 1：假设一个物品被推荐了k次，获取了k次反馈（点击 or 不点击），可以计算出物品被点击的平均概率</p>
+<p>当k 接近于正无穷时，p’ 会接近于真实的物品被点击的概率</p>
+<script type="math/tex; mode=display">
+p' = \frac {\sum reward_i}{k}</script><p>观测 2：现实中物品被点击的次数不可能达到无穷大，因此估计出的被点击的概率 p’ 和真实的点击的概率 p 总会存在一个差值 d，即：</p>
+<script type="math/tex; mode=display">
+p'-d \leqslant p \leqslant p'+d</script><p>最后只需要解决差值 d 到底是怎么计算的？</p>
+<p>首先介绍霍夫丁不等式（Chernoff-Hoeffding Bound），霍夫丁不等式假设reward_1, … , reward_n 是在[0,1]之间取值的独立同分布随机变量，用p’ 表示样本的均值，用p表示分布的均值，那么有：</p>
+<script type="math/tex; mode=display">
+P\{|p'-p| \leqslant \delta \} \geqslant 1 - 2e^{-2n\delta ^2}</script><p>当 $\delta$ 取值为$\sqrt { 2In T /n}$ （其中 T 表示有物品被推荐的次数，n表示有物品被点击的次数），可以得到：</p>
+<script type="math/tex; mode=display">
+P\{|p'-p| \leqslant \sqrt { \frac{2In T }{n}} \} \geqslant 1 - \frac{ 2 }{ T^4}</script><p>也就是说：</p>
+<script type="math/tex; mode=display">
+p' - \sqrt { \frac{2In T }{n}} \leqslant p \leqslant p' + \sqrt { \frac{2In T }{n}}</script><p>是以 1 - 2/T^4 的概率成立的，<br>当T=2时，成立的概率为0.875<br>当T=3时，成立的概率为0.975<br>当T=4时，成立的概率为0.992<br>可以看出 $d =  \sqrt { \frac{2In T }{n}}$ 是一个不错的选择。</p>
+<h3 id="Epsilon-Greedy"><a href="#Epsilon-Greedy" class="headerlink" title="Epsilon-Greedy"></a>Epsilon-Greedy</h3><h4 id="1、算法原理"><a href="#1、算法原理" class="headerlink" title="1、算法原理"></a>1、算法原理</h4><p>这是一个朴素的Bandit算法，有点类似模拟退火的思想：</p>
+<ol>
+<li>选一个（0,1）之间较小的数作为epsilon；</li>
+<li>每次以概率epsilon做一件事：所有臂中随机选一个；</li>
+<li>每次以概率1-epsilon 选择截止到当前，平均收益最大的那个臂。</li>
+</ol>
+<p>是不是简单粗暴？epsilon的值可以控制对Exploit和Explore的偏好程度。越接近0，越保守，只选择收益最大的。</p>
+<h4 id="2、Python实现"><a href="#2、Python实现" class="headerlink" title="2、Python实现"></a>2、Python实现</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">import random</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EpsilonGreedy</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>, epsilon, counts, values)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">self</span>.epsilon = epsilon</span><br><span class="line">        <span class="keyword">self</span>.counts = counts</span><br><span class="line">        <span class="keyword">self</span>.values = values</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(<span class="keyword">self</span>, n_arms)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">self</span>.counts = [<span class="number">0</span> <span class="keyword">for</span> col <span class="keyword">in</span> range(n_arms)]</span><br><span class="line">        <span class="keyword">self</span>.values = [<span class="number">0</span>.<span class="number">0</span> <span class="keyword">for</span> col <span class="keyword">in</span> range(n_arms)]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_arm</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">if</span> random.random() &gt; <span class="keyword">self</span>.<span class="symbol">epsilon:</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">self</span>.values.index( max(<span class="keyword">self</span>.values) )</span><br><span class="line">        <span class="symbol">else:</span></span><br><span class="line">            <span class="comment"># 随机返回 self.values 中个的一个</span></span><br><span class="line">            <span class="keyword">return</span> random.randrange(len(<span class="keyword">self</span>.values))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reward</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> <span class="keyword">if</span> random.random() &gt; <span class="number">0</span>.<span class="number">5</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(<span class="keyword">self</span>, chosen_arm, reward)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">self</span>.counts[chosen_arm] = <span class="keyword">self</span>.counts[chosen_arm] + <span class="number">1</span></span><br><span class="line">        n = <span class="keyword">self</span>.counts[chosen_arm]</span><br><span class="line"></span><br><span class="line">        value = <span class="keyword">self</span>.values[chosen_arm]</span><br><span class="line">        new_value = ((n - <span class="number">1</span>)  * value + reward ) / float(n)</span><br><span class="line">        <span class="keyword">self</span>.values[chosen_arm] = round(new_value,<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">n_arms = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">algo = EpsilonGreedy(<span class="number">0</span>.<span class="number">1</span>, [], [])</span><br><span class="line"></span><br><span class="line">algo.initialize(n_arms)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">100</span>)<span class="symbol">:</span></span><br><span class="line">    chosen_arm = algo.select_arm()</span><br><span class="line">    reward = algo.reward()</span><br><span class="line">    algo.update(chosen_arm, reward)</span><br><span class="line"></span><br><span class="line">print(algo.counts)</span><br><span class="line">print(algo.values)</span><br></pre></td></tr></table></figure>
+<h3 id="朴素Bandit算法"><a href="#朴素Bandit算法" class="headerlink" title="朴素Bandit算法"></a>朴素Bandit算法</h3><p>最朴素的Bandit算法就是：先随机试若干次，计算每个臂的平均收益，一直选均值最大那个臂。这个算法是人类在实际中最常采用的，不可否认，它还是比随机乱猜要好。</p>
+<p>Python实现比较简单，这里就不做演示了。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

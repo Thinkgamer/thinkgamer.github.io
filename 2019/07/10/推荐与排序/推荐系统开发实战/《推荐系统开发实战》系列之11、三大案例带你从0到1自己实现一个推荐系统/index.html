@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之11、三大案例带你从0到1自己实现一个推荐系统 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#新闻推荐系统"><span class="toc-text">新闻推荐系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#音乐推荐系统"><span class="toc-text">音乐推荐系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图书推荐系统"><span class="toc-text">图书推荐系统</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之11、三大案例带你从0到1自己实现一个推荐系统
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:11</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>俗话说的好：“眼看千遍,不如手写一遍”，前几篇介绍了推荐系统的来源、发展、数据预处理、常见的推荐算法，以及冷启动和推荐系统效果评估。本篇文章将会通过实例介绍推荐系统的完整开发过程，以便大家有更加直观、系统的理解。</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/96211201" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/96211201</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<p>在学习了《推荐系统开发实战》的一些基础知识之后，如何才能将这些知识应用到实际的案例中呢，本文介绍了以下三个案例，来带领大家温习和应用学到的知识。三大案例包含：</p>
+<ul>
+<li>新闻推荐系统</li>
+<li>音乐推荐系统</li>
+<li>图书推荐系统</li>
+</ul>
+<h2 id="新闻推荐系统"><a href="#新闻推荐系统" class="headerlink" title="新闻推荐系统"></a>新闻推荐系统</h2><p>实现的第一个案例是新闻推荐系统，这里使用的数据集为：某新闻网站指定日期前的部分新闻数据，节选的几个主题为：国际要闻、互联网、经济要闻、社会公益、书评、影视综艺。爬取的每条数据包含三个字段：标题、时间、正文，如图所示。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190717002449843.png" width="700px"></center>
+在得到基础数据之后就是对数据的预处理，其主要包括：
+- 对原始数据的加工
+- 新闻相似度计算
+- 新闻热度值计算
+- 指定标签下的新闻统计
+
+其系统的整体架构如下所示：
+<center><img src="https://img-blog.csdnimg.cn/20190717002709673.png" width="500px"></center>
+
+<p>其中各个模块介绍如下。</p>
+<ul>
+<li><p>MySQL数据存储：这里使用MySQL存储系统所使用的数据。系统实现选用的是Python的Django框架，在框架中有对数据对象的封装，在第11.4节中将会说明所创建的数据对象。</p>
+</li>
+<li><p>用户选择：系统指定了三个用户（张三、李四、王五）作为演示用户，只是为了区分不同用户、不同行为，“为你推荐”的内容也不同。</p>
+</li>
+<li><p>选择标签：用户与系统的交互过程，解决系统的冷启动。当然用户也可以不选择相应的标签，此时“为你推荐”模块显示的是热度数据。</p>
+</li>
+<li><p>用户点击浏览文章：即用户在系统中产生了相关行为，每篇文章的详细页都会推荐该篇文章的相似文章。</p>
+</li>
+<li><p>热度榜：按照第11.2.2节中计算的热度值进行排序，显示热度值较大的新闻。</p>
+</li>
+<li><p>为你推荐：如果用户是初次登录，则根据用户选择的标签返回“为你推荐”的内容；若用户没有选择标签，则返回热度值较高的新闻作为“为你推荐”的内容；如果用户是在点击浏览过新闻之后返回“为你推荐”模块，则返回用户有行为文章的相似文章，作为“为你推荐”的内容。</p>
+</li>
+</ul>
+<p>系统整体架构设计比较简单，和线上真正应用的复杂的推荐系统是有很大差距的，但实现思路是一致的。</p>
+<p>接下来就是系统实现了，本实例采用前后端分离的形式进行实现，后端采用Python的Django框架进行开发，前端采用Vue.js框架开发。</p>
+<p>后端开发依赖于Python 3.6版本，其中使用的包为：Django==2.1，PyMySQL==0.9.2，jieba==0.39，xlrd==1.1.0，gensim==3.6.0。</p>
+<p>前端开发依赖于node.js环境，使用的是Vue.js框架，node.js对应的版本是10.13。</p>
+<p>其最终实现的效果图如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190717003718141.jpg" width="700px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190717003727282.jpg" width="700px"></center>
+<center><img src="https://img-blog.csdnimg.cn/20190717003738407.png" width="500px"></center>
+
+
+<p>通过这样一个实例，推荐系统变得不那么抽象，更加直观地展示在读者眼前。当然，每一个推荐系统背后都要付出很多，而不仅是算法层面，在从事相关工作时，更要拥有全局意识，要明白一个好的推荐系统是数据、算法、架构和展示等共同决定的，而不是靠“一己之力”。</p>
+<h2 id="音乐推荐系统"><a href="#音乐推荐系统" class="headerlink" title="音乐推荐系统"></a>音乐推荐系统</h2><p>过多的内容这里不展开介绍，大家看下效果图，感兴趣的化可以关注《推荐系统开发实战》</p>
+<center><img src="https://img-blog.csdnimg.cn/20190717004024151.png" width="700px"></center>
+<center><img src="https://img-blog.csdnimg.cn/20190717004034658.png" width="700px"></center>
+<center><img src="https://img-blog.csdnimg.cn/20190717004044810.png" width="700px"></center>
+<center><img src="https://img-blog.csdnimg.cn/20190717004053533.png" width="700px"></center>
+<center><img src="https://img-blog.csdnimg.cn/20190717004101890.png" width="700px"></center>
+
+<hr>
+<h2 id="图书推荐系统"><a href="#图书推荐系统" class="headerlink" title="图书推荐系统"></a>图书推荐系统</h2><center><img src="https://img-blog.csdnimg.cn/20190717004217623.png" width="700px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190717004226269.png" width="500px"></center>
+<center><img src="https://img-blog.csdnimg.cn/2019071700423590.png" width="700px"></center>
+
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

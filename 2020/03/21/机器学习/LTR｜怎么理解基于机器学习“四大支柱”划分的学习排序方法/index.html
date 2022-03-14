@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        LTR｜怎么理解基于机器学习“四大支柱”划分的学习排序方法 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LTR框架"><span class="toc-text">LTR框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pointwise-Approach"><span class="toc-text">Pointwise Approach</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解释"><span class="toc-text">解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pairwise-Approach"><span class="toc-text">Pairwise Approach</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解释-1"><span class="toc-text">解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-1"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Listwise-Approach"><span class="toc-text">Listwise Approach</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解释-2"><span class="toc-text">解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pointwise-VS-Pairwise"><span class="toc-text">Pointwise VS Pairwise</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        LTR｜怎么理解基于机器学习“四大支柱”划分的学习排序方法
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-03-21 14:02:44</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>Learning to rank（LTR，L2R）也叫排序学习，泛指机器学习中任何用户排序的技术，是指一类监督学习（Supervised Learning）排序算法。 LTR被应用在很多领域，比如信息检索（Information Retrieval）、推荐系统（Recommend System）、搜索引擎（Search Engine）。</p>
+<h2 id="LTR框架"><a href="#LTR框架" class="headerlink" title="LTR框架"></a>LTR框架</h2><p>一般来讲，根据机器学习的“四大支柱”，LTR分为三类方法：Pointwise Approach、Pairwise Approach、Listwise Approach。不同的方法通过不同的方式去训练模型，他们定义不同的输入、不同的输出、不同的假设、不同的损失函数。</p>
+<p>什么是机器学习的四大支柱？看下图<br><img src="https://img-blog.csdnimg.cn/2020031823011259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="机器学习的四大支柱"></p>
+<p>LTR框架对应的则是排序模型，一个通用的LTR框架如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200318215807647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="LTR框架"></p>
+<p>通常来说，一个训练集由$n$个query组成$q_i(i=1,2,3…,n)$，每一个query都会有一系列与之相关的documents（通常每个documents都有向量表示，向量内容可以是有意义的特征，也可以是embedding得出的向量）$X^i = \{ x_j^{(i)} \}_{y=1}^{m^{(i)}}$，$m^{(i)}$表示与$q_i$相关的documents个数，$y$代表documents的正确标签（可能是0或者1，也能是相关度）。上图中对应的流程是：准备训练数据-&gt;特征提取-&gt;训练模型-数据预测-&gt;效果评估</p>
+<h2 id="Pointwise-Approach"><a href="#Pointwise-Approach" class="headerlink" title="Pointwise Approach"></a>Pointwise Approach</h2><h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><p>Pointwise是“逐样本”的训练方法，即仅考虑单个样本的得分$h(x_i)$与样本的真实得分$y^{(i)}$的关系。</p>
+<p>Pointwise 将问题转化为多分类或回归问题。如果归结为多分类问题，对于某个 Query，对文档与此 Query 的相关程度打标签，标签分为有限的类别，这样就将问题转为多分类问题；如果归结为回归问题，对于某个 Query，则对文档与此 Query 的相关程度计算相关度 Score，这样就将问题归结为回归问题。</p>
+<p>例如，对于一组样本数据，用户一段时间内在几个商品类别下的浏览，收藏，分享，购买次数，然后label为喜好等级或是否喜欢，如下表所示（数据伪造只为了说明问题）：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>用户</th>
+<th>类别</th>
+<th>浏览</th>
+<th>收藏</th>
+<th>分享</th>
+<th>购买</th>
+<th>喜好等级</th>
+<th>是否喜欢</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>userA</td>
+<td>数码产品</td>
+<td>43</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>高</td>
+<td>是</td>
+</tr>
+<tr>
+<td>userB</td>
+<td>生活用户</td>
+<td>24</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+<td>中</td>
+<td>否</td>
+</tr>
+<tr>
+<td>userC</td>
+<td>办公用品</td>
+<td>12</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td>低</td>
+<td>否</td>
+</tr>
+<tr>
+<td>userD</td>
+<td>衣服</td>
+<td>25</td>
+<td>5</td>
+<td>1</td>
+<td>1</td>
+<td>中</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>如上表所示，用户在每个类别下的行为特征有四个，喜好等级分为：高、中、低三档。然后我们可以采用机器学习中的任意一种多分类方法计算用户对物品类别的喜好等级，当然我们也可以采用二分类的方法计算用户是否喜欢这个类别，这和推荐系统中基于CTR来做物品排序和pointwise中的二分类思路是一致的。</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>Pointwise完全从单文档的分类角度计算，没有考虑文档之间的相对顺序。而且它假设相关度是查询无关的，只要$(query，y_i)$的相关度相同，那么他们就被划分到同一个级别中，属于同一类。比如在CTR场景中构建的训练集中，所有正样本之间的相关性，Pointwise是不会考虑，同样所有的负样本之间的相关性Pointwise也是不会考虑的。</li>
+<li>损失函数中没有捕获预测排序中的位置信息，因此，损失函数可能无意的过多强调那些不重要的结果，即那些排序在后面对用户体验影响小的结果。</li>
+</ul>
+<h2 id="Pairwise-Approach"><a href="#Pairwise-Approach" class="headerlink" title="Pairwise Approach"></a>Pairwise Approach</h2><h3 id="解释-1"><a href="#解释-1" class="headerlink" title="解释"></a>解释</h3><p>相对Pointwise而言，Pairwise更在乎的是文档之间的顺序，他主要将排序问题归结为二元分类问题，这时候相应的机器学习算法就比较多了，比如Boost、SVM、神经网络等。对于同一query的相关文档集中，对任何两个不同label的文档，都可以得到一个训练实例$(y_i,y_j)$，如果$y_i&gt;y_j$则赋值+1，反之-1，于是我们就得到了二元分类器训练所需的训练样本了。</p>
+<p>Pairwise通常用在搜索系统中，系统接收到用户査询后，返回相关文档列表，所以问题的关键是确定文档之间的先后顺序关系。Pointwise方法完全从单个文档的分类得分角度计算，没有考虑文档之间的顺序关系。文档对方法将排序问题转化为多个pair的排序问题，比较不同文章的先后顺序。</p>
+<p>在Pairwise算法中，每个输入数据为一对具有偏序关系（preference relation）的文档，通过对这些数据对的有监督学习来获得一个排序模型，其学习目标是使得结果列表中的错误的偏序对越少越好。<br><img src="https://img-blog.csdnimg.cn/20200319144307194.png" alt="pairwise"></p>
+<p>目前公认最为经典的三个Pairwise算法是：基于SVM的Ranking SVM算法、基于神经网络的RankNet算法和基于Boosting的RankBoost算法。</p>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>样本数据大多数为有序类别，转化成 pairwise preference 后必定会损失掉一些更细粒度的相关度标注信息。</li>
+<li>转化成 pairwise preference 后，样本数量将会增加很多倍，在进行模型训练时也会需要更大的计算资源。</li>
+<li>Pairwise 类方法相对 Pointwise 类方法对噪声标注更敏感，即一个错误标注会引起多个pair 标注错误。</li>
+<li>Pairwise 类方法仅考虑了pair 的相对位置，同样也没有考虑样本在预测排序中的位置信息，同时也没有考虑同一个label对应的数据的内部依赖性。</li>
+</ul>
+<h2 id="Listwise-Approach"><a href="#Listwise-Approach" class="headerlink" title="Listwise Approach"></a>Listwise Approach</h2><h3 id="解释-2"><a href="#解释-2" class="headerlink" title="解释"></a>解释</h3><p>Pariwise和Pointwise忽视了一个事实就是答案选择就是从一系列候选句子中的预测问题，相对于 Pointwise 和 Pairwise 方法来说，它不再将排序问题转化为一个分类问题或者回归问题，而是直接针对评价指标对文档的排序结果进行优化，在listwise中单一训练样本是：query和它的所有候选回答句子。</p>
+<p>ListWise中常用的优化指标有：MAP、NDCG。常用的ListWise方法有：LambdaRank、AdaRank、SoftRank、LambdaMART。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点：相较 Pointwise、Pairwise 对 ranking 的 model 更自然，解决了 ranking 应该基于 query 和 position 问题。</li>
+<li>缺点：一些 ranking 算法需要基于排列来计算 loss，从而使得训练复杂度较高。</li>
+</ul>
+<h2 id="Pointwise-VS-Pairwise"><a href="#Pointwise-VS-Pairwise" class="headerlink" title="Pointwise VS Pairwise"></a>Pointwise VS Pairwise</h2><p>在推荐系统领域，Pointwise的应用是比Pairwise更广的，因为效果更好，但是在搜索系统领域Pairwsie表现比Pointwise更加出色。</p>
+<p>在搜索系统中，搜索是带 query 的、有意识的被动推荐，对于搜索而言，相关性是及其重要的事情。query 限制了你召回商品相关性，比如 “华为手机”，召回回来一批相似性极高的手机，基于用户的主观诉求也决定了他将高度关注商品之间的细微差别，比如价格、颜色、配置等，因此这些商品才有必要比个高下。</p>
+<p>在推荐系统中，推荐是发散的、无意识的主动推荐，相比搜索而言，准确性不再是第一要务（想象下因为你点过一些手机给你出一整屏手机的感觉），多样性是一个必要的指标，这导致了推荐结果极其发散。用户对推荐结果多样性的诉求使得他不关注两个商品之间的比较，对于算法而言不再关注商品之间两两的比较，我只要每个都预测准了，反正最后也要打散的。而且多样性也导致了推荐场景没有像搜索一样适合做 Pairwise 的样本。</p>
+<p>因为虽然用的都是学习排序算法，但是在不同的场景中，算法的选择和使用还是有区别的，要因地制宜！</p>
+<p>这篇文章分享就到这里，如果你有不懂的可以在留言区留言，当然如果你觉得不错，可以分享给更多人！</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

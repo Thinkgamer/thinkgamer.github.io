@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之13、基于Wide&amp;Deep模型的在线排序.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#离线训练"><span class="toc-text">离线训练</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TFServing-部署"><span class="toc-text">TFServing 部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#在线排序"><span class="toc-text">在线排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模型同步"><span class="toc-text">模型同步</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之13、基于Wide&amp;Deep模型的在线排序.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:33</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p><img src="https://upload-images.jianshu.io/upload_images/12790782-66263ecac4ac1688.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>上图是 Wide&amp;Deep 模型的网络结构，深度学习可以通过嵌入（Embedding）表达出更精准的用户兴趣及物品特征，不仅能减少人工特征工程的工作量，还能提高模型的泛化能力，使得用户行为预估更加准确。Wide&amp;Deep 模型适合高维稀疏特征的推荐场景，兼有稀疏特征的可解释性和深模型的泛化能力。通常将类别特征做 Embedding 学习，再将 Embedding 稠密特征输入深模型中。Wide 部分的输入特征包括：类别特征和离散化的数值特征，Deep部分的输入特征包括：数值特征和 Embedding 后的类别特征。其中，Wide 部分使用 FTRL + L1；Deep 部分使用 AdaGrad，并且两侧是一起联合进行训练的。</p>
+<h1 id="离线训练"><a href="#离线训练" class="headerlink" title="离线训练"></a>离线训练</h1><p>TensorFlow 实现了很多深度模型，其中就包括 Wide&amp;Deep，API 接口为 <code>tf.estimator.DNNLinearCombinedClassifier</code>，我们可以直接使用。在上篇文章中已经实现了将训练数据写入 TFRecord 文件，在这里可以直接读取<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@staticmethod</span><br><span class="line">def read_ctr_records():</span><br><span class="line">    <span class="attr">dataset</span> = tf.data.TFRecordDataset([<span class="string">"./train_ctr_201905.tfrecords"</span>])</span><br><span class="line">    <span class="attr">dataset</span> = dataset.<span class="built_in">map</span>(parse_tfrecords)</span><br><span class="line">    <span class="attr">dataset</span> = dataset.shuffle(<span class="attr">buffer_size=10000)</span></span><br><span class="line">    <span class="attr">dataset</span> = dataset.repeat(<span class="number">10000</span>)</span><br><span class="line">    return dataset.make_one_shot_iterator().get_next()</span><br></pre></td></tr></table></figure></p>
+<p>解析每个样本，将 TFRecord 中序列化的 feature 列，解析成 channel_id (1), article_vector (100), user_weights (10), article_weights (10)<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">def parse_tfrecords(example):</span><br><span class="line">    features = &#123;</span><br><span class="line">        <span class="string">"label"</span>: <span class="keyword">tf</span>.FixedLenFeature([], <span class="keyword">tf</span>.int64),</span><br><span class="line">        <span class="string">"feature"</span>: <span class="keyword">tf</span>.FixedLenFeature([], <span class="keyword">tf</span>.<span class="built_in">string</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    parsed_features = <span class="keyword">tf</span>.parse_single_example(example, features)</span><br><span class="line"></span><br><span class="line">    feature = <span class="keyword">tf</span>.decode_raw(parsed_features[<span class="string">'feature'</span>], <span class="keyword">tf</span>.float64)</span><br><span class="line">    feature = <span class="keyword">tf</span>.reshape(<span class="keyword">tf</span>.cast(feature, <span class="keyword">tf</span>.float32), [<span class="number">1</span>, <span class="number">121</span>])</span><br><span class="line">    # 特征顺序 <span class="number">1</span> channel_id,  <span class="number">100</span> article_vector, <span class="number">10</span> user_weights, <span class="number">10</span> article_weights</span><br><span class="line">    # <span class="number">1</span> channel_id类别型特征， <span class="number">100</span>维文章向量求平均值当连续特征，<span class="number">10</span>维用户权重求平均值当连续特征</span><br><span class="line">    channel_id = <span class="keyword">tf</span>.cast(<span class="keyword">tf</span>.slice(feature, [<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>]), <span class="keyword">tf</span>.int32)</span><br><span class="line">    vector = <span class="keyword">tf</span>.reduce_sum(<span class="keyword">tf</span>.slice(feature, [<span class="number">0</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">100</span>]), axis=<span class="number">1</span>, keep_dims=True)</span><br><span class="line">    user_weights = <span class="keyword">tf</span>.reduce_sum(<span class="keyword">tf</span>.slice(feature, [<span class="number">0</span>, <span class="number">101</span>], [<span class="number">1</span>, <span class="number">10</span>]), axis=<span class="number">1</span>, keep_dims=True)</span><br><span class="line">    article_weights = <span class="keyword">tf</span>.reduce_sum(<span class="keyword">tf</span>.slice(feature, [<span class="number">0</span>, <span class="number">111</span>], [<span class="number">1</span>, <span class="number">10</span>]), axis=<span class="number">1</span>, keep_dims=True)</span><br><span class="line"></span><br><span class="line">    label = <span class="keyword">tf</span>.reshape(<span class="keyword">tf</span>.cast(parsed_features[<span class="string">'label'</span>], <span class="keyword">tf</span>.float32), [<span class="number">1</span>, <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    # 构造字典 名称-tensor</span><br><span class="line">    FEATURE_COLUMNS = [<span class="string">'channel_id'</span>, <span class="string">'vector'</span>, <span class="string">'user_weigths'</span>, <span class="string">'article_weights'</span>]</span><br><span class="line">    tensor_list = [channel_id, vector, user_weights, article_weights]</span><br><span class="line"></span><br><span class="line">    feature_dict = dict(zip(FEATURE_COLUMNS, tensor_list))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> feature_dict, label</span><br></pre></td></tr></table></figure></p>
+<p>指定输入特征的数据类型，并定义 Wide&amp;Deep 模型 model<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 离散类型</span></span><br><span class="line">channel_id = tf.feature_column.categorical_column_with_identity('channel_id', num_buckets=25)</span><br><span class="line"><span class="comment"># 连续类型</span></span><br><span class="line">vector = tf.feature_column.numeric_column('vector')</span><br><span class="line">user_weigths = tf.feature_column.numeric_column('user_weigths')</span><br><span class="line">article_weights = tf.feature_column.numeric_column('article_weights')</span><br><span class="line"></span><br><span class="line">wide_columns = [channel_id]</span><br><span class="line"></span><br><span class="line"><span class="comment"># embedding_column用来表示类别型的变量</span></span><br><span class="line">deep_columns = [tf.feature_column.embedding_column(channel_id, dimension=25),</span><br><span class="line">                vector, user_weigths, article_weights]</span><br><span class="line"></span><br><span class="line">estimator = tf.estimator.DNNLinearCombinedClassifier(model_dir=<span class="string">"./ckpt/wide_and_deep"</span>,</span><br><span class="line">                                                     linear_feature_columns=wide_columns,</span><br><span class="line">                                                     dnn_feature_columns=deep_columns,</span><br><span class="line">                                                     dnn_hidden_units=[1024, 512, 256])</span><br></pre></td></tr></table></figure></p>
+<p>通过调用 read_ctr_records() 方法，来读取 TFRecod 文件中的训练数据，并设置训练步长，对定义好的 FTRL 模型进行训练及预估<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">model</span>.train(read_ctr_records, steps=<span class="number">1000</span>)</span><br><span class="line">result = <span class="keyword">model</span>.evaluate(read_ctr_records)</span><br></pre></td></tr></table></figure></p>
+<p>可以用上一次模型的参数作为当前模型的初始化参数，训练完成后，通常会进行离线指标分析，若符合预期即可导出模型<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">columns</span> = wide_columns + deep_columns</span><br><span class="line">feature_spec = tf<span class="selector-class">.feature_column</span><span class="selector-class">.make_parse_example_spec</span>(<span class="attribute">columns</span>)</span><br><span class="line">serving_input_receiver_fn = tf<span class="selector-class">.estimator</span><span class="selector-class">.export</span><span class="selector-class">.build_parsing_serving_input_receiver_fn</span>(feature_spec)</span><br><span class="line">model.export_savedmodel(<span class="string">"./serving_model/wdl/"</span>, serving_input_receiver_fn)</span><br></pre></td></tr></table></figure></p>
+<h1 id="TFServing-部署"><a href="#TFServing-部署" class="headerlink" title="TFServing 部署"></a>TFServing 部署</h1><p>安装<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">docker</span> pull tensorflow/serving</span><br></pre></td></tr></table></figure></p>
+<p>启动<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p <span class="number">8501</span>:<span class="number">8501</span> -p <span class="number">8500</span>:<span class="number">8500</span> --mount type=bind,<span class="keyword">source</span>=<span class="regexp">/root/</span>toutiao_project<span class="regexp">/reco_sys/</span>server<span class="regexp">/models/</span>serving_model<span class="regexp">/wdl,target=/m</span>odels<span class="regexp">/wdl -e MODEL_NAME=wdl -t tensorflow/</span>serving</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>-p 8501:8501 为端口映射（-p 主机端口 : docker 容器程序）</li>
+<li>TFServing 使用 8501 端口对外提供 HTTP 服务，使用8500对外提供 gRPC 服务，这里同时开放了两个端口的使用</li>
+<li>—mount type=bind,source=/home/ubuntu/detectedmodel/wdl,target=/models/wdl 为文件映射，将主机（source）的模型文件映射到 docker 容器程序（target）的位置，以便 TFServing 使用模型，target 参数为 /models/模型名称</li>
+<li>-e MODEL_NAME= wdl 设置了一个环境变量，名为 MODEL_NAME，此变量被 TFServing 读取，用来按名字寻找模型，与上面 target 参数中的模型名称对应</li>
+<li>-t 为 TFServing 创建一个伪终端，供程序运行</li>
+<li>tensorflow/serving 为镜像名称</li>
+</ul>
+<h1 id="在线排序"><a href="#在线排序" class="headerlink" title="在线排序"></a>在线排序</h1><p>通常在线排序是根据用户实时的推荐请求，对召回结果进行 CTR 预估，进而计算出排序结果并返回。我们需要根据召回结果构造测试集，其中每个测试样本包括用户特征和文章特征。首先，根据用户 ID 和频道 ID 读取用户特征（用户在每个频道的特征不同，所以是分频道存储的）<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    user_feature = eval(hbu.get_table_row(<span class="string">'ctr_feature_user'</span>,</span><br><span class="line">                              <span class="string">'&#123;&#125;'</span>.<span class="built_in">format</span>(temp.user_id).encode(),</span><br><span class="line">                              <span class="string">'channel:&#123;&#125;'</span>.<span class="built_in">format</span>(temp.channel_id).encode()))</span><br><span class="line">except Exception <span class="keyword">as</span> e:</span><br><span class="line">    user_feature = []</span><br></pre></td></tr></table></figure></p>
+<p>再根据用户 ID 读取召回结果<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">recall_set = read_hbase_recall('cb_recall', </span><br><span class="line">                'recall<span class="symbol">:user</span>:&#123;&#125;'.format(<span class="name">temp</span>.user_id).encode(), </span><br><span class="line">                'als:&#123;&#125;'.format(<span class="name">temp</span>.channel_id).encode())</span><br></pre></td></tr></table></figure></p>
+<p>接着，遍历召回结果，获取文章特征，并将用户特征合并，构建样本<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">examples = []</span><br><span class="line"><span class="keyword">for</span> article_id in recall_se<span class="variable">t:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        article_feature = <span class="built_in">eval</span>(hbu.get_table_row(<span class="string">'ctr_feature_article'</span>,</span><br><span class="line">                                  <span class="string">'&#123;&#125;'</span>.format(article_id).encode(),</span><br><span class="line">                                  <span class="string">'article:&#123;&#125;'</span>.format(article_id).encode()))</span><br><span class="line">    except Exception <span class="keyword">as</span> <span class="keyword">e</span>:</span><br><span class="line">        article_feature = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> not article_feature:</span><br><span class="line">        article_feature = [<span class="number">0.0</span>] * <span class="number">111</span></span><br><span class="line">    </span><br><span class="line">    channel_id = <span class="keyword">int</span>(article_feature[<span class="number">0</span>])</span><br><span class="line">    # 计算后面若干向量的平均值</span><br><span class="line">    vector = np.mean(article_feature[<span class="number">11</span>:])</span><br><span class="line">    # 用户权重特征</span><br><span class="line">    user_feature = np.mean(user_feature)</span><br><span class="line">    # 文章权重特征</span><br><span class="line">    article_feature = np.mean(article_feature[<span class="number">1</span>:<span class="number">11</span>])</span><br><span class="line"></span><br><span class="line">    # 构建example</span><br><span class="line">    example = <span class="keyword">tf</span>.train.Example(features=<span class="keyword">tf</span>.train.Features(feature=&#123;</span><br><span class="line">                <span class="string">"channel_id"</span>: <span class="keyword">tf</span>.train.Feature(int64_list=<span class="keyword">tf</span>.train.Int64List(value=[channel_id])),</span><br><span class="line">                <span class="string">"vector"</span>: <span class="keyword">tf</span>.train.Feature(float_list=<span class="keyword">tf</span>.train.FloatList(value=[vector])),</span><br><span class="line">                <span class="string">'user_weigths'</span>: <span class="keyword">tf</span>.train.Feature(float_list=<span class="keyword">tf</span>.train.FloatList(value=[user_feature])),</span><br><span class="line">                <span class="string">'article_weights'</span>: <span class="keyword">tf</span>.train.Feature(float_list=<span class="keyword">tf</span>.train.FloatList(value=[article_feature])),</span><br><span class="line">            &#125;))</span><br><span class="line"></span><br><span class="line">    examples.<span class="keyword">append</span>(example)</span><br></pre></td></tr></table></figure></p>
+<p>调用 TFServing 的模型服务，获取排序结果<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> grpc.insecure_channel(<span class="string">"127.0.0.1:8500"</span>) as channel:</span><br><span class="line">    <span class="attr">stub</span> = prediction_service_pb2_grpc.PredictionServiceStub(channel)</span><br><span class="line">    <span class="attr">request</span> = classification_pb2.ClassificationRequest()</span><br><span class="line">    <span class="comment"># 构造请求，指定模型名称，指定输入样本</span></span><br><span class="line">    request.model_spec.<span class="attr">name</span> = 'wdl'</span><br><span class="line">    request.input.example_list.examples.extend(examples)</span><br><span class="line">    <span class="comment"># 发送请求，获取排序结果</span></span><br><span class="line">    <span class="attr">response</span> = stub.Classify(request, <span class="number">10.0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这样，我们就实现了 Wide&amp;Deep 模型的离线训练和 TFServing 模型部署以及在线排序服务的调用。使用这种方式，线上服务需要将特征发送给TF Serving，这不可避免引入了网络 IO，给带宽和预估时延带来压力。可以通过并发请求，召回多个召回结果集合，然后并发请求 TF Serving 模型服务，这样可以有效降低整体预估时延。还可以通过特征 ID 化，将字符串类型的特征名哈希到 64 位整型空间，这样有效减少传输的数据量，降低使用的带宽。</p>
+<h1 id="模型同步"><a href="#模型同步" class="headerlink" title="模型同步"></a>模型同步</h1><p>实际环境中，我们可能还要经常将离线训练好的模型同步到线上服务机器，大致同步过程如下：</p>
+<ul>
+<li>同步前，检查模型 md5 文件，只有该文件更新了，才需要同步</li>
+<li>同步时，随机链接 HTTPFS 机器并限制下载速度</li>
+<li>同步后，校验模型文件 md5 值并备份旧模型</li>
+</ul>
+<p>同步过程中，需要处理发生错误或者超时的情况，可以设定触发报警或重试机制。通常模型的同步时间都在分钟级别。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘， 提取码：eakp）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

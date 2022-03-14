@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】完整空间多任务模型（Entire Space Multi-Task Model） - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MSSE"><span class="toc-text">MSSE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实验"><span class="toc-text">实验</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】完整空间多任务模型（Entire Space Multi-Task Model）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-07 18:38:26</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="http://blog.csdn.net/gamer_gyt" target="_blank" rel="external">http://blog.csdn.net/gamer_gyt</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<ul>
+<li>论文：Entire Space Multi-Task Model: An Effective Approach for<br>Estimating Post-Click Conversion Rate（CVR预估新思路：完整空间多任务模型）</li>
+<li>地址：<a href="https://arxiv.org/pdf/1804.07931.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1804.07931.pdf</a></li>
+</ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>CVR预估在工业界（比如推荐系统，广告系统）应用非常广泛，常规的CVR模型结合了深度学习方法并取得了不错的效果。然而在实际的应用中也会有一些问题，比如：使用有点击的样本进行模型的训练然后在整个样本集中进行应用，这样会引起样本偏差。此外，还存在极端的数据稀疏问题，从而使得模型训练变得更加困难。</p>
+<p>基于用户行为数据（比如展示-&gt;点击-&gt;转化），论文从一个新的视角来训练CVR模型。ESMM（完整空间多任务模型）解决了两大问题：</p>
+<ul>
+<li>直接在整个样本空间上进行建模</li>
+<li>采用特征表示学习策略</li>
+</ul>
+<p>基于淘宝推荐系统的日志，该模型的表现优于其竞争模型，论文也会公开一部分抽样数据集用来支持CVR模型的研究。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>CVR预测对于在线排序（例如广告和推荐）是很必要的，例如预测广告的点击，指定一个合适的价格，可以让广告方和平台方达到双赢。同样对于推荐系统而言，平衡用户的点击和购买也是很重要的。</p>
+<p>通常来讲，传统的CVR模型采用了和CTR类似的方法去做，例如流行的深度神经网络。然而依旧存在一些挑战，论文里总结了两点：</p>
+<ul>
+<li>SSB：smaple selection bias（样本偏差）</li>
+<li>DS：Data sparsity（数据稀疏）</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20190523131830329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="CVR样本偏差"></p>
+<p>如上图中，曝光展示的样本是很大的， 用户有行为的物品只是其中的一小部分，用户进行了转化的物品又只是有行为物品的一部分，这样在使用用户有行为的物品作为训练数据训练模型，然后应用到整个样本空间内就会产生样本偏差的问题。</p>
+<p>论文中也列举了一些已有成果来解决SSB和DS问题的，但都不理想。所以才有了这篇论文，通过利用用户的行为序列，提出了一种新颖的算法（ESMM）来同时解决SSB和DS的问题。</p>
+<p>在ESMM模型，分为了两部分模型分别是CTR和CTCVR，用来代替直接训练一个CVR模型，ESMM模型将pCVR视作中间变量，其和pCTR的乘积等于pCTCVR。pCTCVR和pCTR可以在整个样本空间内进行训练。这样样本偏差的问题就能被解决了，另外，CVR和CTR的模型参数是共享的，这样CVR就会有更多的样本，这种参数转换的方法能够有效的解决DS问题。</p>
+<h1 id="MSSE"><a href="#MSSE" class="headerlink" title="MSSE"></a>MSSE</h1><p>假设数据集形式为：</p>
+<script type="math/tex; mode=display">
+S= \left \{ (x_i,y_i -> z_i) \right \} | (i \in N)</script><p>其中：</p>
+<ul>
+<li>x：特征（高维的特征向量，eg:user field,item field等）</li>
+<li>y/z：二分类的label标签（y=1 表示点击，z=1表示转化）</li>
+<li>N：样本数</li>
+</ul>
+<p>CVR模型预估可能性的表示为：pCVR=p(z=1 | y=1,x)，两个相关的概率值是：pCTR和pCTCVR，其关系为：</p>
+<script type="math/tex; mode=display">
+pCTCVR = pCTR * pCVR
+\\
+p(y=1,z=1|x)=p(y=1|x)* p(z=1|y=1,x)</script><p><img src="https://img-blog.csdnimg.cn/2019052519200815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="CVCTR架构"></p>
+<p>常见基于深度学习模型在CVR模型上已经取得了不错的效果，其中的大多数类似于上图中的左侧部分这样的词嵌入和前馈神经网络。</p>
+<p>CVR模型预估的是点击转化率（p(z=1|y=1,x=1)），训练模型的样本是基于点击数据的，即：</p>
+<script type="math/tex; mode=display">
+Sc ={(x_j,z_j)|y_j =1} (j \in M)</script><p>S_c是整个样本空间S的子集，M是样本空间中点击样本数，点击且未转化的是负样本，点击且转化的为正样本。下面具体解释喜爱SSB问题和DS问题。</p>
+<ul>
+<li>SSB问题</li>
+</ul>
+<p>传统的CVR模型实际上是通过引入了特征空间X_c做了一个假设：</p>
+<script type="math/tex; mode=display">
+p(z=1|y=1,x)\approx q(z=1|x_c)</script><p>x_c 属于X_c，表示（x=x_c,y=1）,这种情况下，q(z=1|x_c)是基于有点击行为的样本空间（S_c）进行训练的，然而在线预估时是针对所有的样本（S）进行计算的，因为S_c是S的一个很小的子集，所以具有很大的随机性，这就可能带来样本偏差和影响模型的泛化能力。</p>
+<ul>
+<li>DS问题</li>
+</ul>
+<p>推荐系统展现给用户的商品数量要远远大于被用户点击的商品数量，同时有点击行为的用户也仅仅只占所有用户的一小部分，因此有点击行为的样本空间 S_c相对于整个样本空间S来说是很小，通常来讲，量级要小1-3个数量级。</p>
+<p>如下表所示，在淘宝公开的训练数据集上，S_c只占整个样本空间S的4%。这就是所谓的训练数据稀疏的问题，高度稀疏的训练数据使得模型的学习变得相当困难。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190526114040812.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="淘宝公开数据集比例"></p>
+<p>除此之外，CVR还存在一个延迟反馈问题，但不在本文的讨论范围内。ESSM模型的结构如Figure2所示，CTR和CVR作为基础模型，拥有相同的结构。</p>
+<ul>
+<li>在整个样本空间建模</li>
+</ul>
+<p>pCVR = pCTCVR / pCTR：</p>
+<script type="math/tex; mode=display">
+p(z=1|y=1,x) = \frac{p(y=1,z=1|x)}{p(y=1|x)}</script><p>上述公式告诉我们，可以在整个样本空间上进行模型训练，继而解决样本稀疏性的问题。这里可以单独的训练CTR和CTCVR模型，继而通过除法得到CVR。然而CTR一般很小，除法容易引起数值不稳定，ESMM通过乘法公式来避免这种情况。在ESSM中，pCVR只是一个中间变量，pCTR和pCTCVR才是主要因素。ESMM乘法形式对应的损失函数如下：</p>
+<script type="math/tex; mode=display">
+L(\theta _{cvr},\theta _{ctr}) = \sum_{i=1}^{N} l(y_i,f(x_i;\theta _{ctr})) + \sum_{i=1}^{N}l(y_i \& z_i,f(x_i;\theta _{ctr})*f(x_i; \theta _{cvr}))</script><p>$\theta _{cvr},\theta _{ctr}$ :CVR 与 CTR网络的参数；l()：交叉熵损失函数</p>
+<ul>
+<li>共享特征表示<br>如图2中所示，embedding层把大规模稀疏输入数据映射到低纬的表示向量，占据了整个网络参数的绝大部分，需要大量的训练样本才能充分学习得到。在ESMM模型中，CTR的训练样本量远远大于CVR的训练样本量，这种共享特征表示也可以让CVR从只有展现没有点击的样本进行学习，从而缓解数据稀疏性的问题。</li>
+</ul>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><ul>
+<li>数据集</li>
+</ul>
+<p>由于ESMM创造性的利用了用户行为序列作为模型的训练样本，因此没有公开的数据集，所以从淘宝的日志中采样了一部分数据，作为公开的数据集，其下载地址为：<a href="https://tianchi.aliyun.com/dataset/dataDetail?dataId=408&amp;userId=1" target="_blank" rel="external">https://tianchi.aliyun.com/dataset/dataDetail?dataId=408&amp;userId=1</a></p>
+<ul>
+<li>对比测试</li>
+</ul>
+<p>为了保证实验的有效性，在以下四方面是相同的。</p>
+<p>1.使用ReLU激活函数</p>
+<p>2.embedding向量的纬度是18</p>
+<p>3.MLP的层数是：360 <em> 200 </em> 80 * 2</p>
+<p>4.adam的参数是：beta1 = 0.9 beta2 = 0.999 e=10^-8</p>
+<p>Adam算法介绍：<a href="https://www.jianshu.com/p/aebcaf8af76e" target="_blank" rel="external">https://www.jianshu.com/p/aebcaf8af76e</a></p>
+<p>几种常见的优化算法对比：<a href="https://zhuanlan.zhihu.com/p/22252270" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/22252270</a></p>
+<p><img src="https://img-blog.csdnimg.cn/20190527071917777.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="image"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190527072152683.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="image"></p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

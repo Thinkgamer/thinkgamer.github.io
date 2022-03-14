@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之2、同步业务数据.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之2、同步业务数据.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:22</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>在推荐系统架构中，推荐系统的数据库和业务系统的数据库是分离的，这样才能有效避免推荐系统的数据读写、计算等对业务系统的影响，所以同步业务数据往往也是推荐系统要做的第一件事情。通常业务数据是存储在关系型数据库中，比如 MySQL，而推荐系统通常需要使用大数据平台，比如 Hadoop，我们可以利用 Sqoop 将 MySQL 中的业务数据同步到 Hive 中，在我们的文章推荐系统中，需要同步的数据包括：</p>
+<ul>
+<li>用户信息表（user_profile）：包括 user_id | gender | birthday   | real_name | create_time | update_time   | register_media_time | id_number | id_card_front | id_card_back | id_card_handheld | area | company | career 等字段。</li>
+<li>用户基础信息表（user_basic）：包括 user_id | mobile      | password | user_name       | profile_photo                | last_login          | is_media | article_count | following_count | fans_count | like_count | read_count | introduction    | certificate | is_verified | account | email       | status 等字段。</li>
+<li>文章信息表（news_article_basic）：包括 article_id | user_id | channel_id | title                         | cover                   | is_advertising | create_time         | status | reviewer_id | review_time | delete_time | comment_count | allow_comment | update_time         | reject_reason 等字段。</li>
+<li>文章内容表（news_article_content）：包括 article_id | content | update_time 等字段。</li>
+<li>频道信息表（news_channel）：包括 channel_id | channel_name | create_time         | update_time         | sequence | is_visible | is_default 等字段。</li>
+</ul>
+<p>首先，在 Hive 中创建业务数据库 toutiao，并创建相关表<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> toutiao <span class="keyword">comment</span> <span class="string">"user,news information of mysql"</span> location <span class="string">'/user/hive/warehouse/toutiao.db/'</span>;</span><br><span class="line"><span class="comment">-- 用户信息表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> user_profile</span><br><span class="line">(</span><br><span class="line">    user_id             <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"userid"</span>,</span><br><span class="line">    gender              <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"gender"</span>,</span><br><span class="line">    birthday            <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"birthday"</span>,</span><br><span class="line">    real_name           <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"real_name"</span>,</span><br><span class="line">    create_time         <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"create_time"</span>,</span><br><span class="line">    update_time         <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"update_time"</span>,</span><br><span class="line">    register_media_time <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"register_media_time"</span>,</span><br><span class="line">    id_number           <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"id_number"</span>,</span><br><span class="line">    id_card_front       <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"id_card_front"</span>,</span><br><span class="line">    id_card_back        <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"id_card_back"</span>,</span><br><span class="line">    id_card_handheld    <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"id_card_handheld"</span>,</span><br><span class="line">    area                <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"area"</span>,</span><br><span class="line">    company             <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"company"</span>,</span><br><span class="line">    career              <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"career"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"toutiao user profile"</span></span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span> # 指定分隔符</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/toutiao.db/user_profile'</span>;</span><br><span class="line"><span class="comment">-- 用户基础信息表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> user_basic</span><br><span class="line">(</span><br><span class="line">    user_id         <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"user_id"</span>,</span><br><span class="line">    mobile          <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"mobile"</span>,</span><br><span class="line">    <span class="keyword">password</span>        <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"password"</span>,</span><br><span class="line">    profile_photo   <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"profile_photo"</span>,</span><br><span class="line">    last_login      <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"last_login"</span>,</span><br><span class="line">    is_media        <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is_media"</span>,</span><br><span class="line">    article_count   <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"article_count"</span>,</span><br><span class="line">    following_count <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"following_count"</span>,</span><br><span class="line">    fans_count      <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"fans_count"</span>,</span><br><span class="line">    like_count      <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"like_count"</span>,</span><br><span class="line">    read_count      <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"read_count"</span>,</span><br><span class="line">    introduction    <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"introduction"</span>,</span><br><span class="line">    certificate     <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"certificate"</span>,</span><br><span class="line">    is_verified     <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is_verified"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"toutiao user basic"</span></span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span> # 指定分隔符</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/toutiao.db/user_basic'</span>;</span><br><span class="line"><span class="comment">-- 文章基础信息表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> news_article_basic</span><br><span class="line">(</span><br><span class="line">    article_id  <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    user_id     <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"user_id"</span>,</span><br><span class="line">    channel_id  <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    title       <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"title"</span>,</span><br><span class="line">    <span class="keyword">status</span>      <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"status"</span>,</span><br><span class="line">    update_time <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"update_time"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"toutiao news_article_basic"</span></span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span> # 指定分隔符</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/toutiao.db/news_article_basic'</span>;</span><br><span class="line"><span class="comment">-- 文章频道表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> news_channel</span><br><span class="line">(</span><br><span class="line">    channel_id   <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    channel_name <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"channel_name"</span>,</span><br><span class="line">    create_time  <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"create_time"</span>,</span><br><span class="line">    update_time  <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"update_time"</span>,</span><br><span class="line">    <span class="keyword">sequence</span>     <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"sequence"</span>,</span><br><span class="line">    is_visible   <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is_visible"</span>,</span><br><span class="line">    is_default   <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is_default"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"toutiao news_channel"</span></span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span> # 指定分隔符</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/toutiao.db/news_channel'</span>;</span><br><span class="line"><span class="comment">-- 文章内容表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> news_article_content</span><br><span class="line">(</span><br><span class="line">    article_id <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    <span class="keyword">content</span>    <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"content"</span>,</span><br><span class="line">    update_time <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"update_time"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"toutiao news_article_content"</span></span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span> # 指定分隔符</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/toutiao.db/news_article_content'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>查看 Sqoop 连接到 MySQL 的数据库列表<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sqoop list-databases --connect jdbc:mysql://192.168.19.137:3306/ --username root -P</span><br><span class="line"></span><br><span class="line">mysql</span><br><span class="line">sys</span><br><span class="line">toutiao</span><br></pre></td></tr></table></figure></p>
+<p>Sqoop 可以指定全量导入和增量导入，通常我们可以先执行一次全量导入，将历史数据全部导入进来，后面再通过定时任务执行增量导入，来保持 MySQL 和 Hive 的数据同步，全量导入不需要提前创建 Hive 表，可以自动创建<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">array=(user_profile user_basic news_article_basic news_channel news_article_content)</span><br><span class="line"></span><br><span class="line">for table_name in $&#123;array[@]&#125;;</span><br><span class="line">do</span><br><span class="line">    sqoop import \</span><br><span class="line">        --connect jdbc:mysql://192.168.19.137/toutiao \</span><br><span class="line">        --username root \</span><br><span class="line">        --password password \</span><br><span class="line">        --table $table_name \</span><br><span class="line">        --m 5 \ # 线程数</span><br><span class="line">        --hive-home /root/bigdata/hive \ # hive路径</span><br><span class="line">        --hive-import \ # 导入形式</span><br><span class="line">        --create-hive-table  \ # 自动创建表</span><br><span class="line">        --hive-drop-import-delims \</span><br><span class="line">        --warehouse-dir /user/hive/warehouse/toutiao.db \ # 导入地址</span><br><span class="line">        --hive-table toutiao.$table_name </span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>增量导入，有 append 和 lastmodified 两种模式</p>
+<ul>
+<li><p>append：通过指定一个递增的列进行更新，只能追加，不能修改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">num=0</span><br><span class="line">declare -A check</span><br><span class="line">check=([user_profile]=user_id [user_basic]=user_id [news_article_basic]=article_id [news_channel]=channel_id [news_article_content]=channel_id)</span><br><span class="line"></span><br><span class="line">for k in $&#123;!check[@]&#125;</span><br><span class="line">do</span><br><span class="line">    sqoop import \</span><br><span class="line">        --connect jdbc:mysql://192.168.19.137/toutiao \</span><br><span class="line">        --username root \</span><br><span class="line">        --password password \</span><br><span class="line">        --table $k \</span><br><span class="line">        --m 4 \</span><br><span class="line">        --hive-home /root/bigdata/hive \ # hive路径</span><br><span class="line">        --hive-import \ # 导入到hive</span><br><span class="line">        --create-hive-table  \ # 自动创建表</span><br><span class="line">        --incremental append \ # 按照id更新</span><br><span class="line">        --check-column $&#123;check[$k]&#125; \ # 指定id列</span><br><span class="line">        --last-value $&#123;num&#125; # 指定最后更新的id</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lastmodified：按照最后修改时间更新，支持追加和修改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">time=`date +"%Y-%m-%d" -d "-1day"`</span><br><span class="line">declare -A check</span><br><span class="line">check=([user_profile]=update_time [user_basic]=last_login [news_article_basic]=update_time [news_channel]=update_time)</span><br><span class="line">declare -A merge</span><br><span class="line">merge=([user_profile]=user_id [user_basic]=user_id [news_article_basic]=article_id [news_channel]=channel_id)</span><br><span class="line"></span><br><span class="line">for k in $&#123;!check[@]&#125;</span><br><span class="line">do</span><br><span class="line">    sqoop import \</span><br><span class="line">        --connect jdbc:mysql://192.168.19.137/toutiao \</span><br><span class="line">        --username root \</span><br><span class="line">        --password password \</span><br><span class="line">        --table $k \</span><br><span class="line">        --m 4 \</span><br><span class="line">        --target-dir /user/hive/warehouse/toutiao.db/$k \ # hive路径</span><br><span class="line">        --incremental lastmodified \ # 按照最后修改时间更新</span><br><span class="line">        --check-column $&#123;check[$k]&#125; \ # 指定时间列</span><br><span class="line">        --merge-key $&#123;merge[$k]&#125; \ # 根据指定列合并重复或修改数据</span><br><span class="line">        --last-value $&#123;time&#125; # 指定最后修改时间</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Sqoop 可以直接导入到 Hive，自动创建 Hive 表，但是 lastmodified 模式不支持<br>Sqoop 也可以先导入到 HDFS，然后再建立 Hive 表关联，为了使用 lastmodified 模式，通常使用这种方法<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--target-dir <span class="meta-keyword">/user/</span>hive<span class="meta-keyword">/warehouse/</span>toutiao.db/user_profile <span class="meta"># 指定导入的HDFS目录</span></span><br></pre></td></tr></table></figure></p>
+<p>若先导入到 HDFS，需要注意 HDFS 默认分隔符为 <code>,</code> 而 Hive 默认分隔符为 <code>/u0001</code>，所以需要在创建 Hive 表时指定分隔符为 HDFS 分隔符 <code>,</code>，若不指定分隔符，查询结果将全部为 NULL<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">row <span class="built_in">format</span> delimited fields terminated <span class="keyword">by</span> <span class="string">','</span> <span class="comment"># 指定分隔符</span></span><br></pre></td></tr></table></figure></p>
+<p>如果 MySQL 数据中存在特殊字符，如 <code>, \t \n</code> 都会导致 Hive 读取失败（但不影响导入到 HDFS 中），可以利用 <code>--query</code> 参数，在读取时使用 <code>REPLACE() CHAR() CHR()</code> 进行字符替换。如果特殊字符过多，比如 news_article_content 表，可以选择全量导入<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--<span class="keyword">query</span> 'select article_id, user_id, channel_id, <span class="keyword">REPLACE</span>(<span class="keyword">REPLACE</span>(<span class="keyword">REPLACE</span>(title, <span class="built_in">CHAR</span>(13),<span class="string">""</span>),<span class="built_in">CHAR</span>(10),<span class="string">""</span>), <span class="string">","</span>, <span class="string">" "</span>) title, status, update_time from news_article_basic WHERE <span class="variable">$CONDITIONS</span>' \</span><br></pre></td></tr></table></figure></p>
+<p>如果 MySQL 数据中存在 tinyint 类型,必须在 <code>--connet</code> 中加入 <code>?tinyInt1isBit=false</code>，防止 Hive 将 tinyint 类型默认转化为 boolean 类型<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--connect <span class="string">jdbc:</span><span class="string">mysql:</span><span class="comment">//192.168.19.137/toutiao?tinyInt1isBit=false</span></span><br></pre></td></tr></table></figure></p>
+<p>MySQL 与 Hive 对应类型如下<br>MySQL|Hive<br>-|-<br>bigint|bigint<br>tinyint|boolean<br>int|int<br>double|double<br>bit|boolean<br>varchar|string<br>decimal|double<br>date / timestamp|string<br>我们可以利用 crontab 来创建定时任务，将更新命令写入脚本 import_incremental.sh，输入 <code>crontab -e</code> 打开编辑界面，输入如下内容，即可定时执行数据同步任务<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每隔半小时增量导入一次</span></span><br><span class="line">*<span class="regexp">/30 * * * * /</span>root<span class="regexp">/toutiao_project/</span>scripts<span class="regexp">/import_incremental.sh</span></span><br></pre></td></tr></table></figure></p>
+<p>crontab 命令格式为 <code>* * * * * shell</code>，其中前五个 <code>*</code> 分别代表分钟 (0-59)、小时(0-59)、月内的某天(1-31)、月(1-12)、周内的某天(0-7，周日为 0 或 7)，<code>shell</code> 表示要执行的命令或脚本，使用方法如下<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 每隔5分钟运行一次backupscript脚本</span></span><br><span class="line"><span class="emphasis">*/5 *</span> <span class="bullet">* *</span> * /root/backupscript.sh</span><br><span class="line"><span class="section"># 每天的凌晨1点运行backupscript脚本</span></span><br><span class="line">0 1 <span class="bullet">* *</span> * /root/backupscript.sh</span><br><span class="line"><span class="section"># 每月的第一个凌晨3:15运行backupscript脚本</span></span><br><span class="line">15 3 1 <span class="bullet">* *</span> /root/backupscript.sh</span><br></pre></td></tr></table></figure></p>
+<p>crontab 常用命令如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">crontab -e      # 修改 crontab 文件，如果文件不存在会自动创建。 </span><br><span class="line">crontab -l      # 显示 crontab 文件。 </span><br><span class="line">crontab -r      # 删除 crontab 文件。</span><br><span class="line">crontab -ir     # 删除 crontab 文件前提醒用户。</span><br><span class="line"></span><br><span class="line">service crond status      # 查看crontab服务状态</span><br><span class="line">service crond start       # 启动服务 </span><br><span class="line">service crond stop        # 关闭服务 </span><br><span class="line">service crond restart     # 重启服务 </span><br><span class="line">service crond reload      # 重新载入配置</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>原文出自（已授权）：<a href="https://www.jianshu.com/u/ac833cc5146e" target="_blank" rel="external">https://www.jianshu.com/u/ac833cc5146e</a></p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a></li>
+<li><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘，提取码 EakP）</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

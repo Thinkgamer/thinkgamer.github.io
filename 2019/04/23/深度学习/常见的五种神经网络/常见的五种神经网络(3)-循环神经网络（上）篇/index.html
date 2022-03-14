@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        常见的五种神经网络(3)-循环神经网络（上）篇 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何给网络增加记忆能力"><span class="toc-text">如何给网络增加记忆能力</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#延时神经网络"><span class="toc-text">延时神经网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#有外部输入的非线性自回归模型"><span class="toc-text">有外部输入的非线性自回归模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#循环神经网络"><span class="toc-text">循环神经网络</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一般的循环神经网络"><span class="toc-text">一般的循环神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单向循环神经网络"><span class="toc-text">单向循环神经网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双向循环神经网络"><span class="toc-text">双向循环神经网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#深度循环神经网络"><span class="toc-text">深度循环神经网络</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#循环神经网络应用到机器学习任务"><span class="toc-text">循环神经网络应用到机器学习任务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#序列到类别模式"><span class="toc-text">序列到类别模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#同步的序列到序列模式"><span class="toc-text">同步的序列到序列模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#异步的序列到序列模式"><span class="toc-text">异步的序列到序列模式</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        常见的五种神经网络(3)-循环神经网络（上）篇
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-23 16:36:43</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#常见的五种神经网络" title="常见的五种神经网络">常见的五种神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/100600661" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/100600661</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
+<p>该系列的其他文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/89459131" target="_blank" rel="external">常见的五种神经网络(1)-前馈神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100531593" target="_blank" rel="external">常见的五种神经网络(2)-卷积神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100600661" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100709422" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(中篇)</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/100943664" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103231385" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103437985" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（上篇）</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
+</ul>
+<hr>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>常见的五种神经网络系列第三种，主要介绍循环神经网络，由于循环神经网络包含的内容过多，分为上中下三篇进行介绍，本文主要是循环神经网络（上）篇，主要介绍以下内容：</p>
+<ul>
+<li>循环神经网络概述</li>
+<li>如何给神经网络增加记忆能力<ul>
+<li>延时神经网络</li>
+<li>有外部输入的非线性自回归模型</li>
+<li>循环神经网络</li>
+</ul>
+</li>
+<li>一般的循环神经网络<ul>
+<li>单向循环神经网络</li>
+<li>双向循环神经网络</li>
+<li>深度循环神经网络</li>
+</ul>
+</li>
+<li>循环神经网络应用到机器学习任务</li>
+</ul>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在前馈神经网络中，信息在神经元之间的传递是单向，网络的输出只依赖于当前的输入，这样限制虽然使网络变得容易学习，但是却减弱了网络的表达能力。在很多现实任务中，网络的输出不仅和当前的输入有关，也和过去一段时间的输出相关，比如一个<strong>有限状态自动机</strong>不仅和当前的输入有关，也和当前的状态（上一步的输出）有关。如下图（图-1）</p>
+<p><img src="https://img-blog.csdnimg.cn/2019090716181761.png" alt="有限状态自动机"></p>
+<blockquote>
+<p>有限状态自动机称为FSM（finite state machine）或者FSA（finite state automaton）</p>
+</blockquote>
+<p>此外，前馈神经网络难以处理时序数据，比如视频，语音，文本等。因为时序数据的长度是不固定的，而前馈神经网络要求输入和输出的维度是固定的。因此当处理这种复杂的时序数据时，就需要一种表达能力能强的模型。</p>
+<p><strong>循环神经网络(Recurrent Neural Network,RNN)</strong> 是一类具有短期记忆能力的神经网络，在循环神经网络中，神经元不仅可以接受其他神经元的信息，还可以接受自身的信息，形成一个环路结构。RNN的参数学习可以通过随时间反向传播算法进行学习（下文会具体介绍），随时间反向传播算法按照时间的逆序将错误信息一步步的向前传递，当输入序列时间较长时，会存在梯度消失和梯度爆炸问题（也叫长期依赖问题），为了解决这个问题，人们对RNN进行了许多改进，其中最有效的是引入门控制，比如长短期记忆网络（LSTM）和门控循环单元网络（GRU），将在（下）篇进行介绍。</p>
+<h3 id="如何给网络增加记忆能力"><a href="#如何给网络增加记忆能力" class="headerlink" title="如何给网络增加记忆能力"></a>如何给网络增加记忆能力</h3><p>上边提到前馈神经网络是一个静态网络，不能处理时序数据，那么可以通过以下三种方法给网络增加记忆能力：</p>
+<ul>
+<li>延时神经网络</li>
+<li>有外部输入的非线性自回归模型</li>
+<li>循环神经网络</li>
+</ul>
+<h4 id="延时神经网络"><a href="#延时神经网络" class="headerlink" title="延时神经网络"></a>延时神经网络</h4><p>一种简单的利用利用历史信息的方法是建立一个额外的延时单元，用来存储网络的历史信息（比如输入，输出，隐状态等），这其中比较有代表性的就是延时神经网络（TDNN，Time Delay Neural Network）。</p>
+<p>延时神经网络是在前馈神经网络的非输出层都添加一个延时器，记录最近几次神经元的输出，在第t个时刻，第（l+1）层的神经元和第（l）层神经元的最近p次输出有关，即（公式-1）:</p>
+<script type="math/tex; mode=display">
+h_t^{l+1} = f(h_t^l,h_{t-1}^l,....,h_{t-p+1}^l)</script><p>通过延时器，前馈神经网络就具有了短期记忆的能力。</p>
+<h4 id="有外部输入的非线性自回归模型"><a href="#有外部输入的非线性自回归模型" class="headerlink" title="有外部输入的非线性自回归模型"></a>有外部输入的非线性自回归模型</h4><p><strong>自回归模型（Autoregressive Model）</strong> 是统计学中常用一类时间序列模型，用一个变量 $y_t$ 的历史信息来预测自己（公式-2）。</p>
+<script type="math/tex; mode=display">
+y_t = w_0 + \sum_{i=1}^{p}w_p * y_{t-i} + \varepsilon_t</script><p>其中p为超参数，$w_p$ 为参数，$\varepsilon_t～N(0,\sigma ^2)$ 为第t个时刻的噪声，方差$\sigma^2$和时间t无关。</p>
+<p>有外部输入的非线性自回归模型（Nonlinear Autoregressive Model）是自回归模型的扩展，在每个时刻t都有一个外部输入$x_t$，产出一个输出$y_t$，NART通过一个延时器来记录最近几次的外部输入和输出，第t个时刻的输出$y_t$为（公式-3）：</p>
+<script type="math/tex; mode=display">
+y_t = f(x_t, x_{t-1},..,x_{t-p}, y_{t-1},y_{t-2},....,y_{t-q})</script><p>其中f(.)为非线性函数，可以是前馈神经网络，p和q为超参数。</p>
+<h4 id="循环神经网络"><a href="#循环神经网络" class="headerlink" title="循环神经网络"></a>循环神经网络</h4><p>给定一个输入序列，$x_{1:T}=( x_1, x_2, … , x_T )$ 循环神经网络通过以下公式（公式-4）更新带反馈边的隐藏层的活性值$h_t$：</p>
+<script type="math/tex; mode=display">
+h_t = (h_{t-1}, x_t)</script><p>循环神经网络示例如下（图-2）：<br><img src="https://img-blog.csdnimg.cn/20190907182513443.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络示例"></p>
+<h3 id="一般的循环神经网络"><a href="#一般的循环神经网络" class="headerlink" title="一般的循环神经网络"></a>一般的循环神经网络</h3><p>在（图-2）中展示了一个简单的循环神经网络，其整个结构分为3层：输入层，隐藏层和输出层。其中t时刻，隐藏层的状态$h_t$不仅与输入$x_t$有关，还与上一个时刻的隐藏层状态$h_{t-1}$有关。</p>
+<p>由于隐藏层多了一个自身到自身的输入，因此该层被称为循环层，（图-2）所示的为一个简单循环神经网络。循环神经网络还有多种类型，基于循环的方向划分为：</p>
+<ul>
+<li>单向循环神经网络</li>
+<li>双向循环神经网络</li>
+</ul>
+<p>基于循环的深度分为：</p>
+<ul>
+<li>循环神经网络</li>
+<li>深度循环神经网络</li>
+</ul>
+<h4 id="单向循环神经网络"><a href="#单向循环神经网络" class="headerlink" title="单向循环神经网络"></a>单向循环神经网络</h4><p>（图-2）所示即为一个单向的循环神经网络，对其展开后的效果图如下（图-3）：<br><img src="https://img-blog.csdnimg.cn/2019090809043298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="单向循环神经网络"></p>
+<p>上图可以理解为网络的输入通过时间往后传递，当前隐藏层的输出$h_t$取决于当前层的输入$x_t$和上一层的输出$h_{t-1}$，因此当前隐藏层的输出信息包含了之前时刻的信息，表达出对之前信息的记忆能力。单向循环神经网络表达如下（公式-5）：</p>
+<script type="math/tex; mode=display">
+o_t = g(V*h_t)
+\\
+h_t = f(U*x_t + W*h_{t-1})</script><p>其中$o_t$为输出层的计算公式， $h_t$为隐藏层的计算公式，g(.) 和 f(.)为激活函数。值得说明的是在循环神经网络中U，V，W权重矩阵值每次循环都是一份，因此循环神经网络的每次循环步骤中，这些参数都是共享的，这也是循 环神经网络 的结构特征之一。</p>
+<h4 id="双向循环神经网络"><a href="#双向循环神经网络" class="headerlink" title="双向循环神经网络"></a>双向循环神经网络</h4><p>在日常的信息推断中，当前信息不仅仅依赖之前的内容，也有可能会依赖后续的内容，比如英语的完形天空。这时候单向的循环神经网络就不能很好的处理，就需要 <strong> 双向循环神经网络(Bi-directional Recurrent Neural Network)</strong> 。</p>
+<p>其主要思想是训练一个分别向前和分别向后的循环神经网络，表示完整的上下文信息，两个循环 网络对应同一个输出层，因此可以理解为两个循环神经网络的叠加，对应的输出结果根据两个神经网络输出状态计算获得，将双向循环神经网络按照时间序列结构展开，如下图所示（图-4）：<br><img src="https://img-blog.csdnimg.cn/20190908145624762.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="双向循环神经网络"></p>
+<p>从上图可以看出，隐藏层需要保留两部分，一部分为由前向后的正向传递$h_t$，一部分为由后向前的反向传递$h’_t$，最新的信息输出$o_t$。双向循环神经网络的表达公式如下（公式-6）：</p>
+<script type="math/tex; mode=display">
+o_t = g(V*h_t + V'*h'_t)
+\\
+h_t = f(U*x_t + W*h_{t-1})
+\\
+h'_t = f(U'*x_t + W'*h'_{t-1})</script><h4 id="深度循环神经网络"><a href="#深度循环神经网络" class="headerlink" title="深度循环神经网络"></a>深度循环神经网络</h4><p>上边介绍的单向训练神经网络和双向循环神经网络都只有一个隐藏层，但是在实际应用中，为了增强表达能力，往往引入多个隐藏层，即深度循环神经网络，如下图所示（图-5）：<br><img src="https://img-blog.csdnimg.cn/20190908151530509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="深度循环神经网络"></p>
+<p>同样可以得到深度循环神经网络的表达式（公式-7）：</p>
+<script type="math/tex; mode=display">
+o_t = g(V^{(i)}*h^{(i)}_t + V'^{(i)}*h'^{(i)}_t)
+\\
+h^{(i)}_t = f(U^{(i)}*h^{(i-1)}_t + W^{(i)}*h_{t-1})
+\\
+h'^{(i)}_t = f(U'^{(i)}*h'^{(i-1)}_t + W'^{(i)}*h'_{t+1})
+\\
+...
+\\
+h^{(1)}_t = f(U^{(1)} * h_t + W^{(1)}*h_{t-1})
+\\
+h'^{(1)}_t = f(U'^{(1)} * h_t + W'^{(1)}*h'_{t+1})
+\\</script><p>从上述公式可以看出，最终的输出依赖两个维 度的计算，横向上内部前后信息的 叠加，即按照时间的计算；纵向上是每一时刻的输入信息在 逐层之间的传递，即按照 空间结构的计算。</p>
+<h3 id="循环神经网络应用到机器学习任务"><a href="#循环神经网络应用到机器学习任务" class="headerlink" title="循环神经网络应用到机器学习任务"></a>循环神经网络应用到机器学习任务</h3><p>循环神经网络可以应用到很多不同类型的机器学习任务，根据这些任务的特点，可以分为以下几种模式：</p>
+<ul>
+<li>序列到类别模式</li>
+<li>同步的序列到序列模式</li>
+<li>异步的序列到序列模式</li>
+</ul>
+<h4 id="序列到类别模式"><a href="#序列到类别模式" class="headerlink" title="序列到类别模式"></a>序列到类别模式</h4><p>主要应用在序列数据的分类问题，其输入为序列，输出为类别。比如在文本分类中，输入为单词序列，输出为文本的类别。</p>
+<p>假设一个样本 $x_{1:T}=(x_1, x_2, … , x_T)$为一个长度为T的序列，输出为类别 $y \in (1, …, C)$，可以将样本x按不同的时刻输入到循环神经网络中，并得到不同时刻的隐含状态$h_t$，可以将 $h_t$ 看作是整个序列的最终表示，并输入给分类器 g(.) 进行分类，如下所示（公式-8）：</p>
+<script type="math/tex; mode=display">
+\hat{y} = g(h_T)</script><p>其中g(.) 为简单的线性分类器（比如LR）或者复杂的分类器（前馈神经网络）。</p>
+<p>除了将最后时刻的状态作为序列表示之外，我们还可以对整个序列的状态进行平均，并用整个状态的最终平均作为整个序列的表示（公式-9）：</p>
+<script type="math/tex; mode=display">
+\hat{y} = g( \frac{1}{T} \sum_{t=1}^{T} h_t )</script><p>公式-8 和公式-9 分别对应下图（图-6）的（a）和（b）:<br><img src="https://img-blog.csdnimg.cn/20190908154219364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="序列到类别模式"></p>
+<h4 id="同步的序列到序列模式"><a href="#同步的序列到序列模式" class="headerlink" title="同步的序列到序列模式"></a>同步的序列到序列模式</h4><p>主要用于序列标注（Sequence Labeling）任务，即每一时刻都有输入和输出，输入序列和输出序列的长度相同。比如词性标注（Part-of-Speech Tagging）中，每一个单词都需要标注其对应的词性标签。</p>
+<p>假设一个样本 $x_{1:T}=(x_1, x_2, … , x_T)$为一个长度为T的序列，输出为序列 $y_{1:T}=(y_1, y_2, … , y_T)$，可以将样本x按不同的时刻输入到循环神经网络中，并得到不同时刻的隐含状态$h_t$，每个时刻的 $h_t$ 代表了当前时刻和历史的信息，并输入给分类器 g(.) 进行分类，得到当前的标签 $\hat{y}_t$，如下所示（公式-8）：</p>
+<script type="math/tex; mode=display">
+\hat{y} = g(h_T), \forall_t \in [1,T]</script><p><img src="https://img-blog.csdnimg.cn/20190908154735645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="同步的序列到序列模式"></p>
+<h4 id="异步的序列到序列模式"><a href="#异步的序列到序列模式" class="headerlink" title="异步的序列到序列模式"></a>异步的序列到序列模式</h4><p>异步的序列到序列模式也成为编码器-解码器，输入序列和输出序列不需要有严格的对应关系，也不需要保持相同的长度，比如在机器翻译中，输入为源语音的单词序列，输出为目标语言的单词序列。</p>
+<p>假设输入为一个长度为T的序列 $x_{1:T}=(x_1, x_2, … , x_T)$，输出为长度为M的序列$y_{1:M}=(x_1, x_2, … , x_M)$，经常通过先编码后解码的形式实现。</p>
+<p>先将样本x按不同时刻输入到一个循环神经网络（编码器）中，并得到其编码$h_T$，然后再使用另外一个循环神经网络（解码器）中，得到输出序列$\hat {y}_{1:M}$。为了建立输出序列之间的依赖关系，在解码器中通常使用非线性的自回归模型。如下所示（公式-9）：</p>
+<script type="math/tex; mode=display">
+h_t = f_1(h_{t-1},x_t), \forall_t \in [1,T]
+\\
+h_{T+t} = f_2(h_{T+t-1},x_t), \forall_t \in [1,M]
+\\
+\hat{y} _t = g(h_{T+t}), \forall_t \in [1,M]</script><p>其中 $f_1(.)$，$f_2(.)$分别为用作编码器和解码器的循环神经网络，g(.)为分类器，$\hat{y}_t$ 为输出预测$\hat{y}_t$的表示。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190908160323234.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>至此，循环神经网络（上）篇已经介绍完了，在（中）篇和下篇中会展开介绍更多的内容，欢迎关注。</p>
+</blockquote>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

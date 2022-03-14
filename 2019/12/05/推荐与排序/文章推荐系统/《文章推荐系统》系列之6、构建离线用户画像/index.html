@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之6、构建离线用户画像.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#处理用户行为数据"><span class="toc-text">处理用户行为数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#计算用户画像"><span class="toc-text">计算用户画像</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apscheduler-定时更新"><span class="toc-text">Apscheduler 定时更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之6、构建离线用户画像.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:26</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>前面我们完成了文章画像的构建以及文章相似度的计算，接下来，我们就要实现用户画像的构建了。用户画像往往是大型网站的重要模块，基于用户画像不仅可以实现个性化推荐，还可以实现用户分群、精准推送、精准营销以及用户行为预测、商业化转化分析等，为商业决策提供数据支持。通常用户画像包括用户属性信息（性别、年龄、出生日期等）、用户行为信息（浏览、收藏、点赞等）以及环境信息（时间、地理位置等）。</p>
+<h1 id="处理用户行为数据"><a href="#处理用户行为数据" class="headerlink" title="处理用户行为数据"></a>处理用户行为数据</h1><p>在数据准备阶段，我们通过 Flume 已经可以将用户行为数据收集到 Hive 的 user_action 表的 HDFS 路径中，先来看一下这些数据长什么样子，我们读取当天的用户行为数据，注意读取之前要先关联分区<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_day = time.strftime(<span class="string">"%Y-%m-%d"</span>, time.localtime())</span><br><span class="line">_localions = <span class="string">'/user/hive/warehouse/profile.db/user_action/'</span> + _day</span><br><span class="line"><span class="keyword">if</span> fs.exists(_localions):</span><br><span class="line">    <span class="comment"># 如果有该文件直接关联，捕获关联重复异常</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        self.spark.sql(<span class="string">"alter table user_action add partition (dt='%s') location '%s'"</span> % (_day, _localions))</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    self.spark.sql(<span class="string">"use profile"</span>)</span><br><span class="line">    user_action = self.spark.sql(<span class="string">"select actionTime, readTime, channelId, param.articleId, param.algorithmCombine, param.action, param.userId from user_action where dt&gt;="</span> + _day)</span><br></pre></td></tr></table></figure></p>
+<p><code>user_action</code> 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-04c3417b7c70dacd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>可以发现，上面的一条记录代表用户对文章的一次行为，但通常我们需要查询某个用户对某篇文章的所有行为，所以，我们要将这里用户对文章的多条行为数据合并为一条，其中包括用户对文章的所有行为。我们需要新建一个 Hive 表 user_article_basic，这张表包括了用户 ID、文章 ID、是否曝光、是否点击、阅读时间等等，随后我们将处理好的用户行为数据存储到此表中<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> user_article_basic</span><br><span class="line">(</span><br><span class="line">    user_id     <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"userID"</span>,</span><br><span class="line">    action_time <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"user actions time"</span>,</span><br><span class="line">    article_id  <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"articleid"</span>,</span><br><span class="line">    channel_id  <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    <span class="keyword">shared</span>      <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is shared"</span>,</span><br><span class="line">    clicked     <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is clicked"</span>,</span><br><span class="line">    collected   <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is collected"</span>,</span><br><span class="line">    exposure    <span class="built_in">BOOLEAN</span> <span class="keyword">comment</span> <span class="string">"is exposured"</span>,</span><br><span class="line">    read_time   <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"reading time"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"user_article_basic"</span></span><br><span class="line">    CLUSTERED <span class="keyword">by</span> (user_id) <span class="keyword">into</span> <span class="number">2</span> buckets</span><br><span class="line">    <span class="keyword">STORED</span> <span class="keyword">as</span> textfile</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/profile.db/user_article_basic'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>遍历每一条原始用户行为数据，判断用户对文章的行为，在 user_action_basic 中将该用户与该文章对应的行为设置为 True<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> user_action.<span class="keyword">collect</span>():</span><br><span class="line">    <span class="keyword">def</span> _generate(row):</span><br><span class="line">        _list = []</span><br><span class="line">        <span class="keyword">if</span> row.action == <span class="string">'exposure'</span>:</span><br><span class="line">            <span class="keyword">for</span> article_id in eval(row.articleId):</span><br><span class="line">                # [<span class="string">"user_id"</span>, <span class="string">"action_time"</span>,<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"shared"</span>, <span class="string">"clicked"</span>, <span class="string">"collected"</span>, <span class="string">"exposure"</span>, <span class="string">"read_time"</span>]</span><br><span class="line">                _list.<span class="keyword">append</span>(</span><br><span class="line">                    [row.userId, row.actionTime, article_id, row.channelId, <span class="keyword">False</span>, <span class="keyword">False</span>, <span class="keyword">False</span>, <span class="keyword">True</span>, row.readTime])</span><br><span class="line">            <span class="keyword">return</span> _list</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">class</span> Temp(object):</span><br><span class="line">                shared = <span class="keyword">False</span></span><br><span class="line">                clicked = <span class="keyword">False</span></span><br><span class="line">                collected = <span class="keyword">False</span></span><br><span class="line">                read_time = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">            _tp = Temp()</span><br><span class="line">            <span class="keyword">if</span> row.action == <span class="string">'click'</span>:</span><br><span class="line">                _tp.clicked = <span class="keyword">True</span></span><br><span class="line">            elif row.action == <span class="string">'share'</span>:</span><br><span class="line">                _tp.shared = <span class="keyword">True</span></span><br><span class="line">            elif row.action == <span class="string">'collect'</span>:</span><br><span class="line">                _tp.collected = <span class="keyword">True</span></span><br><span class="line">            elif row.action == <span class="string">'read'</span>:</span><br><span class="line">                _tp.clicked = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">            _list.<span class="keyword">append</span>(</span><br><span class="line">                [row.userId, row.actionTime, <span class="keyword">int</span>(row.articleId), row.channelId, _tp.shared, _tp.clicked, _tp.collected,</span><br><span class="line">                 <span class="keyword">True</span>, row.readTime])</span><br><span class="line">            <span class="keyword">return</span> _list</span><br><span class="line"></span><br><span class="line">    user_action_basic = user_action.rdd.flatMap(_generate)</span><br><span class="line">    user_action_basic = user_action_basic.toDF(</span><br><span class="line">        [<span class="string">"user_id"</span>, <span class="string">"action_time"</span>, <span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"shared"</span>, <span class="string">"clicked"</span>, <span class="string">"collected"</span>, <span class="string">"exposure"</span>,</span><br><span class="line">         <span class="string">"read_time"</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>user_action_basic</code> 结果如下所示，这里的一条记录包括了某个用户对某篇文章的所有行为</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-651af8651abfca3c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>由于 Hive 目前还不支持 pyspark 的原子性操作，所以 user_article_basic 表的用户行为数据只能全量更新（实际场景中可以选择其他语言或数据库实现）。这里，我们需要将当天的用户行为与 user_action_basic 的历史用户行为进行合并<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">old_data</span> = uup.spark.sql(<span class="string">"select * from user_article_basic"</span>)</span><br><span class="line"><span class="attr">new_data</span> = old_data.unionAll(user_action_basic)</span><br></pre></td></tr></table></figure></p>
+<p>合并后又会产生一个新的问题，那就是用户 ID 和文章 ID 可能重复，因为今天某个用户对某篇文章的记录可能在历史数据中也存在，而 <code>unionAll()</code> 方法并没有去重，这里我们可以按照用户 ID 和文章 ID 进行分组，利用 <code>max()</code> 方法得到 action_time, channel_id, shared, clicked, collected, exposure, read_time 即可，去重后直接存储到 user_article_basic 表中<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">new_data.registerTempTable("temptable")</span><br><span class="line"></span><br><span class="line">self.spark.sql('''<span class="keyword">insert</span> overwrite <span class="keyword">table</span> user_article_basic <span class="keyword">select</span> user_id, <span class="keyword">max</span>(action_time) <span class="keyword">as</span> action_time, </span><br><span class="line">        article_id, <span class="keyword">max</span>(channel_id) <span class="keyword">as</span> channel_id, <span class="keyword">max</span>(<span class="keyword">shared</span>) <span class="keyword">as</span> <span class="keyword">shared</span>, <span class="keyword">max</span>(clicked) <span class="keyword">as</span> clicked, </span><br><span class="line">        <span class="keyword">max</span>(collected) <span class="keyword">as</span> collected, <span class="keyword">max</span>(exposure) <span class="keyword">as</span> exposure, <span class="keyword">max</span>(read_time) <span class="keyword">as</span> read_time <span class="keyword">from</span> temptable </span><br><span class="line">        <span class="keyword">group</span> <span class="keyword">by</span> user_id, article_id<span class="string">''')</span></span><br></pre></td></tr></table></figure></p>
+<p>表 user_article_basic 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-508d84da9f16c36f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="计算用户画像"><a href="#计算用户画像" class="headerlink" title="计算用户画像"></a>计算用户画像</h1><p>我们选择将用户画像存储在 Hbase 中，因为 Hbase 支持原子性操作和快速读取，并且 Hive 也可以通过创建外部表关联到 Hbase，进行离线分析，如果要删除 Hive 外部表的话，对 Hbase 也没有影响。首先，在 Hbase 中创建用户画像表<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="string">'user_profile'</span>, <span class="string">'basic'</span>,<span class="string">'partial'</span>,<span class="string">'env'</span></span><br></pre></td></tr></table></figure></p>
+<p>在 Hive 中创建 Hbase 外部表，注意字段类型设置为 map<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> user_profile_hbase</span><br><span class="line">(</span><br><span class="line">    user_id         <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"userID"</span>,</span><br><span class="line">    information     <span class="keyword">MAP</span>&lt;<span class="keyword">STRING</span>, <span class="keyword">DOUBLE</span>&gt; <span class="keyword">comment</span> <span class="string">"user basic information"</span>,</span><br><span class="line">    article_partial <span class="keyword">MAP</span>&lt;<span class="keyword">STRING</span>, <span class="keyword">DOUBLE</span>&gt; <span class="keyword">comment</span> <span class="string">"article partial"</span>,</span><br><span class="line">    env             <span class="keyword">MAP</span>&lt;<span class="keyword">STRING</span>, <span class="built_in">INT</span>&gt; <span class="keyword">comment</span> <span class="string">"user env"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"user profile table"</span></span><br><span class="line">    <span class="keyword">STORED</span> <span class="keyword">BY</span> <span class="string">'org.apache.hadoop.hive.hbase.HBaseStorageHandler'</span></span><br><span class="line">        <span class="keyword">WITH</span> SERDEPROPERTIES (<span class="string">"hbase.columns.mapping"</span> = <span class="string">":key,basic:,partial:,env:"</span>)</span><br><span class="line">    TBLPROPERTIES (<span class="string">"hbase.table.name"</span> = <span class="string">"user_profile"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>创建外部表之后，还需要导入一些依赖包<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp -r /root/bigdata/hbase/<span class="class"><span class="keyword">lib</span>/<span class="title">hbase</span>-*.<span class="title">jar</span> /<span class="title">root</span>/<span class="title">bigdata</span>/<span class="title">spark</span>/<span class="title">jars</span>/</span></span><br><span class="line">cp -r /root/bigdata/hive/<span class="class"><span class="keyword">lib</span>/<span class="title">h</span>*.<span class="title">jar</span> /<span class="title">root</span>/<span class="title">bigdata</span>/<span class="title">spark</span>/<span class="title">jars</span>/</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来，读取处理好的用户行为数据，由于日志中的 channel_id 有可能是来自于推荐频道（0），而不是文章真实的频道，所以这里要将 channel_id 列删除<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use profile"</span>)</span><br><span class="line">user_article_basic = spark.sql(<span class="string">"select * from user_article_basic"</span>).drop('channel_id')</span><br></pre></td></tr></table></figure></p>
+<p>通过文章 ID，将用户行为数据与文章画像数据进行连接，从而得到文章频道 ID 和文章主题词<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">'use article'</span>)</span><br><span class="line">article_topic = spark.sql(<span class="string">"select article_id, channel_id, topics from article_profile"</span>)</span><br><span class="line">user_article_topic = user_article_basic.<span class="keyword">join</span>(article_topic, how=<span class="string">'left'</span>, <span class="keyword">on</span>=[<span class="string">'article_id'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>user_article_topic</code> 结果如下图所示，其中 topics 列即为文章主题词列表，如 [‘补码’, ‘字符串’, ‘李白’, …]</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-8c0d357cbea1d7e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，我们需要计算每一个主题词对于用户的权重，所以需要将 topics 列中的每个主题词都拆分为单独的一条记录。可以利用 Spark 的 <code>explode()</code> 方法，达到类似“爆炸”的效果<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import pyspark<span class="selector-class">.sql</span><span class="selector-class">.functions</span> as F</span><br><span class="line"></span><br><span class="line">user_article_topic = user_topic.withColumn(<span class="string">'topic'</span>, F.explode(<span class="string">'topics'</span>)).drop(<span class="string">'topics'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>user_article_topic</code> 如下图所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-4c1b56aad8ec412a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>我们通过用户对哪些文章发生了行为以及该文章有哪些主题词，计算出了用户对哪些主题词发生了行为。这样，我们就可以根据用户对主题词的行为来计算主题词对用户的权重，并且将这些主题词作为用户的标签。那么，用户标签权重的计算公式为：用户标签权重 =（用户行为分值之和）x 时间衰减。其中，时间衰减公式为：时间衰减系数 = 1 / (log(t) + 1)，其中 t 为发生行为的时间距离当前时间的大小</p>
+<p>不同的用户行为对应不同的权重，如下所示</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>用户行为</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阅读时间(&lt;1000)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>阅读时间(&gt;=1000)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>收藏</td>
+<td>2</td>
+</tr>
+<tr>
+<td>分享</td>
+<td>3</td>
+</tr>
+<tr>
+<td>点击</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>计算用户标签及权重，并存储到 Hbase 中 user_profile 表的 partial 列族中。注意，这里我们将频道 ID 和标签一起作为 partial 列族的键存储，这样我们就方便查询不同频道的标签及权重了<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_user_label_weights</span><span class="params">(partitions)</span>:</span></span><br><span class="line">    <span class="string">""" 计算用户标签权重</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    action_weight = &#123;</span><br><span class="line">        <span class="string">"read_min"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">"read_middle"</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">"collect"</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">"share"</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="string">"click"</span>: <span class="number">5</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line">    <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 循环处理每个用户对应的每个主题词</span></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> partitions:</span><br><span class="line">        <span class="comment"># 计算时间衰减系数</span></span><br><span class="line">        t = datetime.now() - datetime.strptime(row.action_time, <span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">        alpha = <span class="number">1</span> / (np.log(t.days + <span class="number">1</span>) + <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> row.read_time  == <span class="string">''</span>:</span><br><span class="line">            read_t = <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            read_t = int(row.read_time)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算阅读时间的行为分数</span></span><br><span class="line">        read_score = action_weight[<span class="string">'read_middle'</span>] <span class="keyword">if</span> read_t &gt; <span class="number">1000</span> <span class="keyword">else</span> action_weight[<span class="string">'read_min'</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算各种行为的权重和并乘以时间衰减系数</span></span><br><span class="line">        weights = alpha * (row.shared * action_weight[<span class="string">'share'</span>] + row.clicked * action_weight[<span class="string">'click'</span>] +</span><br><span class="line">                          row.collected * action_weight[<span class="string">'collect'</span>] + read_score)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 更新到user_profilehbase表</span></span><br><span class="line">        <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">            table = conn.table(<span class="string">'user_profile'</span>)</span><br><span class="line">            table.put(<span class="string">'user:&#123;&#125;'</span>.format(row.user_id).encode(),</span><br><span class="line">                      &#123;<span class="string">'partial:&#123;&#125;:&#123;&#125;'</span>.format(row.channel_id, row.topic).encode(): json.dumps(</span><br><span class="line">                          weights).encode()&#125;)</span><br><span class="line">            conn.close()</span><br><span class="line"></span><br><span class="line">user_topic.foreachPartition(compute_user_label_weights)</span><br></pre></td></tr></table></figure></p>
+<p>在 Hive 中查询用户标签及权重<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> * <span class="keyword">from</span> user_profile_hbase limit <span class="number">1</span>;</span><br><span class="line">OK</span><br><span class="line">user:<span class="number">1</span>  &#123;<span class="string">"birthday"</span>:<span class="number">0.0</span>,<span class="string">"gender"</span>:<span class="literal">null</span>&#125;  &#123;<span class="string">"18:##"</span>:<span class="number">0.25704484358604845</span>,<span class="string">"18:&amp;#"</span>:<span class="number">0.25704484358604845</span>,<span class="string">"18:+++"</span>:<span class="number">0.23934588700996243</span>,<span class="string">"18:+++++"</span>:<span class="number">0.23934588700996243</span>,<span class="string">"18:AAA"</span>:<span class="number">0.2747964402379244</span>,<span class="string">"18:Animal"</span>:<span class="number">0.2747964402379244</span>,<span class="string">"18:Author"</span>:<span class="number">0.2747964402379244</span>,<span class="string">"18:BASE"</span>:<span class="number">0.23934588700996243</span>,<span class="string">"18:BBQ"</span>:<span class="number">0.23934588700996243</span>,<span class="string">"18:Blueprint"</span>:<span class="number">1.6487786414275463</span>,<span class="string">"18:Code"</span>:<span class="number">0.23934588700996243</span>,<span class="string">"18:DIR......</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来，要将用户属性信息加入到用户画像中。读取用户基础信息，存储到用户画像表的 basic 列族即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user_info</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    更新用户画像的属性信息</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    spark.sql(<span class="string">"use toutiao"</span>)</span><br><span class="line">    user_basic = spark.sql(<span class="string">"select user_id, gender, birthday from user_profile"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">udapte_user_basic</span><span class="params">(partition)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">import</span> happybase</span><br><span class="line">        <span class="comment">#  用于读取hbase缓存结果配置</span></span><br><span class="line">        pool = happybase.ConnectionPool(size=<span class="number">10</span>, host=<span class="string">'172.17.0.134'</span>, port=<span class="number">9090</span>)</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">            <span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line">            age = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> row.birthday != <span class="string">'null'</span>:</span><br><span class="line">                born = datetime.strptime(row.birthday, <span class="string">'%Y-%m-%d'</span>)</span><br><span class="line">                today = date.today()</span><br><span class="line">                age = today.year - born.year - ((today.month, today.day) &lt; (born.month, born.day))</span><br><span class="line"></span><br><span class="line">            <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">                table = conn.table(<span class="string">'user_profile'</span>)</span><br><span class="line">                table.put(<span class="string">'user:&#123;&#125;'</span>.format(row.user_id).encode(),</span><br><span class="line">                          &#123;<span class="string">'basic:gender'</span>.encode(): json.dumps(row.gender).encode()&#125;)</span><br><span class="line">                table.put(<span class="string">'user:&#123;&#125;'</span>.format(row.user_id).encode(),</span><br><span class="line">                          &#123;<span class="string">'basic:birthday'</span>.encode(): json.dumps(age).encode()&#125;)</span><br><span class="line">                conn.close()</span><br><span class="line"></span><br><span class="line">    user_basic.foreachPartition(udapte_user_basic)</span><br></pre></td></tr></table></figure></p>
+<p>到这里，我们的用户画像就计算完成了。</p>
+<h1 id="Apscheduler-定时更新"><a href="#Apscheduler-定时更新" class="headerlink" title="Apscheduler 定时更新"></a>Apscheduler 定时更新</h1><p>定义更新用户画像方法，首先处理用户行为日志，拆分文章主题词，接着计算用户标签的权重，最后再将用户属性信息加入到用户画像中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user_profile</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    定时更新用户画像的逻辑</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    up = UpdateUserProfile()</span><br><span class="line">    <span class="keyword">if</span> up.update_user_action_basic():</span><br><span class="line">        up.update_user_label()</span><br><span class="line">        up.update_user_info()</span><br></pre></td></tr></table></figure></p>
+<p>在 Apscheduler 中添加定时更新用户画像任务，设定每隔 2 个小时更新一次<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from apscheduler.schedulers.blocking <span class="built_in">import</span> BlockingScheduler</span><br><span class="line">from apscheduler.executors.pool <span class="built_in">import</span> ProcessPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建scheduler，多进程执行</span></span><br><span class="line"><span class="attr">executors</span> = &#123;</span><br><span class="line">    'default': ProcessPoolExecutor(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">scheduler</span> = BlockingScheduler(<span class="attr">executors=executors)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加一个定时运行文章画像更新的任务， 每隔1个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_article_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=1)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行用户画像更新的任务， 每隔2个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_user_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=2)</span></span><br><span class="line"></span><br><span class="line">scheduler.start()</span><br></pre></td></tr></table></figure></p>
+<p>另外说一下，在实际场景中，用户画像往往是非常复杂的，下面是电商场景的用户画像，可以了解一下。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-c44e8dbbbe82fd26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://pan.baidu.com/s/1SPtttZZK5Nzh5wY7ryaBtg" target="_blank" rel="external">https://pan.baidu.com/s/1SPtttZZK5Nzh5wY7ryaBtg</a>（学习资源已保存至网盘）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

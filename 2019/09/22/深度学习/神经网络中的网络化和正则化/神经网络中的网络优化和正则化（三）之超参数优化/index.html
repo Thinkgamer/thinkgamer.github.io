@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        神经网络中的网络优化和正则化（三）之超参数优化 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网格搜索"><span class="toc-text">网格搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机搜索"><span class="toc-text">随机搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态资源分配"><span class="toc-text">动态资源分配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#贝叶斯优化"><span class="toc-text">贝叶斯优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#贝叶斯优化背后的思想"><span class="toc-text">贝叶斯优化背后的思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时序模型优化"><span class="toc-text">时序模型优化</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        神经网络中的网络优化和正则化（三）之超参数优化
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-09-22 21:25:03</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#神经网络" title="神经网络">神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>公众号标题：神经网络中的优化方法之学习率衰减和动态梯度方向</p>
+</blockquote>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>神经网络中的网络优化和正则化问题介绍主要分为一，二，三，四篇进行介绍。</p>
+<ul>
+<li>第一篇包括<ul>
+<li>网络优化和正则化概述</li>
+<li>优化算法介绍</li>
+</ul>
+</li>
+<li>第二篇包括<ul>
+<li>参数初始化</li>
+<li>数据预处理</li>
+<li>逐层归一化</li>
+</ul>
+</li>
+<li>第三篇包括<ul>
+<li>超参数优化</li>
+</ul>
+</li>
+<li>第四篇包括<ul>
+<li>网络正则化 </li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>无论是神经网络还是机器学习都会存在很多的超参数，在神经网络中，常见的超参数有：</p>
+<ul>
+<li>网络结构：包括神经元之间的连接关系，层数，每层的神经元数量，激活函数的类型等</li>
+<li>优化参数：包括优化方法，学习率，小批量样本数量</li>
+<li>正则化系数</li>
+</ul>
+<p><strong>超参数优化（Hyperparamter Optimization）</strong> 主要存在两方面的困难：</p>
+<ul>
+<li>超参数优化是一个组合优化问题，无法像一般参数那样通过梯度优化的方法来求解，也没有一种通用的优化方法</li>
+<li>评估一组超参数配置时间代价很高，从而导致一些优化算法（比如时间演化算法）在超参数优化中难以应用</li>
+</ul>
+<p>对于超参数的设置，一般有三种比较简单的优化方法，人工搜索，网格搜素，随机搜索</p>
+<hr>
+<h3 id="网格搜索"><a href="#网格搜索" class="headerlink" title="网格搜索"></a>网格搜索</h3><p>网格搜索（grid search）是一种通过尝试所有超参数的组合来寻找一组合适的超参数组合的方法。如果参数是连续，可以将其离散化。比如“学习率”，我们可以根据经验选取几个值:$\alpha \in {0.01, 0.1, 0.5, 1.0}$。</p>
+<p>一般而言，对于连续的超参数，不能采用等间隔的方式进行划分，需要根据超参数自身的特点进行离散化。</p>
+<p>网格搜索根据不同的参数组合在测试集上的表现，选择一组最优的参数作为结果。</p>
+<h3 id="随机搜索"><a href="#随机搜索" class="headerlink" title="随机搜索"></a>随机搜索</h3><p>不同超参数对模型的影响不同，有的超参数（比如正则项系数）对模型的影响有限，有的超参数（比如学习率）对模型的影响比较大，这时候采用网格搜索就会在影响不大的超参数上浪费时间。</p>
+<p>一种在实践中比较有效的方法是对超参数进行随机组合（比如不太重要的参数进行随机抽取，重要的参数可以按照网格搜索的方式选择），选择表现最好的参数作为结果,这就是<strong>随机搜索（random search）</strong></p>
+<blockquote>
+<p>网格搜索和随机搜索没有利用超参数之间的相关性，即如果模型的超参数组合比较类似，其模型的性能表现也是比较接近的，这时候网格搜索和随机搜索就比较低效。下面介绍两种自适应的超参数优化方法：贝叶斯优化和动态资源分配。</p>
+</blockquote>
+<hr>
+<h3 id="动态资源分配"><a href="#动态资源分配" class="headerlink" title="动态资源分配"></a>动态资源分配</h3><p>在超参数优化中，每组超参数配置的评估代价很高，如果我们可以在较早的阶段就估计出该组超参数效果就比较差，然后提前终止该组参数的测试，从而将更多的资源留给其他。这个问题可以归结为<strong>多臂赌博机问题</strong>的一个泛化问题，即<strong>最优臂问题（best-arm problem）</strong>，即在给定有限次数的情况下，如何获取最大收益。</p>
+<p>动态资源分配的一种有效方法是<strong>逐层减半（successive halving）</strong>，将超参数优化看作是一种非随机的最优臂问题。该方法出自2015年的一篇论文，论文下载地址为：<a href="https://arxiv.org/pdf/1502.07943.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1502.07943.pdf</a></p>
+<p>假设要尝试N组超参数配置，总共可利用的摇臂资源次数为B，我们可以通过$T= [log_2N]-1$轮逐次减半的方法来选取最优的配置，具体计算过程如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190919191933874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="逐次减半"></p>
+<blockquote>
+<p>在逐次减半方法中，N的设置十分重要，如果N越大，得到最佳配置的机会也越大，但每组配置分配到的资源就越少，这样早期的评估结果可能不准确，反之，如果N越小，每组超参数配置的评估就会越准确，但也有可能无法得到最优的参数配置。因此如何设置N是评估“利用-探索”的一个关键因素，一种改进的方法是：HyperBrand方法，通过尝试不同的N来寻找最优的参数配置。对应的论文下载地址为：<a href="https://openreview.net/pdf?id=ry18Ww5ee" target="_blank" rel="external">https://openreview.net/pdf?id=ry18Ww5ee</a></p>
+</blockquote>
+<hr>
+<h3 id="贝叶斯优化"><a href="#贝叶斯优化" class="headerlink" title="贝叶斯优化"></a>贝叶斯优化</h3><h4 id="贝叶斯优化背后的思想"><a href="#贝叶斯优化背后的思想" class="headerlink" title="贝叶斯优化背后的思想"></a>贝叶斯优化背后的思想</h4><p>贝叶斯优化（Bayesian optimization）是一种自适应的超参数优化方法，根据当前已经试验的超参数组合，来预测下一个可能带来最大收益的组合。</p>
+<blockquote>
+<p>对于同一个算法来讲，不同的超参数组合其实是对应不同的模型，而贝叶斯优化可以帮助我们在众多模型中寻找性能最优的模型，虽然我们可以使用交叉验证的思想寻找更好的超参数组合，但是不知道需要多少样本才能从一系列候选模型中选择出最优的模型。这就是为什么贝叶斯优化能够减少计算任务加速优化过程的进程，同样贝叶斯优化不依赖于人为猜测需要样本量的多少，这种优化计算是基于随机性和概率分布得到的。<br><br><br>简单来说，当我们把第一条样本送到模型中的时候，模型会根据当前的样本点构建一条直接，当把第二天样本送到模型中的时候，模型将结合这两个点并从前面的线出发绘制一条修正的线，当输送第三个样本的时候，模型绘制的就是一条非线性曲线，当样本数据增加时，模型所结合的曲线就会变得更多，这就像统计学里的抽样定理，即我们从样本参数出发估计总体参数，且希望构建出的估计量与总体参数相合，无偏估计。<br><br><br>下图为非线性目标函数曲线图，对于给定的目标函数，在输送了所有的观察样本之后，它将搜寻到最大值，即寻找令目标函数最大的参数（arg max）。<br><img src="https://img-blog.csdnimg.cn/20190920122716823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="非线性目标函数曲线图"><br>我们的目标并不是使用尽可能多的样本去完全推断未知的目标函数，而是希望能求得使目标函数最大化的参数，所以我们将注意力从曲线上移开，当目标函数组合能提升曲线形成分布时，其就可以称为采集函数（Acquisition funtion），这就是<strong>贝叶斯优化背后的思想</strong>。（灰色区域部分参考：<a href="https://www.jiqizhixin.com/articles/2017-08-18-5）" target="_blank" rel="external">https://www.jiqizhixin.com/articles/2017-08-18-5）</a></p>
+</blockquote>
+<h4 id="时序模型优化"><a href="#时序模型优化" class="headerlink" title="时序模型优化"></a>时序模型优化</h4><p>一种常用的贝叶斯优化方法为时序模型优化（Sequential Model-Based Optimization，SMBD），假设超参数优化的函数f(x)服从高斯过程，则$p(f(x)|x)$为一个正态分布。贝叶斯优化过程是根据已有的N组实验结果$H={x_n,y_n}, n\in(1,N)$（$y_n$为$f(x_n)$的观测值）来建模高斯过程，并计算$f(x)$的后验分布$p(f(x)|x,H)$。</p>
+<p>为了使得$p(f(x)|x,H)$接近其真实分布，就需要对样本空间进行足够多的采样，但是超参数优化中每一个样本的生成成本都很高，需要使用尽可能少的样本来使得$p_\theta(f(x)|x,H)$接近于真实分布。因此需要定义一个收益函数（Acquisition funtion）$\alpha (x, H)$来判断一个样本能否给建模$p_\theta(f(x)|x,H)$提供更多的收益。收益越大，其修正的高斯过程会越接近目标函数的真实分布。</p>
+<p>收益函数的定义有很多方式，一个常用的是期望改善（Expected Improvement，EI）。假设$y^* = min \left \{  y_n, 1 \leq n \leq N \right \}$是当前已有样本中的最优值，期望改善函数为：</p>
+<script type="math/tex; mode=display">
+EI(x, H) = \int_{-\infty }^{ +\infty } max (y^* - y, 0) p(y|x, H) dy</script><p>期望改善是定义一个样本$x$在当前模型$p(f(x)|x,H)$下，$f(x)$超过最好结果$y^*$的期望。除了期望改善函数之外，收益函数还有其他函数的定义，比如改善概率（Probability Of Improvement），高斯过程置信上界（GP Up Confidence Bound，GP-UCB）等。</p>
+<p>时序模型优化过程如下所示：<br><img src="https://img-blog.csdnimg.cn/20190920150457198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="时序模型优化过程"></p>
+<p>贝叶斯优化的缺点是高斯建模过程需要计算矩阵的逆，时间复杂度为$O(n^3)$，因此不能很好的处理高维过程，深层神经网络的参数一般比较多，需要更加高效的高斯过程建模，也有一些方法将时间复杂度从$O(n^3)$降到了$O(n)$。</p>
+<blockquote>
+<p>至此，超参数优化部分已经介绍完成，这里并没有对超参数优化进行实现，有很多Python库已经对其进行了封装，感兴趣的可以关注下，另外贝叶斯优化在日常实践中用的比较多但是不太好理解，可以多看几遍，对比一些文章什么看下理解下。</p>
+</blockquote>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

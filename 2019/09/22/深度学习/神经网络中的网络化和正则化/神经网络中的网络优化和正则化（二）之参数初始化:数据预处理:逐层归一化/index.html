@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        神经网络中的网络优化和正则化（二）之参数初始化/数据预处理/逐层归一化 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数初始化"><span class="toc-text">参数初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对称权重现象"><span class="toc-text">对称权重现象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gaussian初始化"><span class="toc-text">Gaussian初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#均匀分布初始化"><span class="toc-text">均匀分布初始化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据预处理"><span class="toc-text">数据预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#为什么要进行数据预处理"><span class="toc-text">为什么要进行数据预处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据预处理的方法"><span class="toc-text">数据预处理的方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#逐层归一化"><span class="toc-text">逐层归一化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#深层神经网络中为什么要做逐层归一化"><span class="toc-text">深层神经网络中为什么要做逐层归一化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#批量归一化"><span class="toc-text">批量归一化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#层归一化"><span class="toc-text">层归一化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他方法"><span class="toc-text">其他方法</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        神经网络中的网络优化和正则化（二）之参数初始化/数据预处理/逐层归一化
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-09-22 21:25:02</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#神经网络" title="神经网络">神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>神经网络中的网络优化和正则化问题介绍主要分为一，二，三，四篇进行介绍。</p>
+<ul>
+<li>第一篇包括<ul>
+<li>网络优化和正则化概述</li>
+<li>优化算法介绍</li>
+</ul>
+</li>
+<li>第二篇包括<ul>
+<li>参数初始化</li>
+<li>数据预处理</li>
+<li>逐层归一化</li>
+</ul>
+</li>
+<li>第三篇包括<ul>
+<li>超参数优化</li>
+</ul>
+</li>
+<li>第四篇包括<ul>
+<li>网络正则化 </li>
+</ul>
+</li>
+</ul>
+<h3 id="参数初始化"><a href="#参数初始化" class="headerlink" title="参数初始化"></a>参数初始化</h3><h4 id="对称权重现象"><a href="#对称权重现象" class="headerlink" title="对称权重现象"></a>对称权重现象</h4><p>在上一篇文章中我们提到神经网络中的参数学习是基于梯度下降的，而梯度下降需要赋予一个初始的参数，所以这个参数的初始化就显得特别重要。</p>
+<p>在感知器和逻辑回归中，一般将参数初始化为0，但是在神经网络中如果把参数初始化为0，就会导致在第一次前向计算时，所有隐藏层神经元的激活值都相同，这样会导致深层神经元没有区分性，这种现象称为<strong>对称权重现象</strong></p>
+<p>因此如果要高质量的训练一个网络，给参数选择一个合适的初始化区间是非常重要的，一般而言，参数初始化的区间应该根据神经元的性质进行差异化的设置，如果一个神经元的输入过多，权重就不要设置太大，以避免神经元的的输出过大（当激活函数为ReLU时）或者过饱和（激活函数为Sigmoid函数时）。<br>关于神经网络中的激活函数介绍可参考：</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/Gamer_gyt/article/details/89440152" target="_blank" rel="external">https://blog.csdn.net/Gamer_gyt/article/details/89440152</a></p>
+</blockquote>
+<p>常见的参数初始化方法包括以下两种。</p>
+<h4 id="Gaussian初始化"><a href="#Gaussian初始化" class="headerlink" title="Gaussian初始化"></a>Gaussian初始化</h4><p>高斯初始化是最简单的初始化方法，参数服从一个固定均值和固定方差的高斯分布进行随机初始化。</p>
+<p>初始化一个深度网络时，一个比较好的初始化方案是保持每个神经元输入的方差是一个常量，当一个神经元的输入连接数量为n时，可以考虑其输入连接权重以$N(0,\sqrt{\frac{1}{n}})$的高斯分布进行初始化，如果同时考虑神经元的输出连接数量为m时，可以按照$N(0,\sqrt{\frac{2}{m+n}})$进行高斯分布初始化。</p>
+<h4 id="均匀分布初始化"><a href="#均匀分布初始化" class="headerlink" title="均匀分布初始化"></a>均匀分布初始化</h4><blockquote>
+<p>均匀初始化是指在一个给定的区间[-r,r]内采用均匀分布来初始化参数，超参数r的设置也可以根据神经元的连接数量来进行自适应调整。</p>
+</blockquote>
+<p><strong>Xavier初始化方法</strong>是一种自动计算超参数r的方法，参数可以在[-r,r]之间采用均匀分布进行初始化。</p>
+<p>如果神经元激活函数为logistic函数，对于第l-1层到第l层的权重参数区间可以设置为：</p>
+<script type="math/tex; mode=display">
+r = \sqrt{ \frac{6}{ n^{l-1} + n^l}}</script><p>$n^l$ 表示第l层神经元的个数，$n^{l-1}$表示l-1层神经元的个数。</p>
+<p>如果是tanh激活函数，权重参数区间可以设置为：</p>
+<script type="math/tex; mode=display">
+r =4 \sqrt{ \frac{6}{ n^{l-1} + n^l}}</script><blockquote>
+<p>在实际经验中，Xavier初始化方法用的比较多。</p>
+</blockquote>
+<h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><h4 id="为什么要进行数据预处理"><a href="#为什么要进行数据预处理" class="headerlink" title="为什么要进行数据预处理"></a>为什么要进行数据预处理</h4><p>一般情况下，在原始数据中，数据的维度往往不一致，比如在电商数据中，某个商品点击的次数往往要远大于购买的次数，即<strong>特征的分布范围差距很大</strong>，这样在一些使用余弦相似度计算的算法中，较大的特征值就会起到绝对作用，显然这样做是极其不合理的。同样在深度神经网络中，虽然可以通过参数的调整来自适应不同范围的输入，但是这样训练的效率也是很低的。</p>
+<p>假设一个只有一层的网络 $y=tanh(w_1x_1 + w_2 x_2 +b)$，其中$x_1 \in [0,10], x_2 \in [0,1]$。因为激活函数 tanh的导数在[-2,2]之间是敏感的，其余的值域导数接近0，因此$w_1x_1 + w_2 x_2 +b$过大或者过小都会影响训练，为了提高训练效率，我们需要把$w_1x_1 + w_2 x_2 +b$限定在[-2,2]之间，因为$x_1,x_2$的取值范围，需要把$w_1$设置的小一些，比如在[-0.1, 0.1]之间，可以想象，如果数据维度比较多的话，我们需要精心的去设置每一个参数，<strong>但是如果把特征限定在一个范围内，比如[0,1]</strong>，我们就不需要太区别对待每一个参数。</p>
+<p>除了参数初始化之外，不同特征取值范围差异比较大时也会影响梯度下降法的搜索效率，下图（图1-1）给出了数据归一化对梯度的影响，对比等高线图可以看出，归一化后，梯度的位置方向更加接近于最优梯度的方向。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190919111801183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="数据归一化对梯度的影响"></p>
+<h4 id="数据预处理的方法"><a href="#数据预处理的方法" class="headerlink" title="数据预处理的方法"></a>数据预处理的方法</h4><p>关于原始数据归一化的方法有很多，可以参考《推荐系统开发实战》中第四章节部分内容，写的很全面，而且有对应的代码实现。该书的购买链接：</p>
+<blockquote>
+<p><a href="https://item.jd.com/12671716.html" target="_blank" rel="external">点击查看详情-京东链接</a></p>
+</blockquote>
+<h3 id="逐层归一化"><a href="#逐层归一化" class="headerlink" title="逐层归一化"></a>逐层归一化</h3><h4 id="深层神经网络中为什么要做逐层归一化"><a href="#深层神经网络中为什么要做逐层归一化" class="headerlink" title="深层神经网络中为什么要做逐层归一化"></a>深层神经网络中为什么要做逐层归一化</h4><p>在深层神经网络中，当前层的输入是上一层的输出，因此之前层参数的变化对后续层的影响比较大，就像一栋高楼，低层很小的变化就会影响到高层。</p>
+<p>从机器学习的角度去看，如果某个神经网络层的输入参数发生了变化，那么其参数需要重新学习，这种现象叫做<strong>内部协变量偏移（Internal Covariate Shift）</strong>。</p>
+<blockquote>
+<p>这里补充下机器学习中的协变量偏移（Covariate Shift）。协变量是一个统计学的概念，是影响预测结果的统计变量。在机器学习中，协变量可以看作是输入，一般的机器学习都要求输入在训练集和测试集上的分布是相似的，如果不满足这个假设，在训练集上得到的模型在测试集上表现就会比较差。<br><img src="https://img-blog.csdnimg.cn/20190919130030578.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="协变量偏移"></p>
+</blockquote>
+<p>为了解决内部协变量偏移问题，需要对神经网络层的每一层输入做归一化，下面介绍几种常见的方法：</p>
+<ul>
+<li>批量归一化</li>
+<li>层归一化</li>
+<li>其他方法</li>
+</ul>
+<h4 id="批量归一化"><a href="#批量归一化" class="headerlink" title="批量归一化"></a>批量归一化</h4><p>为了减少内部协变量偏移的影响，需要对神经网络每一层的净输入$z^l$进行归一化，相当于每一层都要做一次数据预处理，从而加快收敛速度，但是因为对每一层都进行操作，所以要求归一化的效率要很高，一般使用标准归一化，将净输入$z^l$的每一维都归一到标准正态分布，其公式如下：</p>
+<script type="math/tex; mode=display">
+\hat{z}^l = \frac{ z^l - E[z^l] }{ \sqrt{var(z^l) + \epsilon } }</script><p>$E[z^l]，var(z^l)$表示在当前参数下$z^l$的每一维在整个训练集上的期望和方差，因为深度神经网络采用的是下批量的梯度下降优化方法，基于全部样本计算期望和方差是不可能的，因为通常采用小批量进行估计。给定一个包含K个样本的集合，第$l$层神经元的净输入$z^{(1,l)},….z^{(K,l)}$的均值和方差为：</p>
+<script type="math/tex; mode=display">
+\mu _\beta = \frac{1 }{ K } \sum_{k=1}^{K } z^{(k,l)}
+\\
+\sigma^2 _\beta = \frac{1 }{ K }\sum_{ k=1}^{K} (z^{(k,l)} - \mu _\beta)^2</script><p>对净输入$z^l$的标准归一化会使其取值集中在0附近，这样当使用sigmoid激活函数时，这个取值空间刚好接近线性变换的空间，减弱了神经网络的非线性性质。因此为了不使归一化对网络产生影响，需要对其进行缩放和平移处理，公式如下：</p>
+<script type="math/tex; mode=display">
+\hat{z}^l = \frac{ z^l - \mu _\beta }{ \sqrt{\sigma^2 _\beta+ \epsilon } } \odot \gamma  + \beta</script><p>其中$\gamma  , \beta$分别代表缩放和平移的向量。</p>
+<blockquote>
+<p>这里需要注意的是每次小批量样本的均值和方差是净输入$z^l$的函数，而不是常量因此在计算梯度时要考虑到均值和方差产生的影响，当训练完成时，用整个数据集上的均值和方差来代替每次小样本计算得到的均值和方差。在实际实践经验中，小批量样本的均值和方差也可以使用移动平均来计算。</p>
+</blockquote>
+<h4 id="层归一化"><a href="#层归一化" class="headerlink" title="层归一化"></a>层归一化</h4><p>批量归一化的操作对象是单一神经元，因此要求选择样本批量的时候，不能太小，否则难以计算单个神经元的统计信息，另外一个神经元的输入是动态变化的，比如循环神经网络，那么就无法应用批量归一化操作。</p>
+<p><strong>层归一化（Layer Normalization）</strong> 是和批量归一化非常类似的方法，但层归一化的操作对象是某层全部神经元。</p>
+<p>对于深层神经网络，第$l$层神经元的净输入为$z^l$，其均值和方差为：</p>
+<script type="math/tex; mode=display">
+u^l = \frac{1}{n^l} \sum_{i=1}^{ n^l} z_i^l
+\\
+\sigma ^2_l = \frac{1}{n^l} \sum_{i=1}^{ n^l} (z_i^l - u^l )</script><p>其中$n^l$为第$l$层神经元的数量。则层归一化定义为：</p>
+<script type="math/tex; mode=display">
+\hat{z^l} = \frac{z^l - u^l }{ \sqrt {\sigma^2 _l + \epsilon } } \odot \gamma  + \beta</script><p>其中$\gamma ,\beta$分别代表缩放和平移的向量，和$z^l$的维度相同。</p>
+<p><strong>循环神经网络中的层归一化</strong>为：</p>
+<script type="math/tex; mode=display">
+z_t = U h_{t-1} + W x_t
+\\
+h_t = f(\hat{z^l})</script><p>其中隐藏层为$h_t$，$x_t$为第$t$时刻的净输入，$U,W$为参数。</p>
+<blockquote>
+<p>在标准循环网络中，循环神经层的输入一般就随着时间慢慢变大或者变小，从而引起梯度爆炸或者梯度消失，而层归一化的神经网络可以有效的缓解这种状况。</p>
+</blockquote>
+<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><p>除了上面介绍的两种归一化方法之外，还有一些其他的一些归一化方法，感兴趣的可以自行搜索查看。</p>
+<ul>
+<li>权重归一化(Weight Normalization)</li>
+<li>局部响应归一化</li>
+</ul>
+<blockquote>
+<p>至此，神经网络中的优化方法第二部分介绍完成，主要包好了三部分内容：参数初始化，数据预处理和逐层归一化。再下一篇将会重点介绍超参数优化的方法不仅适用于深度神经网络，也适用于一般的机器学习任务。如果你觉得不错，分享一下吧！</p>
+</blockquote>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

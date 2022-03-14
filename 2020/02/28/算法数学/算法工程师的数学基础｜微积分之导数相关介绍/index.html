@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜微积分之导数相关介绍 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念介绍"><span class="toc-text">概念介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导数法则"><span class="toc-text">导数法则</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#加减法则"><span class="toc-text">加减法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#乘法法则"><span class="toc-text">乘法法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#链式法则"><span class="toc-text">链式法则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见函数的导数"><span class="toc-text">常见函数的导数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#标量函数及其导数"><span class="toc-text">标量函数及其导数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#向量函数及其导数"><span class="toc-text">向量函数及其导数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#按位计算的向量函数及其导数"><span class="toc-text">按位计算的向量函数及其导数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#logistic函数"><span class="toc-text">logistic函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#softmax函数"><span class="toc-text">softmax函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本求导函数法则与导数公式"><span class="toc-text">基本求导函数法则与导数公式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本初等函数求导公式"><span class="toc-text">基本初等函数求导公式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数的和、差、商、积的求导法则"><span class="toc-text">函数的和、差、商、积的求导法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反函数求导法则"><span class="toc-text">反函数求导法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#复合函数求导法则"><span class="toc-text">复合函数求导法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双曲函数和反双曲函数的导数"><span class="toc-text">双曲函数和反双曲函数的导数</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜微积分之导数相关介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 22:57:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>导数（derivative）是微积分学中重要的基础概念。本篇主要介绍导数相关的知识，包括：概念介绍、导数法则、常见函数的导数、基本求导函数法则与导数公式。</p>
+<h3 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h3><p>对于定义域和值域都是实数域的函数$f: R \rightarrow R$，若$f(x)$在点$x_0$的某个邻域$\Delta x$内，极限：</p>
+<script type="math/tex; mode=display">
+f'(x_0) = \underset{ \Delta x \rightarrow 0}{lim} \frac{ f(x_0 +\Delta x) - f(x)}{ \Delta x }</script><p>存在，则称函数$f(x)$在点$x_0$处可导，$f(x_0)$称为其导数，或导函数。</p>
+<p>若函数$f(x)$在其定义域包含的某区间内每一个点都可导，那么也可以说函数$f(x)$在这个区间内可导。连续函数不一定可导，可导函数一定连续。例如函数$|x|$为连续函数，但在点$x=0$处不可导。</p>
+<p>对于一个多变量函数$f: R^d \rightarrow R$，它的偏导数（partial derivative）是关于其中一个变量$x_i$的导数，而保持其他变量固定，可以记为$f_{x_i}’(x),\bigtriangledown _{x_i} f(x),\frac{\partial f(x)}{ \partial x_i} $或$\frac{\partial }{  \partial_{x_i}}f(x)$。</p>
+<p>对于一个$d$维向量$x \in R^d$，函数$f(x)=f(x_1, x_2,…,x_d) \in R$，则$f(x)$关于$x$的偏导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial f(x)}{\partial x} = \begin{bmatrix}
+\frac{\partial f(x)}{ \partial x_1}\\ 
+.\\ 
+.\\ 
+.\\ 
+\frac{\partial f(x)}{ \partial x_d}
+\end{bmatrix} \in R^d</script><p>若函数$f(x) \in R^k$的值也为一个向量，则$f(x)$关于$x$的偏导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial f(x)}{\partial x} = \begin{bmatrix}
+\frac{\partial f_1(x)}{ \partial x_1} & ... & \frac{\partial f_k(x)}{ \partial x_1} \\ 
+. & . & .\\ 
+. & . & .\\ 
+. & . & .\\ 
+\frac{\partial f_1(x)}{ \partial x_d} & ... & \frac{\partial f_k(x)}{ \partial x_d} 
+\end{bmatrix} \in R^{d*k}</script><p>称为Jacobian矩阵。</p>
+<h3 id="导数法则"><a href="#导数法则" class="headerlink" title="导数法则"></a>导数法则</h3><p>一个复杂函数的导数的计算可以通过一下法则来简化。</p>
+<h4 id="加减法则"><a href="#加减法则" class="headerlink" title="加减法则"></a>加减法则</h4><p>$y = f(x), z=g(x)$ 则：</p>
+<script type="math/tex; mode=display">
+\frac{ \partial (y+z) }{ \partial x } = \frac{ \partial y}{\partial x} + \frac{ \partial z}{\partial x}</script><h4 id="乘法法则"><a href="#乘法法则" class="headerlink" title="乘法法则"></a>乘法法则</h4><p>(1) 若 $x \in R^p, y= f(x) \in R^q, z = g(x) \in R^q$ ，则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial y^T z}{\partial x} =\frac{\partial y}{\partial x} z + \frac{\partial z}{\partial x}  y</script><p>(2) 若 $x \in R^p, y= f(x) \in R^s, z = g(x) \in R^t, A \in R^{s *t}$ 和 $x$无关，则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial y^T Az}{\partial x} =\frac{\partial y}{\partial x} Az + \frac{\partial z}{\partial x}  A^Ty</script><p>(3)若 $x \in R^p, y= f(x) \in R, z = g(x) \in R^p$ ，则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial yz}{\partial x} =y \frac{\partial z}{\partial x}  + \frac{\partial y}{\partial x}  z^T</script><h4 id="链式法则"><a href="#链式法则" class="headerlink" title="链式法则"></a>链式法则</h4><p>链式法则（chain rule）是求复合函数导数的一个法则，是在微积分中计算导数的一种常见方法。</p>
+<p>(1) 若 $x \in R^p, y= g(x) \in R^s, z = f(y) \in R^t$ ，则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial z}{\partial x} =\frac{\partial y}{\partial x}   \frac{\partial z}{\partial y}</script><p>(2)若 $X \in R^{p<em>q}$为矩阵, $Y= g(x) \in R^{s</em>t}, z = f(Y) \in R$ ，则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial z}{\partial X_{ij} } =tr((\frac{\partial z}{\partial Y})^T   \frac{\partial Y}{\partial X_{ij}}   )</script><p>(3)若 $X \in R^{p*q}$为矩阵, $y= g(x) \in R^s, z = f(Y) \in R$ ，则</p>
+<script type="math/tex; mode=display">
+\frac{\partial z}{\partial X_{ij} } =(\frac{\partial z}{\partial Y})^T   \frac{\partial y}{\partial X_{ij}}</script><p>(4)若 $x \in R, u= u(x) \in R^p, g = g(u) \in R^q$ ，则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial g}{\partial x } =\frac{\partial g}{\partial u}   \frac{\partial u}{\partial x}</script><blockquote>
+<p>(4)的文字部分，$u = u(x)$中左边的$u$表示向量， $g=g(u)$左边的$g$表示向量，$g(u)$表示函数，$u$表示向量</p>
+</blockquote>
+<h3 id="常见函数的导数"><a href="#常见函数的导数" class="headerlink" title="常见函数的导数"></a>常见函数的导数</h3><p>这里介绍常用的几个函数。</p>
+<h4 id="标量函数及其导数"><a href="#标量函数及其导数" class="headerlink" title="标量函数及其导数"></a>标量函数及其导数</h4><p><strong>指示函数</strong> 指示函数$I(x=c)$为：</p>
+<script type="math/tex; mode=display">
+I(x=c) = \left\{\begin{matrix}
+1 & if  & x=c\\ 
+0 & else & 0 
+\end{matrix}\right.</script><p>指示函数$I(x=c)$除了在$c$处外，其导数为0。</p>
+<p><strong>多项式函数</strong> 如果$f(x)=x^r$(幂函数)，其中$r$是非零实数，那么导数：</p>
+<script type="math/tex; mode=display">
+\frac{ \partial x^r}{\partial x} = rx^{r-1}</script><p>当$r=0$时，常函数的导数是0.</p>
+<p><strong>指数函数</strong> 底数为$e$的指数函数$f(x)= exp(x) =e^x$的导数是他本身。</p>
+<script type="math/tex; mode=display">
+\frac{ \partial exp(x)}{\partial x} = exp(x)</script><p><strong>对数函数</strong> 底数为$e$的对数函数 $log(x)$ 的导数则是$x^{-1}$</p>
+<script type="math/tex; mode=display">
+\frac{ \partial log(x)}{\partial x} =\frac{1}{x}</script><h4 id="向量函数及其导数"><a href="#向量函数及其导数" class="headerlink" title="向量函数及其导数"></a>向量函数及其导数</h4><script type="math/tex; mode=display">
+\frac{ \partial x }{\partial x} =I
+\\ 
+\frac{ \partial Ax }{\partial x} =A^T
+\\
+\frac{ \partial x^TA }{\partial x} =A</script><blockquote>
+<p>上面公式中涉及的字母都是向量</p>
+</blockquote>
+<h4 id="按位计算的向量函数及其导数"><a href="#按位计算的向量函数及其导数" class="headerlink" title="按位计算的向量函数及其导数"></a>按位计算的向量函数及其导数</h4><p>假设一个函数$f(x)$的输入是标量$x$。对于一组$K$个标量$x_1, x_2,…,x_K$，我们可以通过$f(x)$得到另外一组$K$个标量$z_1, z_2,…,z_K$</p>
+<script type="math/tex; mode=display">
+z_k = f(x_k), \forall k=1,...,K</script><p>为了简单起见，我们定义$x = [x_1, …, x_K]^T$, $z =[z_1, …, z_K]$</p>
+<script type="math/tex; mode=display">
+z = f(x)</script><p>其中，$f(x)$是按位运算的，即$[f(x)]_i = f(x_i)$ </p>
+<p>当 $x$为标量时，$f(x)$的导数记为$f’(x)$。当输入为$K$维向量$x=[x_1, …,x_K]^T$时，其导数为一个对角矩阵。</p>
+<script type="math/tex; mode=display">
+\frac{ \partial f(x) }{\partial x} = [ \frac{\partial f(x_j)}{\partial x_i} ]_{K*K}</script><h4 id="logistic函数"><a href="#logistic函数" class="headerlink" title="logistic函数"></a>logistic函数</h4><p>Logistic函数是一种常用的S形函数，是比利时数学家Pierrs Francois Verhulst 在1844-1845年研究种群数量的增长模型时提出命名的，最初作为一种生态学模型。</p>
+<p>Logistic的函数定义为：</p>
+<script type="math/tex; mode=display">
+logistic(x) = \frac{L}{1+exp(-k(x-x_0)}</script><p>这里$exp(.)$函数表示自然对数函数，$x_0$是中心点，$L$是最大值，$k$是曲线的倾斜度。下图给出了几种不同参数的logistic函数曲线，当$x \rightarrow -\infty$时，$logistic(x) \rightarrow 0$，当$x \rightarrow +\infty$时，$logistic(x) \rightarrow L$</p>
+<p><img src="https://img-blog.csdnimg.cn/20200109121900765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="几种不同参数的logistic函数曲线"></p>
+<p>当参数为$(k=1,x_0=0, L=1)$时，logistic函数称为标准logistic函数，记为$\sigma (x)$</p>
+<script type="math/tex; mode=display">
+\sigma (x) = \frac{1}{ 1 +exp(-x) }</script><p>标准logistic函数在机器学习中使用得非常广泛，经常用来将一个实数空间的数映射到(0,1)区间。</p>
+<p>标准logistic函数的导数为（<strong>推导过程可以参考《推荐系统开发实战》一书的第八章</strong>）：</p>
+<script type="math/tex; mode=display">
+\sigma(x)' = \sigma(x)(1-\sigma(x))</script><p>当输入为$K$维向量$x=[x_1, …, x_K]^T$时，其导数为：</p>
+<script type="math/tex; mode=display">
+\sigma' (x) = diag( \sigma(x) \odot (1-\sigma(x)) )</script><h4 id="softmax函数"><a href="#softmax函数" class="headerlink" title="softmax函数"></a>softmax函数</h4><p>softmax函数是将多个标量映射为一个概率分布。</p>
+<p>对于$K$个标量$x_1, …, x_K$，softmax函数定义为：</p>
+<script type="math/tex; mode=display">
+z_k = softmax(x_k) = \frac{exp(x_k)}{ \sum_{i=1}^{K} exp(x_k)}</script><p>这样我们可以将$K$个变量$x_1, x_2, …, x_K$转变为一个分布$z_1, …, z_K$，满足：</p>
+<script type="math/tex; mode=display">
+z_k \in [0,1], \forall k, \sum_{i=1}^{K}z_k =1</script><p>当softmax函数的输入为$K$维向量$x$时，</p>
+<script type="math/tex; mode=display">
+\hat z=softmax(x)
+\\ 
+= \frac{a}{  \sum_{k=1}^{K} exp(x_k)} \begin{bmatrix}
+exp(x_1)\\ 
+.\\ 
+.\\ 
+.\\ 
+exp(x_k)
+\end{bmatrix}
+\\
+= \frac{exp(x)}{ \sum_{k=1}^{K} exp(x_k) }
+\\
+= \frac{exp(x)}{ 1^T_K exp(x) }</script><p>其中，$1^T_K=[1,…,1]_{K*1}$是$K$维的全1的向量。 </p>
+<p>其导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial  softmax(x)}{\partial x} = \frac{ \partial  (\frac{exp(x)}{ 1^T_K exp(x) } ) }{ \partial x}
+\\ = diag(softmax(x)) - softmax(x)softmax(x)^T</script><h3 id="基本求导函数法则与导数公式"><a href="#基本求导函数法则与导数公式" class="headerlink" title="基本求导函数法则与导数公式"></a>基本求导函数法则与导数公式</h3><h4 id="基本初等函数求导公式"><a href="#基本初等函数求导公式" class="headerlink" title="基本初等函数求导公式"></a>基本初等函数求导公式</h4><script type="math/tex; mode=display">
+(C)'=0</script><script type="math/tex; mode=display">
+(x^u)'=ux^{u-1}</script><script type="math/tex; mode=display">
+(sin\,x)' = cos\,x</script><script type="math/tex; mode=display">
+(cos\,x)' = -sin\,x</script><script type="math/tex; mode=display">
+(tan\,x)' = sec^2 \,x</script><script type="math/tex; mode=display">
+(cot)'x = - csc^2\, x</script><script type="math/tex; mode=display">
+(sec\,x)' = sec\,x \, tan\,x</script><script type="math/tex; mode=display">
+(csc\,x)' = -csx\,x \, cot\,x</script><script type="math/tex; mode=display">
+(a^x)' = a^x ln a</script><script type="math/tex; mode=display">
+(e^x)' = e^x</script><script type="math/tex; mode=display">
+(log_a\,x)' = \frac{1}{x\,ln\,a}</script><script type="math/tex; mode=display">
+(ln\,x)' = \frac{1}{x}</script><script type="math/tex; mode=display">
+(arc\,sin\,x)' = \frac{1}{\sqrt{1-x^2}}</script><script type="math/tex; mode=display">
+ (arc\,cos\,x)' = - \frac{1}{\sqrt{1-x^2}}</script><script type="math/tex; mode=display">
+ (arc\,tan\,x)' = \frac{1}{\sqrt{1+x^2}}</script><script type="math/tex; mode=display">
+ (arc\,cot\,x)' = - \frac{1}{\sqrt{1+x^2}}</script><h4 id="函数的和、差、商、积的求导法则"><a href="#函数的和、差、商、积的求导法则" class="headerlink" title="函数的和、差、商、积的求导法则"></a>函数的和、差、商、积的求导法则</h4><p>其实上文中已经简单介绍了函数的求导法则，这里再用一种更加简要的方式说明一下：<br>设$u=u(x), v= v(x)$，且都可导，则：</p>
+<script type="math/tex; mode=display">
+(u \pm v)' = u' \pm v'</script><script type="math/tex; mode=display">
+(Cu)' = Cu'</script><script type="math/tex; mode=display">
+(uv)' = u'v + uv'</script><script type="math/tex; mode=display">
+(\frac{u}{v})' = \frac{u'v-uv'}{v^2}</script><h4 id="反函数求导法则"><a href="#反函数求导法则" class="headerlink" title="反函数求导法则"></a>反函数求导法则</h4><p>如果函数$x=f(y)$在区间$I_y$内单调、可导且$f’(y)\neq0$，那么它的反函数$y=f^{−1}(x)$在区间$I_x={x∣x=f(y)，y \in I_y}$内也可导，且</p>
+<script type="math/tex; mode=display">
+[f^{-1}(x)]'=\frac{1}{f'(y)}</script><p>或</p>
+<script type="math/tex; mode=display">
+\frac{dy}{dx} = \frac{1}{ \frac{dx}{dy}}</script><p>结论可以简单表达为：<strong>反函数的导数等于直接函数导数的倒数</strong>。</p>
+<h4 id="复合函数求导法则"><a href="#复合函数求导法则" class="headerlink" title="复合函数求导法则"></a>复合函数求导法则</h4><p>设$y=f(u)$，而$u=\varphi (x)$且$f(u), \varphi(x)$都可导，则复合函数 $y=f[\varphi(x)]$的导数为：</p>
+<script type="math/tex; mode=display">
+\frac{dy}{dx} = \frac{dy}{du}\frac{du}{dx}</script><p>或</p>
+<script type="math/tex; mode=display">
+y'= f'(u)\varphi'(x)</script><h4 id="双曲函数和反双曲函数的导数"><a href="#双曲函数和反双曲函数的导数" class="headerlink" title="双曲函数和反双曲函数的导数"></a>双曲函数和反双曲函数的导数</h4><p>双曲函数和反双曲函数都是初等函数，可以用上边介绍的初等函数求导方式推导出来。</p>
+<p>（1）双曲正弦函数和反双曲正弦函数</p>
+<script type="math/tex; mode=display">
+\sinh x = \frac{e^{x}-e^{-x}}{2}
+\\
+arsinh\,x = ln(x+\sqrt{x^2+1})</script><p>他们的导数为：</p>
+<script type="math/tex; mode=display">
+(\sinh x)' = \cosh x
+\\
+(arsinh\,x)' = \frac{1}{\sqrt{x^2+1}}</script><p>（2）双曲余弦函数和反双曲余弦函数</p>
+<script type="math/tex; mode=display">
+\cosh x=\frac{e^{x}+e^{-x}}{2}
+\\
+arcosh x = ln(x+\sqrt{x^2-1})</script><p>他们的导数为：</p>
+<script type="math/tex; mode=display">
+(\cosh x)'= \sinh x 
+\\
+(arcosh x)' = \frac{1}{\sqrt{x^2-1}}</script><p>（3）双曲正切函数和反双曲正切函数</p>
+<script type="math/tex; mode=display">
+\tanh x= \frac{\sinh x}{\cosh x}</script><script type="math/tex; mode=display">
+artanh\,x = \frac{1}{2} ln(\frac{1+x}{1-x})</script><p>他们的导数为：</p>
+<script type="math/tex; mode=display">
+(\tanh x)'= \frac{1}{(\cosh x)^2}</script><script type="math/tex; mode=display">
+(artanh\,x)' = \frac{1}{1-x^2}</script><p>还有几种不常用的双曲函数和反双曲函数如下（这里不再介绍其导数，感兴趣的可以自行根据上述介绍进行推导）：</p>
+<ul>
+<li>双曲余切函数和反双曲余切函数<script type="math/tex; mode=display">
+\coth x = \frac{1}{\tanh x}</script><script type="math/tex; mode=display">
+arcoth\,x = \frac{1}{2} ln(\frac{x+1}{x-1})</script></li>
+<li>双曲正割函数和双曲正割函数<script type="math/tex; mode=display">
+sech\,x=\frac{1}{\cosh x}</script><script type="math/tex; mode=display">
+arsech\,x=ln(\frac{1+\sqrt{1-x^2}}{x})</script></li>
+<li>双曲余割函数和双曲余割函数<script type="math/tex; mode=display">
+csch\,x=\frac{1}{\sinh x}</script><script type="math/tex; mode=display">
+arcsch\,x= ln(\frac{1}{x} + \frac{\sqrt{1+x^2}}{|x|})</script></li>
+</ul>
+<p>更多关于双曲函数和反双曲函数可以参考Wiki：</p>
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%8F%8C%E6%9B%B2%E5%87%BD%E6%95%B0" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E5%8F%8C%E6%9B%B2%E5%87%BD%E6%95%B0</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%8F%8C%E6%9B%B2%E5%87%BD%E6%95%B0" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%8F%8C%E6%9B%B2%E5%87%BD%E6%95%B0</a></li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        无监督学习中的无监督特征学习、聚类和密度估计 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#无监督学习概述"><span class="toc-text">无监督学习概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#无监督特征学习"><span class="toc-text">无监督特征学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主成分分析"><span class="toc-text">主成分分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PCA中的最大可分性思想"><span class="toc-text">PCA中的最大可分性思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基变换"><span class="toc-text">基变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方差"><span class="toc-text">方差</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#协方差"><span class="toc-text">协方差</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#协方差矩阵"><span class="toc-text">协方差矩阵</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#协方差矩阵对角化"><span class="toc-text">协方差矩阵对角化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PCA算法流程"><span class="toc-text">PCA算法流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PCA算法总结"><span class="toc-text">PCA算法总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#稀疏编码"><span class="toc-text">稀疏编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#稀疏编码（Sparse-Coding）介绍"><span class="toc-text">稀疏编码（Sparse Coding）介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#训练方法"><span class="toc-text">训练方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#稀疏编码优缺点"><span class="toc-text">稀疏编码优缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自编码器"><span class="toc-text">自编码器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#稀疏自编码器"><span class="toc-text">稀疏自编码器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆叠自编码器"><span class="toc-text">堆叠自编码器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#降噪自编码器"><span class="toc-text">降噪自编码器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概率密度估计"><span class="toc-text">概率密度估计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参数密度估计"><span class="toc-text">参数密度估计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#正态分布中的参数密度估计"><span class="toc-text">正态分布中的参数密度估计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多项分布中的参数密度估计"><span class="toc-text">多项分布中的参数密度估计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非参数密度估计"><span class="toc-text">非参数密度估计</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#直方图方法"><span class="toc-text">直方图方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#核方法"><span class="toc-text">核方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#K近邻方法"><span class="toc-text">K近邻方法</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        无监督学习中的无监督特征学习、聚类和密度估计
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-11-05 10:58:36</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#神经网络" title="神经网络">神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <h2 id="无监督学习概述"><a href="#无监督学习概述" class="headerlink" title="无监督学习概述"></a>无监督学习概述</h2><p>无监督学习（Unsupervised Learning）是指从无标签的数据中学习出一些有用的模式，无监督学习一般直接从原始数据进行学习，不借助人工标签和反馈等信息。典型的无监督学习问题可以分为以下几类：</p>
+<ul>
+<li><p>无监督特征学习（Unsupervised Feature Learning）</p>
+<blockquote>
+<p>从无标签的训练数据中挖掘有效的特征表示，无监督特征学习一般用来进行降维，数据可视化或监督学习前期的特征预处理。</p>
+</blockquote>
+</li>
+<li><p>密度估计（Density Estimation）</p>
+<blockquote>
+<p>是根据一组训练样本来估计样本空间的概率密度。密度估计可以分为：参数密度估计和非参数密度估计。参数密度估计是假设数据服从某个已知概率密度函数形式的分布，然后根据训练样本去估计该分布的参数。非参数密度估计是不假设服从某个概率分布，只利用训练样本对密度进行估计，可以进行任意形状的密度估计，非参数密度估计的方法包括：直方图、核密度估计等。</p>
+</blockquote>
+</li>
+<li><p>聚类（Clustering）</p>
+<blockquote>
+<p>是将一组样本根据一定的准则划分到不同的组。一个通用的准则是组内的样本相似性要高于组间的样本相似性。常见的聚类方法包括：KMeans、谱聚类、层次聚类等。</p>
+</blockquote>
+</li>
+</ul>
+<p>聚类大家已经非常熟悉了，下文主要介绍无监督特征学习和概率密度估计。</p>
+<h2 id="无监督特征学习"><a href="#无监督特征学习" class="headerlink" title="无监督特征学习"></a>无监督特征学习</h2><p>无监督特征学习是指从无标注的数据中自动学习有效的数据表示，从而能够帮助后续的机器学习模型达到更好的性能。无监督特征学习主要方法有：</p>
+<ul>
+<li>主成分分析</li>
+<li>稀疏编码</li>
+<li>自编码器</li>
+</ul>
+<h3 id="主成分分析"><a href="#主成分分析" class="headerlink" title="主成分分析"></a>主成分分析</h3><p>主成分分析（Principal Component Analysis，PCA）是一种最常用的数据降维方法，使得在转换后的空间中数据的方差最大。以下部分摘自于 <a href="https://zhuanlan.zhihu.com/p/32412043" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/32412043</a></p>
+<h4 id="PCA中的最大可分性思想"><a href="#PCA中的最大可分性思想" class="headerlink" title="PCA中的最大可分性思想"></a>PCA中的最大可分性思想</h4><p>PCA降维，用原始样本数据中最主要的方面代替原始数据，最简单的情况是从2维降到1维，如下图所示，我们希望找到某一个维度方向，可以代表两个维度的数据，图中列了两个方向 $u_1, u_2$，那么哪个方向可以更好的代表原始数据呢？</p>
+<p><img src="https://img-blog.csdnimg.cn/2019110418180564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="最大可分性示例"><br>从直观上看，$u_1$比$u_2$好，这就是所说的最大可分性。</p>
+<h4 id="基变换"><a href="#基变换" class="headerlink" title="基变换"></a>基变换</h4><p><img src="https://img-blog.csdnimg.cn/20191104182446889.jpg" alt="基变换"></p>
+<p>其中$p_i \in {p_1, p_2, …, p_R}$，$p_i \in R^{1<em>N}$是一个行向量，表示第i个基，$a_j \in {a_1, a_2, …, a_M}$，$a_i \in R^{N</em>1}$是一个列向量，表示第$j$个原始数据记录，特别要注意的是，这里R可以小于N，而R决定了变维后数据的维数。</p>
+<p>从上图和文字解释我们可以得到一种矩阵相乘的物理解释：两个矩阵相乘的意义是将右边矩阵中的每一列列向量变换到左边矩阵中每一行行向量为基所表示的空间中去。更抽象的说，一个矩阵可以表示一种线性变换。很多同学在学习矩阵相乘时，只是简单的记住了相乘的规则，但并不清楚其背后的物理意义。</p>
+<h4 id="方差"><a href="#方差" class="headerlink" title="方差"></a>方差</h4><p>如何考虑一个方向或者基是最优的，看下图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20191104184311912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="周志华机器学习插图"></p>
+<p>我们将所有的点向两条直线做投影，基于前面PCA最大可分性思想，我们要找的是降维后损失最小，可以理解为投影后数据尽可能的分开，那么在数学中去表示数据的分散使用的是方差，我们都知道方差越大，数据越分散，方差的表达式如下：</p>
+<script type="math/tex; mode=display">
+Var(a) = \frac{1}{m} \sum_{i=1}^{m} (a_i - \mu)^2</script><p>其中$\mu$为样本均值，如果提前对样本做去中心化，则方差表达式为：</p>
+<script type="math/tex; mode=display">
+Var(a) = \frac{1}{m} \sum_{i=1}^{m} (a_i)^2</script><p>到现在，我们知道了以下几点：</p>
+<ul>
+<li>对原始数据进行（线性变换）基变换可以对原始样本给出不同的表示</li>
+<li>基的维度小于样本的维度可以起到降维的作用，</li>
+<li>对基变换后新的样本求其方差，选取使其方差最大的基</li>
+</ul>
+<p>那么再考虑另外一个问题？</p>
+<blockquote>
+<p>上面只是说明了优化目标，但并没有给出一个可行性的操作方案或者算法，因为只说明了要什么，但没说怎么做，所以继续进行探讨。</p>
+</blockquote>
+<h4 id="协方差"><a href="#协方差" class="headerlink" title="协方差"></a>协方差</h4><p>从二维降到一维可以采用方差最大来选出能使基变换后数据分散最大的方向（基），但遇到高纬的基变换，当完成第一个方向（基）选择后，第二个投影方向应该和第一个“几乎重合在一起”，这样显然是没有用的，要有其他的约束，我们希望两个字段尽量表示更多的信息，使其不存在相关性。</p>
+<p>数学上使用协方差表示其相关性。</p>
+<script type="math/tex; mode=display">
+Cov(a,b)= \frac{1}{m} \sum_{i=1}^{m}a_i b_i</script><p>当Cov(a,b)=0时表示两个字段完全独立，也是我们优化的目标。</p>
+<blockquote>
+<p>注意这里的 $a_i,b_i$是经过去中心化处理的。</p>
+</blockquote>
+<h4 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h4><p>我们想要达到的目标与字段内方差及协方差有密切的关系，假如只有a、b两个字段，将他们按行组成矩阵X，表示如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20191104190715730.png" alt="矩阵X"></p>
+<p>然后用X乘以X的转置矩阵，并乘以系数 $\frac{1}{m}$得：</p>
+<p><img src="https://img-blog.csdnimg.cn/20191104190820539.png" alt="在这里插入图片描述"></p>
+<p>可见，协方差矩阵是一个对称的矩阵，而且对角线是各个维度的方差，而其他元素是a 和 b的协方差，然后会发现两者被合并到了一个矩阵内。</p>
+<h4 id="协方差矩阵对角化"><a href="#协方差矩阵对角化" class="headerlink" title="协方差矩阵对角化"></a>协方差矩阵对角化</h4><p>我们的目标是使$\frac{1}{m}\sum_{i=1}^{m}a_ib_i=0$，根据上述的推导，可以看出优化目标是$C=\frac{1}{m}XX^T$等价于协方差矩阵对角化。即除对角线外的其他元素（如$\frac{1}{m} \sum_{i=1}^{m}a_i b_i$）化为0，并且在对角线上将元素按大小从上到下排列，这样我们就达成了优化目的。</p>
+<p>这样说可能不是很明晰，我们进一步看下原矩阵和基变换后矩阵协方差矩阵的关系：</p>
+<p>设原始数据矩阵为X，对应的协方差矩阵为C，而P是一组基按行组成的矩阵，设Y=PX，则Y为X对P做基变换后的数据。设Y的协方差矩阵为D，我们推导一下D与C的关系：</p>
+<script type="math/tex; mode=display">
+D=\frac{1}{m}YY^T
+\\
+= \frac{1}{m}(PX)(PX)^T
+\\
+= \frac{1}{m} PXX^TP^T
+\\
+=P(\frac{1}{m} XX^T)P^T
+\\
+= PCP^T
+\\
+=P \begin{pmatrix}
+\frac{1}{m} \sum_{i=1}^{m} a_i^2 & \frac{1}{m} \sum_{i=1}^{m} a_i b_i \\ 
+ \frac{1}{m} \sum_{i=1}^{m} a_ib_i  & \frac{1}{m} \sum_{i=1}^{m} b_i^2 
+\end{pmatrix} P^T</script><p>可见我们要找的P不是别的，而是能让原始协方差矩阵对角化的P。换句话说，优化目标变成了寻找一个矩阵P，满足$PCP^T$是一个对角矩阵，并且对角元素按从大到小依次排列，那么P的前K行就是要寻找的基，用P的前K行组成的矩阵乘以X就使得X从N维降到了K维并满足上述优化条件。</p>
+<p>我们希望投影后的方差最大化，于是优化目标可以改写为：</p>
+<script type="math/tex; mode=display">
+\underset{P}{max} \, tr(PCP^T)
+\\
+s.t. \,PP^T=I</script><p>利用拉格朗日函数可以得到：</p>
+<script type="math/tex; mode=display">
+J(P) = tr(PCP^T) + \lambda(PP^T - I)</script><p>对P求导有$CP^T + \lambda P^T = 0$，整理得：</p>
+<script type="math/tex; mode=display">
+CP^T = (- \lambda) P^T</script><p>于是，只需对协方差矩阵C进行特征分解，对求得的特征值进行排序，再对 $P^T = (P_1, P_2, …, P_R)$取前K列组成的矩阵乘以原始数据矩阵X，就得到了我们需要的降维后的数据矩阵Y。</p>
+<h4 id="PCA算法流程"><a href="#PCA算法流程" class="headerlink" title="PCA算法流程"></a>PCA算法流程</h4><p>从上边可以看出，求样本$x_i$的$n’$维的主成分，其实就是求样本集的协方差矩阵$\frac{1}{m}XX^T$的前$n’$维个特征值对应特征向量矩阵P，然后对于每个样本$x_i$，做如下变换$y_i = P x_i$，即达到PCA降维的目的。</p>
+<p>具体的算法流程如下：</p>
+<ul>
+<li>输入：n维的样本集 $X=(x_i, x_2,…,x_m)$，要降维到的维数$n’$</li>
+<li>输出：降维后的维度Y</li>
+</ul>
+<ol>
+<li>对所有的样本集去中心化 $x_i = x_i - \frac{1}{m} \sum_{j=1}^{m}x_j$</li>
+<li>计算样本的协方差矩阵$C = \frac{1}{m}XX^T$</li>
+<li>求出协方差矩阵对应的特征值和对应的特征向量</li>
+<li>将特征向量按照特征值从大到小，从上到下按行排列成矩阵，取前k行组成矩阵P</li>
+<li>$Y=PX$即为降维到K维之后的数据</li>
+</ol>
+<p>注意：有时候降维并不会指定维数，而是指定一个比例$t$，比如降维到原先的t比例。</p>
+<h4 id="PCA算法总结"><a href="#PCA算法总结" class="headerlink" title="PCA算法总结"></a>PCA算法总结</h4><p>PCA算法的主要优点：</p>
+<ul>
+<li>仅仅需要以方差衡量信息量，不受数据集意外因素的影响</li>
+<li>各主成分之间正交，可消除原始数据各成分间的相互影响的因素</li>
+<li>方法设计简单，主要运算是特征值分解，易于实现</li>
+</ul>
+<p>PCA算法的主要缺点：</p>
+<ul>
+<li>主成分各个特征维度的含义具有一定的模糊性，不如原始样本特征的可解释性强</li>
+<li>方差小的非主成分也可能包含对样本差异的重要信息，因降维丢弃可能会对后续数据处理有影响</li>
+<li>当样本特征维度较大时，需要巨大的计算量（比如，10000*10000，这时候就需要SVD[奇异值分解]，SVD不仅可以得到PCA降维的结果，而且可以大大的减小计算量）</li>
+</ul>
+<h3 id="稀疏编码"><a href="#稀疏编码" class="headerlink" title="稀疏编码"></a>稀疏编码</h3><h4 id="稀疏编码（Sparse-Coding）介绍"><a href="#稀疏编码（Sparse-Coding）介绍" class="headerlink" title="稀疏编码（Sparse Coding）介绍"></a>稀疏编码（Sparse Coding）介绍</h4><p>在数学上，线性编码是指给定一组基向量$A=[a_1,a_2,…,a_p]$，将输入样本$x\in R$表示为这些基向量的线性组合</p>
+<script type="math/tex; mode=display">
+x = \sum _{i=1}^{p} z_i a_i = Az</script><p>其中基向量的系数$z=[z_1,…,z_p]$称为输入样本x的编码，基向量A也称为字典（dictionary）。</p>
+<p>编码是对d维空间中的样本x找到其在p维空间中的表示（或投影），其目标通常是编码的各个维度都是统计独立的，并且可以重构出输入样本。编码的关键是找到一组“完备”的基向量A，比如主成分分析等。但是是主成分分析得到的编码通常是稠密向量，没有稀疏性。</p>
+<blockquote>
+<p>如果p个基向量刚好可以支撑p维的欧式空间，则这p个基向量是完备的，如果p个基向量可以支撑d维的欧式空间，并且p&gt;d，则这p个基向量是过完备，冗余的。<br><br><br>“过完备”基向量一般指的是基向量个数远大于其支撑空间维度，因此这些基向量一般是不具备独立，正交等性质。</p>
+</blockquote>
+<p>给定一组N个输入向量$x^1, …, x^N$，其稀疏编码的目标函数定义为：</p>
+<script type="math/tex; mode=display">
+L(A,Z)= \sum _{n=1}^{N}( || x^n - Az^n || ^2 + \eta \rho (z^n))</script><p>其中$\rho(.)$是一个稀疏性衡量函数，$\eta$是一个超参数，用来控制稀疏性的强度。</p>
+<p>对于一个向量$z \in R$，其稀疏性定义为非零元素的比例。如果一个向量只有很少的几个非零元素，就说这个向量是稀疏的。稀疏性衡量函数$\rho(z)$是给向量z一个标量分数。z越稀疏，$\rho(z)$越小。</p>
+<p>稀疏性衡量函数有多种选择，最直接的衡量向量z稀疏性的函数是$l_0$范式</p>
+<script type="math/tex; mode=display">
+\rho(z) = \sum _{i=1}^{p} I(|z_i| > 0)</script><p>但$l_0$范数不满足连续可导，因此很难进行优化，在实际中，稀疏性衡量函数通常选用$l_1$范数</p>
+<script type="math/tex; mode=display">
+\rho(z) = \sum _{i=1}^{p} |z_i|</script><p>或对数函数</p>
+<script type="math/tex; mode=display">
+\rho(z) = \sum _{i=1}^{p} log(1+z_i^2)</script><p>或指数函数</p>
+<script type="math/tex; mode=display">
+\rho(z) = \sum _{i=1}^{p} -exp(-z_i^2)</script><h4 id="训练方法"><a href="#训练方法" class="headerlink" title="训练方法"></a>训练方法</h4><p>给定一组N个输入向量$x^1, … , x^N$，需要同时学习基向量A以及每个输入样本对应的稀疏编码$z^1, …,z^N$。</p>
+<p>稀疏编码的训练过程一般用交替优化的方法进行（这一点和ALS很相似）。</p>
+<p>（1）固定基向量A，对每个输入$x^n$ ，计算其对应的最优编码（原内容为减去稀疏性衡量函数，觉得不对）</p>
+<script type="math/tex; mode=display">
+\underset{x^n}{min} || x^n - Az^n ||^2 + \eta \rho (z^n), \forall n \in [1,N]</script><p>（2）固定上一步得到的编码$z^1, …,z^N$，计算其最优的基向量</p>
+<script type="math/tex; mode=display">
+\underset{A}{min} \sum _{i=1}^{N} ( || x^n - Az^n ||^2 ) + \lambda \frac{1}{2} ||A||^2</script><p>其中第二项为正则化项，$\lambda$为正则化项系数。</p>
+<h4 id="稀疏编码优缺点"><a href="#稀疏编码优缺点" class="headerlink" title="稀疏编码优缺点"></a>稀疏编码优缺点</h4><p>稀疏编码的每一维都可以看作是一种特征，和基于稠密向量的分布式表示相比，稀疏编码具有更小的计算量和更好的可解释性等优点。</p>
+<p><strong>计算量</strong> 稀疏性带来的最大好处就是可以极大的降低计算量</p>
+<p><strong>可解释性</strong> 因为稀疏编码只有少数的非零元素，相当于将一个输入样本表示为少数几个相关的特征，这样我们可以更好的描述其特征，并易于理解</p>
+<p><strong>特征选择</strong> 稀疏性带来的另一个好处是可以实现特征的自动选择，只选择和输入样本相关的最少特征，从而可以更好的表示输入样本，降低噪声并减轻过拟合</p>
+<h3 id="自编码器"><a href="#自编码器" class="headerlink" title="自编码器"></a>自编码器</h3><p>自编码器（Auto-Encoder，AE）是通过无监督的方式来学习一组数据的有效编码。</p>
+<p>假设有一组d维的样本$x^n \in R^d, 1 \leq n \leq N$，自编码器将这组数据映射到特征空间得到每个样本的编码$z^n \in R^p, 1 \leq n \leq N$，并且希望这组编码可以重构出原来的样本。</p>
+<p>自编码器的结构可分为两部分：编码器（encoder）：$f: R^d -&gt; R^p$和解码器（decoder）：$R^p -&gt; R^d$</p>
+<p>自编码器的学习目标是最小化重构误差（reconstruction errors）</p>
+<script type="math/tex; mode=display">
+L = \sum_{n=1}^{N} || x^n -g(f(x^n)) ||^2 = \sum || x^n -f \cdot  g(x^n) ||^2</script><p>如果特征空间的维度p小雨原始空间的维度d，自编码器相当于是一种降维或特征抽取方法。如果$p \geq d$，一定可以找到一组或多组解使得$f \cdot g$为单位函数（Identity Function），并使得重构错误为0。但是这样的解并没有太多的意义，但是如果再加上一些附加的约束，就可以得到一些有意义的解，比如编码的稀疏性、取值范围，f和g的具体形式等。如果我们让编码只能取k个不同的值（k&lt;N），那么自编码器就可以转换为一个k类的聚类问题。</p>
+<p>最简单的自编码器如下图所示的两层神经网络，输入层到隐藏层用来编码，隐藏层到输出层用来解码，层与层之间互相全连接。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191104162315242.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="最简单的自编码器"></p>
+<p>对于样本x，中间隐藏层为编码：</p>
+<script type="math/tex; mode=display">
+z = s(W^1 x + b^l)</script><p>输出为重构的数据</p>
+<script type="math/tex; mode=display">
+x' = s(W^2 z + b^l)</script><p>其中$W,b$为网格参数，$s(.)$为激活函数。如果令$W^2$等于$W^1$的转置，即$W^2=W^{(1)T}$，称为捆绑权重（tied weights）。</p>
+<p>给定一组样本 $x^n \in [0,1]^d, 1 \leq n \leq N$，其重构错误为：</p>
+<script type="math/tex; mode=display">
+L = \sum_{n=1}^{N} || x^n -x^{'n} ||^2 + \lambda ||W||_F^2</script><p>其中$\lambda$为正则化系数，通过最小化重构误差，可以有效的学习网格的参数。</p>
+<p>我们使用自编码器是为了得到有效的数据表示，因此在训练数据后，我们一般去掉解码器，只保留编码器，编码器的输出可以直接作为后续机器学习模型的输入。</p>
+<h3 id="稀疏自编码器"><a href="#稀疏自编码器" class="headerlink" title="稀疏自编码器"></a>稀疏自编码器</h3><p>自编码器除了可以学习低维编码之外，也学习高维的稀疏编码。假设中间隐藏层z的维度为p，大于输入样本的维度，并让z尽量稀疏，这就是稀疏自编码器（Sparse Auto-Encoder）。和稀疏编码一样，稀疏自编码器的优点是有很高的模型可解释性，并同时进行了隐式的特征选择。</p>
+<p>通过给自编码器中隐藏单元z加上稀疏性限制，自编码器可以学习到数据中一些有用的结构。</p>
+<h3 id="堆叠自编码器"><a href="#堆叠自编码器" class="headerlink" title="堆叠自编码器"></a>堆叠自编码器</h3><p>对于很多数据来说，仅使用两层神经网络的自编码器还不足以获取一种好的数据表示，为了获取更好的数据表示，我们可以使用更深层的神经网络。深层神经网络作为自编码器提取的数据表示一般会更加抽象，能够很好的捕捉到数据的语义信息。在实践中经常使用逐层堆叠的方式来训练一个深层的自编码器，称为堆叠自编码器（Stacked Auto-Encoder，SAE）。堆叠自编码一般可以采用逐层训练（layer-wise training）来学习网络参数。</p>
+<h3 id="降噪自编码器"><a href="#降噪自编码器" class="headerlink" title="降噪自编码器"></a>降噪自编码器</h3><p>降噪自编码器（Denoising Autoencoder）就是一种通过引入噪声来增加编码鲁棒性的自编码器。对于一个向量x，我们首先根据一个比例$\mu$随机将x的一些维度的值设置为0，得到一个被损坏的向量$\tilde x$。然后将被损坏的向量$\tilde x$输入给自编码器得到编码z，并重构原始的无损输入x。</p>
+<p>下图给出了自编码器和降噪自编码器的对比，其中$f_{\theta}$为编码器，$g_{\theta^’}$为解码器，$L(x,x’)$为重构错误。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191104175727219.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="自编码器和降噪自编码器的对比"></p>
+<p>降噪自编码器的思想十分简单，通过引入噪声来学习更鲁棒性的数据编码，并提高模型的泛化能力。</p>
+<h2 id="概率密度估计"><a href="#概率密度估计" class="headerlink" title="概率密度估计"></a>概率密度估计</h2><p>概率密度估计（Probabilistic Density Estimation）简称密度估计（Density Estimation），是基于一些观测样本来估计一个随机变量的概率密度函数。密度估计在机器学习和数学建模中应用十分广泛。</p>
+<p>概率密度估计分为：</p>
+<ul>
+<li>参数密度估计</li>
+<li>非参数密度估计</li>
+</ul>
+<h3 id="参数密度估计"><a href="#参数密度估计" class="headerlink" title="参数密度估计"></a>参数密度估计</h3><p>参数密度估计（Parametric Density Estimation）是根据先验知识假设随机变量服从某种分布，然后通过训练样本来估计分布的参数。</p>
+<p>令 $D = {\{x^n\}}_{i=1}^{N}$为某个未知分布中独立抽取的N个训练样本，假设这些样本服从一个概率分布函数$p(x|\theta)$，其对数似然函数为：</p>
+<script type="math/tex; mode=display">
+log\,p(D|\theta) = \sum_{n=1}^{N}log\,p(x^n|\theta)</script><p>要估计一个参数$\theta ^{ML}$来使得：</p>
+<script type="math/tex; mode=display">
+\theta ^{ML} = \underset{\theta}{arg\,max } \sum_{n=1}^{N}log\,p(x^n|\theta)</script><p>这样参数估计问题就转化为最优化问题。</p>
+<h4 id="正态分布中的参数密度估计"><a href="#正态分布中的参数密度估计" class="headerlink" title="正态分布中的参数密度估计"></a>正态分布中的参数密度估计</h4><p>假设样本$x \in X$服从正态分布 $X \sim N(\mu,\sigma^2)$，正态分布的表达式如下：</p>
+<script type="math/tex; mode=display">
+X \sim N(\mu,\sigma^2) = \frac{1}{ \sqrt{2\pi} \sigma^2} e^{- \frac{(x-\mu)^2}{2\sigma^2}}</script><p>求 $\mu,\sigma^2$的最大似然估计量。</p>
+<p>$X$的概率密度为：</p>
+<script type="math/tex; mode=display">
+f(x;\mu,\sigma^2) = \frac{1}{ \sqrt{2\pi} \sigma^2} e^{- \frac{(x-\mu)^2}{2\sigma^2}}</script><p>似然函数为：</p>
+<script type="math/tex; mode=display">
+L(\mu,\sigma^2) = \prod_{i=1}^{N} \frac{1}{ \sqrt{2\pi} \sigma^2} e^{- \frac{(x-\mu)^2}{2\sigma^2}}
+\\
+= (2\pi)^{-\frac{N}{2}} (\sigma^2)^{-\frac{N}{2}} e^{(-\frac{1}{2\sigma^2} \sum_{i=1}^{N} (x_i - \mu)^2)}</script><p>对其求导可得对数似然函数为：</p>
+<script type="math/tex; mode=display">
+Ln\, L =-\frac{N}{2} ln(2\pi)-\frac{N}{2} ln(\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^{N}(x_i - \mu)^2</script><p>令：</p>
+<script type="math/tex; mode=display">
+\left\{\begin{matrix}
+\frac{\partial }{\partial \mu }ln\, L = \frac{1}{\sigma^2} (\sum_{i=1}^{N} x_i -N\mu ) =0 & \\ 
+\\
+\frac{\partial }{\partial \sigma^2 }ln\, L = - \frac{N}{2\sigma^2} + \frac{1}{ (2\sigma^2)^2} \sum_{i=1}^{N}(x_i-\mu)^2 =0& 
+\end{matrix}\right.</script><p>由前一式解得$\tilde{\mu}=\frac{1}{N}\sum_{i=1}^{N}x_i = \bar{\mu}$，代入后一式得$\tilde{\sigma^2}=\frac{1}{N}\sum_{i=1}^{N}(x_i-\bar{x})^2$，因此得$\mu,\sigma^2$的最大似然估计为：</p>
+<script type="math/tex; mode=display">
+\tilde{\mu} = \bar{X},\tilde{\sigma^2}=\frac{1}{N}(x_i - \bar{x})^2</script><h4 id="多项分布中的参数密度估计"><a href="#多项分布中的参数密度估计" class="headerlink" title="多项分布中的参数密度估计"></a>多项分布中的参数密度估计</h4><p>假设样本服从K个状态的多态分布，令onehot向量$x\in[0,1]^K$来表示第K个状态，即$x_k=1$，其余$x_{i,k \neq k}=0$，则样本x的概率密度函数为：</p>
+<script type="math/tex; mode=display">
+p(x|\mu) = \prod_{k=1}^{K}\mu_k ^{x_K}</script><p>其中$\mu_k$为第k个状态的概率，并且满足$\sum_{k=1}^{K} \mu_k =1$。</p>
+<p>数据集$D={\{x^n\}}_{n=1}^{N}$的对数似然函数为：</p>
+<script type="math/tex; mode=display">
+log(D|\mu) = \sum_{n=1}^{N} \sum_{k=1}^{K} x_n ^k log (\mu _k)</script><p>多项分布的参数估计为约束优化问题，引入拉格朗日乘子$\lambda$，将原问题转化为无约束优化问题。</p>
+<script type="math/tex; mode=display">
+\underset{\mu, \lambda}{ max} \sum_{n=1}^{N} \sum_{k=1}^{K} x_k ^n log(\mu_k) + \lambda (\sum_{k=1}^{K} \mu_k -1)</script><p>上式分别对$\mu_k,\lambda$求偏，并令其等于0，得到：</p>
+<script type="math/tex; mode=display">
+\mu_k ^{ML} = \frac{m_k}{N}, 1 \leq N \leq K</script><p>其中$m_k = \sum_{n=1}^{N} x_k ^n$为数据集中取值为第k个状态的样本数量。</p>
+<p>在实际应用中，参数密度估计一般存在两个问题：</p>
+<ul>
+<li>（1）模型选择问题，即如何选择数据分布的密度函数，实际的数据分布往往是非常复杂的，而不是简单的正态分布或者多项分布。</li>
+<li>（2）不可观测变量问题，即我们用来训练数据的样本只包含部分的可观测变量，还有一些非常关键的变量是无法观测的，这导致我们很难估计数据的真实分布。</li>
+<li>（3）维度灾难问题，即高维的参数估计十分困难。随着维度的增加，估计参数所需要的样本量呈指数增加。在样本不足时会出现过拟合。</li>
+</ul>
+<h4 id="非参数密度估计"><a href="#非参数密度估计" class="headerlink" title="非参数密度估计"></a>非参数密度估计</h4><p>非参数密度估计（Nonparametric Density Estimation）是不假设数据服从某种分布，通过将样本空间划分为不同的区域并估计每个区域的概率来近似数据的概率密度函数。</p>
+<p>对于高纬空间中的一个随机向量x，假设其服从一个未知分布p(x)，则x落入空间中的小区域R的概率为：  $P=\int_{R} p(x)dx$。</p>
+<p>给定N个训练样本$D=\{x^n\}_{n=1}^{N}$，落入区域R的样本数量K服从二项分布：</p>
+<script type="math/tex; mode=display">
+P_K = \binom{N}{K}P^K(1-P)^{1-K}</script><p>其中$K/N$的期望为$E[K/N]=P$，方差为$var(K/N)=P(1-P)/N$。当N非常大时，我们可以近似认为：$P\approx \frac{K}{N}$，假设区域R足够小，其内部的概率密度是相同的，则有$P\approx p(x)V$，其中V为区域R的提及，结合前边的两个公式，可得：$p(x)\approx \frac{K}{NV}$。</p>
+<p>根据上式，要准确的估计p(x)需要尽量使得样本数量N足够大，区域体积V尽可能的小。但在具体的应用中吗，样本数量一般有限，过小的区域导致落入该区域的样本比较少，这样估计的概率密度就不太准确。</p>
+<p>因此在实践中估计非参数密度通常使用两种方法：</p>
+<ul>
+<li>（1）固定区域大小V，统计落入不同区域的数量，这种方式包括直方图和核方法两种</li>
+<li>（2）改变区域大小，以使得落入每个区域的样本数量为K，这种方法成为K近邻方法</li>
+</ul>
+<h5 id="直方图方法"><a href="#直方图方法" class="headerlink" title="直方图方法"></a>直方图方法</h5><p>直方图（Histogram Method）是一种非常直观的估计连续变量密度函数的方法，可以表示为一种柱状图。</p>
+<p>以一维随机变量为例，首先将其取值范围划分为M个连续的、不重叠的区间，每个区间的宽度为$\Delta m$，给定$N$个训练样本，我们统计这些样本落入每个区间的数量$K_m$，然后将他们归一化为密度函数。</p>
+<script type="math/tex; mode=display">
+p_m = \frac {K_m}{N\Delta m},1 \leq m \leq  M</script><p>直方图的关键问题是如何选择一个合适的$\Delta m$，如果该值太小，那么落入每个区间的样本会特别少，其估计的区间密度也会有很大的随机性，如果该值过大，其估计的密度函数会变得十分平滑。下图给出了两个直方图的例子，其中蓝色表示真实的密度函数，红色表示直方图估计的密度函数。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191104090336556.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="直方图估计密度函数"></p>
+<p>直方图通常用来处理低维随机变量，可以非常快速的对数据的分布进行可视化，但其<strong>缺点</strong>是很难扩展到高维变量，假设一个d维的随机变量，如果每一维都划分为M个空间，那么整个空间的区域数量为$M^d$，直方图估计的方法会随着空间的增大而指数增长，从而形成<strong>维度灾难（Curse Of Dimensionality）</strong></p>
+<h5 id="核方法"><a href="#核方法" class="headerlink" title="核方法"></a>核方法</h5><p>核密度估计（Kernel Density Estimation），也叫Parzen窗方法，是一种直方图方法的改进。</p>
+<p>假设$R$为$d$维空间中的一个以点x为中心的“超立方体”，并定义核函数</p>
+<script type="math/tex; mode=display">
+\phi (\frac{z-x}{h}) = \left\{\begin{matrix}
+1 \,\,\,\,\,\, if \, |z_i - x_i|< \frac{h}{2},  1 \leq i \leq d & \\ 
+0 \,\,\,\,\,\, else & 
+\end{matrix}\right.</script><p>来表示一个样本是否落入该超立方体中，其中$h$为超立方体的边长，也称为核函数的密宽度。</p>
+<p>给定$N$个训练样本$D$，落入区域$R$的样本数量$K$为：</p>
+<script type="math/tex; mode=display">
+K = \sum_{n=1}^{K} \phi (\frac {x^n - x}{h})</script><p>则点$x$的密度估计为：</p>
+<script type="math/tex; mode=display">
+p(x) = \frac{K}{Nh^d} =\frac{1}{Nh^d} \sum_{n=1}^{K} \phi (\frac {x^n - x}{h})</script><p>其中$h^d$表示区域$R$的体积。</p>
+<p>除了超立方体的核函数意外之外，我们还可以选择更加平滑的核函数，比如高斯核函数：</p>
+<script type="math/tex; mode=display">
+\phi (\frac {z-x}{h}) = \frac {1}{ (2\pi)^{\frac{1}{2}} h} exp(- \frac{||z-x||^2}{2h^2})</script><p>其中$h^2$可以看做是高斯核函数的方差，这样点$x$的密度估计为：</p>
+<script type="math/tex; mode=display">
+p (x) = \frac{1}{N} \sum_{n=1}^{N}   \frac {1}{ (2\pi)^{\frac{1}{2}} h} exp(- \frac{||z-x||^2}{2h^2})</script><h5 id="K近邻方法"><a href="#K近邻方法" class="headerlink" title="K近邻方法"></a>K近邻方法</h5><p>核密度估计方法中的核宽度是固定的，因此同一个宽度可能对高密度的区域过大，而对低密度的区域过小。一种更加灵活的方式是设置一种可变宽度的区域，并使得落入每个区域中的样本数量固定为K。</p>
+<p>要估计点x的密度，首先找到一个以x为中心的球体，使得落入球体的样本数量为K，然后根据公式$p(x)\approx \frac{K}{NV}$就可以计算出点x的密度。因为落入球体的样本也是离x最近的K个样本，所以这种方法也称为K近邻（K-Nearest Neughbor）方法。</p>
+<p>在K近邻方法中，K值的选择十分重要，如果K太小，无法有效的估计密度函数，而K太大也会使局部的密度不准确，并且会增加计算开销。</p>
+<p>K近邻方法也经常用于分类问题，称为K近邻分类器。 当K=1时为最近邻分类器。</p>
+<p>最近邻分类器的一个性质是，当 $N \rightarrow \infty$，其分类错误率不超过最优分类器错误率的两倍。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>无监督学习是一种十分重要的机器学习方法，无监督学习问题主要可以分为聚类，特征学习，密度估计等几种类型。但是无监督学习并没有像有监督学习那样取得广泛的成功，主要原因在于其缺少有效客观评价的方法，导致很难衡量一个无监督学习方法的好坏。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

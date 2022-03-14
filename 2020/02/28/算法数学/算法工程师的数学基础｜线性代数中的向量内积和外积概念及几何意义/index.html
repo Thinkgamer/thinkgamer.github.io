@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#向量加减法"><span class="toc-text">向量加减法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#向量乘法"><span class="toc-text">向量乘法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向量乘以常数"><span class="toc-text">向量乘以常数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内积"><span class="toc-text">内积</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义："><span class="toc-text">定义：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性质"><span class="toc-text">性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几何意义"><span class="toc-text">几何意义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外积"><span class="toc-text">外积</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性质-1"><span class="toc-text">性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几何意义-1"><span class="toc-text">几何意义</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 22:55:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>线性代数主要包含向量、向量空间（或称线性空间）以及向量的线性变换和有限维的线性方程组。本篇文章主要介绍线性代数部分中的向量和向量空间。</p>
+<p>本篇内容主要是对线性代数中向量点积和外积补充,同时说明一下向量的四则运算，如果对向量和向量空间相关含义有所遗忘的话可以回顾：<a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></p>
+<p>数学中的运算包括：加减乘除，同样向量的运算也包括这几项，需要注意的是，保证向量的维度相同。</p>
+<h2 id="向量加减法"><a href="#向量加减法" class="headerlink" title="向量加减法"></a>向量加减法</h2><p>加法和减法是可逆的运算，比如加一个数$m$可以转变为减去这个数$m$的负数$-m$。</p>
+<p>假设：向量$a = [1,2,3,4]$, 向量$b = [5,6,7,8]$</p>
+<p>则：向量$a + b = [1+5, 2+6, 3+7, 4+8]=[6,8,10,12]$</p>
+<p>则：向量$a - b = [1+(-5), 2+(-6), 3+(-7), 4+(-8)]=[-4,-4,-4,-4]$</p>
+<p>这里需要注意的是，向量不能和常数进行加减运算，但是可以进行乘除运算。</p>
+<h2 id="向量乘法"><a href="#向量乘法" class="headerlink" title="向量乘法"></a>向量乘法</h2><p>乘法和除法是可逆的运算，比如乘一个数$m$可以转变为乘这个数$m$的倒数$\frac{1}{m}(m \neq 0)$。所以这里只介绍乘法，除法可以进行等价变换。</p>
+<p>向量的乘法分为：</p>
+<ul>
+<li>向量$a$ 乘以常数$m$</li>
+<li>向量$a$ 乘以向量$b$</li>
+</ul>
+<p>向量之间的乘法还分为：</p>
+<ul>
+<li>内积</li>
+<li>外积<h3 id="向量乘以常数"><a href="#向量乘以常数" class="headerlink" title="向量乘以常数"></a>向量乘以常数</h3></li>
+</ul>
+<p>向量与常数的乘法结果依旧是向量，只不过是在原先的基础上延长或者缩短了向量，比如向量$a=[2,4,6,8]$与常数$m=0.5$的积为：</p>
+<script type="math/tex; mode=display">
+a * m = [2,4,6,8] * 0.5 = [1,2,3,4]</script><p>向量$a=[2,4,6,8]$与常数$m=2$的积为</p>
+<script type="math/tex; mode=display">
+a * m = [2,4,6,8] * 2 = [4,8,12,16]</script><p>当$m=0.5$时表示将向量缩短在原先的一半，当$m=2$表示将向量延长在原先的2倍。</p>
+<h3 id="内积"><a href="#内积" class="headerlink" title="内积"></a>内积</h3><p>向量的内积又称为<strong>点乘</strong>或者<strong>数量乘</strong>。</p>
+<h4 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h4><p>对两个向量执行点乘运算，就是对这两个向量对应位一一相乘之后求和的操作，假设向量$a=[a_1, a_2, a_3, a_4]$，向量$b=[b_1, b_2, b_3, b_4]$，则向量$a * b$的结果为：</p>
+<script type="math/tex; mode=display">
+a \odot  b = a_1 * b_1 + a_2 * b_2 + a_3 * b_3 + a_4 * b_4</script><p>这里要求一维向量a和向量b的行列数相同。注意：<strong>点乘的结果是一个标量(数量而不是向量)</strong></p>
+<h4 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h4><ul>
+<li>$a^2 ≥ 0$；当$a^2 = 0$时，必有$a = 0$ （正定性）</li>
+<li>$a \odot b = b \odot a$ （对称性）</li>
+<li>$(λa + μb)·c = λa·c + μb·c$，对任意实数$λ,μ$成立（线性）</li>
+<li>$cos(a,b) =\frac{a \odot b}{(|a||b|)}$</li>
+<li>$|a \odot b| ≤ |a||b|$，等号只在$a$与$b$共线时成立</li>
+</ul>
+<h4 id="几何意义"><a href="#几何意义" class="headerlink" title="几何意义"></a>几何意义</h4><p>内积（点乘）的几何意义包括：</p>
+<ul>
+<li>表征或计算两个向量之间的夹角</li>
+<li>$b$向量在$a$向量方向上的投影</li>
+</ul>
+<h3 id="外积"><a href="#外积" class="headerlink" title="外积"></a>外积</h3><p>两个向量的外积又叫叉乘或者叉乘向量积，其运算结果是一个向量，并且两个向量的外积与这两个向量组成的平面垂直。</p>
+<h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>向量$a$与$b$的外积是一个向量，其长度等于$|a \otimes b| = |a||b|sin(a,b)$，其方向正交于$a$与$b$。<br>特别地，$0 \otimes a = a \otimes 0 = 0$.此外，对任意向量$a$，$a \otimes a=0$。</p>
+<p>假设向量$a = [x_1, y_1, z_1]$，$b = [x_2, y_2, z_2]$，则向量$a \otimes b$为：</p>
+<script type="math/tex; mode=display">
+a \otimes b = \begin{vmatrix}
+i & j & k\\ 
+x_1 & y_1 & z_1 \\ 
+x_2 & y_2 & z_2
+\end{vmatrix}
+ = (y_1z_2 - y_2z_1)i - (x_1z_2 - x_2z_1)j + (x_1y_2-x_2y_1)k</script><p>其中$i = [1,0,0], j=[0,1,0],k=[0,0,1]$，根据$i,j,k$之间的关系有：</p>
+<script type="math/tex; mode=display">
+a \otimes b=(y_1z_2 - y_2z_1, -(x_1z_2 - x_2z_1), x_1y_2 - x_2y_1)</script><h4 id="性质-1"><a href="#性质-1" class="headerlink" title="性质"></a>性质</h4><ul>
+<li>$a \otimes b = -b \otimes a$（反称性）</li>
+<li>$(λa + μb) \otimes c = λ(a \otimes c) + μ(b \otimes c)$ （线性）</li>
+</ul>
+<h4 id="几何意义-1"><a href="#几何意义-1" class="headerlink" title="几何意义"></a>几何意义</h4><ul>
+<li>在二维空间中，外积还有另外一个几何意义就是：$|a \otimes b|$在数值上等于由向量$a$和向量$b$构成的平行四边形的面积。</li>
+<li>在三维几何中，向量$a$和向量$b$的外积结果是一个向量，有个更通俗易懂的叫法是法向量，该向量垂直于$a$和$b$向量构成的平面。</li>
+<li>在3D图像学中，外积的概念非常有用，可以通过两个向量的外积，生成第三个垂直于$a，b$的法向量，从而构建$X、Y、Z$坐标系。</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        常见的五种神经网络(3)-循环神经网络（中）篇 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数学习"><span class="toc-text">参数学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#随时间反向传播算法"><span class="toc-text">随时间反向传播算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实时循环学习"><span class="toc-text">实时循环学习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#长期依赖"><span class="toc-text">长期依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见的循环神经网络结构"><span class="toc-text">常见的循环神经网络结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#N比N结构"><span class="toc-text">N比N结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1比N结构"><span class="toc-text">1比N结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#N比1结构"><span class="toc-text">N比1结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#N比M结构"><span class="toc-text">N比M结构</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        常见的五种神经网络(3)-循环神经网络（中）篇
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-23 16:36:45</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#常见的五种神经网络" title="常见的五种神经网络">常见的五种神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/100709422" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/100709422</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
+<p>该系列的其他文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/89459131" target="_blank" rel="external">常见的五种神经网络(1)-前馈神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100531593" target="_blank" rel="external">常见的五种神经网络(2)-卷积神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100600661" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100709422" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(中篇)</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/100943664" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103231385" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103437985" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（上篇）</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
+</ul>
+<hr>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>常见的五种神经网络系列第三种，主要介绍循环神经网络，分为上中下三篇进行介绍，本文主为（中）篇，涉及内容如下：</p>
+<ul>
+<li>循环神经网络中的参数学习</li>
+<li>RNN中的长期依赖问题</li>
+<li>常见的循环神经网络结构</li>
+</ul>
+<h3 id="参数学习"><a href="#参数学习" class="headerlink" title="参数学习"></a>参数学习</h3><p>循环神经网络的参数可以通过梯度下降方法来学习。给定一个样本(x,y)，其中$x_{1:T}=(x_1, x_2, … ,x_T)$为长度是T的输入序列，其中$y_{1:T}=(y_1, y_2, … ,y_T)$是长度为T的标签序列，在每个时刻t，都有一个监督信息$y_t$，定义时刻t的损失函数为（公式1-1）：</p>
+<script type="math/tex; mode=display">
+L_t = L(y_t, g(h_t))</script><p>其中$g(h_t)$为第t时刻的输出，L为可微分的损失函数，比如交叉熵，整个序列上的损失函数为（公式1-2）：</p>
+<script type="math/tex; mode=display">
+L = \sum_{t=1}^{T} L_t</script><p>整个序列的损失函数L关于参数U的梯度为（公式1-3）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial U} = \sum _{t=1}^{T}\frac{\partial L_t}{ \partial U }</script><p>即每个时刻的损失函数$L_t$对参数U的偏导数之和。</p>
+<p>在循环神经网络中主要有两种计算梯度的方式：</p>
+<ul>
+<li>随时间反向传播算法（Backpropagation Through Time，BRTT）</li>
+<li>实时循环学习（Real-Time Recurrent Learning，RTRL）</li>
+</ul>
+<h4 id="随时间反向传播算法"><a href="#随时间反向传播算法" class="headerlink" title="随时间反向传播算法"></a>随时间反向传播算法</h4><p>主要通过类似前馈神经网络的错误反向传播算法来进行计算梯度。随时间反向传播算法将循环神经网络看作是一个展开的多层前馈网络，其中“每一层”对应循环网络中的每个时刻，这样循环神经网络就可以按照前馈神经网络中的反向传播算法来计算梯度。与前馈神经网络不同的是，循环神经网络中各层的参数是共享的，因此参数的真实梯度是各个层的参数梯度之和。</p>
+<p>先计算公式1-3中第t时刻损失对参数U的偏导数 $\frac {\partial L_t}{\partial U}$，参数U和每个时刻k的净输入$z_k = Uh_{k-1} + Wx_{k} + b$有关，因此第t个时刻损失函数$L_t$关于参数$U_ij$的梯度为（公式1-4）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L_t}{ \partial U_{ij}} = \sum_{k=1}^{t} tr( ( \frac{\partial L_t}{ \partial z_k} )^T \frac{\partial^+ z_k}{ \partial U_{ij}}    )
+\\
+= \sum_{k=1}^{t}  ( \frac{\partial^+ z_k}{ \partial U_{ij}}    )^T  \frac{\partial L_t}{ \partial z_k}</script><p>其中$\frac{\partial^+ z_k}{ \partial U_{ij}}$ 表示“直接”偏导数，即公式$z_k = Uh_{k-1} + Wx_{k} + b$中保持$h_{k-1}$不变，对$U_{ij}$进行求偏导数，得到（公式1-5）：</p>
+<script type="math/tex; mode=display">
+ \frac{\partial^+ z_k}{ \partial U_{ij}}  = \begin{bmatrix}
+0\\ 
+... \\ 
+[h_{k-1}]_j \\ 
+... \\ 
+0
+\end{bmatrix} \triangleq I_i([h_{k-1}]_j)</script><p>其中$[h_{k-1}]_j$为第$k-1$时刻隐状态的第j维，$I_i(x)$除了第j行值为x，之外全为0的向量。</p>
+<p>定义$\delta _{t,k} = \frac{\partial L_t}{ \partial z_k }$为第t时刻损失函数对第k时刻隐藏层神经元净输入$z_k$的导数，则（公式1-6）：</p>
+<script type="math/tex; mode=display">
+\delta _{t,k} = \frac{\partial L_t}{ \partial z_k }
+\\
+= \frac{ \partial h_k }{ \partial z_k} \frac{\partial z_{k+1}}{ \partial h_k } \frac{ \partial L_t }{ \partial z_{k+1} }
+\\
+= diag(f'(z_k))U^T \delta _{t,k+1}</script><p>将（公式1-6） 和 （公式 1-5） 代入（公式1-4）得到（公式1-7）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L_t}{ \partial U_{ij} } = \sum_{k=1}^{ t } [\delta _{t,k}]_i [h_{k-1}]_j</script><p>将（公式1-7）写成矩阵形式为（公式1-8）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{ \partial U } = \sum_{k=1}^{ t } \delta _{t,k} h^T_{k-1}</script><p>下图为随时间反向传播算法示例：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190910191047315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="随时间反向传播算法示例"></p>
+<p>将（公式1-8）代入（公式1-3）得到整个序列的损失函数$L$关于参数$U$的梯度（公式1-9）:</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{ \partial U } = \sum_{t=1}^{ T}\sum_{k=1}^{ t } \delta _{t,k} h^T_{k-1}</script><p>同理可得到$L$关于参数$W$的梯度（公式1-10）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{ \partial W } = \sum_{t=1}^{ T}\sum_{k=1}^{ t } \delta _{t,k} x^T_k</script><p>$L$关于参数$b$的梯度（公式1-11）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{ \partial b } = \sum_{t=1}^{ T}\sum_{k=1}^{ t } \delta _{t,k}</script><blockquote>
+<p>在 随时间反向传播算法中，参数的梯度需要在一个完整的“向前”计算和“向后”计算后才能得到并参数更新。</p>
+</blockquote>
+<h4 id="实时循环学习"><a href="#实时循环学习" class="headerlink" title="实时循环学习"></a>实时循环学习</h4><p>与随时间反向传播算法不同的是：实时循环学习（Real-Time Recurrent Learning）是通过前向传播的方式来计算梯度。</p>
+<p>假设RNN中第 $t+1$时刻的状态$h_{t+1}$为（公式1-12）：</p>
+<script type="math/tex; mode=display">
+h_{t+1} = f(z_{t+1}) = f(Uh_k + Wx_{k+1} + b)</script><p>其关于参数$U_{ij$的偏导数为（公式1-13）：</p>
+<script type="math/tex; mode=display">
+\frac{ h_{t+1} }{ \partial U_{ij} } = \frac{ \partial h_{t+1} }{ \partial z_{t+1} } ( \frac{ \partial^+z_{t+1} }{ \partial  U_{ij}}   + U \frac{ \partial h_t}{ \partial U_{ij} } )
+\\
+= diag( f'(z_{t+1}) ) ( I_i ([h_t]_j)+ U \frac{ \partial h_t}{ \partial U_{ij} }  )
+\\
+=f'(z_{t+1}) \odot  ( I_i ([h_t]_j)+ U \frac{ \partial h_t}{ \partial U_{ij} }  )</script><p>其中$I_i(x)$为除了第i行之外元素全为0的向量。</p>
+<p>RTRL自从第一个时刻开始，除了计算RNN的隐状态之外，还利用（公式1-13）依次前向计算偏导数$\frac{\partial h_1}{ \partial U_{ij}},\frac{\partial h_2}{ \partial U_{ij}},\frac{\partial h_3}{ \partial U_{ij}}…$</p>
+<p>这样假设第t个时刻存在一个监督信息，其损失函数为$L_t$，就可以同时计算损失函数对$U_{ij}$的偏导数（公式1-14）：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L_t}{ \partial U_{ij}} =( \frac{\partial h_t}{ \partial U_{ij} } )^T \frac{\partial L_t}{ \partial h_t}</script><p>这样在第t个时刻就可以实时计算$L_t$关于参数U的梯度，并更新参数。参数W和b的梯度也可以按照上述方法进行计算。</p>
+<blockquote>
+<p>两种算法比较：RTRL算法和BPTT算法都是基于梯度求解参数，分别通过前向模式和反向模式应用链式法则来计算梯度。在RNN中一般输出维度要比输入维度少，因此BPTT算法的计算量会很小，但要保存计算过程中的梯度值，空间复杂度较高。RTRL算法不需要进行空间回传，比较适合用在在线学习或无限序列的任务中。</p>
+</blockquote>
+<h3 id="长期依赖"><a href="#长期依赖" class="headerlink" title="长期依赖"></a>长期依赖</h3><p>在BRTT算法中，将（公式1-6）展开得到（公式1-15）：</p>
+<script type="math/tex; mode=display">
+\delta _{t,k}=\prod_{i=k}^{t-1} ( diag('f(z_i ))U^T  )\delta _{t,t}</script><p>如果定义$\gamma \approx || diag(‘f(z_i ))U^T   ||$，则（公式1-16）：</p>
+<script type="math/tex; mode=display">
+\delta _{t,k}=\gamma ^{t-k} \delta _{t,t}</script><p>若$\gamma &gt;1$，当$t-k \rightarrow +\infty$，$\gamma ^{t-k} \rightarrow +\infty$，会造成系统不稳定，称之为梯度爆炸（Gradient Exploding Problem），反之，若$\gamma &lt; 1$，当$t-k \rightarrow +\infty$，$\gamma ^{t-k} \rightarrow 0$，会出现和前馈神经网络类似的梯度消失问题（Gradient Vanishing Problem）。</p>
+<blockquote>
+<p>注意：在循环神经网络中，梯度消失指的是并不是说$\frac{ \partial L_t}{ \partial U}$的梯度消失了，而是$\frac{ \partial L_t}{ \partial h_k}$的梯度消失，当$t-k$很大时，即参数U的更新主要靠最近的几个状态来更新，长距离的状态对参数U没有影响。</p>
+</blockquote>
+<p>当循环神经网络中使用的激活函数是Logistic或者tanh的时候，由于其导数小于1，并且权重矩阵$||U||$也不会太大，因此，如果时间间隔t-k过大的话，也会出现梯度消失问题。所以一般采用 ReLU激活函数（关于激活函数的介绍可参考：<a href="https://blog.csdn.net/Gamer_gyt/article/details/89440152" target="_blank" rel="external">神经网络中的激活函数介绍</a>）。</p>
+<p>虽然简单循环网络理论上可以建立长时间间隔的状态之间的依赖关系，但是由于梯度爆炸和梯度消失问题，实际上只能学习到短期的依赖关系，这样如果t时刻的输出$y_t$依赖于$t-k$时刻的输入$x_{t-k}$，当间隔k比较大时，简单神经网络很难建模这种长距离的依赖关系，称之为长期依赖问题（Long-Term Dependences Problem）。</p>
+<p>改进措施：</p>
+<ul>
+<li>选取合适的参数</li>
+<li>使用非饱和的激活函数</li>
+</ul>
+<p>循环网络的梯度爆炸问题比较容易解决，一般通过梯度截断和权重衰减来避免。而梯度消失很难解决，通常是对模型进行调优来解决。</p>
+<h3 id="常见的循环神经网络结构"><a href="#常见的循环神经网络结构" class="headerlink" title="常见的循环神经网络结构"></a>常见的循环神经网络结构</h3><p>主要包含四种：</p>
+<ul>
+<li>N：N</li>
+<li>1：N</li>
+<li>N：1</li>
+<li>N：M</li>
+</ul>
+<h4 id="N比N结构"><a href="#N比N结构" class="headerlink" title="N比N结构"></a>N比N结构</h4><p>N维输入对应N维输出，大致结构如下所示：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190910211158381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络N比N结构"></p>
+<p>其常常用于处理以下问题：</p>
+<ul>
+<li>视频理解中获取视频每一帧标签，输入为视频解码后的图像，通过此结构，获取每一 帧的标签信息。这种场景一般用作视频理解的初期，对视频做初步的处理后， 后续可以基于这些标签信息进行语义分析，构建更为复杂的需求场景。</li>
+<li>股票价格预测。基于历史的股票信息输入，预测下一时刻或者未来的股票走势信息。</li>
+</ul>
+<h4 id="1比N结构"><a href="#1比N结构" class="headerlink" title="1比N结构"></a>1比N结构</h4><p>一维输入，N维输出，大致结构如下图所示：<br><img src="https://img-blog.csdnimg.cn/20190910211546198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络1比N结构"></p>
+<p>还有一种结构是在同一信息在不同时刻输入到网络中，如下所示：<br><img src="https://img-blog.csdnimg.cn/20190910211800194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络1比N结构"></p>
+<p>其常常用于处理以下问题：</p>
+<ul>
+<li>看图写描述 : 根据输入的 一张图 片，生成对这张图片的描述信息 </li>
+<li>自动作曲 : 按照类别生成音乐 </li>
+</ul>
+<h4 id="N比1结构"><a href="#N比1结构" class="headerlink" title="N比1结构"></a>N比1结构</h4><p>N维输入，一维输出，大致结构如下图所示：<br><img src="https://img-blog.csdnimg.cn/20190910211426311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络N比1结构"></p>
+<p>其常常用于处理以下问题：</p>
+<ul>
+<li>视频理解中的获取视频每个场景的描述信息，或者获取整个影片的摘要信息。 </li>
+<li>获取用户评价的情感信息，即根据用户的一句话的评论，来判断用户的喜好等情感信息 。</li>
+</ul>
+<h4 id="N比M结构"><a href="#N比M结构" class="headerlink" title="N比M结构"></a>N比M结构</h4><p>N维输入，M维输出，这种结构又被称为Encoder-Decoder模型，也可以称为Seq2Seq模型，这种模型的输入和输出可以不相等，该模型由两部分组成：编码部分和解码部分，大致结构如下图所示：<br><img src="https://img-blog.csdnimg.cn/20190910212035184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络N比M结构"></p>
+<p> c的前半部分循环神经网络为编码部分，称之为Endcoder, c可以是s3的直接输出，或者 是对s3输出做一定的变换，也可以对编码部分所有的s1、s2、s3进行变换得到，这样c中就包 含了对X1、 Xz、码的编码信息 。c的后半部分循环神经网络为解码部分，称之为Decoder。c作为之前的状态编码，作为初始值，输入到Decoder当中。 Decoder经过循环处理，最终将信息解码输出。</p>
+<p> 除了上边所示的解码结构外，还有下图所示的结构：<br> <img src="https://img-blog.csdnimg.cn/20190910212711689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="循环神经网络N比M结构"></p>
+<p> N比M的循环神经网络结构更具有普遍性，现实环境中有很多基于该结构落地的场景，他可以解决如下问题：</p>
+<ul>
+<li>机器翻译：将不同语言作为输入，输出为非输入语言的类型，这也是Encoder-Decoder的经典用法</li>
+<li>文本摘要：输入一篇文章，输出这篇文章的摘要信息</li>
+<li>语音识别：输入一段语音，输出这段语音信息的文字</li>
+</ul>
+<blockquote>
+<p>至此，循环神经网络（中）篇已经介绍完了，在下篇中会展开介绍更多的内容，欢迎关注。</p>
+</blockquote>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

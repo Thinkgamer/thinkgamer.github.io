@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        常见的五种神经网络(4)-深度信念网络（上）篇 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#玻尔兹曼机"><span class="toc-text">玻尔兹曼机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成模型"><span class="toc-text">生成模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#受限玻尔兹曼机"><span class="toc-text">受限玻尔兹曼机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍-1"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成模型-1"><span class="toc-text">生成模型</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        常见的五种神经网络(4)-深度信念网络（上）篇
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-23 16:36:46</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#常见的五种神经网络" title="常见的五种神经网络">常见的五种神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/103231385" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/103231385</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
+<p>该系列的其他文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/89459131" target="_blank" rel="external">常见的五种神经网络(1)-前馈神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100531593" target="_blank" rel="external">常见的五种神经网络(2)-卷积神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100600661" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100709422" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(中篇)</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/100943664" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103231385" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103437985" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（上篇）</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
+</ul>
+<hr>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>常见的五种神经网络系列第三篇，主要介绍深度信念网络。内容分为上下两篇进行介绍，本文主要是深度信念网络（上）篇，主要介绍以下内容：</p>
+<ul>
+<li>背景</li>
+<li>玻尔兹曼机</li>
+<li>受限玻尔兹曼机</li>
+</ul>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对于一个复杂的数据分布，我们往往只能观测到有限的局部特征，并且这些特征通常会包含一定的噪声。如果要对这个数据分布进行建模，就需要挖掘出可观测变量之间复杂的依赖关系，以及可观测变量背后隐藏的内部表示。</p>
+<p>而深度信念网络可以有效的学习变量之间复杂的依赖关系。深度信念网络中包含很多层的隐变量，可以有效的学习数据的内部特征表示，也可以作为一种有效的非线性降维方法，这些学习到的内部特征表示包含了数据的更高级的、有价值的信息，因此十分有助于后续的分类和回归等任务。</p>
+<p>玻尔兹曼机是生成模型的一种基础模型，和深度信念网络的共同问题是<strong>推断和学习</strong>，因为这两种模型都比较复杂，并且都包含隐变量，他们的推断和学习一般通过MCMC方法来进行近似估计。这两种模型和神经网络有很强的对应关系，在一定程度上也称为随机神经网络（Stochastic Neural Network，SNN）。</p>
+<p>因为深度信念网络是有多层玻尔兹曼机组成的，所以本篇文章我们先来了解一下<strong>玻尔兹曼机</strong>和<strong>受限玻尔兹曼机</strong>。</p>
+<h3 id="玻尔兹曼机"><a href="#玻尔兹曼机" class="headerlink" title="玻尔兹曼机"></a>玻尔兹曼机</h3><h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>玻尔兹曼机（Boltzmann Machine）可以看作是一种随机动力系统，每个变量的状态都以一定的概率受到其他变量的影响。玻尔兹曼机可以用概率无向图模型来描述，如下所示：</p>
+<p><img src="https://img-blog.csdnimg.cn/20191122090749423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="一个有六个变量的玻尔兹曼机"></p>
+<p>BM的三个性质：</p>
+<ul>
+<li>二值输出：每个随机变量可以用一个二值的随机变量表示</li>
+<li>全连接：所有节点之间是全连接的</li>
+<li>权重对称：每两个变量之间的相互影响是对称的</li>
+</ul>
+<p>BM中的每个变量$X$的联合概率由玻尔兹曼分布得到，即：</p>
+<script type="math/tex; mode=display">
+p(x) = \frac{1}{Z} exp(\frac{-E(x)}{T})</script><p>其中$Z$为配分函数，能量函数$E(X)$的定义为：</p>
+<script type="math/tex; mode=display">
+E(x) \overset{\bigtriangleup }{=} E(X=x) = -(   \sum_{i<j } w_{ij}x_ix_j + \sum_{i} b_i x_i  )</script><p>其中$w_{ij}$是两个变量之间的连接权重，$x_i \in \{0,1\}$表示状态，$b_i$是变量$x_i$的偏置。</p>
+<p>玻尔兹曼机可以用来解决两类问题，一是搜索问题，当给定变量之间的连接权重，需要找到一组二值变量，使得整个网络的能量最低。另一类是学习问题，当给定一部分变量的观测值时，计算一组最优的权重。</p>
+<h4 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h4><p>在玻尔兹曼机中配分函数$Z$通常难以计算，因此联合概率分布$p(x)$一般通过MCMC（马尔科夫链蒙特卡罗，Markov Chain Monte Carlo）方法来近似，生成一组服从$p(x)$分布的样本。这里介绍基于吉布斯采样的样本生成方法。</p>
+<p><strong>1. 全条件概率</strong><br>吉布斯采样需要计算每个变量$X_i$的全条件概率$p(x_i|x_{\setminus i})$，其中$x_{\setminus i}$表示除了$X_i$外其它变量的取值。</p>
+<p>对于玻尔兹曼机中的一个变量$X_i$，当给定其他变量$x_{\setminus i}$时，全条件概率公式$p(x_i|x_{\setminus i})$为：</p>
+<script type="math/tex; mode=display">
+p(x_i=1|x_{\setminus i}) = \sigma( \frac{ \sum_{j} w_{ij}x_j +b_i }{T} )
+\\
+p(x_i=0|x_{\setminus i}) = 1- p(x_i=1|x_{\setminus i})</script><p>其中$\sigma(.)$为sigmoid函数。</p>
+<p><strong>2. 吉布斯采样</strong></p>
+<p>玻尔兹曼机的吉布斯采样过程为：随机选择一个变量$X_i$，然后根据其全条件概率$p(x_i|x_{\setminus i})$来设置其状态，即以$p(x_i=1|x_{\setminus i})$的概率将变量$X_i$设为1，否则全为0。在固定温度$T$的情况下，在运动不够时间之后，玻尔兹曼机会达到热平衡。此时，任何全局状态的概率服从玻尔兹曼分布$p(x)$，只与系统的能量有关，与初始状态无关。</p>
+<p>要使得玻尔兹曼机达到热平衡，其收敛速度和温度$T$相关。当系统温度非常高$T \rightarrow \infty$时，$p(x_i|x_{\setminus i}) \rightarrow 0.5$，即每个变量状态的改变十分容易，每一种系统状态都是一样的，从而很快可以达到热平衡。当系统温度非常低$T \rightarrow 0$时，如果$\Delta E_i(x_{ \setminus i}) &gt; 0$，则$p(x_i|x_{\setminus i}) \rightarrow 1$，如果$\Delta E_i(x_{ \setminus i}) &lt; 0$，则$p(x_i|x_{\setminus i}) \rightarrow 0$，即：</p>
+<script type="math/tex; mode=display">
+x_i = \left\{\begin{matrix}
+1 &  if \sum_{j}w_{ij}x_j + b_i  \geq 0\\ 
+0 & otherwise
+\end{matrix}\right.</script><p>因此，当$ \rightarrow 0$时，随机性方法变成了确定性方法，这时，玻尔兹曼机退化为一个Hopfield网络。Hopfield网络是一种确定性的动力系统，每次的状态更新都会使系统的能量降低；而玻尔兹曼机时一种随机性动力系统，每次的状态更新则以一定的概率使得系统的能力上升。</p>
+<p><strong>3. 能量最小化与模拟退火</strong></p>
+<p>要使得动力系统达到热平衡，温度$T$的选择十分关键。一个比较好的折中方法是让系统刚开始在一个比较高的温度下运行达到热平衡，然后逐渐降低直到系统在一个比较低的温度下达到热平衡。这样我们就能够得到一个能量全局最小的分布。这个过程被称为模拟退火（Simulated Annealing）。</p>
+<p>模拟退火是一种寻找全局最优的近似方法。</p>
+<h3 id="受限玻尔兹曼机"><a href="#受限玻尔兹曼机" class="headerlink" title="受限玻尔兹曼机"></a>受限玻尔兹曼机</h3><h4 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h4><p>全连接的玻尔兹曼机十分复杂，虽然基于采样的方法提高了学习效率，但在权重更新的过程中仍十分低效。在实际应用中，使用比较广泛的一种带限制的版本，即受限玻尔兹曼机（Restricted Boltzmann Machine，RBM）是一个二分图结构的无向图模型，如下所示。<br><img src="https://img-blog.csdnimg.cn/20191122145237428.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="一个有7个变量的受限玻尔兹曼机"></p>
+<p>首先玻尔兹曼机中的变量也分为隐藏变量和可观测变量。分别用可观测层和隐藏层来表示这两组变量。同一层中的节点之间没有连接，而不同层一个层中的节点与另一层中的所有节点连接，这和两层的全连接神经网络结构相同。</p>
+<p>一个受限玻尔兹曼机由$m_1$个可观测变量和$m_2$个隐变量组成，其定义如下：</p>
+<ul>
+<li>可观测的随机向量$v=[v_1, …, v_{m_1}]^T$</li>
+<li>隐藏的随机向量 $h=[h_1, … , h_{m_2}]^T$</li>
+<li>权重矩阵$W \in R^{m_1 * m_2}$，其中每个元素$w_{ij}$为可观测变量$v_i$和隐变量$h_j$之间边的权重</li>
+<li>偏置$a \in R^{m_1}$和$b \in R^{m_2}$，其中$a_i$为每个可观测变量$v_i$得偏置，$b_j$为每个隐变量$h_j$得偏置</li>
+</ul>
+<p>受限玻尔兹曼机得能量函数定义为：</p>
+<script type="math/tex; mode=display">
+E(v,h) = - \sum_{i} a_iv_i - \sum_{j}b_j h_j - \sum_{i}\sum_{j}v_i w_{ij}h_j = -a^Tv -b^Th - v^T W h</script><p>受限玻尔兹曼机得联合概率分布为$p(v,h)$定义为：</p>
+<script type="math/tex; mode=display">
+p(v,h) = \frac{1}{Z} exp(-E(v,h)) = \frac{1}{Z} exp(a^Tv)exp(b^Th)exp(v^TWh)</script><p>其中$Z=\sum_{v,h}exp(-E(v,h))$为配分函数。</p>
+<h4 id="生成模型-1"><a href="#生成模型-1" class="headerlink" title="生成模型"></a>生成模型</h4><p>受限玻尔兹曼机得联合概率分布p(v,h)一般也通过吉布斯采样的方法来近似，生成一组服从$p(v,h)$分布的样本。</p>
+<p><strong>1. 全条件概率</strong><br>吉布斯采样需要计算每个变量$V_i$和$H_j$的全条件概率。受限玻尔兹曼机中的同层的变量之间没有连接。从无向图的性质可知，在给定可观测变量时，隐变量之间相互条件独立，同样在给定隐变量时，可观测变量之间也相互条件独立，即有：</p>
+<script type="math/tex; mode=display">
+p(v_i | v_{\setminus i},h) = p(v_i|h)
+\\
+p(h_j | v,h_{\setminus j}) = p(h_j|v)</script><p>其中$v_{\setminus i}$表示除变量$V_i$外其他可观测变量得取值，$h_{\setminus j}$为除变量$H_j$外其它隐变量的取值。因此，$V_i$的全条件概率只需要计算$p(v_i|h)$，而$H_j$的全条件概率只需要计算$p(h_j|v)$</p>
+<p>在受限玻尔兹曼机中，每个可观测变量和隐变量的条件概率为：</p>
+<script type="math/tex; mode=display">
+p(v_i=1|h) = \sigma (a_i + \sum_{j}w_{ij} h_j)
+\\
+p(h_j=1|v) = \sigma (b_j + \sum_{i}w_{ij} v_i)</script><p>其中$\sigma$为sigmoid函数。</p>
+<p><strong>2. RBM中得吉布斯采样</strong><br>受限玻尔兹曼机得采样过程如下：</p>
+<ul>
+<li>（给定）或随机初始化一个可观测的向量$v_0$，计算隐变量得概率，并从中采样一个隐向量$h_0$</li>
+<li>基于$h_0$，计算可观测变量得概率，并从中采样一个个可观测的向量$v_1$</li>
+<li>重复$t$次后，获得$(v_t, h_t)$</li>
+<li>当$t \rightarrow \infty$时，$(v_t,h_t)$的采样服从$p(v,h)$分布</li>
+</ul>
+<p>下图为上述采样过程的示例：<br><img src="https://img-blog.csdnimg.cn/20191122162803614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="受限玻尔兹曼机得采样过程"></p>
+<p><strong>3. 对比散度学习算法</strong></p>
+<p>由于首先玻尔兹曼机得特殊结构，因此可以使用一种比吉布斯采样更高效的学习算法，即对比散度（Contrastive Divergence）。对比散度算法仅需k步吉布斯采样。</p>
+<p>为了提高效率，对比散度算法用一个训练样本作为可观测向量的初始值，然后交替对可观测向量和隐藏向量进行吉布斯采用，不需要等到收敛，只需要k步就行了。这就是CD-k算法，通常，k=1就可以学得很好。对比散度得流程如下所示：<br><img src="https://img-blog.csdnimg.cn/20191122163920824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="单步对比散度算法"></p>
+<p><strong>4. 受限玻尔兹曼机得类型</strong><br>在具体的不同任务中，需要处理得数据类型不一定是二值得，也可能时连续值，为了能够处理这些数据，就需要根据输入或输出得数据类型来设计新的能量函数。一般来说受限玻尔兹曼机有以下三种：</p>
+<ul>
+<li>“伯努利-伯努利”受限玻尔兹曼机：即上面介绍得可观测变量喝隐变量都为二值类型得受限玻尔兹曼机</li>
+<li>“高斯-伯努利”受限玻尔兹曼机：假设可观测变量为高斯分布，隐变量为伯努利分布，其能量函数定义为：<script type="math/tex; mode=display">
+E(v,h) = \sum_{i} \frac{(v_i - \mu_i)^2}{2 \sigma_i^2} - \sum{j} b_jh_j - \sum_{i}\sum{j} \frac{v_i}{\sigma_i}w_ijh_j</script>其中每个可观测变量$v_i$服从$(\mu_i, \sigma_i)$的高斯分布。</li>
+<li>“伯努利-高斯”受限玻尔兹曼机：假设可观测变量为伯努利分布，隐变量为高斯分布，其能量函数定义为：<script type="math/tex; mode=display">
+E(v,h)=\sum_{i}a_i v_j - \sum_{j} \frac{(h_j-u_j)^2}{2\sigma_j^2} - \sum_{i}\sum_{j}v_iw_{ij}\frac{h_j}{\sigma_j}</script>其中每个隐变量$h_j$服从$(\mu_j, \sigma_j)$的高斯分布</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

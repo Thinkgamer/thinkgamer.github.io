@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        点击率预估中的FM算法和FFM算法 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTR方法概览"><span class="toc-text">CTR方法概览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FM算法"><span class="toc-text">FM算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要解决的问题"><span class="toc-text">要解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型形式"><span class="toc-text">模型形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FM总结"><span class="toc-text">FM总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FM降低了交叉项参数学习不充分的影响"><span class="toc-text">FM降低了交叉项参数学习不充分的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FM提升了模型预估能力"><span class="toc-text">FM提升了模型预估能力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FM提升了参数学习效率"><span class="toc-text">FM提升了参数学习效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FFM算法"><span class="toc-text">FFM算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景-1"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型形式-1"><span class="toc-text">模型形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        点击率预估中的FM算法和FFM算法
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-07-13 16:45:14</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Spark与推荐系统" title="Spark与推荐系统">Spark与推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>特征决定了所有算法效果的上限，而不同的算法只是离这个上限的距离不同而已</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="CTR方法概览"><a href="#CTR方法概览" class="headerlink" title="CTR方法概览"></a>CTR方法概览</h1><ol>
+<li>广义线性模型+人工特征组合（LR+FeatureEngineering）</li>
+<li>非线性模型（GBDT，FM，FFM，DNN，MLR）</li>
+<li>广义线性模型+非线性模型组合特征（模型融合，常见的是LR+GBDT）</li>
+</ol>
+<p>其中 2（非线性模型）又可以分为：<br>      ○ 矩阵分解类 （FM，FFM）<br>      ○ 回归类        （GBDT，MLR）<br>      ○ 神经网络类 （DNN）</p>
+<h1 id="FM算法"><a href="#FM算法" class="headerlink" title="FM算法"></a>FM算法</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>FM算法（Factorization Machine）一般翻译为“因子分解机”，2010年，它由当时还在日本大阪大学的Steffen Rendle提出。此算法的主要作用是可以把所有特征进行高阶组合，减少人工参与特征组合的工作，工程师可以将精力集中在模型参数调优。FM只需要线性时间复杂度，可以应用于大规模机器学习。经过部分数据集试验，此算法在稀疏数据集合上的效果要明显好于SVM。</p>
+<h2 id="要解决的问题"><a href="#要解决的问题" class="headerlink" title="要解决的问题"></a>要解决的问题</h2><p>假设一个广告分类问题，根据用户和广告位相关的特征，预测用户是否点击了广告。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Clicked?</th>
+<th>Country</th>
+<th>Day</th>
+<th>Ad_type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>USA</td>
+<td>26/11/15</td>
+<td>Movie</td>
+</tr>
+<tr>
+<td>0</td>
+<td>China</td>
+<td>1/7/14</td>
+<td>Game</td>
+</tr>
+<tr>
+<td>1</td>
+<td>China</td>
+<td>19/2/15</td>
+<td>Game</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>“Clicked?”是label，Country、Day、Ad_type是特征。由于三种特征都是categorical类型的，需要经过独热编码（One-Hot Encoding）转换成数值型特征。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Clicked?</th>
+<th>Country=USA</th>
+<th>Country=China</th>
+<th>Day=26/11/15</th>
+<th>Day=1/7/14</th>
+<th>Day=19/2/15</th>
+<th>Ad_type=Movie</th>
+<th>Ad_type=Game</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>经过one-hot编码之后，特征变得稀疏，上边实例中每个样本有7维的特征，但平均仅有3维为非0值，在电商场景中预测sku是否被点击的过程中，特征往往要比上例中多的多，可见数据稀疏性是工业环境中不可避免的问题。另外一个问题就是特征在经过one-hot编码之后，维度会变得非常大，比如说三级品类有3k个，那么sku的所属三级品类特征经过编码之后就会变成3k维，特征空间就会剧增。</p>
+<p>依旧分析上边的例子，特征在经过关联之后，与label之间的相关性就会增加。例如“USA”与“Thanksgiving”、“China”与“Chinese New Year”这样的关联特征，对用户的点击有着正向的影响。换句话说，来自“China”的用户很可能会在“Chinese New Year”有大量的浏览、购买行为，而在“Thanksgiving”却不会有特别的消费行为。这种关联特征与label的正向相关性在实际问题中是普遍存在的，如“化妆品”类商品与“女”性，“球类运动配件”的商品与“男”性，“电影票”的商品与“电影”品类偏好等。因此，引入两个特征的组合是非常有意义的。</p>
+<p>综上，FM所解决的问题是<br>1)：特征稀疏<br>2)：特征组合</p>
+<h2 id="模型形式"><a href="#模型形式" class="headerlink" title="模型形式"></a>模型形式</h2><p>对于特征集合x=（x1,x2,x3,x4,….,xn）和标签y，希望得到x和y的对应关系，最简单的是建立线性回归模型，<br><img src="https://bdn.135editor.com/files/users/360/3608534/201807/fBKAMR8S_7Dba.png"></p>
+<p>但是，一般线性模型无法学习到高阶组合特征，所以会将特征进行高阶组合，这里以二阶为例(理论上，FM可以组合任意高阶，但是由于计算复杂度，实际中常用二阶，后面也主要介绍二阶组合的内容)。模型形式为，</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/cOBUyUJj_TmqU.png"></p>
+<p>其中n代表样本的特征数量，x_i是第i个特征，w_0，w_i，w_ij是模型参数<br>从公式(2)中可以看出，组合特征参数一共有n(n-1)/2个，任意两个参数之间都是独立的，在数据特别稀疏的情况下，二次项参数的训练是十分困难的，原因为每个wij的训练都需要大量的非零x_i，x_j样本，由于样本稀疏，满足条件的样本很少，就会导致参数w_ij不准确，最终将影响模型的性能。<br>如何解决二次项参数的训练？可以利用矩阵分解的思路。<br>在model-based的协同过滤中，一个rating矩阵可以分解为user矩阵和item矩阵，每个user和item都可以采用一个隐向量表示。比如在下图中的例子中，我们把每个user表示成一个二维向量，同时把每个item表示成一个二维向量，两个向量的点积就是矩阵中user对item的打分。</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/UhsawK7r_t2gO.png"></p>
+<p>所有的二次项参数 w_ij 可以组成一个对称矩阵W，那么这个矩阵可以分解为W=V^T * V，V的第j列便是第j维特征的隐向量，换句话说就是每个参数w_ij=<v_i,v_j>，这里的v_i和v_j是分别是第i，j个特征的隐向量，这就是FM的核心思想，因此FM的模型方程为（二阶形式）</v_i,v_j></p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/ta3RTSJ7_P6vQ.png"></p>
+<p>其中，V_i是第i维特征的隐向量，&lt;<em>,</em>&gt;表示两个向量内积，隐向量的长度k（k&lt;&lt;n），包含k个描述特征的因子，这样二次项的参数便从n^2 减少到了nk，远少于多项式模型的参数数量。<br>另外，参数因子化使得 x_h，x_i的参数和 x_i，x_j 的参数不再是相互独立的，因此我们可以在样本稀疏的情况下相对合理地估计FM的二次项参数。具体来说，x_h，x_i 和 x_i，x_j 的系数分别为 ⟨v_h,v_i⟩ 和 ⟨v_i,v_j⟩，它们之间有共同项 vi。也就是说，所有包含“xi的非零组合特征”（存在某个 j≠i，使得 x_i x_j≠0）的样本都可以用来学习隐向量 v_i，这很大程度上避免了数据稀疏性造成的影响。而在多项式模型中，w_hi 和 w_ij 是相互独立的。<br>显而易见，公式(3)是一个通用的拟合方程，可以采用不同的损失函数用于解决回归、二元分类等问题，比如可以采用MSE（Mean Square Error）损失函数来求解回归问题，也可以采用Hinge/Cross-Entropy损失（铰链损失，互熵损失）来求解分类问题。当然，在进行二元分类时，FM的输出需要经过sigmoid变换，这与Logistic回归是一样的。直观上看，FM的复杂度是 O(kn^2)。但是，通过公式(3)的等式，FM的二次项可以化简，其复杂度可以优化到 O(kn)。由此可见，FM可以在线性时间对新样本作出预测。</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/ZvytpfVA_wCpX.png"></p>
+<p>从(3)—&gt;(4)推导如下：</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/MS5AAkAm_kPrI.png"></p>
+<p>解读第（1）步到第（2）步，这里用A表示系数矩阵V的上三角元素，B表示对角线上的交叉项系数。由于系数矩阵V是一个对称阵，所以下三角与上三角相等，有下式成立：</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/RpSGrOmQ_AfmL.png"><br>如果用随机梯度下降（Stochastic Gradient Descent）法学习模型参数。那么，模型各个参数的梯度如下：</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/T8MAnmvn_apWg.png"></p>
+<p>其中，v_j,f 是隐向量 v_j 的第 f 个元素。由于 ∑nj=1vj,fxj 只与 f 有关，而与 i 无关，在每次迭代过程中，只需计算一次所有 f 的 ∑nj=1vj,fxj，就能够方便地得到所有 v_i,f 的梯度。显然，计算所有 f 的 ∑nj=1vj,fxj 的复杂度是 O(kn)；已知 ∑nj=1vj,fxj 时，计算每个参数梯度的复杂度是 O(1)；得到梯度后，更新每个参数的复杂度是 O(1)；模型参数一共有 nk+n+1 个。因此，FM参数训练的复杂度也是 O(kn)。综上可知，FM可以在线性时间训练和预测，是一种非常高效的模型。</p>
+<h2 id="FM总结"><a href="#FM总结" class="headerlink" title="FM总结"></a>FM总结</h2><h3 id="FM降低了交叉项参数学习不充分的影响"><a href="#FM降低了交叉项参数学习不充分的影响" class="headerlink" title="FM降低了交叉项参数学习不充分的影响"></a>FM降低了交叉项参数学习不充分的影响</h3><p>one-hot编码后的样本数据非常稀疏，组合特征更是如此。为了解决交叉项参数学习不充分、导致模型有偏或不稳定的问题。借鉴矩阵分解的思路：每一维特征用k维的隐向量表示，交叉项的参数w_ij用对应特征隐向量的内积表示，即⟨v_i,v_j⟩（也可以理解为平滑技术）。这样参数学习由之前学习交叉项参数w_ij的过程，转变为学习n个单特征对应k维隐向量的过程。<br>很明显，单特征参数（k维隐向量v_i）的学习要比交叉项参数w_ij学习得更充分。示例说明：<br>假如有10w条训练样本，其中出现女性特征的样本数为3w，出现男性特征的样本数为7w，出现汽车特征的样本数为2000，出现化妆品的样本数为1000。特征共现的样本数如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>共现交叉特征</th>
+<th>样本数</th>
+<th>注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;女性，汽车&gt;</td>
+<td>500</td>
+<td>同时出现&lt;女性，汽车&gt;的样本数</td>
+</tr>
+<tr>
+<td>&lt;女性，化妆品&gt;</td>
+<td>1000</td>
+<td>同时出现&lt;女性，化妆品&gt;的样本数</td>
+</tr>
+<tr>
+<td>&lt;男性，汽车&gt;</td>
+<td>1500</td>
+<td>同时出现&lt;男性，汽车&gt;的样本数</td>
+</tr>
+<tr>
+<td>&lt;男性，化妆品&gt;</td>
+<td>0</td>
+<td>样本中无此特征组合项</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&lt;女性，汽车&gt;的含义是女性看汽车广告。可以看到，单特征对应的样本数远大于组合特征对应的样本数。训练时，单特征参数相比交叉项特征参数会学习地更充分。<br>因此，可以说FM降低了因数据稀疏，导致交叉项参数学习不充分的影响</p>
+<h3 id="FM提升了模型预估能力"><a href="#FM提升了模型预估能力" class="headerlink" title="FM提升了模型预估能力"></a>FM提升了模型预估能力</h3><p>依然看上面的示例，样本中没有&lt;男性，化妆品&gt;交叉特征，即没有男性看化妆品广告的数据。如果用多项式模型来建模，对应的交叉项参数W_男性,化妆品是学不出来的，因为数据中没有对应的共现交叉特征。那么多项式模型就不能对出现的男性看化妆品广告场景给出准确地预估。<br>FM模型是否能得到交叉项参数W_男性,化妆品呢？答案是肯定的。由于FM模型是把交叉项参数用对应的特征隐向量内积表示，这里表示为W_男性,化妆品=⟨v_男性,v_化妆品⟩。<br>用男性特征隐向量v_男性和v_化妆品特征隐向量v化妆品的内积表示交叉项参数 W_男性,化妆品。<br>由于FM学习的参数就是单特征的隐向量，那么男性看化妆品广告的预估结果可以用⟨v_男性,v_化妆品⟩得到。这样，即便训练集中没有出现男性看化妆品广告的样本，FM模型仍然可以用来预估，提升了预估能力。</p>
+<h3 id="FM提升了参数学习效率"><a href="#FM提升了参数学习效率" class="headerlink" title="FM提升了参数学习效率"></a>FM提升了参数学习效率</h3><p>这个显而易见，参数个数由(n^2+n+1)变为(nk+n+1)个，模型训练复杂度也由O(mn^2)变为O(mnk)。m为训练样本数。对于训练样本和特征数而言，都是线性复杂度。<br>此外，就FM模型本身而言，它是在多项式模型基础上对参数的计算做了调整，因此也有人把FM模型称为多项式的广义线性模型，也是恰如其分的。<br>从交互项的角度看，FM仅仅是一个可以表示特征之间交互关系的函数表法式，可以推广到更高阶形式，即将多个互异特征分量之间的关联信息考虑进来。例如在广告业务场景中，如果考虑User-Ad-Context三个维度特征之间的关系，在FM模型中对应的degree为3。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>FM最大特点和优势：FM模型对稀疏数据有更好的学习能力，通过交互项可以学习特征之间的关联关系，并且保证了学习效率和预估能力</p>
+<h1 id="FFM算法"><a href="#FFM算法" class="headerlink" title="FFM算法"></a>FFM算法</h1><h2 id="背景-1"><a href="#背景-1" class="headerlink" title="背景"></a>背景</h2><p>FFM（Field-aware Factorization Machine）最初的概念来自Yu-Chin Juan（阮毓钦，毕业于中国台湾大学，现在美国Criteo工作）与其比赛队员，是他们借鉴了来自Michael Jahrer的论文中的field概念提出了FM的升级版模型。</p>
+<h2 id="模型形式-1"><a href="#模型形式-1" class="headerlink" title="模型形式"></a>模型形式</h2><p>通过引入field的概念，FFM把相同性质的特征，归结于同一个field。还是以FM中的广告分类为例，“Day=26/11/15”、“Day=1/7/14”、“Day=19/2/15”这三个特征都是代表日期的，可以放到同一个field中。同理，三级品类有3k个，那么sku的所属三级品类特征经过编码之后就会变成3k维，那么这3k维可以放到一个field中，简单来说，同一个categorical特征经过One-Hot编码生成的数值特征都可以放到同一个field。<br>在FFM中，每一维特征x_i，针对其他特征的每一种field f_j，都会学习到一个隐向量V_i,f_ j。因此，隐向量不仅与特征有关，还与filed有关。也就是说，“Day=26/11/15”这个特征与“Country”特征和“Ad_type”特征进行关联的时候使用不同的隐向量，这与“Country”和“Ad_type”的内在差异相符，也是FFM中“field-aware”的由来。<br>假设样本的 n 个特征属于 f 个field，那么FFM的二次项有 nf个隐向量。而在FM模型中，每一维特征的隐向量只有一个。FM可以看作FFM的特例，是把所有特征都归属到一个field时的FFM模型。根据FFM的field敏感特性，可以导出其模型方程。</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/jUKaHRqz_pIvY.png"></p>
+<p>其中，f_ j 是第 j 个特征所属的field。如果隐向量的长度为 k，那么FFM的二次参数有 f * kn 个，远多于FM模型的 kn 个。此外，由于隐向量与field相关，FFM二次项并不能化简，其预测复杂度是 O(kn^2)。<br>下面以一个例子简单说明FFM的特征组合方式。输入记录如下<br>User Movie Genre Price<br>YuChin 3Idiots Comedy, Drama $9.99<br>这条记录可以编码成5个特征，其中“Genre=Comedy”和“Genre=Drama”属于同一个field，“Price”是数值型，不用One-Hot编码转换。为了方便说明FFM的样本格式，我们将所有的特征和对应的field映射成整数编号。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Field index</th>
+<th>Feature name</th>
+<th>Feature index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User</td>
+<td>1</td>
+<td>User=YuChin</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Movie</td>
+<td>2</td>
+<td>Movie=3Idiots</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Genre</td>
+<td>3</td>
+<td>Genre=Comedy</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Price</td>
+<td>4</td>
+<td>Genre=Drama</td>
+<td>4</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Price</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>那么，FFM的组合特征有10项，如下图所示。</p>
+<p><img src="https://bdn.135editor.com/files/users/360/3608534/201807/BW3Vpww7_n3ZY.png"></p>
+<p>其中，红色是field编号，蓝色是特征编号，绿色是此样本的特征取值。二次项的系数是通过与特征field相关的隐向量点积得到的，二次项共有 n(n−1)/2 个。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>在DSP的场景中，FFM主要用来预估站内的CTR和CVR，即一个用户对一个商品的潜在点击率和点击后的转化率。<br>CTR和CVR预估模型都是在线下训练，然后用于线上预测。两个模型采用的特征大同小异，主要有三类：<br>  ● -用户相关的特征<br>用户相关的特征包括年龄、性别、职业、兴趣、品类偏好、浏览/购买品类等基本信息，以及用户近期点击量、购买量、消费额等统计信息。<br>  ● 商品相关的特征<br>商品相关的特征包括所属品类、销量、价格、评分、历史CTR/CVR等信息。<br>  ● 用户-商品匹配特征<br>用户-商品匹配特征主要有浏览/购买品类匹配、浏览/购买商家匹配、兴趣偏好匹配等几个维度。<br>为了使用FFM方法，所有的特征必须转换成“field_id:feat_id:value”格式，field_id代表特征所属field的编号，feat_id是特征编号，value是特征的值。数值型的特征比较容易处理，只需分配单独的field编号，如用户评论得分、商品的历史CTR/CVR等。categorical特征需要经过One-Hot编码成数值型，编码产生的所有特征同属于一个field，而特征的值只能是0或1，如用户的性别、年龄段，商品的品类id等。<br>除此之外，还有第三类特征，如用户浏览/购买品类，有多个品类id且用一个数值衡量用户浏览或购买每个品类商品的数量。这类特征按照categorical特征处理，不同的只是特征的值不是0或1，而是代表用户浏览或购买数量的数值。按前述方法得到field_id之后，再对转换后特征顺序编号，得到feat_id，特征的值也可以按照之前的方法获得。<br>CTR、CVR预估样本的类别是按不同方式获取的。CTR预估的正样本是站内点击的用户-商品记录，负样本是展现但未点击的记录；CVR预估的正样本是站内支付（发生转化）的用户-商品记录，负样本是点击但未支付的记录。构建出样本数据后，采用FFM训练预估模型，并测试模型的性能。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>#(field)</th>
+<th>#(feature)</th>
+<th>AUC</th>
+<th>Logloss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>站内CTR</td>
+<td>39</td>
+<td>2456</td>
+<td>0.77</td>
+<td>0.38</td>
+</tr>
+<tr>
+<td>站内CVR</td>
+<td>67</td>
+<td>2441</td>
+<td>0.92</td>
+<td>0.13</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>由于模型是按天训练的，每天的性能指标可能会有些波动，但变化幅度不是很大。这个表的结果说明，站内CTR/CVR预估模型是非常有效的。<br>在训练FFM的过程中，有许多小细节值得特别关注。<br>第一，样本归一化。FFM默认是进行样本数据的归一化，即 pa.norm 为真；若此参数设置为假，很容易造成数据inf溢出，进而引起梯度计算的nan错误。因此，样本层面的数据是推荐进行归一化的。<br>第二，特征归一化。CTR/CVR模型采用了多种类型的源特征，包括数值型和categorical类型等。但是，categorical类编码后的特征取值只有0或1，较大的数值型特征会造成样本归一化后categorical类生成特征的值非常小，没有区分性。例如，一条用户-商品记录，用户为“男”性，商品的销量是5000个（假设其它特征的值为零），那么归一化后特征“sex=male”（性别为男）的值略小于0.0002，而“volume”（销量）的值近似为1。特征“sex=male”在这个样本中的作用几乎可以忽略不计，这是相当不合理的。因此，将源数值型特征的值归一化到 [0,1] 是非常必要的。<br>第三，省略零值特征。从FFM模型的表达式(8)可以看出，零值特征对模型完全没有贡献。包含零值特征的一次项和组合项均为零，对于训练模型参数或者目标值预估是没有作用的。因此，可以省去零值特征，提高FFM模型训练和预测的速度，这也是稀疏样本采用FFM的显著优势。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="http://bourneli.github.io/ml/fm/2017/07/02/fm-remove-combine-features-by-yourself.html" target="_blank" rel="external">http://bourneli.github.io/ml/fm/2017/07/02/fm-remove-combine-features-by-yourself.html</a></li>
+<li><a href="https://tech.meituan.com/deep_understanding_of_ffm_principles_and_practices.html" target="_blank" rel="external">https://tech.meituan.com/deep_understanding_of_ffm_principles_and_practices.html</a></li>
+<li><a href="http://www.52caml.com/head_first_ml/ml-chapter9-factorization-family/" target="_blank" rel="external">http://www.52caml.com/head_first_ml/ml-chapter9-factorization-family/</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1104673?fromSource=waitui" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1104673?fromSource=waitui</a></li>
+</ol>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

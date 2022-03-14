@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        浅谈企业如何正确的引入和发展AI算法 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#（上）部分"><span class="toc-text">（上）部分</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据积累"><span class="toc-text">数据积累</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征"><span class="toc-text">特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型的不可解释性"><span class="toc-text">模型的不可解释性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#（下）篇——引入AI后的情况"><span class="toc-text">（下）篇——引入AI后的情况</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        浅谈企业如何正确的引入和发展AI算法
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-03-26 05:55:44</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#技术思考" title="技术思考">技术思考</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p><img src="https://img-blog.csdnimg.cn/20200104161735535.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>本文主要分为上下两部分，（上）部分主要介绍一下企业内部什么时候需要引入AI技术（这里的AI技术泛指机器学习、深度学习、NLP、视觉、语音、推荐等），（下）部分主要介绍一下在引入这些AI技术之后的一些情况和企业的技术方向发展。</p>
+</blockquote>
+<h1 id="（上）部分"><a href="#（上）部分" class="headerlink" title="（上）部分"></a>（上）部分</h1><h2 id="数据积累"><a href="#数据积累" class="headerlink" title="数据积累"></a>数据积累</h2><p>当一个产品是以内容为主的时候，必然会积累大量的数据，在这个数据为王的时代，有了数据当前要进行分析、挖掘，然后产出更多的商业价值。这个时候必然需要引入AI技术。</p>
+<p>但在数据积累前期，产品、分析、挖掘等更多是基于「规则」进行的。人们总结出一些规则，然后利用编程让计算机自动的去执行这些规则。基于规则的好处是：<strong>人们知道在什么的数据条件下，会产出什么样的数据结果，一切皆可判断，可以解释。</strong></p>
+<p>当然一些规则会逐渐演变成可解释的、简单机器学习模型，比如KNN、K-Means、贝叶斯等。但是基于规则的方法，很难甚至无法总结出有效的规则。这个时候规则就要退场，并逐渐切换到AI技术。AI技术的最底层的根基便是数据，如果没有数据，何谈AI。</p>
+<p>「基于数据」的方法简单说就是:从海量数据中找规律，这些规律是很抽象的，并不能总 结成具象的规则。比如:</p>
+<ul>
+<li>给机器看海量的猫和狗的照片，它就具备了「区分猫和狗」的能力</li>
+<li>给机器海量的中英文对照文章，它就具备了「中英文翻译」的能力</li>
+<li>给机器海量的文章，它甚至可以具备「写文章」的能力</li>
+</ul>
+<p>基于数据的好处是：只要有足够多的优质数据，那么机器就能学会某些技能，数据越多， 能力越强。</p>
+<p>但是基于数据的方法也有明显的弊端：机器只能告诉你「是什么」，但是无法告诉你「为什么」。这就是模型的不可解释性。表现最突出的就是神经网络相关的算法模型。</p>
+<p>上边说了有了数据的时候需要考虑引入AI，但并不仅仅是一些杂乱无章的数据，我们考虑的是数据的四大要素：<br><img src="https://img-blog.csdnimg.cn/2020010414521022.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="数据的四大要素"></p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p>首先我们要理解什么是特征？比如当听到一个人说着一口流利的东北话，我们就知道他可能来自东北，当看到一个人的头发短、卷，肤色全黑，但牙齿十分洁白，我们就可以猜测他来自非洲。但一个人说着东北话 却不一定是东北人，可能他在东北上学，一个人符合非洲人的特征，也有可能是个混血儿。</p>
+<p>上面这个例子其实想要说明两点：</p>
+<ul>
+<li>1、AI技术模型的一般流程<br><img src="https://img-blog.csdnimg.cn/20200104143704273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="AI算法的一般流程"></li>
+<li><p>2、特征是AI算法模型的关键（当我们想要使用一个算法去评估一个结果时，简单几个特征是不够的，我们需要引入更多的特征，同时特征本身的不确定性也对结果有很大的影响）<br><img src="https://img-blog.csdnimg.cn/20200104143747736.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="特征时AI算法的关键"></p>
+<ul>
+<li>特征少+确定性弱：适合人工解决</li>
+<li>特征少+确定性强：适合规则解决 </li>
+<li>特征多+确定性强：适合规则解决 </li>
+<li>特征多+确定性弱:「可以考虑」 AI 解决</li>
+</ul>
+</li>
+</ul>
+<p>但其实还有很多其他因素:成本、⻛险、是否可测量…这里不做考虑，否则太复杂了</p>
+<h2 id="模型的不可解释性"><a href="#模型的不可解释性" class="headerlink" title="模型的不可解释性"></a>模型的不可解释性</h2><p>在「数据积累」中，提到了模型的不可解释性。不可解释的模型只会告诉你结果「是什么」，而不会告诉你「为什么」会产出这个结果。当我们的不可解释模型中出现badcase时，我们并不能轻易的找到为什么会出现这个问题的原因？同样通常也不能对症下药，因为我们的修改和优化都是针对模型整体而言的。</p>
+<p>因此在考虑是否使用不可解释模型去解决一些问题时，需要考虑：</p>
+<ul>
+<li>是否需要解释</li>
+<li>是否可容忍</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200104145544419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="两个维度"></p>
+<p>我们先从这2个⻆度来看看普及率较高的AI应用:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>是否需要解释</th>
+<th>错误容忍度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语音识别</td>
+<td>用户只关心效果好不好，并不关心背后的原理是什么</td>
+<td>偶尔出现一些错误并不影响对整句话的理 解。少量出错是可以接受的。</td>
+</tr>
+<tr>
+<td>人脸识别</td>
+<td>同上</td>
+<td>相比语音识别，用户对出错的容忍度要低一些，因为需要重新刷脸</td>
+</tr>
+<tr>
+<td>机器翻译</td>
+<td>同上</td>
+<td>跟语音识别类似，只要大面上准确，并不影 响整体的理解。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>再来看一些人力和AI结合的案例<br>案例 |是否需要解释 | 错误容忍度<br>—— | —-          |   —-<br>智能客服 | 用户不关心是人工服务还是机器服务，只要能解决我的问题就行 | 如果机器客服不能理解我的意图，无法帮我解决问 题，用户会很不满意。所以当机器搞不定的时候需要人工来补位<br>内容审核 | 对于审核不通过的内容，需要解释原因。通过的内容不需要解释为什么 | 有一种职业叫「鉴⻩师」，目前正在逐步被机器替 代，但是并没有完全替代，因为有时候机器会拿不 准，这个时候人工来复审</p>
+<p>最后看一些不适合AI落地的场景<br>案例 |是否需要解释 | 错误容忍度<br>—— | —-          |   —-<br>推导定理 | 科学是绝对严谨的，一定是从逻辑上推导出来的，而不是统计出来的。 | 如果有例外就不能称作定理，一定是绝对正确没有错误的<br>写论文 | 人工智能已经可以写小说、诗歌、散文。但是论文这种文体要求非常严谨的上下文逻辑。 | 论文里是不允许有错误的，全文的逻辑要非 常清晰，哪怕一个细节出现了逻辑问题，也 会造成整篇论文没有价值。</p>
+<p>如果我们把上面提到的案例全部放在象限中，大致如下：<br><img src="https://img-blog.csdnimg.cn/20200104150404723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="AI落地的评估"></p>
+<p>所以在评估是否引入不可解释的AI技术时，有下面三个准则：</p>
+<ul>
+<li>1、解决方案越需要解释背后的原因，越不适合用深度学习</li>
+<li>2、对错误的容忍度越低，越不适合使用深度学习</li>
+<li>3、上面2条并非绝对判断标准，还需要看商业价值和性价比，自动驾驶和医疗就是反例。</li>
+</ul>
+<h1 id="（下）篇——引入AI后的情况"><a href="#（下）篇——引入AI后的情况" class="headerlink" title="（下）篇——引入AI后的情况"></a>（下）篇——引入AI后的情况</h1><p>首先需要明确的是引入AI后并不代表其他劳动可以缺失，AI只是整个内容生产、运营链条中的一环而已，不能凡事都交给AI。</p>
+<blockquote>
+<p>这里插播一个笑话：我经常会听到一些说，AI不是很厉害吗，那xxxx不能用AI解决吗？</p>
+</blockquote>
+<p>是呀，AI技术是能够挖掘和创造一些价值，但AI也并不是万能的。我们要对AI树立正确的态度，合理利用AI技术，继而带来更大的产业价值。</p>
+<p>没有任何事情是一蹴而就的，引入AI并不是马上要见到成效。通常的做法应该是这样的：<br><img src="https://img-blog.csdnimg.cn/20200104154325495.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="引入AI"></p>
+<p>在产品中无论引入什么技术，我们最终需要追求的就是创造价值。只不过规则时代能够创造的价值是有限的，而引入AI技术之后，潜能是巨大的。</p>
+<p>技术在企业发展中的过程中主要有两大原则：</p>
+<ul>
+<li>1、为企业创造可见的价值（如营收、用户）</li>
+<li>2、竖立企业技术品牌，扩大其影响力</li>
+</ul>
+<p>2 是建立在1的基础上的，毕竟只有企业生存下来了，才有资格去谈技术品牌和影响力。所以这也就促进了员工在工作期间，不仅要完成工作的内容，同样也要不断学习新的技术，扩展自己的知识面和技术实力。当然如果一个人的目标不是技术，那无可厚非，做自己喜欢的事情就好。</p>
+<p>所以一个企业的技术肯定是要不断进步和演化的，不可能固守在规则为王或者简单的可解释算法模型时期，需要引入更加先进的技术，因为其潜在的能创造的价值是无限的。</p>
+<p>这才引入AI技术后，企业技术发展的正确方向。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

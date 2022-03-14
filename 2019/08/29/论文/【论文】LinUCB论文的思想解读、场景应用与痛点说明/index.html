@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】LinUCB论文的思想解读、场景应用与痛点说明 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Disjoint-LinUCB"><span class="toc-text">Disjoint LinUCB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Hybrid-LinUCB"><span class="toc-text">Hybrid LinUCB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#评估算法"><span class="toc-text">评估算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实验说明"><span class="toc-text">实验说明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#实验位置"><span class="toc-text">实验位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据选择"><span class="toc-text">数据选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征选择"><span class="toc-text">特征选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征降维"><span class="toc-text">特征降维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验结论"><span class="toc-text">实验结论</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意点"><span class="toc-text">注意点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LinUCB-的重点"><span class="toc-text">LinUCB 的重点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#场景应用"><span class="toc-text">场景应用</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】LinUCB论文的思想解读、场景应用与痛点说明
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-08-29 08:19:15</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>本篇文章主要介绍一下雅虎在2012年发表的论文 【A Contextual-Bandit Approach to Personalized News Article Recommendation】，同时由于最近在做用户留存方面的工作，也涉及了一些冷启动方面的东西，尝试了很多种方法：包括性别热门、用户群体热门、bandit算法和LDA等尝试，有的效果好，有的效果差（当然和具体的业务场景和使用方法都有关系，不能否则算法或者思路本身的好坏）。最近也在尝试LinUCB算法，因此重新翻看了该论文，整理成下文，同时涉及一些个人的想法和一些实践思路。</p>
+</blockquote>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>个性化Web服务通过利用用户和内容的信息调整他们的服务以满足用户的个性化需求，尽管之前的研究取得了一些进展，但仍然存在两个问题：</p>
+<ul>
+<li>Web服务具有动态更改内容池的功能，从而使传统的协同过滤算法无法使用。</li>
+<li>大多数具有实际意义的Web服务要求具有快速学习和进行计算</li>
+</ul>
+<p>论文中把文章推荐看作是多臂老虎机问题，一种有效的做法是根据用户和文章的上下文信息，选择文章推荐给用户，同时基于用户对文章的点击行为动态调整策略，追求点击次数最大化。实验证明加入上下文信息的Bandit算法比传统的Bandit算法CTR提升在12.5%以上，如果是基于稀疏的数据，效果会变得更好。</p>
+<p>通常用户和物品都有其特征进行表示，在这种情况下不同用户对于同一物品而言，看法也会不同，因此识别不同内容之间的共性，并在内容池中转移该知识变得格外重要。</p>
+<p>论文分析了已有的Bandit算法，包括UCB、E-Greedy、Thompson Smapling、朴素Bandit，然后提出了LinUCB算法，LinUCB分为两种：</p>
+<ul>
+<li>简单的线性不相交模型 disjoint LinUCB</li>
+<li>混合相交的线性模型 hybrid LinUCB</li>
+</ul>
+<h1 id="Disjoint-LinUCB"><a href="#Disjoint-LinUCB" class="headerlink" title="Disjoint LinUCB"></a>Disjoint LinUCB</h1><p>之所以称为DisJoint LinUCB是因为不同臂之间的参数不共享。</p>
+<p>首先定义每个臂的期望收益为：</p>
+<script type="math/tex; mode=display">
+E[r_{t,a} | x_{t,a} ] = x^T_{t,a} \theta^*_a</script><p>其中：</p>
+<ul>
+<li>$\theta^*_a$ 表示臂a的参数</li>
+<li>$x_{t,a}$表示臂a的特征</li>
+</ul>
+<p>通常模型优化采用的是最小化损失函数，在这里损失函数可以表示为：</p>
+<script type="math/tex; mode=display">
+loss = (c_a - D_a \theta_a)^2 + \lambda|| \theta_a||</script><p>基于<strong>岭回归</strong>得到的参数估计值为：</p>
+<script type="math/tex; mode=display">
+\hat{\theta}_a  = (D^T_a D_a + I_d)^{-1} D^T_ac_a</script><p>其中：</p>
+<ul>
+<li>$D_a$表示是一个m*d的矩阵（即m行，d列），m即选择臂a得到的m个上下文特征组，d为特征的维度</li>
+<li>$I_d$ 表示d*d的单位矩阵</li>
+<li>$c_a$ 表示臂a返回的事物是否被点击的记录向量，长度为m</li>
+</ul>
+<p>根据最小平方和强化学习理论：</p>
+<script type="math/tex; mode=display">
+| x^T_{t,a} \hat{ \theta}_a - E[r_{t,a} | x_{t,a} ] | \leqslant \alpha \sqrt{ x^T_{t,a}(D^T_aD_a + I_d)^{-1} x_{t,a} }</script><p>其中 $\alpha$是一个常数，为：$1+\sqrt{ln(2/\delta )/2}$</p>
+<p>基于这个不等式可以选择收益最大的臂，在进行第t次实验时：</p>
+<script type="math/tex; mode=display">
+a_t \overset{def}{=} \underset{a \in A_t}{arg max} (x^T_{t,a} \hat{ \theta}_a +  \alpha \sqrt{ x^T_{t,a}A_a^{-1} x_{t,a} } )</script><p>其中$A \overset{def}{=}D^T_aD_a + I_d$</p>
+<p>其对应的算法流程为：<br><img src="https://img-blog.csdnimg.cn/20191218202151721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="LinUCB的算法流程"></p>
+<h1 id="Hybrid-LinUCB"><a href="#Hybrid-LinUCB" class="headerlink" title="Hybrid LinUCB"></a>Hybrid LinUCB</h1><p>Hybrid LinUCB考虑了臂之间的共性，因此每个臂的期望修改为：</p>
+<script type="math/tex; mode=display">
+E[r_{t,a} | x_{t,a} ] =z^T_{t,a}\beta^* + x^T_{t,a} \theta^*_a</script><p>其中：</p>
+<ul>
+<li>$z_{t,a}$表示的是用户/文章的组合特征</li>
+<li>$\beta^*$表示的是所有臂的共享未知参数</li>
+<li>$\theta^*_a$表示的是臂a的私有参数</li>
+</ul>
+<p>由于篇幅有限，论文中并没有给出hybrid的推断，给出的伪代码如下：<br><img src="https://img-blog.csdnimg.cn/20191218225906690.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="Hybrid LinUCB的算法流程"></p>
+<h1 id="评估算法"><a href="#评估算法" class="headerlink" title="评估算法"></a>评估算法</h1><p>与传统的监督学习算法评测相比，融合上下文的Bandit算法的评估十分困难，由于算法的交互性，似乎只能在线上进行效果评测。然而在具体的实践过程中，这种方法是不可行的，对线上效果带来的挑战也很大。</p>
+<p>文中提到了一种方法是根据记录的数据模拟臂的选择过程，但随即又说明了这种方法在实验过程中会引入偏差，导致结果不可信。</p>
+<p>文中提出了一种实验方法，其实验算法如下：<br><img src="https://img-blog.csdnimg.cn/20191223151319775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="LinUCB实验方法"></p>
+<ul>
+<li>$\pi$为选择的策略，这里即为带上下文的bandit算法</li>
+<li>$h_{t-1}$即为$t-1$时刻的历史行为记录 </li>
+<li>$R_T/T$即为最终的实验指标</li>
+</ul>
+<h1 id="实验说明"><a href="#实验说明" class="headerlink" title="实验说明"></a>实验说明</h1><h2 id="实验位置"><a href="#实验位置" class="headerlink" title="实验位置"></a>实验位置</h2><p><img src="https://img-blog.csdnimg.cn/20191223152042832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="实验位置"></p>
+<p>实验使用的数据是Yahoo-Today Moudle，在选择数据时，为了避免曝光位置带来的偏差，只关注Story和F1位置。</p>
+<h2 id="数据选择"><a href="#数据选择" class="headerlink" title="数据选择"></a>数据选择</h2><p><strong>在选取数据时，文中提出了一点：选取了一周的数据作为评估数据，运行bandit算法。从实践经验上讲这是靠谱的，避免了数据本身带来的偏差。</strong></p>
+<h2 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h2><ul>
+<li>用户维度<ul>
+<li>人口统计学信息（性别化为两类，年龄划分为10个等级）</li>
+<li>地理特征（文中选取的是200个城市地区）</li>
+<li>行为类别信息（用户的消费历史和属性信息）</li>
+</ul>
+</li>
+<li>文章维度：<ul>
+<li>文章URL类别（推断出数十个类别信息）</li>
+<li>人工编辑的类别信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="特征降维"><a href="#特征降维" class="headerlink" title="特征降维"></a>特征降维</h2><p>这里通过K-means对用户特征进行聚类，划分为5个簇，即最终得到的用户特征维度为5，最后补一列特征值为1（即第六列特征值为1，<strong>为什么为1，文中并没有说明，这里小编也不太明白，如果你有想法的话欢迎留言</strong>）</p>
+<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>吧啦吧啦就是比别的算法好！</p>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
+<li>【实践】在使用Thompson sampling时每个臂的a、b值初始化时要注意，如果差值过大，就会导致经过几次负反馈之后，排在top的臂依旧排在top，因此设计a、b值的时候需要进行特别的设计</li>
+<li>计算每个臂时的特征为臂a的特征，切勿和臂下的样本特征搞混（如果一个样本是一个臂的话，那么这里的特征就是样本的特征）</li>
+<li>disjoint linucb中的$x_{t,z}$表示的是臂a的特征，$z_{t,a}$表示的是用户/文章的组合特征（臂和文章在某种程度上是一样的概念，比如候选池有100篇文章，那么每篇文章就可以看作是一个臂）</li>
+<li>读论文时有些论文的实验并不太好做，这时候不仅要学习论文中算法的思路，还要学习论文中实验的设计技巧和评判技巧</li>
+</ul>
+<h1 id="LinUCB-的重点"><a href="#LinUCB-的重点" class="headerlink" title="LinUCB 的重点"></a>LinUCB 的重点</h1><ul>
+<li>LinUCB 不再是上下文无关地，像盲人摸象一样从候选臂中去选择了，而是要考虑上下文因素，比如是用户特征、物品特征和场景特征一起考虑。</li>
+<li>每一个候选臂针对这些特征各自维护一个参数向量，各自更新，互不干扰。</li>
+<li>每次选择时用各自的参数去计算期望收益和置信区间，然后按照置信区间上边界最大的输出结果。</li>
+<li>观察用户的反馈，简单说就是“是否点击”，将观察的结果返回，结合对应的特征，按照刚才给出的公式，去重新计算这个候选臂的参数。</li>
+<li>当 LinUCB 的特征向量始终取 1，每个候选臂的参数是收益均值的时候，LinUCB 就是 UCB。</li>
+</ul>
+<hr>
+<p>2019-12-27 补充</p>
+<ul>
+<li><strong>当备选池不大的时候，每个备选物品可以作为一个臂，如果备选池大的话可以对备选池的物品进行归类，一个类别作为一个臂</strong></li>
+<li><strong>不同业务场景下，设置的奖励和惩罚应该是不一样的，比如点击，可以设置为1，购买设置为2，惩罚可以设置为0</strong></li>
+<li><strong>alpha的值通常是拍脑门子定的几个，通过测试比较效果，一般初始值选0.5更加稳妥些</strong></li>
+</ul>
+<hr>
+<h1 id="场景应用"><a href="#场景应用" class="headerlink" title="场景应用"></a>场景应用</h1><p>当来一个新用户的时候，我们并不知道该用户的偏好和兴趣，那么最常见的方法就是试探法，假设我们有10个标签，每个标签下都有运营配置的一些精品文章或者商品或者新闻等。</p>
+<p>那么这里就可以把每个标签看作是一个臂，我们可以每个臂下展示一个事物，来对用户的兴趣进行试探，然后根据用户的行为进行结果修正。</p>
+<p>在选取特征时，论文中使用了用户维度和臂维度的特征，那么在我们实践过程中通常可以使用下面的三大维度的特征：</p>
+<ul>
+<li>用户维度：性别、年龄、城市、手机品牌等</li>
+<li>臂维度：曝光点击率、标签类别信息等</li>
+<li>用户x事物交互维度：用户在该臂下的一些交互维度特征，比如点击、曝光点击率等</li>
+</ul>
+<p>在实际的应用过程中，并没有那么简单，常见的痛点如下：</p>
+<ul>
+<li>LinUCB不是一个传统的ctr算法，如何与线上服务进行集成？</li>
+<li>经过onehot或者分桶之后的特征维度会增高，高维的特征必然会引起延迟增大，如何进行线上降维？</li>
+<li>特征包括了用户访问时携带的特征、臂的离线和实时特征，如何进行特征拼接，进行计算？</li>
+<li>LinUCB和Thomson sampling、UCB相比，参数增多数倍，线上如何进行参数维护和更新？</li>
+<li>新用户数量往往并不多，在有限的新用户下进行不同留存策略的ABTest，如何保证结果的可靠和有效？</li>
+<li>LinUCB是针对新用户的，那么对于新老用户之间的界定也十分重要，如何界定新老用户或者具体场景下的新老用户？</li>
+</ul>
+<p>具体的场景、业务面对的问题和解决的办法往往是不尽相同的，如果大家决定要应用LinUCB算法，那么在使用之前一定要考虑后相关的问题和解决办法，这样才能避免使用过程中遇到的坑。</p>
+<p>针对上边的问题并没有唯一具体的解决办法，感兴趣的欢迎在进行留言讨论。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

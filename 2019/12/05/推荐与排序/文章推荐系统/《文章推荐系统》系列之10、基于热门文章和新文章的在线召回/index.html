@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之10、基于热门文章和新文章的在线召回.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#热门文章在线召回"><span class="toc-text">热门文章在线召回</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#新文章在线召回"><span class="toc-text">新文章在线召回</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之10、基于热门文章和新文章的在线召回.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:30</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>在上篇文章中我们实现了基于内容的在线召回，接下来，我们将实现基于热门文章和新文章的在线召回。主要思路是根据点击次数，统计每个频道下的热门文章，根据发布时间统计每个频道下的新文章，当推荐文章不足时，可以根据这些文章进行补足。</p>
+<p>由于数据量较小，这里采用 Redis 存储热门文章和新文章的召回结果，数据结构如下所示</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>热门文章召回</th>
+<th>结构</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>popular_recall</td>
+<td>ch:{}:hot</td>
+<td>ch:18:hot</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>新文章召回</th>
+<th>结构</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>new_article</td>
+<td>ch:{}:new</td>
+<td>ch:18:new</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>热门文章存储，键为 <code>ch:频道ID:hot</code> 值为 <code>分数</code> 和 <code>文章ID</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ZINCRBY key increment member</span></span><br><span class="line"><span class="comment"># ZSCORE</span></span><br><span class="line"><span class="comment"># 为有序集 key 的成员 member 的 score 值加上增量 increment 。</span></span><br><span class="line">client.zincrby(<span class="string">"ch:&#123;&#125;:hot"</span>.format(row[<span class="string">'channelId'</span>]), <span class="number">1</span>, row[<span class="string">'param'</span>][<span class="string">'articleId'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># ZREVRANGE key start stop [WITHSCORES]</span></span><br><span class="line">client.zrevrange(ch:&#123;&#125;:new, <span class="number">0</span>, <span class="number">-1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>新文章存储，键为 <code>ch:{频道ID}:new</code> 值为 <code>文章ID:时间戳</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ZADD ZRANGE</span></span><br><span class="line"><span class="comment"># ZADD key score member [[score member] [score member] ...]</span></span><br><span class="line"><span class="comment"># ZRANGE page_rank 0 -1</span></span><br><span class="line">client.zadd(<span class="string">"ch:&#123;&#125;:new"</span>.format(channel_id), &#123;article_id: time.time()&#125;)</span><br></pre></td></tr></table></figure></p>
+<h1 id="热门文章在线召回"><a href="#热门文章在线召回" class="headerlink" title="热门文章在线召回"></a>热门文章在线召回</h1><p>首先，添加 Spark Streaming 和 Kafka 的配置，热门文章读取由业务系统发送到 Kafka 的 click-trace 主题中的用户实时行为数据<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">KAFKA_SERVER</span> = <span class="string">"192.168.19.137:9092"</span></span><br><span class="line"><span class="attr">click_kafkaParams</span> = &#123;<span class="string">"metadata.broker.list"</span>: KAFKA_SERVER&#125;</span><br><span class="line"><span class="attr">HOT_DS</span> = KafkaUtils.createDirectStream(stream_c, [<span class="string">'click-trace'</span>], click_kafkaParams)</span><br></pre></td></tr></table></figure></p>
+<p>接下来，利用 Spark Streaming 读取 Kafka 中的用户行为数据，筛选出被点击过的文章，将 Redis 中的文章热度分数进行累加即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">client = redis.StrictRedis(host=DefaultConfig.REDIS_HOST, port=DefaultConfig.REDIS_PORT, db=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_hot_redis</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    收集用户行为，更新热门文章分数</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_hot_article</span><span class="params">(rdd)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> rdd.collect():</span><br><span class="line">            <span class="comment"># 过滤用户行为</span></span><br><span class="line">            <span class="keyword">if</span> data[<span class="string">'param'</span>][<span class="string">'action'</span>] <span class="keyword">in</span> [<span class="string">'exposure'</span>, <span class="string">'read'</span>]:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                client.zincrby(<span class="string">"ch:&#123;&#125;:hot"</span>.format(data[<span class="string">'channelId'</span>]), <span class="number">1</span>, data[<span class="string">'param'</span>][<span class="string">'articleId'</span>])</span><br><span class="line"></span><br><span class="line">    HOT_DS.map(<span class="keyword">lambda</span> x: json.loads(x[<span class="number">1</span>])).foreachRDD(update_hot_article)</span><br></pre></td></tr></table></figure></p>
+<p>测试，写入用户行为日志<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &#123;\"actionTime\":\"2019-04-10 21:04:39\",\"readTime\":\"\",\"channelId\":18,\"param\":&#123;\"action\": \"click\", \"userId\": \"2\", \"articleId\": \"14299\", \"algorithmCombine\": \"C2\"&#125;&#125; &gt;&gt; userClick.log</span><br></pre></td></tr></table></figure></p>
+<p>查询热门文章<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:6379</span><span class="selector-attr">[10]</span>&gt; <span class="selector-tag">keys</span> *</span><br><span class="line">1) "<span class="selector-tag">ch</span><span class="selector-pseudo">:18</span><span class="selector-pseudo">:hot"</span></span><br><span class="line">127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:6379</span><span class="selector-attr">[10]</span>&gt; <span class="selector-tag">ZRANGE</span> "<span class="selector-tag">ch</span><span class="selector-pseudo">:18</span><span class="selector-pseudo">:hot"</span> 0 <span class="selector-tag">-1</span></span><br><span class="line">1) "14299"</span><br></pre></td></tr></table></figure></p>
+<h1 id="新文章在线召回"><a href="#新文章在线召回" class="headerlink" title="新文章在线召回"></a>新文章在线召回</h1><p>首先，添加 Spark Streaming 和 Kafka 的配置，新文章读取由业务系统发送到 Kafka 的 new-article 主题中的最新发布文章数据<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">NEW_ARTICLE_DS</span> = KafkaUtils.createDirectStream(stream_c, [<span class="string">'new-article'</span>], click_kafkaParams)</span><br></pre></td></tr></table></figure></p>
+<p>接下来，利用 Spark Streaming 读取 Kafka 的新文章，将其按频道添加到 Redis 中，Redis 的值为当前时间<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">update_new_redis</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">"""更新频道最新文章</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_new_article</span><span class="params">(rdd)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> rdd.collect():</span><br><span class="line">            channel_id, article_id = row.split(<span class="string">','</span>)</span><br><span class="line">            client.zadd(<span class="string">"ch:&#123;&#125;:new"</span>.format(channel_id), &#123;article_id: time.time()&#125;)</span><br><span class="line"></span><br><span class="line">    NEW_ARTICLE_DS.map(<span class="keyword">lambda</span> x: x[<span class="number">1</span>]).foreachRDD(add_new_article)</span><br></pre></td></tr></table></figure></p>
+<p>还需要在 Kafka 的启动脚本中添加 new-article 主题监听配置，这样就可以收到业务系统发送过来的新文章了，重新启动 Flume 和 Kafka<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/root/bigdata/kafka/bin/kafka-topics.sh --zookeeper 192.168.19.137:2181 --create --replication-factor 1 --topic<span class="built_in"> new-article </span>--partitions 1</span><br></pre></td></tr></table></figure></p>
+<p>测试，向 Kafka 发送新文章数据<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">from</span> kafka import KafkaProducer </span><br><span class="line"></span><br><span class="line"><span class="comment"># kafka消息生产者</span></span><br><span class="line">kafka_producer = KafkaProducer(bootstrap_servers=[<span class="string">'192.168.19.137:9092'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构造消息并发送</span></span><br><span class="line">msg = <span class="string">'&#123;&#125;,&#123;&#125;'</span>.<span class="built_in">format</span>(<span class="number">18</span>, <span class="number">13891</span>)</span><br><span class="line">kafka_producer.<span class="built_in">send</span>(<span class="string">'new-article'</span>, msg.encode())</span><br></pre></td></tr></table></figure></p>
+<p>查看新文章<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[10]&gt; keys *</span><br><span class="line">1) "ch:18:hot"</span><br><span class="line">2) "ch:18:new"</span><br><span class="line">127.0.0.1:6379[10]&gt; ZRANGE "ch:18:new" 0 -1</span><br><span class="line">1) "13890"</span><br><span class="line">2) "13891"</span><br></pre></td></tr></table></figure></p>
+<p>最后，修改 <code>online_update.py</code>，加入基于热门文章和新文章的在线召回逻辑，开启实时运行即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ore = OnlineRecall()</span><br><span class="line">    ore.update_content_recall()</span><br><span class="line">    ore.update_hot_redis()</span><br><span class="line">    ore.update_new_redis()</span><br><span class="line">    stream_sc.start()</span><br><span class="line">    <span class="comment"># 使用 ctrl+c 可以退出服务</span></span><br><span class="line">    _ONE_DAY_IN_SECONDS = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            time.sleep(_ONE_DAY_IN_SECONDS)</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>到这里，我们就完成了召回阶段的全部工作，包括基于模型和基于内容的离线召回，以及基于内容、热门文章和新文章的在线召回。通过召回，我们可以从数百万甚至上亿的原始物品数据中，筛选出和用户相关的几百、几千个可能感兴趣的物品，后面，我们将要进入到排序阶段，对召回的几百、几千个物品进行进一步的筛选和排序。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘， 提取码：eakp）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

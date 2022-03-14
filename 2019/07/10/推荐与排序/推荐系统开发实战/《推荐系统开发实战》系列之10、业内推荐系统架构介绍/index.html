@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之10、业内推荐系统架构介绍 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#架构介绍"><span class="toc-text">架构介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#召回内容"><span class="toc-text">召回内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#计算排序"><span class="toc-text">计算排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#特征工程"><span class="toc-text">特征工程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征分类"><span class="toc-text">特征分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#排序算法"><span class="toc-text">排序算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#物品过滤和展示"><span class="toc-text">物品过滤和展示</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#物品过滤"><span class="toc-text">物品过滤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物品展示"><span class="toc-text">物品展示</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#效果评估"><span class="toc-text">效果评估</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之10、业内推荐系统架构介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:10</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>不管是电商网站，还是新闻资讯类网站，推荐系统都扮演着十分重要的角色。一个优秀的推荐系统能够推荐出让人满意的物品，但这不仅是推荐算法的功劳，整个推荐架构所扮演的角色也举足轻重。</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/96265282" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/96265282</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<p>学术界往往更加关注推荐算法的各项评估指标。从基本的协同过滤到点击率预估算法，从深度学习到强化学习，学术界都始终走在最前列。一个推荐算法从出现到在业界得到广泛应用是一个长期的过程，因为在实际的生产系统中，首先需要保证的是稳定、实时地向用户提供推荐服务，在这个前提下才能追求推荐系统的效果。</p>
+<p>在生产系统中，不管是用户维度、物品维度还是用户和物品的交互维度，数据都是极其丰富的，学术界对算法的使用方法不能照搬到工业界。当一个用户访问推荐模块时，系统不可能针对该用户对所有的物品进行排序，那么推荐系统是怎么解决的呢？对应的商品众多，如何决定将哪些商品展示给用户？对于排序好的商品，如何合理地展示给用户？</p>
+<h1 id="架构介绍"><a href="#架构介绍" class="headerlink" title="架构介绍"></a>架构介绍</h1><p>图14-1所示是业界推荐系统通用架构图，主要包括：底层基础数据、数据加工存储、召回内容、计算排序、过滤和展示、业务应用。<br>底层基础数据是推荐系统的基石，只有数据量足够多，才能从中挖掘出更多有价值的信息，进而更好地为推荐系统服务。底层基础数据包括用户和物品本身数据、用户行为数据、用户系统上报数据等。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190717080622698.png" width="500px"></center>
+
+<p>图14-2～图14-4所示为用户本身数据、物品本身数据和用户行为数据。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190717080738525.png" width="300px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190717080746725.png" width="300px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190717080753359.png" width="300px"></center>
+
+<p>得到底层基础数据之后，就要对数据进行加工处理和分析了，如结合用户属性信息和行为信息构建用户画像，结合物品属性信息和用户对物品的行为信息构建物品画像。基于用户对物品的行为数据构建特征工程，同时进行相关的数据分析。<br>数据在处理之后存储到相应的位置（业务推荐系统使用的数据一般存储在redis中），供推荐系统实时调用。</p>
+<h1 id="召回内容"><a href="#召回内容" class="headerlink" title="召回内容"></a>召回内容</h1><p>电商网站、内容网站、视频网站中数据量很大，并不能直接把所有的物品数据全部输送到推荐系统进行排序，那么如何对物品进行筛选就成了很关键的问题。<br>第4章中介绍了一些常用的数据挖掘算法和应用场景，在进行物品召回时可以基于一些常用的机器学习算法构建用户偏好模型、用户兴趣模型、物品相似模型、物品互补模型等。在进行内容召回时，只召回和用户有偏好关系、和用户有直接关联、和用户有直接关系的相关物品，输入排序模型，进行打分排序。<br>例如，在某新闻类网站中，根据用户对新闻的相关行为信息构建用户对新闻标签的兴趣模型，在为用户推荐时就可以推荐用户偏好标签下的新闻数据，如图14-5所示。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190717080944181.png" width="500px"></center>
+
+<p>在物品召回过程中，重点是如何构建合适的用户偏好模型，只有保证偏好模型的准确性才能确保用户召回物品的准确性。</p>
+<h1 id="计算排序"><a href="#计算排序" class="headerlink" title="计算排序"></a>计算排序</h1><h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>“数据决定了机器学习的上限，而算法只是尽可能逼近这个上限”，这里的数据指的就是经过特征工程得到的数据。特征工程指的是把原始数据转变为模型的训练数据的过程，目的就是获取更好的训练数据特征，使得机器学习模型逼近这个上限。特征工程能使模型的性能得到提升，有时甚至在简单的模型上也能取得不错的效果。</p>
+<p>特征工程在机器学习中起着非常重要的作用，一般认为包括特征构建、特征提取、特征选择三部分。 特征提取与特征选择都是为了从原始特征中找出最有效的特征。它们之间的区别是：</p>
+<ul>
+<li>特征提取强调通过特征转换的方式得到一组具有明显物理意义或统计意义的特征；</li>
+<li>特征选择是从特征集合中挑选一组具有明显物理意义或统计意义的特征子集。</li>
+</ul>
+<p>两者都能帮助减少特征维度、数据冗余，特征提取有时能发现更有意义的特征属性，特征选择的过程经常能表示出每个特征对于模型构建的重要性。<br>特征工程的标准化流程主要分为以下几步：<br>（1）基于业务理解，找到对因变量有影响的所有自变量，即特征。<br>（2）评估特征的可用性、覆盖率、准确率等。<br>（3）特征处理：包括特征清洗、特征预处理（特征预处理可参考第4章“数据预处理”部分）、特征选择。<br>（4）特征监控：特征对算法模型的影响很大，微小的浮动都会带来模型效果的很大波动，因此做好重要特征的监控可防止特征异常变动带来线上事故。</p>
+<h2 id="特征分类"><a href="#特征分类" class="headerlink" title="特征分类"></a>特征分类</h2><p>在工业界的推荐系统中，典型的特征主要分为以下四类。</p>
+<ul>
+<li>相关性特征：评估内容的属性与用户是否匹配。显性的匹配包括关键词匹配、分类匹配、来源匹配、主题匹配等。</li>
+<li>环境特征：包括地理位置、时间。这些既是偏差特征，又能以此构建一些匹配特征。</li>
+<li>热度特征：包括全局热度、分类热度、主题热度及关键词热度等。内容热度信息在大的推荐系统中特别是在用户冷启动时非常有效。</li>
+<li>协同特征：可以在一定程度上帮助解决所谓算法越推越窄的问题。协同特征并不考虑用户已有历史，而是通过用户行为分析不同用户间的相似性，如点击相似、兴趣分类相似、主题相似、兴趣词相似，甚至向量相似，从而扩展模型的探索能力。<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2>在得到召回的物品之后，就要考虑如何对这些物品进行正确的排序。目前业界在机器学习领域最普遍的做法是将排序推荐模型作为二分类模型来训练，即在构造样本集的过程中对应的标签为0或1（未点击或点击）。常用的排序算法包括但不局限于GBDT、LR、XGBoost等，当然也有很多把GBDT和LR结合起来使用的，但是模型融合后的效果在不同的业务场景中带来的提升并不是很大。</li>
+</ul>
+<h1 id="物品过滤和展示"><a href="#物品过滤和展示" class="headerlink" title="物品过滤和展示"></a>物品过滤和展示</h1><blockquote>
+<p>过滤和展示直接影响用户体验，因此在做推荐系统时一定要注意相关的过滤和展示规则。</p>
+</blockquote>
+<h2 id="物品过滤"><a href="#物品过滤" class="headerlink" title="物品过滤"></a>物品过滤</h2><p>经常会听到人们说“电商网站经常给我推荐我已经买过的东西”。其实在做推荐系统的过程中会有相关的过滤规则，在电商推荐系统中，最常用的过滤规则是：用户购买过滤，即在进行商品召回时过滤掉用户过去一段时间内已经购买过的商品和相似商品。例如，用户昨天买了一个机械键盘，今天的推荐系统就不会再给该用户推荐机械键盘了。<br>同时也会有一些其他过滤规则如：</p>
+<ul>
+<li>项目指定的一些敏感词汇或敏感商品等过滤。</li>
+<li>刷单商品过滤。</li>
+<li>曝光商品过滤（有时会认为那些曝光过的商品是用户不感兴趣的，即看到了没有进行点击）。</li>
+<li>无货商品过滤。</li>
+</ul>
+<p>至于为什么推荐系统会给用户推荐已经购买过的商品，是因为在用户购买该商品之后，又对该类型的商品产生了新的行为，所以推荐系统会再次进行推荐。</p>
+<h2 id="物品展示"><a href="#物品展示" class="headerlink" title="物品展示"></a>物品展示</h2><p>展示即用户看到的推荐结果。不同类型的推荐系统中展示的规则不一样，但基本原则是：品类隔离展示，即同类型的商品不能出现在相邻的位置。例如推荐系统返回的推荐结果集中有两个手机，这两个手机就不能在相邻的位置展示。</p>
+<p>有的推荐系统会要求第一屏内不能出现同类型的商品，如推荐系统给用户的第一屏展示了8个商品，那么这8个商品中就不能出现同类型的商品（如不能出现两个手机）。</p>
+<h1 id="效果评估"><a href="#效果评估" class="headerlink" title="效果评估"></a>效果评估</h1><p>无论是推荐架构最开始的召回内容、计算排序，还是最后的过滤和展示，每次新上一个方案之后都要进行效果统计，生产系统中最常用的效果评估方法就是ABTest，更多关于ABTest的使用介绍可以参考第10章。<br>在生产系统中，进行ABtest之后，往往会将不好的方案下线，保留效果更好的一方，同时也会不断上线新的召回、排序特征等，迭代优化模型，提升线上效果。</p>
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

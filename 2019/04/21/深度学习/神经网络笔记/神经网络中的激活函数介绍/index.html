@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        神经网络中的激活函数介绍 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#激活函数（Activation-Function）"><span class="toc-text">激活函数（Activation Function）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Sigmoid型激活函数"><span class="toc-text">Sigmoid型激活函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修正线性单元"><span class="toc-text">修正线性单元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#带泄漏的ReLU"><span class="toc-text">带泄漏的ReLU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带参数的ReLU"><span class="toc-text">带参数的ReLU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ELU"><span class="toc-text">ELU</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Softplus函数"><span class="toc-text">Softplus函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Swish函数"><span class="toc-text">Swish函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Maxout单元"><span class="toc-text">Maxout单元</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        神经网络中的激活函数介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-21 22:25:15</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#神经网络" title="神经网络">神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>人工神经元（Artifical Neuron）简称神经元（Neuron），是构成神经网络的基本单元，其主要是模拟生物神经元的结构和特性，接受一组输入信息并产出输出。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="激活函数（Activation-Function）"><a href="#激活函数（Activation-Function）" class="headerlink" title="激活函数（Activation Function）"></a>激活函数（Activation Function）</h1><p>是神经元中非常重要的一部分，为了增强网络的表示能力和学习能力，激活函数需要具备以下几点性质：</p>
+<ul>
+<li>连续并可导的非线性函数，可导的激活函数可以直接利用数值优化的方法来学习网络参数。</li>
+<li>激活函数及其导函数要尽可能的简单，有利于提高网络计算效率。</li>
+<li>激活函数的导函数的值域要在一个合适的区间内，不能太大也不能太小，否则会影响训练的效率和温度性。</li>
+</ul>
+<h2 id="Sigmoid型激活函数"><a href="#Sigmoid型激活函数" class="headerlink" title="Sigmoid型激活函数"></a>Sigmoid型激活函数</h2><p>S型曲线函数，常见的Sigmoid函数有Logistic函数和tanh函数。</p>
+<blockquote>
+<p>知识点：对于函数f(x)，若x趋向于负无穷大，其导数f’(x)趋向于0，则称其为左饱和。若x趋向于正无穷大，其导数f’(x)趋向于0，则称其为右饱和。同时满足左右饱和时，称为两端饱和。</p>
+</blockquote>
+<ul>
+<li>Logistic 函数<script type="math/tex; mode=display">
+\sigma (x) = \frac{1} { 1+ exp(-x)}</script></li>
+<li>tanh函数</li>
+</ul>
+<script type="math/tex; mode=display">
+tanh(x) = \frac{ exp(x)-exp(-x) }{ exp(x) + exp(-x) }</script><p>tanh函数可以看作是放大并平移的Logistic函数，其值域是(-1，1)。</p>
+<script type="math/tex; mode=display">
+tanh(x) = 2 \sigma(2x) - 1</script><p>tanh函数的输出是零中心化的（Zero-Centered），而Logistic函数的输出值恒大于0。非零中心化的输出会使得最后一层的神经元的输入发生位置偏移（Bias Shift），并进一步使得梯度下降的收敛速度变慢。</p>
+<p><img src="https://img-blog.csdnimg.cn/2019042122140374.jpg" alt="image"></p>
+<h2 id="修正线性单元"><a href="#修正线性单元" class="headerlink" title="修正线性单元"></a>修正线性单元</h2><p>Rectified Linear Unit（ReLU）也叫rectifier函数，是目前深层神经网络中经常使用的激活函数。ReLU实际上是一个斜坡函数，定义为：</p>
+<script type="math/tex; mode=display">
+ReLU(x) = \begin{cases}
+x & \text{ if } x \geq 0 \\ 
+0 & \text{ if } x < 0
+\end{cases}
+= max(0,x)</script><hr>
+<p>ReLU的优缺点：</p>
+<ul>
+<li>优点<blockquote>
+<p>采用ReLU的神经元只需要进行加，乘，和，比较的操作，计算上更加高效。Sigmoid型激活函数会导致一个非稀疏的神经网络，而ReLU却具有很好的稀疏性，大约50%的神经元会处于激活状态。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>在优化方面，由于Sigmoid型函数的两端饱和，ReLU函数为左饱和函数，且在x&gt;0时导数为1，在一定程度上缓解了神经网络的梯度消失问题，加速梯度下降的收敛速度。</p>
+</blockquote>
+<ul>
+<li>缺点<blockquote>
+<p>ReLU的输出是非零中心化的，给后一层的神经网络引入偏置偏移，会影响梯度下降的效率。此外ReLU神经元在训练时比较容易死亡。在训练时，如果参数在一次不恰当的更新后，第一个隐藏层中的某个ReLU神经元在所有的训练数据上都不能被激活，那么这个神经元自身参数的梯度永远都会是0，在以后的训练过程中永远不能被激活。这种现象称为死亡ReLU问题（Dying ReLU Problem），并且也有kennel会发生在其他隐藏层。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<p>在实际使用中，为了避免上述情况，有集中ReLU的变种也会被广泛使用。</p>
+<h3 id="带泄漏的ReLU"><a href="#带泄漏的ReLU" class="headerlink" title="带泄漏的ReLU"></a>带泄漏的ReLU</h3><p>带泄漏的ReLU在输入x&lt;0时，保持一个很小的梯度 lambda。这样当神经元非激活时也能又一个非零的梯度可以更新参数，避免永远不能被激活。带泄漏的ReLU的定义如下：</p>
+<script type="math/tex; mode=display">
+LeakyReLU(x) = \begin{cases}
+x & \text{ if } x > 0 \\ 
+\gamma x & \text{ if } x  \leq 0
+\end{cases}
+= max(0,x) + \gamma min(0,x)</script><p>其中 gamma是一个很小的常数，比如0.01。当gamma &lt; 1时，带泄漏的ReLU也可以写为：</p>
+<script type="math/tex; mode=display">
+LeakyReLU(x) = max(x, \gamma x)</script><p>相当于是一个比较简单的maxout单元。</p>
+<h3 id="带参数的ReLU"><a href="#带参数的ReLU" class="headerlink" title="带参数的ReLU"></a>带参数的ReLU</h3><p>带参数的ReLU引入一个可学习的参数，不同神经元可以有不同的参数，对于第i个神经元，其PReLU的定义为：</p>
+<script type="math/tex; mode=display">
+PReLU(x) = \begin{cases}
+x & \text{ if } x > 0 \\ 
+\gamma _ix & \text{ if } x  \leq 0
+\end{cases}
+= max(0,x) + \gamma_imin(0,x)</script><p>其中γi为x≤0时函数的斜率。因此，PReLU是非饱和函数。如果γi =0，那 么 PReLU 就退化为 ReLU。如果 γi 为一个很小的常数，则 PReLU 可以看作带 泄露的 ReLU。PReLU 可以允许不同神经元具有不同的参数，也可以一组神经 元共享一个参数。</p>
+<hr>
+<h3 id="ELU"><a href="#ELU" class="headerlink" title="ELU"></a>ELU</h3><p>指数线性单元（Exponential Linear Unit）是一个近似的零中心化的非线性函数，其定义为：</p>
+<script type="math/tex; mode=display">
+ELU(x) = \begin{cases}
+x & \text{ if } x > 0 \\ 
+\gamma (exp(x)-1) & \text{ if } x  \leq 0
+\end{cases}
+= max(0,x) + min(0,\gamma(exp(x)-1))</script><p>其中 γ ≥ 0是一个超参数，决定x ≤ 0时的饱和曲线，并调整输出均值在0附<br>近。</p>
+<hr>
+<h4 id="Softplus函数"><a href="#Softplus函数" class="headerlink" title="Softplus函数"></a>Softplus函数</h4><p>Softplus函数可以看作是rectifier函数的平滑版本，其定义为：</p>
+<script type="math/tex; mode=display">
+Softplus(x) = log(1 + exp(x))</script><p>Softplus函数及其导数刚好是Logistic函数。Softplus函数虽然也具有单侧抑制，宽兴奋边界的特征，却没有稀疏激活性。</p>
+<p>下图为几种激活函数的示例：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421213409642.jpg" alt="激活函数对比"></p>
+<h2 id="Swish函数"><a href="#Swish函数" class="headerlink" title="Swish函数"></a>Swish函数</h2><p>Swish函数是一种自门控（self-Gated）激活函数，其定义为：</p>
+<script type="math/tex; mode=display">
+swish(x) = x \sigma (\beta x)</script><p>其中 sigma(.)为logistic函数，beta为可学习的参数或一个固定超参数。 sigma(.) 属于 (0,1)可以看做是一种软性的门控机构。当sigma(beta x)接近于1时，门处于“开”状态，激活函数的输出近似于x本身；当sigma(beta x)接近于0时，门的状态为“关”，激活函数的输出近似于0。</p>
+<p>下图为Swish函数的示例：<br><img src="https://img-blog.csdnimg.cn/20190421214743755.jpg" alt="image"></p>
+<p>当 beta=0时，Swish函数变成线性函数 x/2。 当 beta=1时，Swish 函数在 x&gt;0时近似线性，在x &lt; 0时近似饱和，同时具有一定的非单调性。当beta趋向于正无穷大时， sigma(beta x)趋向于离散的0-1函数，Switch函数近似为ReLU函数。</p>
+<p>因此Swish函数可以看作时线性函数和ReLU函数之间的非线性插值函数，其程度由参数beta控制。</p>
+<hr>
+<h3 id="Maxout单元"><a href="#Maxout单元" class="headerlink" title="Maxout单元"></a>Maxout单元</h3><p>Maxout单元也是一种分段线性函数。Sigmoid型函数， ReLU等激活函数的输入是神经元的净输入z，是一个标量。而maxout单元的输入是上一层神经元的全部原始输入，是一个向量x=[x1;x2;…;x_d]。</p>
+<p>每个maxout单元有K个权重向量w_k 属于 R^d 和偏置 b_k（1 &lt;= k &lt;= K）。对于输入x，可以得到K个净输入z_k，1 &lt;= k &lt;=K。</p>
+<script type="math/tex; mode=display">
+z_k = w^T_kx + b_k</script><p>其中</p>
+<script type="math/tex; mode=display">
+w_k = [w_{k,1},w_{k,2},...,w_{k,d}]^T</script><p>为第k个权重向量。<br>Maxout单元的非线性函数定义为：</p>
+<script type="math/tex; mode=display">
+maxout(x) = \underset{k\in [1,K]}{max} (z_k)</script><p>Maxout单元不单是净输入到输出之间的非线性映射，而是整体学习输入到输出之间的非线性映射关系。Maxout激活函数可以看作任意凸函数的分段线性近似，并且在有限的点上是不可微的。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

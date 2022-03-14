@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        算法工程师的数学基础｜数学优化类型和优化算法 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#数学优化"><span class="toc-text">数学优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数学优化的类型"><span class="toc-text">数学优化的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#离散优化和连续优化"><span class="toc-text">离散优化和连续优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#离散优化问题"><span class="toc-text">离散优化问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连续优化问题"><span class="toc-text">连续优化问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无约束优化和约束优化"><span class="toc-text">无约束优化和约束优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线性优化和非线性优化"><span class="toc-text">线性优化和非线性优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化算法"><span class="toc-text">优化算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局最优和局部最优"><span class="toc-text">全局最优和局部最优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#梯度下降法"><span class="toc-text">梯度下降法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拉格朗日乘数法与KKT条件"><span class="toc-text">拉格朗日乘数法与KKT条件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#等式约束优化问题"><span class="toc-text">等式约束优化问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不等式约束优化问题"><span class="toc-text">不等式约束优化问题</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        算法工程师的数学基础｜数学优化类型和优化算法
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-28 23:00:57</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#算法数学" title="算法数学">算法数学</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
+<p>《算法工程师的数学基础》已更新：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104548670/" target="_blank" rel="external">1、算法工程师的数学基础｜线性代数中的向量和向量空间</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105362927" target="_blank" rel="external">1.2、算法工程师的数学基础｜线性代数中的向量内积和外积概念及几何意义</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104686771" target="_blank" rel="external">2、算法工程师的数学基础｜线性代数中的矩阵</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104687130" target="_blank" rel="external">3、算法工程师的数学基础｜微积分之导数相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/104823450" target="_blank" rel="external">4、算法工程师的数学基础｜微积分之微分相关介绍</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/105097829" target="_blank" rel="external">5、算法工程师的数学基础｜微积分之积分相关介绍</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105107022" target="_blank" rel="external">6、算法工程师的数学基础｜数学优化类型和优化算法</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">7、算法工程师的数学基础｜概率论</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/105575099" target="_blank" rel="external">8、算法工程师的数学基础｜信息论</a></li>
+</ul>
+<hr>
+<p>这里数学优化部分的内容记录在一篇文章中，内容比较多，建议先收藏再认真看。</p>
+<h1 id="数学优化"><a href="#数学优化" class="headerlink" title="数学优化"></a>数学优化</h1><p>数学优化（Mathemattical Optimization）问题，也叫最优化问题，是指在一定约束条件下，求解一个目标函数的最大值（或最小值）问题。</p>
+<h2 id="数学优化的类型"><a href="#数学优化的类型" class="headerlink" title="数学优化的类型"></a>数学优化的类型</h2><h3 id="离散优化和连续优化"><a href="#离散优化和连续优化" class="headerlink" title="离散优化和连续优化"></a>离散优化和连续优化</h3><p>根据输入变量$x$的值域是否为实数域， 数学优化问题可以分为离散优化问题和连续优化问题。</p>
+<h4 id="离散优化问题"><a href="#离散优化问题" class="headerlink" title="离散优化问题"></a>离散优化问题</h4><p>离散优化（Discrete Optimization）问题是目标函数的输入变量为离散变量，比如为整数或有限集合中的元素。离散优化问题主要有两个分支：</p>
+<ul>
+<li>1、组合优化（Combinational Optimization）：其目标是从一个有限集合中找出使得目标函数最优的元素。在一般的组合优化问题中，集合中的元素之间存在一定的关联，可以表示为图结构。典型的组合优化问题有旅行商问题、最小生成树问题、图着色问题等。很多机器学习问题都是组合优化问题，比如特征选择、聚类问题、超参数优化问题以及结构化学习（Structuced Learning）中标签预测问题等。</li>
+<li><p>2、整数规划（Integer Programming）：输入变量$x \in Z^d$为整数。一般常见的整数规划问题为整数线性规划（Integer Linear Programming， ILP）。整数线性规划的一种最直接的求解方法是：</p>
+<ul>
+<li>1）去掉输入为整数的限制，得到一个就称为一个一般的线性规划问题，这个线性规划问题为原整数线性规划问题的松弛问题；</li>
+<li>2）求得相应松弛问题的解；</li>
+<li><p>3）把松弛问题的解四舍五入到最接近的整数。但是这种方法得到的解一般都不是最优的，因此原问题的最优解不一定在松弛问题最优解的附近</p>
+<p>另外，这种方法得到的解也不一样定满足约束条件。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="连续优化问题"><a href="#连续优化问题" class="headerlink" title="连续优化问题"></a>连续优化问题</h4><p>连续优化（Continuous Optimization）问题是目标函数的输入变量为连续变量$x \in R^d$，即目标函数为实体函数。</p>
+<h3 id="无约束优化和约束优化"><a href="#无约束优化和约束优化" class="headerlink" title="无约束优化和约束优化"></a>无约束优化和约束优化</h3><p>在连续优化问题中，根据是否有变量的约束条件，可以将优化问题分为无约束优化问题和约束优化问题。</p>
+<p>无约束优化问题（Unconstrained Optimization）的可行域为整个实数域$D = R^d$，可以写为：</p>
+<script type="math/tex; mode=display">
+\underset{x}{ min } \, f(x)</script><p>其中$x \in R^d$为输入变量，$f: R^d \rightarrow R$为目标函数。</p>
+<p>约束优化问题（Constrained Optimization）中变量$x$需要满足一些等式或不等式的约束条件。约束优化问题通常使用拉格朗日乘数法来进行求解。</p>
+<h3 id="线性优化和非线性优化"><a href="#线性优化和非线性优化" class="headerlink" title="线性优化和非线性优化"></a>线性优化和非线性优化</h3><p>如果在公式$\underset{x}{ min } \, f(x)$中，目标函数和所有的约束函数都为线性函数，则该问题为线性规划问题（Linear Programming）。相反，如果目标函数或任何一个约束函数为非线性函数，则该问题为非线性规划问题（Nonlinear Programming）。</p>
+<p>在非线性优化问题中，有一类比较特殊的问题是凸优化问题（Conver Programming）。在凸优化问题中，变量$x$的可行域为凸集，即对于集合中任意两点，他们的连线全部位于在集合内部。目标函数$f$也必须为凸函数，即满足：</p>
+<script type="math/tex; mode=display">
+ f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha) f(y), \forall \alpha \in [0,1]</script><p>凸优化问题是一种特殊的约束化问题，需满足目标函数为凸函数，并且等式约束函数为线性函数，不等式约束函数为凹函数。</p>
+<h2 id="优化算法"><a href="#优化算法" class="headerlink" title="优化算法"></a>优化算法</h2><p>优化问题一般都是通过迭代的方法来求解：通过猜测一个初始的估计$x_0$，然后不断迭代优化产生新的估计$x_1, x_2, … ,x_t$，希望$x_t$最终收敛的最优解$x^<em>$。一个好的优化算法应该是在一定的时间或者空间复杂度下能够快速准确地找到最优解。同时，好的优化算法受初始猜测点的影响较小，通过迭代能稳定地找到最优解$x^</em>$的邻域，然后迅速收敛于$x^*$。</p>
+<p>优化算法中常用的迭代方法有：<strong>线性搜索</strong>和<strong>置信域</strong>方法等。线性搜索的策略是寻找方向和步长，具体算法有<strong>梯度下降法</strong>、<strong>牛顿法</strong>、<strong>共轭梯度法</strong>等。</p>
+<h3 id="全局最优和局部最优"><a href="#全局最优和局部最优" class="headerlink" title="全局最优和局部最优"></a>全局最优和局部最优</h3><p>对于很多非线性优化问题，会存在若干个局部的极小值。局部最小值，或局部最优解$x^<em>$定义为：存在一个$\delta &gt; 0$，对于所有的满足$||x-x^</em>|| \leq \delta$的$x$，公式$f(x^<em>) \leq f(x)$成立。也就是说，在$x^</em>$的附近区域内，所有的函数值都大于或者等于$f(x^*)$。</p>
+<p>对于所有的$x \in A$，都有$f(x^<em>) \leq f(x)$成立，则$x^</em>$为全局最小值，或全局最优解。</p>
+<p>一般的，求局部最优解是容易的，但很难保证其为全局最优解。对于线性规划或凸优化问题，局部最优解就是全局最优解。</p>
+<p>要确认一个点$x^<em>$是否为局部最优解，通过比较它的邻域内有没有更小数值是不现实的。如果函数$f(x)$是二次连续可微的，我们可以通过检查目标函数在点$x^</em>$的梯度$\bigtriangledown f(x^<em>)$和Hessian矩阵$\bigtriangledown^2 f(x^</em>)$来判断。</p>
+<blockquote>
+<p>定理：局部最小值的一阶必要条件：如果$x^<em>$为局部最优解并且函数$f$在$x^</em>$的邻域内一阶可微，则在$\bigtriangledown f(x^*) = 0$</p>
+</blockquote>
+<p>证明：如果函数$f(x)$是连续可微的，根据泰勒公式（Taylor’s Formula），函数$f(x)$的一阶展开可以近似为：</p>
+<script type="math/tex; mode=display">
+f(x^* + \Delta x) = f(x^*) + \Delta x^T \bigtriangledown f(x^*)</script><h3 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h3><p><strong>梯度下降法（Gradient Descent Method）</strong>也叫<strong>最速下降法</strong>，经常用来求解无约束优化的极小值问题。</p>
+<p>对于函数$f(x)$，如果$f(x)$在点$x_t$附近是连续可微的，那么$f(x)$下降最快的方向是$f(x)$在$x_t$点的梯度方向的反方向。</p>
+<p>根据泰勒一阶展开公式：</p>
+<script type="math/tex; mode=display">
+f(x_{t+1}) = f(x_t + \Delta x) \approx f(x_t) + \Delta x^T \bigtriangledown f(x_t)</script><p>要使得$f(x_{t+1}) &lt; f(x_t)$，就得使$\Delta x^T \bigtriangledown f(x_t) <0$。取$\delta x="-" \alpha="" f(x_t)$，如果$\alpha="">0$为一个够小数值时，那么$f(x_{t+1}) &lt; f(x_t)$成立。</0$。取$\delta></p>
+<p>这样我们就可以从一个初始值$x_0$出发，通过迭代公式：</p>
+<script type="math/tex; mode=display">
+x_{t+1} = x_t - \alpha_t \bigtriangledown f(x_t), t \geq 0</script><p>生成序列$x_0, x_1,x_2, …$使得：</p>
+<script type="math/tex; mode=display">
+f(x_0) \geq f(x_1) \geq f(x_2) \geq ...</script><p>如果顺利的话，序列$(x_n)$收敛到局部最优解$x^*$。注意每次迭代步长$\alpha$可以改变，但其取值必须合适，如果过大就不会收敛，如果过小则收敛速度太慢。</p>
+<p>梯度下降法的过程如下图所示。曲线是等高线（水平集），即函数$f$为不同常数的集合构成的曲线。红色的箭头指向该点梯度的反方向（梯度方向与通过该点的等高线垂直）。沿着梯度下降方向，将最终到达函数$f$值的局部最优解。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200325225140310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="梯度下降法"></p>
+<p>梯度下降法为一阶收敛算法，当靠近极小值时梯度变小，收敛速度会变慢，并且可能以“之字形”的方式下降。如果目标函数为二阶连续可微，我们可以采用牛顿法。<strong>牛顿法</strong>为二阶收敛算法，收敛速度更快，但是每次迭代需要计算Hessian矩阵的逆矩阵，复杂度较高。</p>
+<p>相反，如果要求解一个最大值问题，就需要向梯度正方形迭代进行搜索，逐渐接近函数的局部极大值点，这个过程则被称为<strong>梯度上升法</strong>（Gradient ascent）。</p>
+<h2 id="拉格朗日乘数法与KKT条件"><a href="#拉格朗日乘数法与KKT条件" class="headerlink" title="拉格朗日乘数法与KKT条件"></a>拉格朗日乘数法与KKT条件</h2><p>在求解最优化问题的时候，<strong>拉格朗日乘数法</strong> （Lagrange Multiplier） 和 <strong>KKT条件</strong>是两种最常见的方法。</p>
+<p>最优化一般分为三种情况：</p>
+<p>1、无约束条件</p>
+<blockquote>
+<p>解决办法通常是对原函数求导，令导函数等于0的点可能是极值点，例如上边说的梯度下降法</p>
+</blockquote>
+<ol>
+<li><p>等式约束条件</p>
+<blockquote>
+<p>设目标函数是$f(x)$，等式约束函数是$g(x)$，即在$g(x)$满足的情况下求解$f(x)$的极值。常用的解决办法就是<strong>拉格朗日乘数法</strong></p>
+</blockquote>
+</li>
+<li><p>不等式约束条件</p>
+<blockquote>
+<p>设目标函数是$f(x)$，不等式约束函数是$g(x)$，即在$g(x)$满足的情况下求解$f(x)$的极值。常用的解决办法就是<strong>KKT（Karush Kuhn Tucker）条件</strong></p>
+</blockquote>
+</li>
+</ol>
+<p>约束优化问题可以表示为：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+\underset{x}{min} & f(x) \\ 
+ s.t & \begin{matrix}
+h_i(x) = 0, i=1,..,m\\ 
+g_j(x) \leq 0, j = 1,...,n
+\end{matrix}
+\end{matrix}</script><p>其中$h_i(x)$为等式约束条件，$g_j(x)$为不等式约束条件。</p>
+<h3 id="等式约束优化问题"><a href="#等式约束优化问题" class="headerlink" title="等式约束优化问题"></a>等式约束优化问题</h3><p>如果上述公式中只有等式约束$h_i(x)=0$，可以构造一个拉格朗日函数$L(x, \lambda)$</p>
+<script type="math/tex; mode=display">
+L(x, \lambda) = f(x) + \sum_{i=1}^{m} \lambda_ih_i(x)</script><p>其中$\lambda$为拉格朗日乘数，可以是正数或者负数。如果$f(x^<em>)$是原始约束优化问题的局部最优解，那么存在一个$\lambda^</em>$使得$(x^<em>, \lambda^</em>)$为拉格朗日函数$L(x,\lambda)$的驻点。因此只需要令$\frac{\partial L(x, \lambda)}{ \partial x} = 0$，$\frac{\partial L(x, \lambda)}{ \partial \lambda} = 0$，得到：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+ \bigtriangledown f(x) +\sum_{i=1}^{m} \lambda_i \bigtriangledown h_i(x) = 0 \\ 
+h_i (x) = 0, i=0,....,m
+\end{matrix}</script><p>上述方程式的解即为原始问题的可能解，在实际应用中，需根据问题来验证是否为极值点。</p>
+<blockquote>
+<p>驻点：函数的一阶导数为0地点(驻点也称为稳定点，临界点)。对于多元函数，驻点是所有一阶偏导数都为零的点。驻点不一定是极值点，但极值点一定是驻点。</p>
+</blockquote>
+<p>拉格朗日乘数法是将一个有$d$个变量和$m$个等式约束条件的最优化问题转换为一个有$d+m$个变量的函数求平稳点的问题。拉格朗日乘数法所得的平稳点会包含原问题的所有极值点,但并不保证每个平稳点都是原问题的极值点。</p>
+<h3 id="不等式约束优化问题"><a href="#不等式约束优化问题" class="headerlink" title="不等式约束优化问题"></a>不等式约束优化问题</h3><p>如果上述公式定义的是一般约束化的问题，其拉格朗日乘数为：</p>
+<script type="math/tex; mode=display">
+L(x, a,b)=f(x) +  \sum_{i=1}^{m} a_ih_i(x) + \sum_{i=1}^{m} b_jg_j(x)</script><p>其中：</p>
+<ul>
+<li>$a = [a_i, …, a_m]^T$为等式约束的拉格朗日乘数</li>
+<li>$b = [b_i, …, b_n]^T$为不等式约束的拉格朗日乘数</li>
+</ul>
+<p>当约束条件不满足时，有$max_{a,b} L(x,a,b) = \infty$；当约束条件满足时并且$b \geq 0$时，$max_{a,b} L(x,a,b) = f(x)$。因此原始约束优化问题等价于：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+\underset{x}{min} \, \underset{a,b}{max} \, L(x,a,b) \\ 
+s.t \,b \geq 0
+\end{matrix}</script><p>这是一个min-max优化问题称为主问题（primal problem）。</p>
+<p><strong>对偶问题</strong> 主问题的优化一般比较困难，我们可以通过交换，min-max的顺序来简化。定义拉格朗日对偶函数为：</p>
+<script type="math/tex; mode=display">
+\Gamma (a,b) = \underset{x \in D}{ inf } L(x,a,b)</script><p>$\Gamma(a,b)$是一个凹函数，即使$f(x)$是非凸的。</p>
+<p>当$b \geq 0$时，对于任意的$\tilde{x} \in D$，有</p>
+<script type="math/tex; mode=display">
+\Gamma (a,b) = \underset{ x \in D }{inf} L(x,a,b) \leq L(\tilde{x} ,a,b) \leq f( \tilde{x})</script><p>令$p^*$是原问题的最优解，则有</p>
+<script type="math/tex; mode=display">
+L(a,b) \leq p^*</script><p>即拉格朗日对偶函数$\Gamma(a,b)$为原问题最优解的下界。</p>
+<p>优化拉格朗日对偶函数$\Gamma(a,b)$并得到原问题的最优下界，称为<strong>拉格朗日对偶函数问题（Lagrange dual problem）</strong></p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+\underset{a,b}{max} & \Gamma(a,b) \\ 
+s.t. &  b \geq 0
+\end{matrix}</script><p>拉格朗日对偶函数为凹函数，因此拉格朗日对偶问题为凸优化问题。</p>
+<p>令$d^<em>$是拉格朗日对偶问题的最优解，则有$d^</em> \leq p^<em>$，这个性质称为弱对偶性，如果$d^</em> = p^*$，这个性质称为强对偶性质。</p>
+<p>当强对偶性质成立时，令$x^<em>$和$a^</em>, b^*$分别是原问题和对偶问题的最优解，那么他们满足以下条件：</p>
+<script type="math/tex; mode=display">
+\bigtriangledown f(x^*)  + \sum_{i=1}^{m} a^*_i \bigtriangledown h_i(x^*)  + \sum_{j=1}^{n} b^*_j \bigtriangledown g_j(x^*)</script><script type="math/tex; mode=display">
+h_i (x^*) =0, i=0,1,2....,m</script><script type="math/tex; mode=display">
+g_j(x^*) \leq 0, j =0,1,2,....,n</script><script type="math/tex; mode=display">
+b^*_j g_j (x^*) =0, j =0,1,2,....,n</script><script type="math/tex; mode=display">
+b^*_j \geq 0, j =0,1,2,....,n</script><p>称为不定式约束优化问题的KKT条件（Karush-Kuhn-Tucher conditions）。KKT条件是拉格朗日乘数法在不等式约束优化问题上的泛化。当原问题是凸优化问题时，满足KKT条件的解也是原问题和对偶问题的最优解。</p>
+<p>KKT条件中需要关注的是$b^<em>_j g_j (x^</em>) =0$，称为互补松弛条件。如果最优解$x^<em>$出现在不等式约束的边界上$g_j(x) = 0$，则$b^</em>_j&gt;0$；如果$x^<em>$出现在不等式约束的内部$g_j(x) &lt; 0$，则$b^</em>_j=0$。互补松弛条件说明当最优解出现在不等式约束的内部，则约束失效。</p>
+<p>更多关于拉格朗日和KKT的文章可以参考：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/55532322" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/55532322</a></li>
+<li><a href="https://www.cnblogs.com/mo-wang/p/4775548.html" target="_blank" rel="external">https://www.cnblogs.com/mo-wang/p/4775548.html</a></li>
+<li><a href="https://www.matongxue.com/madocs/939.html" target="_blank" rel="external">https://www.matongxue.com/madocs/939.html</a></li>
+</ul>
+<blockquote>
+<p>数学优化类型和优化算法介绍完了，如果觉得不错，动动小手分享给更多人看吧！</p>
+</blockquote>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

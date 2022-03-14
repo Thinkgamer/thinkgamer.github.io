@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        常见的五种神经网络(4)-深度信念网络（下）篇 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#深度信念网络介绍"><span class="toc-text">深度信念网络介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成模型"><span class="toc-text">生成模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数学习"><span class="toc-text">参数学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        常见的五种神经网络(4)-深度信念网络（下）篇
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-23 16:36:47</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#常见的五种神经网络" title="常见的五种神经网络">常见的五种神经网络</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/103231385" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/103231385</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki</p>
+<p>该系列的其他文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/89459131" target="_blank" rel="external">常见的五种神经网络(1)-前馈神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100531593" target="_blank" rel="external">常见的五种神经网络(2)-卷积神经网络</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100600661" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/100709422" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(中篇)</a></li>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/100943664" target="_blank" rel="external">常见的五种神经网络(3)-循环神经网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103231385" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(上篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103437985" target="_blank" rel="external">常见的五种神经网络(4)-深度信念网络(下篇)</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（上篇）</a></li>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/103754752" target="_blank" rel="external">常见的五种神经网络(5)-生成对抗网络（下篇）</a></li>
+</ul>
+<hr>
+<p>在上一篇文章中介绍了玻尔兹曼机和受限玻尔兹曼机（<a href="https://blog.csdn.net/Gamer_gyt/article/details/103231385" target="_blank" rel="external">阅读详情</a>）,这篇文章中介绍一下深度信念网络。</p>
+<h3 id="深度信念网络介绍"><a href="#深度信念网络介绍" class="headerlink" title="深度信念网络介绍"></a>深度信念网络介绍</h3><p>深度信念网络（Deep Belief Netword, DBN）是一种深层的概率有向图模型，其图结构有多层的节点构成。每层节点的内部没有连接，相邻两层的节点之间为全连接。网络的最底层为可观测的变量，其他层节点都为隐变量。最顶部的两层间的连接是无向的，其他层之间的连接是有向的。下图给出了一个深度信念网络的示例。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191207141248183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="4层结构的深度信念网络"></p>
+<p>对一个有$L$层隐变量的深度信念网络，令$v=h^{(0)}$表示最底层（第0层）为可观测变量，$h^{(1)}, …, h^{(L)}$表示其余每层的变量。顶部的两层是一个无向图，可以看作是一个受限玻尔兹曼机，用来产生$p(h^{(L-1)})$的先验分布。除了最顶上两层外，每一层变量$h^{(l)}$依赖于其上面一层$h^{(l+1)}$，即：</p>
+<script type="math/tex; mode=display">
+p(h^{(l)} | h^{(l+1)}, ..., h^{(L)}) = p(h^{(l)} | h^{(l+1)})</script><p>其中$l=\{0,…,L-2\}$</p>
+<p>深度信念网络中所有变量的联合概率可以分解为：</p>
+<script type="math/tex; mode=display">
+p(v,h^{(1)},...,h^{(L)}) = p(v|h^{(1)})( \prod_{l=1}^{L-2} p(h^{(l)} | h^{(l+1)} ) )p( h^{(L-1)}, h^{(L)})
+\\
+= \prod_{l=0}^{L-1} p(h^{(l)} | h^{(l+1)} ) p(h^{(L-1)},h^{(L)})</script><p>其中$p(h^{l} | h^{(l+1)})$为sigmoid型条件概率分布为：</p>
+<script type="math/tex; mode=display">
+p(h^{(l)} | h^{(l+1)}) = \sigma (a^{(l)}+W^{(l+1)} h^{(l+1)})</script><p>其中$\sigma(.)$ 为按位计算的logistic sigmoid函数，$a^{(l)}$为偏置参数，$W^{(l+1)}$为权重参数。这样，每一个层都可以看作是一个Sigmoid信念网络。</p>
+<h3 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h3><p>DBN是一个生成模型，可以用来生成符合特定分布的样本。隐变量用来描述在可观测变量之间的高阶相关性。假如训练数据服从分布$p(v)$，通过训练得到一个深度信念网络。</p>
+<p>在生成样本时，首先在最顶两层进行足够多次的吉布斯采样，生成$h^{(L-1)}$，然后依次计算下一层隐变量的分布。因为在给定上一层变量取值时，下一层的变量是条件独立的，因为可以独立采样。这样我们就可以从第$L-1$层开始，自顶向下进行逐层采样，最终得到可观测层的样本。</p>
+<h3 id="参数学习"><a href="#参数学习" class="headerlink" title="参数学习"></a>参数学习</h3><p>DBN最直接的训练方式可以通过最大似然方法使得可观测变量的边际分布$p(v)$在训练集合上的似然达到最大。但在深度信念网络中，隐变量$h$之间的关系十分复杂，由于“贡献度分配问题”，很难直接学习。即使对于简单的单层Sigmoid信念网络</p>
+<script type="math/tex; mode=display">
+p(v=1 | h) = \sigma (b + w^Th)</script><p>在已知可观察变量时，其隐变量的联合后验概率$p(h|v)$不再相互独立，因此很难精确估计所有隐变量的后验概率。早起深度信念网络的后验概率一般通过蒙特卡洛方法或变分方法来近似估计，但是效率比较低，而导致其参数学习比较困难。</p>
+<p>为了有效地训练深度信念网络，我们将每一层的Sigmoid信念网络转换为受限玻尔兹曼机。这样做的好处是隐变量的后验概率是相互独立的，从而可以很容易地进行采样。这样，深度信念网络可以看作是由多个受限玻尔兹曼机从上到下进行堆叠，第$l$层受限玻尔兹曼机的隐层作为第$l+1$层受限玻尔兹曼机可观测层。进一步地，深度信念网络可以采用逐层训练的方式来快速训练，即从最底层开始，每次只训练一层，直到最后一层。</p>
+<p>深度信念网络的训练过程可以分为预训练和精调两个阶段。先通过逐层预训练将模型的参数初始化为较优的值，再通过传统学习方法对参数进行精调。</p>
+<p><strong>逐层预训练</strong><br>在预训练阶段，采用逐层训练的方式，将深度信念网络的训练简化为多个玻尔兹曼机的训练。下图给出了深度信念网络的逐层预训练过程。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191207155415641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="深度信念网络的逐层预训练过程"></p>
+<p>具体的逐层训练过程为自下而上依次训练每一层的受限玻尔兹曼机。假设我们已经训练好了前$l-1$层的受限玻尔兹曼机，那么可以计算隐变量自下而上的条件概率</p>
+<script type="math/tex; mode=display">
+p(h^{(i)} | h^{(i-1)}) = \sigma( b^{(i)} + W^{(i) h^{(i-1)}} ), 1 \leq i \leq (l-1)</script><p>其中$b^{(i)}$为第$i$层受限玻尔兹曼机的偏置，$W^{(i)}$为连接权重。这样，可以按照 $v=h^{(0)} -&gt; h^{(1)} -&gt; … -&gt; h^{(l-1)}$的顺序生成一组$h^{(l-1)}$的样本，记为$\hat{H} ^{(l-1)} = {\hat{h}^{(l,1)}, …, \hat{h}^{(l,M)} }$。然后将$h^{(l-1)}$和$h^{(l)}$组成一个受限玻尔兹曼机，用$\hat{H}^{(l-1)}$作为训练集充分训练第$l$层的受限玻尔兹曼机。</p>
+<p>下图的算法流程给出了一种深度信念网络的逐层预训练方法。大量的实践表明，逐层预训练可以产生非常好的参数初始值，从而极大的降低了模型的学习难度。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191207161617779.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="算法流程"></p>
+<p><strong>精调</strong></p>
+<p>经过预训练之后，再结合具体的任务（监督学习或无监督学习），通过传统的全局学习算法对网络进行精调（fin-tuning），使模型收敛到更好的局部最优点。</p>
+<p>作为生成模型的精调，除了顶层的受限玻尔兹曼机，其他层之间的权重被分成向上的认知权重（recognition weights）$W’$和向下的生成权重（generative weights）$W$。认知权重用来进行后验概率计算，而生成权重用来进行定义模型。认知权重的初始值$W’^{(l)}=W^{(l)T}$。</p>
+<p>深度信念网络一般采用contrastive wake-sleep算法进行精调，其算法过程是：</p>
+<ul>
+<li>Wake阶段：认知过程，通过外界输入（可观测变量）和向上认知权重，计算每一层隐变量的后验概率并采样。然后，修改下行的生成权重使得下一层的变量的后验概率最大。也就是“如果现实跟我想象的不一样，改变我的权重使得我想象的东西就是这样的”</li>
+<li>Sleep阶段：生成过程，通过顶层的采样和向下的生成权重，逐层计算每一层的后验概率并采样。然后，修改向上的认知权重使得上一层变量的后验概率最大。也就是“如果梦中的景象不是我闹中的相应概念，改变我的认知权重使得这种景象在我看来就是这个概念”</li>
+<li>交替进行Wake和Sleep过程，直到收敛</li>
+</ul>
+<p><strong>作为深度神经网络的精调</strong> 深度信念网络的一个应用是作为深度神经网络的预训练部分，提供神经网络的初始权重。</p>
+<p>在深度信念网络的最顶层再增加一层输出层，然后再使用反向传播算法对这些权重进行调优。特别是在训练数据比较少的时候，预训练的作用非常大。因为不恰当的初始化权重会显著影响最终模型的性能，而预训练获得的权重在权重空间中比随机权重更接近最优的权重，避免了反向传播算法因随机初始化权重参数而容易陷入局部最优和训练时间长的缺点。这不仅仅提升了模型的性能，也加快了调优阶段的收敛速度。</p>
+<p>下图给出了深度信念网络作为生成模型和判断模型的精调过程。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191207164923957.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="精调过程"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>玻尔兹曼机能够学习数据的内部表示，并且其参数学习的方式和赫布型学习十分类似。没有任何约束的玻尔兹曼机因为过于复杂，难以应用在实际问题上。通过引入一定的约束（即变为二分图），受限玻尔兹曼机在特征提取、协同过滤、分类等多个任务上取得了广泛的应用。</p>
+<p>和深度信念网络十分类似的一种深度概率模型是深度玻尔兹曼机（deep Boltzmann Machines ，DBM）。深度玻尔兹曼机是由多层的受限玻尔兹曼机堆叠而成，是真正的无向图模型，其联合概率是通过能量函数来定义。和深度信念网络相比，深度玻尔兹曼机的学习和推断要更加困难。</p>
+<p>尽管深度信念网络作为一种深度学习模型已经很少使用，但其在深度学习发展过程中的贡献十分巨大，并且其理论基础为概率图模型，有非常好的解释性，依然是一种值得深入研究的模型。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

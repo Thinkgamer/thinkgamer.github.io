@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】被“玩烂”了的协同过滤加上神经网络怎么搞？ - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础知识"><span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、了解隐式反馈数据"><span class="toc-text">1、了解隐式反馈数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、矩阵分解（MF）"><span class="toc-text">2、矩阵分解（MF）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#神经网络协同过滤"><span class="toc-text">神经网络协同过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、NCF框架"><span class="toc-text">1、NCF框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-框架介绍"><span class="toc-text">a. 框架介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b-参数学习"><span class="toc-text">b. 参数学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、GMF（Generalized-Matrix-Factorization）"><span class="toc-text">2、GMF（Generalized Matrix Factorization）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、MLP（Multi-Layer-Perception）"><span class="toc-text">3、MLP（Multi-Layer Perception）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、NeuMF（Neural-Matrix-Factorization）"><span class="toc-text">4、NeuMF（Neural Matrix Factorization）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-NeuMF介绍"><span class="toc-text">a. NeuMF介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b-预训练"><span class="toc-text">b. 预训练</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实验"><span class="toc-text">实验</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】被“玩烂”了的协同过滤加上神经网络怎么搞？
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-03-23 14:34:58</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>相信熟悉推荐系统的同学对于协同过滤（Collaborative Filtering）已经熟悉的不能再熟悉了，我也相信很多人心里在想“这么简单的协同，都2020年了，谁还用呀”。</p>
+<p>俗话说得好，人不可貌相，海水不可斗量！CF作为最早的推荐算法，基于CF的改进在学术界和工业界应用的十分广泛，就在之前介绍的一篇论文里，介绍了<a href="https://mp.weixin.qq.com/s/EUEqO9JkoerdxVrcXuMDTw" target="_blank" rel="external">腾讯实时ItemCF的实现和应用</a>，所以说可千万别小瞧协同过滤了。</p>
+<p>本篇论文主要介绍新加坡国立大学在17年发表的论文：Neural Collaborative Filtering（神经网络协同过滤），这篇论文主要介绍的点有：</p>
+<ul>
+<li>协同过滤优化技巧中矩阵分解（MF）的限制</li>
+<li>如何基于神经网络优化协同过滤</li>
+</ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在信息爆炸时代，推荐系统扮演着及其重要的角色，而且在很多在线服务上也应用的十分广泛，比如：电商网站、内容网站、社会媒体网站等。个性化推荐系统的关键是如何基于用户过去一段时间对物品的行为信息进行建模，最著名的属协同过滤（Collaborative Filtering，CF），在各式各样的CF技术中，矩阵分解（Matrix factorzation，MF）是应用的最广泛的。MF将用户和物品映射到同一个潜在的空间中，用一个潜在的向量特征来表示一个用户或者物品，然后将用户与物品的向量内积来表示用户对物品的喜好。</p>
+<p>尽管MF对于协同过滤非常有效，但是通过简单的内积计算会影响MF的效果。例如对于显式反馈的评分预测任务，可以通过合并用户和物品的评分偏差来改善MF的内积计算。对于内积计算操作而言，这可能只是一个很小的改动，但它正向的指出了设计一个更好的、专用的交互方式来对用户和物品的行为进行建模。仅仅使用线性相乘的内积计算不足以捕获复杂的用户交互行为。</p>
+<p>尽管现在DNN在推荐中应用的比较广泛，但大多数是用户来进行预测建模，在协同过滤方面，仍基于MF来进行计算。本论文主要是利用神经网络来解决MF在协同过滤中的限制，而且论文基于的是用户的隐式反馈数据，与显式反馈相比，隐式反馈可以更加容易的收集用户数据，但也充满了挑战性，因为无法真实的反馈用户满意程度，而且缺乏一些自然的反馈数据。</p>
+<p>本篇论文主要探索了如何基于对充满噪声的隐式反馈数据进行建模，主要贡献有以下三点：</p>
+<ul>
+<li>提出了一种神经网络架构来对用户和物品的潜在特征进行建模，并为基于神经网络的协同过滤设计了通用的框架NCF</li>
+<li>证明了MF可以被解释为NCF的一个特例，并利用多层感知器增加NCF模型的高度非线性。</li>
+<li>基于两个真实的数据集证实了NCF的有效性</li>
+</ul>
+<h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="1、了解隐式反馈数据"><a href="#1、了解隐式反馈数据" class="headerlink" title="1、了解隐式反馈数据"></a>1、了解隐式反馈数据</h2><p>用$M、N$表示用户和物品的数目，用$Y \in R^{M\ast N}$表示用户对物品的隐式反馈，如果用户$u$对物品$i$有行为，则$y_{ui}=1$，否则为0。$y_{ui}=1$表示用户与物品之间存在交互，但这并不意味着用户$u$喜欢物品$i$，同样$y_{ui}=0$也不能表示用户$u$不喜欢物品$i$，可能是用户$u$并没有注意到物品$i$。</p>
+<p>使用隐式反馈数据的推荐问题被形式化的用来估计用户$u$对物品$i$的得分，继而使用这些得分进行排序。基于模型的方法则认为数据可以通过一个底层模型来描述，通常这个底层模型被抽象的认为是$\hat{y}_{ui} = f(u,i | \Theta )$，$\hat{y}_{ui}$表示预测分，$\Theta$表示模型的参数，$f$则表示将模型参数转换为预测分的一个映射。</p>
+<p>为了计算模型的参数$\Theta$，现有的一些方法遵循机器学习的规则-优化目标函数。在研究中，主要有两种目标函数：PairWise Loss和PointWise Loss。在PointWise 方式中，通常遵循的是回归框架，即最小化$\hat{y}_{u,i}、y_{u,i}$之间的误差。为了处理数据缺失的问题，则将未观察到的条目视为负反馈数据或者将观察到的反馈中负面样例作为负反馈数据。PiarWise 则认为观察到的样例（正样本）应该比未观察到的样例（负样本）得分高。因此代替了pointwise中的最小化方式，pairwise优化的目标是最大化观察到的样例（正样本）和未观察到的样例（负样本）。</p>
+<p>而本文提出的NCF框架则利用神经网络求解参数$\Theta$，继而来估计$\hat{y}_{ui}$，支持pointwise 和 pairwise。</p>
+<blockquote>
+<p>关于 pointwise、pairwise、listwise可以参考之前发的一篇文章：<a href="https://blog.csdn.net/Gamer_gyt/article/details/104955010" target="_blank" rel="external">怎么理解基于机器学习“四大支柱”划分的学习排序方法</a></p>
+</blockquote>
+<h2 id="2、矩阵分解（MF）"><a href="#2、矩阵分解（MF）" class="headerlink" title="2、矩阵分解（MF）"></a>2、矩阵分解（MF）</h2><p>MF将每个用户和物品的联系用潜在的向量特征来表示，用$p_u$和$q_i$分别表示用户和物品的隐含的向量，MF的计算方式是 $p_u、q_i$的内积，如下所示：</p>
+<script type="math/tex; mode=display">
+\hat {y}_{ui} = f(u,i | p_u,q_i) =p_u ^T q_i = \sum_{k=1}^{K} p_{u,k}q_{i,k}</script><p>其中$K$表示隐含向量的长度。</p>
+<p>如公式所示，假设用户和物品的每个维度的隐含特征都是彼此独立的，并以相同的权重进行线性组合，则MF是对用户和物品的隐含向量进行双向建模。从这个维度理解，MF可以看作是隐含向量的线性模型。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321141436617.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="MF"></p>
+<p>上图展示了MF使用内积进行计算的限制，为了说明示例，有两个限制：</p>
+<ul>
+<li>使用内积方式或者余弦相似度进行计算时，用户和物品的隐含向量特征维度必须一致</li>
+<li>使用jaccard相似计算修正计算两个用户的相似度</li>
+</ul>
+<p>从上图（a）可以看出，$s_{23}(0.66) &gt; s_{12}(0.5) &gt; s_{13}(0.4)$，即$u_2、u_3$之间的相似度 &gt;  $u_1、u_2$之间的相似度 &gt; $u_1、u_3$之间的相似度，可以将他们映射到图（b）所示的空间中，当一个新的用户$u_4$加入比较时，可以很容易的比较两两用户之间的相似度，$s_{41}(0.6) &gt; s_{43}(0.4) &gt; s_{41}(0.2)$，但是如果将$u_4$在图（b）中展示时，会发现和$p_4$最接近的顺序为：$p_1, p_2, p_3$，和我们计算的结果并不一致。</p>
+<p>上图说明了，在低维场景下，使用内积方式的限制。一种解决办法是扩大隐含向量的维度，但是会影响模型的泛化能力，而且也会增大计算量。为了解决这个问题，论文中引入了DNN来解决内积方式的局限性。</p>
+<h1 id="神经网络协同过滤"><a href="#神经网络协同过滤" class="headerlink" title="神经网络协同过滤"></a>神经网络协同过滤</h1><h2 id="1、NCF框架"><a href="#1、NCF框架" class="headerlink" title="1、NCF框架"></a>1、NCF框架</h2><h3 id="a-框架介绍"><a href="#a-框架介绍" class="headerlink" title="a. 框架介绍"></a>a. 框架介绍</h3><p><img src="https://img-blog.csdnimg.cn/20200321193531998.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="NCF框架"></p>
+<p>一个通用的NCF框架如上图所示，最下面的input为$v^U_u,v^I_i$表示的是用户和物品的特征向量（这里是进行了ID的onehot编码），同时这里支持进行自定义继而对用户和物品进行建模，比如：上下文、基于内容、最近邻等。这种通用的内容输入，可以轻易的解决新用户的冷启动问题。</p>
+<p>Input Layer输入的是稀疏向量，经过Embedding Layer转转化为稠密向量，之后向量被传入到多层的神经网络，这一整块被称为 Neural CF Layers，最后一层称为 Output Layer，输出层的维度决定了模型的功能，输出的$\hat{y}_{ui}$为预测分值，模型训练的目标是最小化$\hat{y}_{ui}、y_{ui}$之间的误差，基于point wise方式的损失函数进行优化（关于point wise、pair wise、list wise的区别可以参考： <a href="https://thinkgamer.blog.csdn.net/article/details/104955010" target="_blank" rel="external">LTR｜怎么理解基于机器学习“四大支柱”划分的学习排序方法</a>）。</p>
+<p>定义NCF框架预测模型为：</p>
+<script type="math/tex; mode=display">
+\hat{y}_{u,i} = f( P^T v^U_u , Q^Tv^I_i| P,Q,\Theta_f)</script><p>其中：</p>
+<ul>
+<li>$P, Q$表示用户和物品的隐向量</li>
+<li>$\Theta_f$表示函数$f$的参数</li>
+</ul>
+<p>函数 $f$被定义为多层神经网络，其表达式为：</p>
+<script type="math/tex; mode=display">
+f( P^T v^U_u , Q^Tv^I_i) = \phi_{out}( \phi_X ( ... \phi_2(\phi_1(P^T v^U_u , Q^Tv^I_i)) ... )  )</script><p>其中：</p>
+<ul>
+<li>$\phi_{out}$ 表示输出层</li>
+<li>$\phi_x$ 表示第$x$层，总共有$X$层</li>
+</ul>
+<h3 id="b-参数学习"><a href="#b-参数学习" class="headerlink" title="b. 参数学习"></a>b. 参数学习</h3><p>为了计算模型的参数，pointwise中通用的方法是平方损失（Squard loss），对应的表达式如下：</p>
+<script type="math/tex; mode=display">
+L_{sqr} = \sum_{(u,i) \in Y \cup Y^-} w_{u,i} ( y_{ui} - \hat{y}_{ui}) ^2</script><p>其中：</p>
+<ul>
+<li>$Y$ 表示正样本</li>
+<li>$Y^-$ 表示负样本（可以是全部负样本，也可以是抽样后的）</li>
+</ul>
+<p>虽然可以通过假设观测值是从高斯分布中生成的来解释平方损失函数，但对于隐式反馈数据可能无法很好的拟合，因此，论文中提出了一种基于概率的方法来学习 point wise方法的NCF，他能够很好的捕获隐式反馈数据。</p>
+<p>对于输出的$\hat y_{ui}$需要将其限定在[0,1]，可以通过概率函数来实现（比如：Logistic 函数 或者 probit 函数）。</p>
+<p>定义NCF的似然函数为：</p>
+<script type="math/tex; mode=display">
+p(Y, Y^-| P,Q,\Theta_f) = \prod_{ (u,i) \in y} \hat y_{ui} \prod_{(u,i) \in y^-} (1-\hat y_{ui})</script><p>接着取负对数，可以得到最小化NCF的目标函数（参数求解可以通过SGD进行），如下所示：</p>
+<script type="math/tex; mode=display">
+L = - \sum_{(u,i) \in y} log \, \hat y_{ui} - \sum_{(u,i) \in y^-} log \, (1 - \hat y_{ui} )
+\\
+= - \sum_{(u,i) \in y\cup y^-} y_{ui}  \, log \, \hat y_{ui}  +(1 -  y_{ui} ) log \, (1 - \hat y_{ui} )
+\\</script><blockquote>
+<p>上述供水和交叉熵损失函数比较相似，也是log loss中的一种，这里通过对NCF进行概率函数映射，可以将隐式反馈转化为二进制分类解决推荐问题。</p>
+</blockquote>
+<h2 id="2、GMF（Generalized-Matrix-Factorization）"><a href="#2、GMF（Generalized-Matrix-Factorization）" class="headerlink" title="2、GMF（Generalized Matrix Factorization）"></a>2、GMF（Generalized Matrix Factorization）</h2><p><img src="https://img-blog.csdnimg.cn/20200322161140198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="NeuMF"></p>
+<p>GMF对应Figure 3 中的左半部分，用$p_u$表示用户的隐向量，用$q_i$表示物品的隐向量，可以定义GMF的函数为：</p>
+<script type="math/tex; mode=display">
+\phi_1(p_u, q_i) = p_u \odot  q_i</script><p>$\odot$表示内积计算。将结果传到输出层，对应的计算公式为：</p>
+<script type="math/tex; mode=display">
+\hat y_{ui} = a_{out}(h^T(p_u \odot  q_i))</script><p>其中：</p>
+<ul>
+<li>$a_{out}$ 表示激活函数，本论文中用的是$\sigma (x) = 1 \ (1 + e^{-x})$</li>
+<li>$h$ 表示权重向量，使用 上文中的 log loss进行学习</li>
+</ul>
+<h2 id="3、MLP（Multi-Layer-Perception）"><a href="#3、MLP（Multi-Layer-Perception）" class="headerlink" title="3、MLP（Multi-Layer Perception）"></a>3、MLP（Multi-Layer Perception）</h2><p>简单的向量内积并不能捕获到用户和物品之间的交互信息，因此本论文通过使用MLP（Multi-Layer Perception）在连接的向量计算过程中增加隐藏层，以捕获用户和物品之间的交互，如Figure 3中的右半部分。</p>
+<p>通过这种方式，可以赋予模型较大的灵活度和非线性，在NCF框架下MLP被定义为：</p>
+<script type="math/tex; mode=display">
+z_1 = \phi_1 ( p_u, q_i) =\begin{bmatrix}
+p_u\\ 
+q_i
+\end{bmatrix}</script><script type="math/tex; mode=display">
+\phi_2(z_1) = a_2 (W^T_2z_1 + b_2)
+...</script><script type="math/tex; mode=display">
+\phi_L(z_{L-1}) = a_L (W^T_Lz_{L-1} + b_{L-1})</script><script type="math/tex; mode=display">
+\hat y_{ui} = \sigma (h^T \phi _L(z_{L-1}))</script><p>MLP模型的激活函数选用的ReLU（还有sigmoid，tanh可以供选择），原因是：</p>
+<ul>
+<li>sigmoid 函数在横坐标接近正负无穷时，输出值接近 1或0，会导致神经元停止学习</li>
+<li>tanh 函数可以有sigmoid转化得到（$tanh(x/2) = 2\sigma (x) -1$）,会造成同样的问题</li>
+<li>ReLU更符合生物学，且两端不饱和，同时ReLU非常适合稀疏函数，不会导致过拟合。</li>
+</ul>
+<h2 id="4、NeuMF（Neural-Matrix-Factorization）"><a href="#4、NeuMF（Neural-Matrix-Factorization）" class="headerlink" title="4、NeuMF（Neural Matrix Factorization）"></a>4、NeuMF（Neural Matrix Factorization）</h2><h3 id="a-NeuMF介绍"><a href="#a-NeuMF介绍" class="headerlink" title="a. NeuMF介绍"></a>a. NeuMF介绍</h3><p>NeuMF则是GMF和MLP的结合，整体模型的思路如Figure 3所示，整体模型的表达式为：</p>
+<script type="math/tex; mode=display">
+\hat {y}_{ui} = \sigma (h^T a(p_u \odot q_i + W \begin{bmatrix}
+p_u\\ 
+q_i
+\end{bmatrix}+ b))</script><p>从图中可以看出，如果共享GMF和MLP的Embedding会限制模型融合的性能，比如必须保证相同长度的隐向量。</p>
+<p>因此，GMF和MLP模型分开进行训练，在最后一层时进行连接，整体表达式可以表示为：</p>
+<script type="math/tex; mode=display">
+\phi ^{GMF} = p^G_u \odot q^G_i</script><script type="math/tex; mode=display">
+\phi^{MLP} = a_L( W^T_L a_{L-1}(... a_2(W^T_2 
+\begin{bmatrix}
+p^M_u\\ 
+q^M_i
+\end{bmatrix} + b_2)... ))+b_L</script><script type="math/tex; mode=display">
+\hat y_{ui} = \sigma (h^T \begin{bmatrix}
+\phi ^{GMF}\ \ 
+\phi^{MLP}
+\end{bmatrix} )</script><p>MLP层采用的是ReLU激活函数。</p>
+<h3 id="b-预训练"><a href="#b-预训练" class="headerlink" title="b. 预训练"></a>b. 预训练</h3><p>由于NeuMF目标函数是非凸的，所以基于梯度的优化方法只能找到局部最优解，而且初始化对于深度学习模型的收敛和性能有着重要的作用，因此这里采用的方法是先对GMF和MLP分开进行参数初始化，接着对两个模型进行训练，基于训练的结果初始化NeuMF的两部分参数。 </p>
+<script type="math/tex; mode=display">
+h \leftarrow \begin{bmatrix}
+a h^{GMF}\\ 
+(1-a) h^{MLP}
+\end{bmatrix}</script><p>优化方法采用的Adma。通过对频繁更新的参数进行较小的更新，对于不频繁更新的参数进行较大的更新，来调整参数的学习率。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验分为三部分进行，分别说明了以下三个问题：</p>
+<ul>
+<li>基于NCF框架的方法是否优于最新的隐式协同过滤方法？</li>
+<li>论文中提出的优化框架（带有负采样的对数损失）如何应用于推荐任务？</li>
+<li>MLP多层神经网络是否有利于用户和物品之间的行为交互？</li>
+</ul>
+<p>答案肯定都是OK的，否则也不会发表成论文，哈哈 开玩笑！</p>
+<p>实验所采用的数据集有两个：</p>
+<ul>
+<li>MovieLens</li>
+<li>Pinterest</li>
+</ul>
+<p>数据集的描述如下：<br><img src="https://img-blog.csdnimg.cn/20200322231717828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="数据集的描述"></p>
+<p>关于实验的技巧如下：</p>
+<ul>
+<li>训练集和测试集的拆分，按照时间的顺序进行拆分，最接近当前时间的为测试集</li>
+<li>随机选取训练集中用户没有行为的100个物品作为测试集中的物品，因为整体的物品太多，测试过程消耗资源和时间，不利于实验</li>
+<li>每个评估指标取top 10物品进行评测</li>
+<li>实验的指标：Hit Ratio、Nor- malized Discounted Cumulative Gain (NDCG）</li>
+<li>实验采用的对比模型有：ItemPop、ItemKNN、BRP、eALS</li>
+</ul>
+<p>问题一的实验：</p>
+<p>结果如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200322232814430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="实验结果"></p>
+<p>下表则展示了有预训练GMF、MLP和没有预训练的结果对比：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200322233428629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="是否有预训练对比"></p>
+<p>问题二的实验：</p>
+<p>基于NCF框架进行的实验中主要是三种算法的对比：GMF<br>、MLP、NeuMF，在这三种算法中性能对比结果为：NeuMF &gt; MLP &gt; GMF，如Figure 6所示。</p>
+<p>在Figure 7 中展示了不同的负采样率和评估指标之间的关系，每个正样本只有一个负样本不足以实现最佳性能，而对更多的负实例进行采样则是有益的。</p>
+<p><img src="https://img-blog.csdnimg.cn/2020032223412954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="问题2实验"></p>
+<p>问题三的实验：</p>
+<p>具有不同数量隐藏层的MLP对实验结果的影响如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200322234235998.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="HR"><br><img src="https://img-blog.csdnimg.cn/20200322234406387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="NDCG"></p>
+<p>结果表明使用深度模型进行协作推荐的有效性。</p>
+<hr>
+<p>至此，论文的内容已经阅读完成，关于文中算法的代码实现可以参考：<a href="https://blog.csdn.net/qq_40006058/article/details/89074172" target="_blank" rel="external">《Neural Collaborative Filtering》NCF模型的理解以及python代码</a>。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

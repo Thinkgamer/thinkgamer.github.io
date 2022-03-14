@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之5、计算文章相似度 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#计算文章词向量"><span class="toc-text">计算文章词向量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#计算文章相似度"><span class="toc-text">计算文章相似度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apscheduler-定时更新"><span class="toc-text">Apscheduler 定时更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之5、计算文章相似度
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:25</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>在上篇文章中，我们已经完成了离线文章画像的构建，接下来，我们要为相似文章推荐做准备，那就是计算文章之间的相似度。首先，我们要计算出文章的词向量，然后利用文章的词向量来计算文章的相似度。</p>
+<h1 id="计算文章词向量"><a href="#计算文章词向量" class="headerlink" title="计算文章词向量"></a>计算文章词向量</h1><p>我们可以通过大量的历史文章数据，训练文章中每个词的词向量，由于文章数据过多，通常是分频道进行词向量训练，即每个频道训练一个词向量模型，我们包括的频道如下所示<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">channel_info = &#123;</span><br><span class="line">            1: <span class="string">"html"</span>,</span><br><span class="line">            2: <span class="string">"开发者资讯"</span>,</span><br><span class="line">            3: <span class="string">"ios"</span>,</span><br><span class="line">            4: <span class="string">"c++"</span>,</span><br><span class="line">            5: <span class="string">"android"</span>,</span><br><span class="line">            6: <span class="string">"css"</span>,</span><br><span class="line">            7: <span class="string">"数据库"</span>,</span><br><span class="line">            8: <span class="string">"区块链"</span>,</span><br><span class="line">            9: <span class="string">"go"</span>,</span><br><span class="line">            10: <span class="string">"产品"</span>,</span><br><span class="line">            11: <span class="string">"后端"</span>,</span><br><span class="line">            12: <span class="string">"linux"</span>,</span><br><span class="line">            13: <span class="string">"人工智能"</span>,</span><br><span class="line">            14: <span class="string">"php"</span>,</span><br><span class="line">            15: <span class="string">"javascript"</span>,</span><br><span class="line">            16: <span class="string">"架构"</span>,</span><br><span class="line">            17: <span class="string">"前端"</span>,</span><br><span class="line">            18: <span class="string">"python"</span>,</span><br><span class="line">            19: <span class="string">"java"</span>,</span><br><span class="line">            20: <span class="string">"算法"</span>,</span><br><span class="line">            21: <span class="string">"面试"</span>,</span><br><span class="line">            22: <span class="string">"科技动态"</span>,</span><br><span class="line">            23: <span class="string">"js"</span>,</span><br><span class="line">            24: <span class="string">"设计"</span>,</span><br><span class="line">            25: <span class="string">"数码产品"</span>,</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来，分别对各自频道内的文章进行分词处理，这里先选取 18 号频道内的所有文章，进行分词处理<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use article"</span>)</span><br><span class="line">article_data = spark.sql(<span class="string">"select * from article_data where channel_id=18"</span>)</span><br><span class="line">words_df = article_data.rdd.mapPartitions(segmentation).toDF([<span class="string">'article_id'</span>, <span class="string">'channel_id'</span>, <span class="string">'words'</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">segmentation</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> os</span><br><span class="line">    <span class="keyword">import</span> re</span><br><span class="line">    <span class="keyword">import</span> jieba</span><br><span class="line">    <span class="keyword">import</span> jieba.analyse</span><br><span class="line">    <span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line">    <span class="keyword">import</span> codecs</span><br><span class="line"></span><br><span class="line">    abspath = <span class="string">"/root/words"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 结巴加载用户词典</span></span><br><span class="line">    userDict_path = os.path.join(abspath, <span class="string">"ITKeywords.txt"</span>)</span><br><span class="line">    jieba.load_userdict(userDict_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 停用词文本</span></span><br><span class="line">    stopwords_path = os.path.join(abspath, <span class="string">"stopwords.txt"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_stopwords_list</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""返回stopwords列表"""</span></span><br><span class="line">        stopwords_list = [i.strip() <span class="keyword">for</span> i <span class="keyword">in</span> codecs.open(stopwords_path).readlines()]</span><br><span class="line">        <span class="keyword">return</span> stopwords_list</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 所有的停用词列表</span></span><br><span class="line">    stopwords_list = get_stopwords_list()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 分词</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cut_sentence</span><span class="params">(sentence)</span>:</span></span><br><span class="line">        <span class="string">"""对切割之后的词语进行过滤，去除停用词，保留名词，英文和自定义词库中的词，长度大于2的词"""</span></span><br><span class="line">        <span class="comment"># eg:[pair('今天', 't'), pair('有', 'd'), pair('雾', 'n'), pair('霾', 'g')]</span></span><br><span class="line">        seg_list = pseg.lcut(sentence)</span><br><span class="line">        seg_list = [i <span class="keyword">for</span> i <span class="keyword">in</span> seg_list <span class="keyword">if</span> i.flag <span class="keyword">not</span> <span class="keyword">in</span> stopwords_list]</span><br><span class="line">        filtered_words_list = []</span><br><span class="line">        <span class="keyword">for</span> seg <span class="keyword">in</span> seg_list:</span><br><span class="line">            <span class="keyword">if</span> len(seg.word) &lt;= <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">elif</span> seg.flag == <span class="string">"eng"</span>:</span><br><span class="line">                <span class="keyword">if</span> len(seg.word) &lt;= <span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    filtered_words_list.append(seg.word)</span><br><span class="line">            <span class="keyword">elif</span> seg.flag.startswith(<span class="string">"n"</span>):</span><br><span class="line">                filtered_words_list.append(seg.word)</span><br><span class="line">            <span class="keyword">elif</span> seg.flag <span class="keyword">in</span> [<span class="string">"x"</span>, <span class="string">"eng"</span>]:  <span class="comment"># 是自定一个词语或者是英文单词</span></span><br><span class="line">                filtered_words_list.append(seg.word)</span><br><span class="line">        <span class="keyword">return</span> filtered_words_list</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">        sentence = re.sub(<span class="string">"&lt;.*?&gt;"</span>, <span class="string">""</span>, row.sentence)    <span class="comment"># 替换掉标签数据</span></span><br><span class="line">        words = cut_sentence(sentence)</span><br><span class="line">        <span class="keyword">yield</span> row.article_id, row.channel_id, words</span><br></pre></td></tr></table></figure></p>
+<p><code>words_df</code> 结果如下所示，words 为分词后的词语列表</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-4cbedc535c6b965c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接着，使用分词后的所有词语，对 Word2Vec 模型进行训练并将模型保存到 HDFS，其中 vectorSize 为词向量的长度，minCount 为词语的最小出现次数，windowSize 为训练窗口的大小，inputCol 为输入的列名，outputCol 为输出的列名<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature import Word2Vec</span><br><span class="line"></span><br><span class="line">w2v_model = Word2Vec(<span class="attribute">vectorSize</span>=100, <span class="attribute">inputCol</span>=<span class="string">'words'</span>, <span class="attribute">outputCol</span>=<span class="string">'vector'</span>, <span class="attribute">minCount</span>=3)</span><br><span class="line">model = w2v_model.fit(words_df)</span><br><span class="line">model.save(<span class="string">"hdfs://hadoop-master:9000/headlines/models/word2vec_model/channel_18_python.word2vec"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>加载训练好的 Word2Vec 模型<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.ml.feature import Word2VecModel</span><br><span class="line"></span><br><span class="line">w2v_model = Word2VecModel.load(<span class="string">"hdfs://hadoop-master:9000/headlines/models/word2vec_model/channel_18_python.word2vec"</span>)</span><br><span class="line">vectors = w2v_model.getVectors()</span><br></pre></td></tr></table></figure></p>
+<p><code>vectors</code> 结果如下所示，其中 vector 是训练后的每个词的 100 维词向量，是 vector 类型格式的，如 [0.2 -0.05 -0.1 …]</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-ee792e4abfe00e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这里，我们计算出了所有词语的词向量，接下来，还要得到关键词的词向量，因为我们需要通过关键词的词向量来计算文章的词向量。那么，首先通过读取频道内的文章画像来得到关键词（实际场景应该只读取新增文章画像）<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">article_profile</span> = spark.sql(<span class="string">"select * from article_profile where channel_id=18"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>在文章画像表中，关键词和权重是存储在同一列的，我们可以利用 <code>LATERAL VIEW explode()</code> 方法，将 map 类型的 keywords 列中的关键词和权重转换成单独的两列数据<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">article_profile.registerTempTable('profile')</span><br><span class="line">keyword_weight = spark.sql("<span class="keyword">select</span> article_id, channel_id, keyword, weight <span class="keyword">from</span> profile LATERAL <span class="keyword">VIEW</span> explode(keywords) <span class="keyword">AS</span> keyword, weight<span class="string">")</span></span><br></pre></td></tr></table></figure></p>
+<p><code>keyword_weight</code> 结果如下所示，keyword 为关键词，weight 为对应的权重</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-39f3605d616afc31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这时就可以利用关键词 keyword 列，将文章关键词 <code>keyword_weight</code> 与词向量结果 <code>vectors</code> 进行内连接，从而得到每个关键词的词向量<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">keywords_vector</span> = keyword_weight.join(vectors, vectors.word==keyword_weight.keyword, <span class="string">'inner'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>keywords_vector</code> 结果如下所示，vector 即对应关键词的 100 维词向量</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-8cc8e64b8f642fec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，将文章每个关键词的词向量加入权重信息，这里使每个关键词的词向量 = 关键词的权重 x 关键词的词向量，即 weight_vector = weight x vector，注意这里的 <code>vector</code> 为 vector 类型，所以 weight x vector 是权重和向量的每个元素相乘，向量的长度保持不变<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def compute_vector(<span class="built_in">row</span>):</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">row</span>.article_id, <span class="built_in">row</span>.channel_id, <span class="built_in">row</span>.keyword, <span class="built_in">row</span>.weight * <span class="built_in">row</span>.<span class="built_in">vector</span></span><br><span class="line"></span><br><span class="line">article_keyword_vectors = keywords_vector.rdd.<span class="built_in">map</span>(compute_vector).toDF([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"keyword"</span>, <span class="string">"weightingVector"</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>article_keyword_vectors</code> 结果如下所示，weightingVector 即为加入权重信息后的关键词的词向量</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-cb450dceb634a754.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>再将上面的结果按照 article_id 进行分组，利用 <code>collect_set()</code> 方法，将一篇文章内所有关键词的词向量合并为一个列表<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">article_keyword_vectors.registerTempTable('temptable')</span><br><span class="line">article_keyword_vectors = spark.sql("<span class="keyword">select</span> article_id, <span class="built_in">min</span>(channel_id) channel_id, collect_set(weightingVector) vectors <span class="keyword">from</span> temptable <span class="keyword">group</span> <span class="keyword">by</span> article_id<span class="string">")</span></span><br></pre></td></tr></table></figure></p>
+<p><code>article_keyword_vectors</code> 结果如下所示，vectors 即为文章内所有关键词向量的列表，如 [[0.6 0.2 …], [0.1 -0.07 …], …]</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-9e68516da76d0189.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，利用上面得出的二维列表，计算每篇文章内所有关键词的词向量的平均值，作为文章的词向量。注意，这里的 <code>vectors</code> 是包含多个词向量的列表，词向量列表的平均值等于其中每个词向量的对应元素相加再除以词向量的个数<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_avg_vectors</span><span class="params">(row)</span></span><span class="symbol">:</span></span><br><span class="line">    x = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> row.<span class="symbol">vectors:</span></span><br><span class="line">        x += i</span><br><span class="line">    <span class="comment"># 求平均值</span></span><br><span class="line">    <span class="keyword">return</span> row.article_id, row.channel_id, x / len(row.vectors)</span><br><span class="line"></span><br><span class="line">article_vector = article_keyword_vectors.rdd.map(compute_avg_vectors).toDF([<span class="string">'article_id'</span>, <span class="string">'channel_id'</span>, <span class="string">'vector'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>article_vector</code> 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-a86e19255d39bf47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>此时，<code>article_vector</code> 中的 <code>vector</code> 列还是 vector 类型，而 Hive 不支持该数据类型，所以需要将 vector 类型转成 array 类型（list）<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def to_list(<span class="built_in">row</span>):</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">row</span>.article_id, <span class="built_in">row</span>.channel_id, [<span class="built_in">float</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">row</span>.<span class="built_in">vector</span>.toArray()]</span><br><span class="line"></span><br><span class="line">article_vector = article_vector.rdd.<span class="built_in">map</span>(to_list).toDF(['article_id', 'channel_id', '<span class="built_in">vector</span>'])</span><br></pre></td></tr></table></figure></p>
+<p>在 Hive 中创建文章词向量表 article_vector<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> article_vector</span><br><span class="line">(</span><br><span class="line">    article_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    channel_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    articlevector <span class="built_in">ARRAY</span> <span class="keyword">comment</span> <span class="string">"keyword"</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>最后，将 18 号频道内的所有文章的词向量存储到 Hive 的文章词向量表 article_vector 中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">article_vector.write.insertInto(<span class="string">"article_vector"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这样，我们就计算出了 18 号频道下每篇文章的词向量，在实际场景中，我们还要分别计算出其他所有频道下每篇文章的词向量。</p>
+<h1 id="计算文章相似度"><a href="#计算文章相似度" class="headerlink" title="计算文章相似度"></a>计算文章相似度</h1><p>前面我们计算出了文章的词向量，接下来就可以根据文章的词向量来计算文章的相似度了。通常我们会有几百万、几千万甚至上亿规模的文章数据，为了优化计算性能，我们可以只计算每个频道内文章之间的相似度，因为通常只有相同频道的文章关联性较高，而不同频道之间的文章通常关联性较低。在每个频道内，我们还可以用聚类或局部敏感哈希对文章进行分桶，将文章相似度的计算限制在更小的范围，只计算相同分类内或相同桶内的文章相似度。</p>
+<ul>
+<li>聚类（Clustering），对每个频道内的文章进行聚类，可以使用 KMeans 算法，需要提前设定好类别个数 K，聚类算法的时间复杂度并不小，也可以使用一些优化的聚类算法，比如二分聚类、层次聚类等。但通常聚类算法也比较耗时，所以通常被使用更多的是局部敏感哈希。</li>
+</ul>
+<p>Spark 的 BisectingKMeans 模型训练代码示例<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.clustering import BisectingKMeans</span><br><span class="line"></span><br><span class="line">bkmeans = BisectingKMeans(<span class="attribute">k</span>=100, <span class="attribute">minDivisibleClusterSize</span>=50, <span class="attribute">featuresCol</span>=<span class="string">"articlevector"</span>, <span class="attribute">predictionCol</span>=<span class="string">'group'</span>)</span><br><span class="line">bkmeans_model = bkmeans.fit(article_vector)</span><br><span class="line">bkmeans_model.save(<span class="string">"hdfs://hadoop-master:9000/headlines/models/articleBisKmeans/channel_%d_%s.bkmeans"</span> % (channel_id, channel))</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>局部敏感哈希 LSH（Locality Sensitive Hashing），LSH 算法是基于一个假设，如果两个文本在原有的数据空间是相似的，那么经过哈希函数转换以后，它们仍然具有很高的相似度，即越相似的文本在哈希之后，落到相同的桶内的概率就越高。所以，我们只需要将目标文章进行哈希映射并得到其桶号，然后取出该桶内的所有文章，再进行线性匹配即可查找到与目标文章相邻的文章。其实 LSH 并不能保证一定能够查找到与目标文章最相邻的文章，而是在减少需要匹配的文章个数的同时，保证查找到最近邻的文章的概率很大。</li>
+</ul>
+<p>下面我们将使用 LSH 模型来计算文章相似度，首先，读取 18 号频道内所有文章的 ID 和词向量作为训练集<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">article_vector</span> = spark.sql(<span class="string">"select article_id, articlevector from article_vector where channel_id=18"</span>)</span><br><span class="line"><span class="attr">train</span> = articlevector.select([<span class="string">'article_id'</span>, <span class="string">'articlevector'</span>])</span><br></pre></td></tr></table></figure></p>
+<p>文章词向量表中的词向量是被存储为 array 类型的，我们利用 Spark 的 <code>Vectors.dense()</code> 方法，将 array 类型（list）转为 vector 类型<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.linalg <span class="keyword">import</span> Vectors</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">list_to_vector</span><span class="params">(row)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> row.article_id, Vectors.dense(row.articlevector)</span><br><span class="line"></span><br><span class="line">train = train.rdd.map(list_to_vector).toDF([<span class="string">'article_id'</span>, <span class="string">'articlevector'</span>])</span><br></pre></td></tr></table></figure></p>
+<p>使用训练集 <code>train</code> 对 Spark 的 <code>BucketedRandomProjectionLSH</code> 模型进行训练，其中 inputCol 为输入特征列，outputCol 为输出特征列，numHashTables 为哈希表数量，bucketLength 为桶的数量，数量越多，相同数据进入到同一个桶的概率就越高<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature import BucketedRandomProjectionLSH</span><br><span class="line"></span><br><span class="line">brp = BucketedRandomProjectionLSH(<span class="attribute">inputCol</span>=<span class="string">'articlevector'</span>, <span class="attribute">outputCol</span>=<span class="string">'hashes'</span>, <span class="attribute">numHashTables</span>=4.0, <span class="attribute">bucketLength</span>=10.0)</span><br><span class="line">model = brp.fit(train)</span><br></pre></td></tr></table></figure></p>
+<p>训练好模型后，调用 <code>approxSimilarityJoin()</code> 方法即可计算数据之间的相似度，如 <code>model.approxSimilarityJoin(df1, df2, 2.0, distCol=&#39;EuclideanDistance&#39;)</code> 就是利用欧几里得距离作为相似度，计算在 df1 与 df2 每条数据的相似度，这里我们计算训练集中所有文章之间的相似度<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">similar</span> = model.approxSimilarityJoin(train, train, <span class="number">2.0</span>, distCol=<span class="string">'EuclideanDistance'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>similar</code> 结果如下所示，EuclideanDistance 就是两篇文章的欧几里得距离，即相似度</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-8e98744a01f7d121.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在后面的推荐流程中，会经常查询文章相似度，所以出于性能考虑，我们选择将文章相似度结果存储到  Hbase 中。首先创建文章相似度表<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">create</span> <span class="string">'article_similar'</span>, <span class="string">'similar'</span></span><br></pre></td></tr></table></figure></p>
+<p>然后存储文章相似度结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_hbase</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> happybase</span><br><span class="line">    pool = happybase.ConnectionPool(size=<span class="number">3</span>, host=<span class="string">'hadoop-master'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">        <span class="comment"># 建立表连接</span></span><br><span class="line">        table = conn.table(<span class="string">'article_similar'</span>)</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">            <span class="keyword">if</span> row.datasetA.article_id != row.datasetB.article_id:</span><br><span class="line">                table.put(str(row.datasetA.article_id).encode(), &#123;<span class="string">"similar:&#123;&#125;"</span>.format(row.datasetB.article_id).encode(): <span class="string">b'%0.4f'</span> % (row.EuclideanDistance)&#125;)</span><br><span class="line">                </span><br><span class="line">        <span class="comment"># 手动关闭所有的连接</span></span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line">similar.foreachPartition(save_hbase)</span><br></pre></td></tr></table></figure></p>
+<h1 id="Apscheduler-定时更新"><a href="#Apscheduler-定时更新" class="headerlink" title="Apscheduler 定时更新"></a>Apscheduler 定时更新</h1><p>将文章相似度计算加入到文章画像更新方法中，首先合并最近一个小时的文章完整信息，接着计算 TF-IDF 和 TextRank 权重，并根据 TF-IDF 和 TextRank 权重计算得出关键词和主题词，最后计算文章的词向量及文章的相似度<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_article_profile</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    定时更新文章画像及文章相似度</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    ua = UpdateArticle()</span><br><span class="line">    sentence_df = ua.merge_article_data()</span><br><span class="line">    <span class="keyword">if</span> sentence_df.rdd.collect():</span><br><span class="line">        textrank_keywords_df, keywordsIndex = ua.generate_article_label()</span><br><span class="line">        article_profile = ua.get_article_profile(textrank_keywords_df, keywordsIndex)</span><br><span class="line">        ua.compute_article_similar(article_profile)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>原文出自（已授权）：<a href="https://www.jianshu.com/u/ac833cc5146e" target="_blank" rel="external">https://www.jianshu.com/u/ac833cc5146e</a></p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a></li>
+<li><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘，提取码 EakP）</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        NLP实战之基于TFIDF的文本相似度计算 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#TFIDF算法介绍"><span class="toc-text">TFIDF算法介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于TFIDF计算文本相似度"><span class="toc-text">基于TFIDF计算文本相似度</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        NLP实战之基于TFIDF的文本相似度计算
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-11-26 17:03:03</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#NLP" title="NLP">NLP</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <h3 id="TFIDF算法介绍"><a href="#TFIDF算法介绍" class="headerlink" title="TFIDF算法介绍"></a>TFIDF算法介绍</h3><p>TF-IDF（Term Frequency–InverseDocument Frequency）是一种用于资讯检索与文本挖掘的常用加权技术。TF-IDF的主要思想是：如果某个词或短语在一篇文章中出现的频率TF高，并且在其他文章中很少出现，则认为此词或者短语具有很好的类别区分能力，适合用来分类。</p>
+<p>TF-IDF实际是TF*IDF，其中TF（Term Frequency）表示词条$t$在文档$D_i$中的出现的频率，TF的计算公式如下所示：</p>
+<script type="math/tex; mode=display">
+TF_{t,D_i} = \frac{count(t)}{D_i}</script><p>其中IDF（InverseDocument Frequency）表示总文档与包含词条t的文档的比值求对数，IDF的计算公式如下所示： </p>
+<script type="math/tex; mode=display">
+IDF_t = log \frac{N}{ \sum_{i=1}^{N} I(t,D_i) }</script><p>其中$N$为所有的文档总数，$I(t,D_i)$表示文档$D_i$是否包含词条$t$，若包含为1，不包含为0。但此处存在一个问题，即当词条$t$在所有文档中都没有出现的话IDF计算公式的分母为0，此时就需要对IDF做平滑处理，改善后的IDF计算公式如下所示：</p>
+<script type="math/tex; mode=display">
+IDF_t = log \frac{N}{ 1 + \sum_{i=1}^{N} I(t,D_i) }</script><p>那么最终词条$t$在文档$D_i$中的TF-IDF值为：$TF-IDF_{t,D_i} = TF_{t,D_i} * IDF_t$ 。</p>
+<p>从上述的计算词条$t$在文档$D_i$中的TF-IDF值计算可以看出：当一个词条在文档中出现的频率越高，且新鲜度低（即普遍度低），则其对应的TF-IDF值越高。<br>比如现在有一个预料库，包含了100篇（$N$）论文，其中涉及包含推荐系统（$t$）这个词条的有20篇，在第一篇论文（$D1$）中总共有200个技术词汇，其中推荐系统出现了15次，则词条推荐系统的在第一篇论文（$D1$）中的TF-IDF值为：</p>
+<script type="math/tex; mode=display">
+TF-IDF_{推荐系统} = \frac {15} {200} * log \frac{200}{20+1} = 0.051</script><p>更多详细的关于TFIDF的介绍可以参考</p>
+<ul>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/48811033" target="_blank" rel="external">搜索引擎：文本分类——TF/IDF算法</a></li>
+</ul>
+<p>关于TF-IDF的其他实战：</p>
+<ul>
+<li><a href="https://thinkgamer.blog.csdn.net/article/details/85690389" target="_blank" rel="external">基于TF-IDF算法的短标题关键词提取</a></li>
+</ul>
+<h3 id="基于TFIDF计算文本相似度"><a href="#基于TFIDF计算文本相似度" class="headerlink" title="基于TFIDF计算文本相似度"></a>基于TFIDF计算文本相似度</h3><p>这里需要注意的是在spark2.x中默认不支持dataframe的笛卡尔积操作，需要在创建Spark对象时开启。</p>
+<p>创建spark对象，并设置日志等级<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// spark.sql.crossJoin.enabled=true spark <span class="number">2.0</span> x不支持笛卡尔积操作，需要开启支持</span><br><span class="line">val spark = SparkSession</span><br><span class="line"><span class="meta">    .builder</span>()</span><br><span class="line"><span class="meta">    .appName</span>(<span class="string">"docSimCalWithTFIDF"</span>)</span><br><span class="line"><span class="meta">    .config</span>(<span class="string">"spark.sql.crossJoin.enabled"</span>,<span class="string">"true"</span>)</span><br><span class="line"><span class="meta">    .master</span>(<span class="string">"local[10]"</span>)</span><br><span class="line"><span class="meta">    .enableHiveSupport</span>()</span><br><span class="line"><span class="meta">    .getOrCreate</span>()</span><br><span class="line">Logger.getRootLogger.setLevel(Level.WARN)</span><br></pre></td></tr></table></figure></p>
+<p>这里以官方样例代码中的三行英文句子为例，创建数据集，并进行分词（spark中的中文分词包有很多，比如jieba，han，ansj，fudannlp等，这里不展开介绍）<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">val</span> sentenceData = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">    (<span class="number">0</span>, <span class="string">"Hi I heard about Spark"</span>),</span><br><span class="line">    (<span class="number">1</span>, <span class="string">"I wish Java could use case classes"</span>),</span><br><span class="line">    (<span class="number">2</span>, <span class="string">"Logistic regression models are neat"</span>)</span><br><span class="line">)).toDF(<span class="string">"label"</span>, <span class="string">"sentence"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">val</span> tokenizer = <span class="function"><span class="keyword">new</span> <span class="title">Tokenizer</span>()</span></span><br><span class="line"><span class="function">    .<span class="title">setInputCol</span>("sentence")</span></span><br><span class="line"><span class="function">    .<span class="title">setOutputCol</span>("words")</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">val</span> <span class="title">wordsData</span> = <span class="title">tokenizer</span>.<span class="title">transform</span>(sentenceData)</span></span><br><span class="line"><span class="function"><span class="title">wordsData</span>.<span class="title">show</span>(<span class="number">10</span>)</span></span><br></pre></td></tr></table></figure></p>
+<p>展示的结果为：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+-----+--------------------+--------------------+</span><br><span class="line">|<span class="string">label</span>|<span class="string">            sentence</span>|<span class="string">               words</span>|</span><br><span class="line">+-----+--------------------+--------------------+</span><br><span class="line">|<span class="string">    0</span>|<span class="string">Hi I heard about ...</span>|<span class="string">[hi, i, heard, ab...</span>|</span><br><span class="line">|<span class="string">    1</span>|<span class="string">I wish Java could...</span>|<span class="string">[i, wish, java, c...</span>|</span><br><span class="line">|<span class="string">    2</span>|<span class="string">Logistic regressi...</span>|<span class="string">[logistic, regres...</span>|</span><br><span class="line">+-----+--------------------+--------------------+</span><br></pre></td></tr></table></figure></p>
+<p>调用官方的tfidf包计算向量：<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// setNumFeatures(5)表示将Hash分桶的数量设置为5个,可以根据你的词语数量来调整，一般来说，这个值越大不同的词被计算为一个Hash值的概率就越小，数据也更准确，但需要消耗更大的内存</span></span><br><span class="line"></span><br><span class="line"><span class="meta">val</span> hashingTF = <span class="function"><span class="keyword">new</span> <span class="title">HashingTF</span>()</span></span><br><span class="line"><span class="function">    .<span class="title">setInputCol</span>("words")</span></span><br><span class="line"><span class="function">    .<span class="title">setOutputCol</span>("rawFeatures")</span></span><br><span class="line"><span class="function">    .<span class="title">setNumFeatures</span>(<span class="number">5</span>)</span></span><br><span class="line"><span class="function"><span class="title">val</span> <span class="title">featurizedData</span> = <span class="title">hashingTF</span></span></span><br><span class="line"><span class="function">    .<span class="title">transform</span>(wordsData)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">featurizedData</span>.<span class="title">show</span>(<span class="number">10</span>)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">val</span> <span class="title">idf</span> = <span class="title">new</span> <span class="title">IDF</span>()</span></span><br><span class="line"><span class="function">    .<span class="title">setInputCol</span>("rawFeatures")</span></span><br><span class="line"><span class="function">    .<span class="title">setOutputCol</span>("features")</span></span><br><span class="line"><span class="function"><span class="title">val</span> <span class="title">idfModel</span> = <span class="title">idf</span>.<span class="title">fit</span>(featurizedData)</span></span><br><span class="line"><span class="function"><span class="title">val</span> <span class="title">rescaledData</span> = <span class="title">idfModel</span>.<span class="title">transform</span>(featurizedData)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">rescaledData</span>.<span class="title">show</span>(<span class="number">10</span>)</span></span><br><span class="line"><span class="function"><span class="title">rescaledData</span>.<span class="title">select</span>("label", "features").<span class="title">show</span>()</span></span><br></pre></td></tr></table></figure></p>
+<p>展示的结果为：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">+-----+--------------------+--------------------+--------------------+</span><br><span class="line">|label|            sentence|               words|         rawFeatures|</span><br><span class="line">+-----+--------------------+--------------------+--------------------+</span><br><span class="line">|    <span class="number">0</span>|Hi I heard about ...|[hi, i, heard, ab...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>],[<span class="number">2.0</span>,<span class="number">2.</span>..|</span><br><span class="line">|    <span class="number">1</span>|I wish Java could...|[i, wish, java, c...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">1.0</span>...|</span><br><span class="line">|    <span class="number">2</span>|Logistic regressi...|[logistic, regres...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">1.0</span>...|</span><br><span class="line">+-----+--------------------+--------------------+--------------------+</span><br><span class="line"></span><br><span class="line">+-----+--------------------+--------------------+--------------------+--------------------+</span><br><span class="line">|label|            sentence|               words|         rawFeatures|            features|</span><br><span class="line">+-----+--------------------+--------------------+--------------------+--------------------+</span><br><span class="line">|    <span class="number">0</span>|Hi I heard about ...|[hi, i, heard, ab...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>],[<span class="number">2.0</span>,<span class="number">2.</span>..|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>],[<span class="number">0.0</span>,<span class="number">0.</span>..|</span><br><span class="line">|    <span class="number">1</span>|I wish Java could...|[i, wish, java, c...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">1.0</span>...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">0.0</span>...|</span><br><span class="line">|    <span class="number">2</span>|Logistic regressi...|[logistic, regres...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">1.0</span>...|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">0.0</span>...|</span><br><span class="line">+-----+--------------------+--------------------+--------------------+--------------------+</span><br><span class="line"></span><br><span class="line">+-----+--------------------+</span><br><span class="line">|label|            features|</span><br><span class="line">+-----+--------------------+</span><br><span class="line">|    <span class="number">0</span>|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>],[<span class="number">0.0</span>,<span class="number">0.</span>..|</span><br><span class="line">|    <span class="number">1</span>|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">0.0</span>...|</span><br><span class="line">|    <span class="number">2</span>|(<span class="number">5</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">0.0</span>...|</span><br><span class="line">+-----+--------------------+</span><br></pre></td></tr></table></figure></p>
+<p>其中$(5,[0,2,4],[0.0,0…$ 是向量的一种压缩表示格式，例如$(3,[0,1],[0.1,0.2])$表示的是 向量的长度为3，其中第 1位和第2位的值为0.1 和0.3，第3位的值为0。</p>
+<hr>
+<p>这里需要将其转化为向量的形式，方便后续进行计算，可以直接通过dataframe进行转化，也可以先将dataframe转化为rdd，再进行转化。<br>datafram通过自定义UDF进行转化如下：<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import spark.implicits._</span><br><span class="line">// 解析数据 转化为denseVector格式 datafra</span><br><span class="line">val sparseVectorToDenseVector = <span class="keyword">udf</span> &#123; </span><br><span class="line">    features: <span class="attr">SV</span> =&gt; features.toDense </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> <span class="keyword">df</span> = rescaledData</span><br><span class="line">    .select($<span class="string">"label"</span>, sparseVectorToDenseVector($<span class="string">"features"</span>))</span><br><span class="line">    .withColumn(<span class="string">"tag"</span>,lit(1))</span><br><span class="line">df.show(10)</span><br></pre></td></tr></table></figure></p>
+<p>展示结果为：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+--------------------+---+</span><br><span class="line">|<span class="string">label1</span>|<span class="string">           features1</span>|<span class="string">tag</span>|</span><br><span class="line">+------+--------------------+---+</span><br><span class="line">|<span class="string">     0</span>|<span class="string">[0.0,0.0,0.575364...</span>|<span class="string">  1</span>|</span><br><span class="line">|<span class="string">     1</span>|<span class="string">[0.0,0.0,0.575364...</span>|<span class="string">  1</span>|</span><br><span class="line">|<span class="string">     2</span>|<span class="string">[0.0,0.6931471805...</span>|<span class="string">  1</span>|</span><br><span class="line">+------+--------------------+---+</span><br></pre></td></tr></table></figure></p>
+<p>先转化为RDD，再进行转化如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val selectedRDD = rescaledData.select(<span class="string">"label"</span>, <span class="string">"features"</span>).rdd</span><br><span class="line">    .map( l=&gt;( l.get(<span class="number">0</span>)<span class="selector-class">.toString</span>, l<span class="selector-class">.getAs</span>[SV](<span class="number">1</span>).toDense))</span><br><span class="line">selectedRDD.take(<span class="number">10</span>).foreach(println)</span><br></pre></td></tr></table></figure></p>
+<p>展示结果为：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">0</span>,[<span class="number">0.0</span>,<span class="number">0.0</span>,<span class="number">0.5753641449035617</span>,<span class="number">0.0</span>,<span class="number">0.0</span>])</span><br><span class="line">(<span class="number">1</span>,[<span class="number">0.0</span>,<span class="number">0.0</span>,<span class="number">0.5753641449035617</span>,<span class="number">0.28768207245178085</span>,<span class="number">0.0</span>])</span><br><span class="line">(<span class="number">2</span>,[<span class="number">0.0</span>,<span class="number">0.6931471805599453</span>,<span class="number">0.0</span>,<span class="number">0.5753641449035617</span>,<span class="number">0.0</span>])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>当然也可以在进行相似度计算时进行转化，实现代码如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义相似度计算udf</span></span><br><span class="line">import spark.implicits._</span><br><span class="line">val df1 = rescaledData</span><br><span class="line">    .<span class="keyword">select</span>(<span class="string">$"label"</span>.<span class="keyword">alias</span>(<span class="string">"id1"</span>), <span class="string">$"features"</span>.<span class="keyword">alias</span>(<span class="string">"f1"</span>))</span><br><span class="line">    .withColumn(<span class="string">"tag"</span>,lit(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">val df2 = rescaledData</span><br><span class="line">    .<span class="keyword">select</span>(<span class="string">$"label"</span>.<span class="keyword">alias</span>(<span class="string">"id2"</span>), <span class="string">$"features"</span>.<span class="keyword">alias</span>(<span class="string">"f2"</span>))</span><br><span class="line">    .withColumn(<span class="string">"tag"</span>,lit(<span class="number">1</span>))</span><br><span class="line">    </span><br><span class="line">val simTwoDoc = udf&#123; </span><br><span class="line">    (f1: SV, f2: SV) =&gt; calTwoDocSim(f1,f2) </span><br><span class="line">&#125;</span><br><span class="line">val df =  df1.<span class="keyword">join</span>(df2, Seq(<span class="string">"tag"</span>), <span class="string">"inner"</span>)</span><br><span class="line">    .<span class="keyword">where</span>(<span class="string">"id1 != id2"</span>)</span><br><span class="line">    .withColumn(<span class="string">"simscore"</span>,simTwoDoc(col(<span class="string">"f1"</span>), col(<span class="string">"f2"</span>)))</span><br><span class="line">    .<span class="keyword">where</span>(<span class="string">"simscore &gt; 0.0"</span>)</span><br><span class="line">    .<span class="keyword">select</span>(<span class="string">"id1"</span>,<span class="string">"id2"</span>,<span class="string">"simscore"</span>)</span><br><span class="line">df.printSchema()</span><br><span class="line">df.show(<span class="number">20</span>)</span><br></pre></td></tr></table></figure></p>
+<p>其中calTwoDocSim 函数实现如下：<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @Author: GaoYangtuan</span></span><br><span class="line"><span class="comment">  * @Description: 自定义计算两个文本的距离</span></span><br><span class="line"><span class="comment">  * @Thinkgamer: 《推荐系统开发实战》作者，「搜索与推荐Wiki」公号负责人，算法工程师</span></span><br><span class="line"><span class="comment">  * @Param: [f1, f2]</span></span><br><span class="line"><span class="comment">  * @return: double</span></span><br><span class="line"><span class="comment">  **/</span></span><br><span class="line"><span class="symbol">def</span> calTwoDocSim(<span class="built_in">f1</span>: SV, <span class="built_in">f2</span>: SV): Double = &#123;</span><br><span class="line">    val <span class="keyword">breeze1 </span><span class="symbol">=new</span> SparseVector(<span class="built_in">f1</span>.indices,<span class="built_in">f1</span>.values, <span class="built_in">f1</span>.size)</span><br><span class="line">    val <span class="keyword">breeze2 </span><span class="symbol">=new</span> SparseVector(<span class="built_in">f2</span>.indices,<span class="built_in">f2</span>.values, <span class="built_in">f2</span>.size)</span><br><span class="line">    val cosineSim = <span class="keyword">breeze1.dot(breeze2) </span>/ (norm(<span class="keyword">breeze1) </span>* norm(<span class="keyword">breeze2))</span></span><br><span class="line"><span class="keyword"> </span>  cosineSim</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印结果如下：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root</span><br><span class="line"> |<span class="string">-- id1: integer (nullable = false)</span></span><br><span class="line"><span class="string"> </span>|<span class="string">-- id2: integer (nullable = false)</span></span><br><span class="line"><span class="string"> </span>|<span class="string">-- simscore: double (nullable = false)</span></span><br><span class="line"></span><br><span class="line"><span class="string">+---+---+------------------+</span></span><br><span class="line">|<span class="string">id1</span>|<span class="string">id2</span>|<span class="string">          simscore</span>|</span><br><span class="line">+---+---+------------------+</span><br><span class="line">|<span class="string">  0</span>|<span class="string">  1</span>|<span class="string">0.8944271909999159</span>|</span><br><span class="line">|<span class="string">  1</span>|<span class="string">  0</span>|<span class="string">0.8944271909999159</span>|</span><br><span class="line">|<span class="string">  1</span>|<span class="string">  2</span>|<span class="string">0.2856369296406274</span>|</span><br><span class="line">|<span class="string">  2</span>|<span class="string">  1</span>|<span class="string">0.2856369296406274</span>|</span><br><span class="line">+---+---+------------------+</span><br></pre></td></tr></table></figure></p>
+<p>最后进行排序和保存，代码如下：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">val sortAndSlice = udf &#123; simids: Seq[Row] =&gt;</span><br><span class="line">    simids.map&#123;</span><br><span class="line">        case Row(id2: <span class="keyword">Int</span>,  simscore: Double) =&gt; (id2,simscore)</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">    .sortBy</span>(_<span class="meta">._2</span>)</span><br><span class="line"><span class="meta">    .reverse</span></span><br><span class="line"><span class="meta">    .slice</span>(<span class="number">0</span>,<span class="number">100</span>)</span><br><span class="line"><span class="meta">    .map</span>(e =&gt; e<span class="meta">._1</span> + <span class="string">":"</span> + e<span class="meta">._2</span>.formatted(<span class="string">"%.3f"</span>))</span><br><span class="line"><span class="meta">    .mkString</span>(<span class="string">","</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val result = df</span><br><span class="line"><span class="meta">    .groupBy</span>($<span class="string">"id1"</span>)</span><br><span class="line"><span class="meta">    .agg</span>(collect_list(struct($<span class="string">"id2"</span>, $<span class="string">"simscore"</span>)).as(<span class="string">"simids"</span>))</span><br><span class="line"><span class="meta">    .withColumn</span>(<span class="string">"simids"</span>, sortAndSlice(sort_array($<span class="string">"simids"</span>, asc = false)))</span><br><span class="line"></span><br><span class="line">result.show(<span class="number">10</span>)</span><br><span class="line">result.coalesce(<span class="number">1</span>).write.format(<span class="string">"parquet"</span>).mode(<span class="string">"overwrite"</span>).save(<span class="string">"data/tfidf"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>打印结果如下：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">+---+</span>---------------+</span><br><span class="line">|id1|         simids|</span><br><span class="line"><span class="code">+---+</span>---------------+</span><br><span class="line">|  1|0:0.894,2:0.286|</span><br><span class="line">|  2|        1:0.286|</span><br><span class="line">|  0|        1:0.894|</span><br><span class="line"><span class="code">+---+</span>---------------+</span><br></pre></td></tr></table></figure></p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

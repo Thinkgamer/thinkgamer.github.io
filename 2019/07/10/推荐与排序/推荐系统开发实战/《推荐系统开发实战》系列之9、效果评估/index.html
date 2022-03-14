@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之9、效果评估 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用户调研"><span class="toc-text">用户调研</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#在线评估"><span class="toc-text">在线评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ABTest介绍"><span class="toc-text">ABTest介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ABTest注意事项"><span class="toc-text">ABTest注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在线评估指标"><span class="toc-text">在线评估指标</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#离线评估"><span class="toc-text">离线评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据集拆分"><span class="toc-text">数据集拆分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#离线评估指标"><span class="toc-text">离线评估指标</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之9、效果评估
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:09</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>推荐系统的评估方法分为用户调研、在线评估和离线评估。</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/96207006" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/96207006</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<h1 id="用户调研"><a href="#用户调研" class="headerlink" title="用户调研"></a>用户调研</h1><p>推荐系统的离线实验指标和实际商业指标之间存在差异。例如，预测准确率和用户满意度之间就存在很大的差异，高预测准确率不等于高用户满意度。因此，要准确评估一个算法，需要相对真实的环境，最好的方法就是将算法直接上线测试。但如果对算法是否会降低用户满意度不太有把握，那么直接上线往往有较大的风险，所以在上线测试前一般需要做一次用户调研。<br>在进行用户调研的过程中，需要保证测试用户的分布和真实用户分布相同。例如，男女各一半，年龄、活跃度的分布都和真实用户分布尽量相同。此外，用户调查要尽量保证是双盲实验，即不要让实验人员和用户事先知道测试的目标，以免用户的回答和实验人员的测试受主观成分的影响。</p>
+<p>用户调研的优缺点也很明显。</p>
+<ul>
+<li>优点：可以获得很多体现用户主观感受的指标，比在线实验风险低，出现错误后很容易弥补。</li>
+<li>缺点：招募测试用户代价较大；很难组织大规模的测试用户，因此测试结果的统计意义不足。</li>
+</ul>
+<p>此外，在很多时候设计双盲实验非常困难，而且用户在测试环境下的行为和真实环境下的行为可能有所不同，因而，在测试环境下收集到的测试指标可能与真实环境下的不太相同。所以，在实际推荐系统评估过程中，基本不会采用该方式进行评估，相反，会通过线上的一些行为统计得出结果。例如，豆瓣FM频道的点赞和删除，界面如图10-1所示。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190716234700573.png" width="500px"></center>
+
+<h1 id="在线评估"><a href="#在线评估" class="headerlink" title="在线评估"></a>在线评估</h1><p>在线评估：设计一个在线实验，然后根据用户的在线反馈结果来衡量推荐系统的表现。在线评估中，比较重要的两个选择点是——在线实验方式和在线评估指标，10.3和10.4节将分别介绍这两个知识点。</p>
+<h2 id="ABTest介绍"><a href="#ABTest介绍" class="headerlink" title="ABTest介绍"></a>ABTest介绍</h2><p>ABTest就是为了实现同一个目标制定两个方案，让一部分用户使用A方案，另一部分用户使用B方案，记录下两部分用户的反馈情况，然后根据相应的评估指标确认哪种方案更好。</p>
+<p>互联网行业里，在软件快速上线的过程中，ABTest是一个帮助我们快速试错的实验方法。在统计学上，ABTest其实是假设检验的一种形式。它能帮助开发者了解推荐系统的改动是否有效、能够带来多大的KPI提升。</p>
+<p>在推荐系统中，为了对比不同算法、不同数据集对最终结果的影响，通过一定的规则将用户随机分成几组，并对不同组采取不同的召回或推荐算法，最终通过不同组用户的各种评估指标来进行对比分析。</p>
+<p>一个典型得到ABTest架构图如下所示：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190716234907436.png" width="500px"></center>
+
+<p>这里需要注意的是，在对用户进行分桶并召回商品之后，需要重新将用户打散并分桶，这样能确保不同桶之间的用户没有相关性，召回池中的ABTest和排序部分的ABTest没有关联，互不影响。</p>
+<h2 id="ABTest注意事项"><a href="#ABTest注意事项" class="headerlink" title="ABTest注意事项"></a>ABTest注意事项</h2><p>ABTest是一种在线上测试算法好坏的方法，由于其简单、直接、便于实施，被广泛应用在公司中。但在使用过程中仍要注意以下几个问题。<br>（1）证实偏差。<br>证实偏差是指：遇到一个命题时，人们倾向于寻找支持这个命题的证据，而忽略否定这个命题的证据。<br>在ABTest中，算法工程师在调优的过程中，会自然地将测试假设和设计建立在他们自己的态度和观点上，而忽略了一些互相矛盾的信息，不去测试和设计与自己意见不一致的想法。这就会导致：一旦推荐系统出现符合预期的结果，他们会认为此前的想法是对的，也就不再进行实验了。这样就会导致很大的误差，不同的业务场景会受到营销和外界其他活动的影响。因此，在进行ABTest时要注意外界因素对系统的影响，应适当拉长测试周期。<br>（2）幸存偏差。<br>幸存偏差是一种认知偏差，其逻辑谬误为：推荐系统倾向于关注经常来访用户，而忽略他们在访问推荐系统的过程中已经被影响。<br>例如“乔布斯勇于挑战体制取得了成功，所以大家都应该都去尝试挑战体制”，在这句话中没有提到那些挑战体制失败的人，仅以一名成功者为例说明，没有说明失败者的下场。<br>在推荐系统中也一样，不能只关注来访者的行为特征和偏好，更要注意那些没有来访的用户的行为特征和偏好，这样才能保证推荐系统的泛化能力。<br>（3）辛普森悖论。<br>开始进行ABTest后，就不要更改设置、变量或对照的设计，并且不要在实验过程中更改已经分配到变量的流量。<br>在测试期间调整变量的流量分配，可能会影响测试结果。当两组数据合并时，不同数据组中的趋势消失，便会产生“辛普森悖论”现象。<br>（4）均值回归。<br>在进行ABTest几天后，如果发现KPI指标有大幅提升，请不要立即下结论。因为这种早期的显著提升往往会在接下来的几天或几周的测试中逐渐消失，此时看到的不过是均值回归。也就是说，如果某一指标在第一次评估时出现极端结果，在后续的观察中，该指标会逐渐趋向于平均值。小样本尤其容易生产极端结果，因此不要在刚开始生成数据时就将所得到的结果解读成转化率，要适当增加测试时间，至少保证一个时间周期（如一周）。</p>
+<h2 id="在线评估指标"><a href="#在线评估指标" class="headerlink" title="在线评估指标"></a>在线评估指标</h2><p>在线评估指标是指在实际的业务场景中去评估推荐系统好坏的指标。常见的在线评估指标包括点击率、转化率、GMV等。</p>
+<blockquote>
+<p>这里不展开介绍，欢迎阅读《推荐系统开发实战》</p>
+</blockquote>
+<h1 id="离线评估"><a href="#离线评估" class="headerlink" title="离线评估"></a>离线评估</h1><p>离线评估：根据待评估推荐系统在实验数据集上的表现，基于一些离线评估指标来衡量推荐系统的效果。相比于在线评估，离线评估更方便、更经济，一旦数据集选定，只需将待评估的推荐系统在此数据集上运行即可。离线评估最主要的环节有两个：拆分数据集、选择离线评估指标。</p>
+<h2 id="数据集拆分"><a href="#数据集拆分" class="headerlink" title="数据集拆分"></a>数据集拆分</h2><p>在机器学习中，通常将数据集拆分为训练数据集、验证数据集和测试数据集。它们的功能分别如下。</p>
+<ul>
+<li>训练数据集（Train Dataset）：用来构建机器学习模型。</li>
+<li>验证数据集（Validation Dataset）：辅助构建模型，用于在构建过程中评估模型，为模型提供无偏估计，进而调整模型的超参数。</li>
+<li>测试数据集（Test Dataset）：评估训练完成的最终模型的性能。<br>三类数据集在模型训练和评估过程中的使用顺序如图所示。<br><img src="https://img-blog.csdnimg.cn/20190716235204796.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+<p>数据集拆分的方式有：</p>
+<ul>
+<li>留出法</li>
+<li>K-折交叉验证法</li>
+<li>自助法</li>
+</ul>
+<blockquote>
+<p>具体每种方法是什么意思，以及他们的实现，这里不展开介绍，欢迎阅读《推荐系统开发实战》</p>
+</blockquote>
+<h2 id="离线评估指标"><a href="#离线评估指标" class="headerlink" title="离线评估指标"></a>离线评估指标</h2><p>离线评估指标用于预估模型上线前在整个推荐系统中能达到的效果。常见的离线评估指标可以分为两大类：</p>
+<ul>
+<li>准确度指标：评估推荐系统的最基本的指标，衡量的是指标推荐算法在多大程度上能够准确预测用户对推荐商品的偏好程度，可以分为分类准确度指标、预测评分准确度指标、预测评分指标关联。</li>
+<li>非准确度指标：在推荐系统达到一定的准确度之后，衡量推荐系统丰富度和多样性等的指标。</li>
+</ul>
+<p>其中预测分类准确度指标包含：</p>
+<ul>
+<li>AUC</li>
+<li>准确率（Accuracy）</li>
+<li>精确率（Precision）</li>
+<li>召回率（Recall）</li>
+<li>F-measure值。</li>
+</ul>
+<p>预测评分准确度指标包含：</p>
+<ul>
+<li>平均绝对误差（MAE）</li>
+<li>均方误差（MSE）</li>
+<li>均方根误差（RMSE）</li>
+</ul>
+<p>预测评分关联指标包含：</p>
+<ul>
+<li>皮尔逊积距相关系统</li>
+<li>斯皮尔曼等级相关系数</li>
+<li>肯德尔等级相关系数</li>
+</ul>
+<p>预测排序准确度指标包含：</p>
+<ul>
+<li>评价排序分</li>
+</ul>
+<p>非准确度的指标包含：</p>
+<ul>
+<li>多样性</li>
+<li>新颖性</li>
+<li>惊喜度</li>
+<li>覆盖率</li>
+<li>信任度</li>
+<li>实时性</li>
+<li>健壮性</li>
+<li>商业目标</li>
+</ul>
+<blockquote>
+<p>具体指标的含义这里不过多介绍，欢迎阅读《推荐系统开发实战》了解具体含义和实现以及应用场景。</p>
+</blockquote>
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

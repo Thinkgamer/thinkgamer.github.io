@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之11、基于FTRL优化方法的模型在线排序.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#构造训练集"><span class="toc-text">构造训练集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模型训练"><span class="toc-text">模型训练</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模型评估"><span class="toc-text">模型评估</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之11、基于FTRL优化方法的模型在线排序.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:31</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>前面，我们已经完成了召回阶段的全部工作，通过召回，我们可以从数百万甚至上亿的原始物品数据中，筛选出和用户相关的几百、几千个可能感兴趣的物品。接下来，我们将要进入到排序阶段，对召回的几百、几千个物品进行进一步的筛选和排序。</p>
+<p>排序流程包括离线排序和在线排序：</p>
+<ul>
+<li><p>离线排序<br>读取前天（第 T - 2 天）之前的用户行为数据作为训练集，对离线模型进行训练；训练完成后，读取昨天（第 T - 1 天）的用户行为数据作为验证集进行预测，根据预测结果对离线模型进行评估；若评估通过，当天（第 T 天）即可将离线模型更新到定时任务中，定时执行预测任务；明天（第 T + 1 天）就能根据今天的用户行为数据来观察更新后离线模型的预测效果。（注意：数据生产有一天时间差，第 T 天生成第 T - 1 天的数据）</p>
+</li>
+<li><p>在线排序<br>读取前天（第 T - 2 天）之前的用户行为数据作为训练集，对在线模型进行训练；训练完成后，读取昨天（第 T - 1 天）的用户行为数据作为验证集进行预测，根据预测结果对在线模型进行评估；若评估通过，当天（第 T 天）即可将在线模型更新到线上，实时执行排序任务；明天（第 T + 1 天）就能根据今天的用户行为数据来观察更新后在线模型的预测效果。</p>
+</li>
+</ul>
+<p>这里再补充一个数据集划分的小技巧：可以横向划分，随机或按用户或其他样本选择策略；也可以纵向划分，按照时间跨度，比如一周的数据中，周一到周四是训练集，周五周六是测试集，周日是验证集。</p>
+<p>利用排序模型可以进行评分预测和用户行为预测，通常推荐系统利用排序模型进行用户行为预测，比如点击率（CTR）预估，进而根据点击率对物品进行排序，目前工业界常用的点击率预估模型有如下 3 种类型：</p>
+<ul>
+<li>宽模型 + 特征⼯程<br>LR / MLR + 非 ID 类特征（⼈⼯离散 / GBDT / FM），可以使用 Spark 进行训练</li>
+<li>宽模型 + 深模型<br>Wide&amp;Deep，DeepFM，可以使用 TensorFlow 进行训练</li>
+<li>深模型：<br>DNN + 特征 Embedding，可以使用 TensorFlow 进行训练</li>
+</ul>
+<p>这里的宽模型即指线性模型，线性模型的优点包括：</p>
+<ul>
+<li>相对简单，训练和预测的计算复杂度都相对较低</li>
+<li>可以集中精力发掘新的有效特征，且可以并行化工作</li>
+<li>解释性较好，可以根据特征权重做解释</li>
+</ul>
+<p>本文我们将采用逻辑回归作为离线模型，进行点击率预估。逻辑回归（Logistic Regression，LR）是基础的二分类模型，也是监督学习的一种，通过对有标签的训练集数据进行特征学习，进而可以对测试集（新数据）的标签进行预测。我们这里的标签就是指用户是否对文章发生了点击行为。</p>
+<h1 id="构造训练集"><a href="#构造训练集" class="headerlink" title="构造训练集"></a>构造训练集</h1><p>读取用户历史行为数据，将 clicked 作为训练集标签<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use profile"</span>)</span><br><span class="line">user_article_basic = spark.sql(<span class="string">"select * from user_article_basic"</span>).<span class="keyword">select</span>([<span class="symbol">'user_id</span>', <span class="symbol">'article_id</span>', <span class="symbol">'clicked</span>'])</span><br></pre></td></tr></table></figure></p>
+<p><code>user_article_basic</code> 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-3e75d46d736f96ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>之前我们已经计算好了文章特征和用户特征，并存储到了 Hbase 中。这里我们遍历用户历史行为数据，根据其中文章 ID 和用户 ID 分别获取文章特征和用户特征，再将标签转为 int 类型，这样就将一条用户行为数据构造成为了一个样本，再将所有样本加入到训练集中<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">train = []</span><br><span class="line"><span class="keyword">for</span> user_id, article_id, clicked <span class="keyword">in</span> user_article_basic:</span><br><span class="line">    try:</span><br><span class="line">        article_feature = eval(hbu.get_table_row('ctr_feature_article', '&#123;&#125;'.<span class="keyword">format</span>(article_id).<span class="keyword">encode</span>(), 'article:&#123;&#125;'.<span class="keyword">format</span>(article_id).<span class="keyword">encode</span>()))</span><br><span class="line">    except Exception <span class="keyword">as</span> <span class="keyword">e</span>:</span><br><span class="line">        article_feature = []</span><br><span class="line">    try:</span><br><span class="line">        user_feature = eval(hbu.get_table_row('ctr_feature_user', '&#123;&#125;'.<span class="keyword">format</span>(temp.user_id).<span class="keyword">encode</span>(), 'channel:&#123;&#125;'.<span class="keyword">format</span>(temp.channel_id).<span class="keyword">encode</span>()))</span><br><span class="line">    except Exception <span class="keyword">as</span> <span class="keyword">e</span>:</span><br><span class="line">        user_feature = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> not article_feature:</span><br><span class="line">        article_feature = [0.0] * 111</span><br><span class="line">    <span class="keyword">if</span> not user_feature:</span><br><span class="line">        user_feature = [0.0] * 10</span><br><span class="line"></span><br><span class="line">    <span class="keyword">sample</span> = []</span><br><span class="line">    <span class="keyword">sample</span>.<span class="keyword">append</span>(user_feature)</span><br><span class="line">    <span class="keyword">sample</span>.<span class="keyword">append</span>(article_feature)</span><br><span class="line">    <span class="keyword">sample</span>.<span class="keyword">append</span>(int(clicked))</span><br><span class="line"></span><br><span class="line">    train.<span class="keyword">append</span>(<span class="keyword">sample</span>)</span><br></pre></td></tr></table></figure></p>
+<p>接下来，还需要利用 Spark 的 Vectors 将 <code>array&lt;double&gt;</code> 类型的 article_feature 和 user_feature 转为 <code>vector</code> 类型<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">columns = [<span class="string">'article_feature'</span>, <span class="string">'user_feature'</span>, <span class="string">'clicked'</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">list_to_vector</span><span class="params">(row)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> pyspark.ml.linalg <span class="keyword">import</span> Vectors</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Vectors.dense(row[<span class="number">0</span>]), Vectors.dense(row[<span class="number">1</span>]), row[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">train = train.rdd.map(list_to_vector).toDF(columns)</span><br></pre></td></tr></table></figure></p>
+<p>再将 article_feature, user_feature 合并为统一输入到 LR 模型的特征列 features，这样就完成训练集的构建<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">train</span> = VectorAssembler().setInputCols(columns[<span class="number">0</span>:<span class="number">1</span>]).setOutputCol(<span class="string">'features'</span>).transform(train)</span><br></pre></td></tr></table></figure></p>
+<h1 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h1><p>Spark 已经实现好了 LR 模型，通过指定训练集 train 的特征列 features 和标签列 clicked，即可对 LR 模型进行训练，再将训练好的模型保存到 HDFS<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from pyspark<span class="selector-class">.ml</span><span class="selector-class">.feature</span> import VectorAssembler</span><br><span class="line">from pyspark<span class="selector-class">.ml</span><span class="selector-class">.classification</span> import LogisticRegression</span><br><span class="line"></span><br><span class="line">lr = LogisticRegression()</span><br><span class="line">model = lr.setLabelCol(<span class="string">"clicked"</span>).setFeaturesCol(<span class="string">"features"</span>).fit(train)</span><br><span class="line">model.save(<span class="string">"hdfs://hadoop-master:9000/headlines/models/lr.obj"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>加载训练好的 LR 模型，调用 <code>transform()</code> 对训练集做出预测（实际场景应该对验证集和训练集进行预测）<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.ml.classification import LogisticRegressionModel</span><br><span class="line"></span><br><span class="line">online_model = LogisticRegressionModel.load(<span class="string">"hdfs://hadoop-master:9000/headlines/models/lr.obj"</span>)</span><br><span class="line">sort_res = online_model.transform(train)</span><br></pre></td></tr></table></figure></p>
+<p>预测结果 <code>sort_res</code> 中包括 clicked 和 probability 列，其中 clicked 为样本标签的真实值，probability 是包含两个元素的列表，第一个元素是预测的不点击概率，第二个元素则是预测的点击概率，可以提取点击率（CTR）<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def get_ctr(<span class="built_in">row</span>):</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">float</span>(<span class="built_in">row</span>.clicked), <span class="built_in">float</span>(<span class="built_in">row</span>.probability[<span class="number">1</span>]) </span><br><span class="line"></span><br><span class="line">score_label = sort_res.select([<span class="string">"clicked"</span>, <span class="string">"probability"</span>]).rdd.<span class="built_in">map</span>(get_ctr)</span><br></pre></td></tr></table></figure></p>
+<h1 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h1><p>离线模型评估指标包括：</p>
+<ul>
+<li>评分准确度<br>通常是均方根误差（RMSE），用来评估预测评分的效果</li>
+<li>排序能力<br>通常采用 AUC（Area Under the Curve），即 ROC 曲线下方的面积</li>
+<li>分类准确率（Precision）<br>表示在 Top K 推荐列表中，用户真实点击的物品所占的比例</li>
+<li>分类召回率（Recall）<br>表示在用户真实点击的物品中，出现在 Top K 推荐列表中所占的比例</li>
+</ul>
+<p>当模型更新后，还可以根据商业指标进行评估，比例类的包括： 点击率（CTR）、转化率（CVR），绝对类的包括：社交关系数量、用户停留时长、成交总额（GMV）等。</p>
+<p>推荐系统的广度评估指标包括：</p>
+<ul>
+<li>覆盖率<br>表示被有效推荐（推荐列表长度大于 c）的用户占全站用户的比例，公式如下：<script type="math/tex; mode=display">Con_{UV}=\frac{N_{l >c}}{N_{UV}}</script></li>
+<li>失效率<br>表示被无效推荐（推荐列表长度为 0）的用户占全站用户的比例，公式如下：<script type="math/tex; mode=display">Lost_{UV}=\frac{N_{l =0}}{N_{UV}}</script></li>
+<li>新颖性</li>
+<li>更新率<br>表示推荐列表的变化程度，当前周期与上个周期相比，推荐列表中不同物品的比例<script type="math/tex; mode=display">Update=\frac{N_{diff}}{N_{last}}</script></li>
+</ul>
+<p>推荐系统的健康评估指标包括：</p>
+<ul>
+<li>个性化<br>用于衡量推荐的个性化程度，是否大部分用户只消费小部分物品，可以计算所有用户推荐列表的平均相似度</li>
+<li>基尼系数<br>用于衡量推荐系统的马太效应，反向衡量推荐的个性化程度。将物品按照累计推荐次数排序，排序位置为 i，推荐次数占总推荐次数的比例为 $P_i$，推荐次数越不平均，基尼系数越接近 1，公式为：<script type="math/tex; mode=display">Gini=\frac{1}{n}\sum_{i=1}^n P_i(2i-n-i)</script></li>
+<li>多样性<br>通常是在类别维度上衡量推荐结果的多样性，可以衡量各个类别在推荐时的熵<script type="math/tex; mode=display">Div=\frac{\sum_{i=1}^n-P_i\log(P_i)}{n\log(n)}</script>其中，物品共包括 n 个类别，类别 i 被推荐次数占总推荐次数的比例为 $P_i$，分母是各个类别最均匀时对应的熵，分子是实际推荐结果的类别分布熵。这是整体推荐的多样性，还可以计算每次推荐和每个用户推荐的多样性。</li>
+</ul>
+<p>我们这里主要根据 AUC 进行评估，首先利用 <code>model.summary.roc</code> 绘制 ROC 曲线<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import matplotlib<span class="selector-class">.pyplot</span> as plt</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">5</span>,<span class="number">5</span>))</span><br><span class="line">plt.plot([<span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>], <span class="string">'r--'</span>)</span><br><span class="line">plt.plot(model<span class="selector-class">.summary</span><span class="selector-class">.roc</span><span class="selector-class">.select</span>(<span class="string">'FPR'</span>).collect(),</span><br><span class="line">         model<span class="selector-class">.summary</span><span class="selector-class">.roc</span><span class="selector-class">.select</span>(<span class="string">'TPR'</span>).collect())</span><br><span class="line">plt.xlabel(<span class="string">'FPR'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'TPR'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p>ROC 曲线如下所示，曲线下面的面积即为 AUC（Area Under the Curve），AUC 值越大，排序效果越好</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-ebdcbb926acd114a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>利用 Spark 的 <code>BinaryClassificationMetrics()</code> 计算 AUC<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">from</span> pyspark.mllib.evaluation <span class="meta">import</span> <span class="keyword">BinaryClassificationMetrics</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">metrics </span>= <span class="keyword">BinaryClassificationMetrics(score_label)</span></span><br><span class="line"><span class="keyword">metrics.areaUnderROC</span></span><br></pre></td></tr></table></figure></p>
+<p>也可以利用 sklearn 的 <code>roc_auc_score()</code> 计算 AUC，<code>accuracy_score()</code> 计算准确率<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, roc_auc_score,</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">arr = np.<span class="built_in">array</span>(score_label.collect())</span><br><span class="line"><span class="comment"># AUC</span></span><br><span class="line">roc_auc_score(arr[:, <span class="number">0</span>], arr[:, <span class="number">1</span>]) <span class="comment"># 0.719274521004087</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 准确率</span></span><br><span class="line">accuracy_score(arr[:, <span class="number">0</span>], arr[:, <span class="number">1</span>].round()) <span class="comment"># 0.9051438053097345</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://book.douban.com/subject/34872145/" target="_blank" rel="external">https://book.douban.com/subject/34872145/</a><br><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘， 提取码：eakp）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

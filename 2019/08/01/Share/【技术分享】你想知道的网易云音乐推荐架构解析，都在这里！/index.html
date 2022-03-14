@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【技术分享】你想知道的网易云音乐推荐架构解析，都在这里！ - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关于网易云音乐"><span class="toc-text">关于网易云音乐</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AI算法在音乐推荐中的应用"><span class="toc-text">AI算法在音乐推荐中的应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#音乐场景下的AI思考"><span class="toc-text">音乐场景下的AI思考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【技术分享】你想知道的网易云音乐推荐架构解析，都在这里！
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-08-01 01:17:24</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#技术分享" title="技术分享">技术分享</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>本文选自网易云音乐推荐算法负责人-肖强前辈在全球人工智能峰会上的分享，主要介绍了三方面：关于网易云音乐，AI算法在音乐推荐中的应用和AI场景下的音乐思考。这里拿来分享给大家，并加上自己的理解，希望对大家有所帮助。</p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>首先说明我是网易云音乐的深度用户，目前级别LV9，每天都会去听日推。喜欢网易云音乐的原因不仅是友好的用户交互设计，而且还是因为在网易云音乐中能看到一个个陌生的故事。虽不知这些故事是真是假，但总会找到一些共鸣，在这里像是一个心灵的寄托一样。我相信大多数人和我一样，喜欢在敲代码的时候戴上耳机，来一个燥一点的音乐，所有的事情与我无关，我只想专心写代码，哈哈，开篇小小的题外话，下面进入正题。</p>
+</blockquote>
+<p>关于本文的PDF，可关注公号 合作=&gt;私信 获取小编微信，私聊获取！</p>
+<p>本文将从三个方面介绍AI算法在网易云音乐推荐中的应用：</p>
+<ul>
+<li>关于网易云音乐</li>
+<li>AI算法在音乐推荐中的应用</li>
+<li>音乐场景下的AI思考</li>
+</ul>
+<hr>
+<h1 id="关于网易云音乐"><a href="#关于网易云音乐" class="headerlink" title="关于网易云音乐"></a>关于网易云音乐</h1><blockquote>
+<p>关于网易云音乐的介绍就不用多说了，相信大家都知道这个产品。但是这个产品里边也有很多其他的业务，如下这些。当然推荐也会在各个业务线进行应用，最大化的提高用户体验。</p>
+</blockquote>
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbjlOWUpEU3laT0hGUkZERGJ1WGdWajdLdnBtWkNXaGY3S3Rvem5kZlQ1T3ZyT0tQMUdpY0tBalEvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnBqYjhlUFhSakVEekV3SHFSUXBjSnB6NkROVnBFc01ZYzNSYWFHMlhYblNMaWIybDB4TjB3UFEvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbjdYNnlYdlQySjk0OGROcXAzbUZNTHo1S3Bnd0d2ZUhobWsxaWFMZ0pGMWJLb3VQbW5FQkloMncvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<h1 id="AI算法在音乐推荐中的应用"><a href="#AI算法在音乐推荐中的应用" class="headerlink" title="AI算法在音乐推荐中的应用"></a>AI算法在音乐推荐中的应用</h1><center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbjR5ZTFNaWFxckt2d1lBVGp0SUQ2ZlJKREFRQWljeGpFV3h3VHZkSGljUkk1WFFic2xpY3h1Y2xYZ1EvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<blockquote>
+<p>除了上图中介绍的三个场景以外，推荐在云音乐还有其他很多的应用，比如推荐的MV/视频，推荐的电台，推荐的Look直播等。</p>
+</blockquote>
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbjVMemc4MFg5RERWa053RVZpY01lUWNkc3dXRzJFT25QOXl2WXRBZldJbXlJdjNQUW9Rbk1WTVEvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbkt2U1htcGJ3c3JzWlE1SVNpYUZnUWhpY3hGNFg0bjB0amhBaFpMZXlpYm5EbnhpYWo3SGlicHRmcEtnLzY0MD93eF9mbXQ9cG5n"> </center>
+
+<blockquote>
+<p>几乎所有的推荐系统或者业务系统的分析和底层数据支持都离不开用户的行为日志，在对基础的日志进行ETL处理之后，进行数仓的存储，画像模型，特征工程等均基于这个日志来进行构建。</p>
+</blockquote>
+<p><br></p>
+<blockquote>
+<p>在此之上这是推荐系统的召回模块，然后进行粗排，精排和展示。这是所有推荐系统的通用架构，然后各个公司，各个部门会在此基础上进行适合各自业务的开发和精细化应用，以适应具体的需求，继而最大化的发挥推荐系统的价值。</p>
+</blockquote>
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbll5WnBPaWFoU1JqWWhLRHVXdkYzVVNpY0pSbGlieUxIQ1E2TnJtSEdpYWhpYW41YVdvWGlhcWFybWt6US82NDA_d3hfZm10PXBuZw"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjblpFS3IzMUJ3TnVpYzhrd0hOS0FHUzNscnFVaWNhREtLS3ZiQVB4WmxWQld3SEJMWnZ5eWgyek1nLzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnhKaWFXbmw3V3hkWXRHOWt4aWNJMk85RzMyQ0NmVzk1SzQyQXFaOTN4dWt2aWNJMHdaSlJGWXVzQS82NDA_d3hfZm10PXBuZw"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnRSaGY4a2lhcjZqSXVYNmFjTWxCWG5tMUlUMEVFYXhzTlFNRE1WWUgwV2Fub29OOG80NjUyU0EvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbjc1dXNibmJFeUJJdlZZZkdodE41aWFzbnYwN05IVGI1YnRUNjRwWThpY29xRFFiV1NJN3hIbzNRLzY0MD93eF9mbXQ9cG5n"> </center>
+
+<blockquote>
+<p>不同的业务场景下，推荐的侧重点和实现方法是不一样的。音乐推荐，视频推荐，商品推荐，新闻推荐等，这些各自有各自的特点，音乐本身的复杂性，就要要求系统能够更好的理解音乐，网易云音乐则主要从NLP和视频，图像层面去理解音乐。</p>
+</blockquote>
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbkhPZWV6dVRaMmRxb2Uwa0swbTdweGE1VWRqdTE5VkJsUGljaWI3R2ljQ2ljUWdkeFQ0TFB4a21pYlFBLzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbjZ4UFNHY25qemVUdURhSzlyTGlhY2hKc2FicE5mTXRKbTBtRXd2MkFaZHYzTjV6SndKYzU3T3cvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<blockquote>
+<p>传统的CF算法应用的是余弦相似度或者Jaccard距离进行计算，云音乐这里则对其相似度计算方法进行了优化，其计算公式如上图所示，与传统相比，效果提升显著。PS：CF即协同过滤，虽然传统，但是在推荐中扮演的角色至关重要。</p>
+<p>接下来主要介绍下云音乐中的排序模型，其经历了线性模型，树模型，FTRL，深度学习模型，深度时序模型。PS：不过在这里小编要提醒的，做排序模型要一步一个脚印，一步一步来，我们不可能在建设推荐系统之时，直接上深度学习，因为只有经历过每个阶段的排序模型，我们才能更好的去理解业务，去提升业务。</p>
+</blockquote>
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbmZSMjdmYXg0dThRMkFtcjNLTk9OMVc3QWREdHQ5UmhpYlh4QjZFZU1ya1pjemlhSjBoNXNMWEh3LzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbkgwMU9vQmpVWUtwNHl4NkZWd200djBOS1NWN1c2U0FNMWNXdGlhODVBbGMxRFlpYmVTTGlhTU9aQS82NDA_d3hfZm10PXBuZw"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbmZOT1FzTEgxR0poTUE1NWliN2xpYzNKWlZaSjlxV2J6bUtWN3Q2NEk3VFdTbzVEbXJMUFEwZ1l3LzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbk1rVWR5cHRHV201b0x6NjJHckhFbldFY2liM2F2VEVSN1d1SjQzYU12bXdsNXNFdjBUVUdVbHcvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjblpqSXdNeWo0TDRHbVVnZkpDcURrODFLaWJmd2ljVUtyNVFkaWJBVUtqc21nQTlIVGtpYlJONXVQMXcvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnhpY2tDaWF3ODM2c3pLZ3IzVFJrU2VxZFU2VkhYQnk4aG9vZ3M3ZFpZaWF4R0w2eTQ1c25obzZpYUEvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbm11aWNRS3d3ZU96UnV4aWNONGd0OWtudHRUZE5BSmtsbVVtZlJQbE1oMXZxSFI4OTRVaDhyeGJBLzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnpvUE1oamxxcW9XTXpMVmtiTXk1NGljR1VobFQzcWptVHI4cmpjYkk3ZUluaFRxbVpsamtzc3cvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnZBdTh6S1dpYzBiTmZGZWRmeGx3cUNpY0hwSkFQalpnUmpIU2ZsNUpCRmFnTXEwdVdTODVpY3ZmQS82NDA_d3hfZm10PXBuZw"> </center>
+
+<h1 id="音乐场景下的AI思考"><a href="#音乐场景下的AI思考" class="headerlink" title="音乐场景下的AI思考"></a>音乐场景下的AI思考</h1><blockquote>
+<p>当某种算法在推荐中发挥的价值很难再进行提升时，我们需要进行的是业务的深层次的思考和对更加有效或者先进的算法进行探索。</p>
+</blockquote>
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbmlhbE1WdFhZMzgzUkNqUkx0MTZGSGJHOWgzaldtTEtHWXJQY3hQZ1Z4QWw5QzJnMzRtRWhZd1EvNjQwP3d4X2ZtdD1wbmc"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnhJb2pQSmgyWFhKWWh1TVBVemNuRjM3dDlmQnNnWGszaG5VaHlNeGt5UEhSS3c0ZnhDRlhnZy82NDA_d3hfZm10PXBuZw"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjblp4alJLWkN0aGFxc0dKQnEyb1BJSnFTUmNtMzB5RndIMXpvN3FyZWh3czFtWFFEWDNXRkRLQS82NDA_d3hfZm10PXBuZw"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbkdYaWJkQjlUVm9KaWE3OEdoSWxTdGlhSkpxeFBVOXFjcDNscko2VHc5UzNOQ2JpY2liU1pCUkJ1S1d3LzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbklQaWNpYWZLWnVtemVBcVFma0o4dnZwcVpiTzVNOGp1Q2w5YXdlUzJ0UnRyTHNQNzhEbEptaWM1US82NDA_d3hfZm10PXBuZw"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjblRpY2xTZWt0ejNKY29pYUdLWkhPRGliRzFJaWNIbnEyQlBHWDYzSTFSYXZZd2FoaWFaZzJKZHJtSzNBLzY0MD93eF9mbXQ9cG5n"> </center>
+
+<center><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy8wMmtpY0VXc0luaWNqaENmc1J6NEJjdWh5Y3JpYloxRTFjbnZGSlBCUDhSME1SWGhydjUya3FtYUk3NEZLWHRKcUYzZEVKeFFhMm12d0lRUmdmc3BQaGVlUS82NDA_d3hfZm10PXBuZw"> </center>
+
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编的最新出版的技术图书，已经在京东，当当上线，感兴趣的朋友可以进行购买阅读！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

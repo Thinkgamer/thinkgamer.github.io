@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】组推荐系统及其应用研究 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#传统推荐系统"><span class="toc-text">传统推荐系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#群组推荐系统的形式化定义"><span class="toc-text">群组推荐系统的形式化定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#群组推荐与传统推荐的异同"><span class="toc-text">群组推荐与传统推荐的异同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#群组推荐系统研究框架"><span class="toc-text">群组推荐系统研究框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#群组推荐的关键技术"><span class="toc-text">群组推荐的关键技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户偏好获取"><span class="toc-text">用户偏好获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐的群组发现"><span class="toc-text">群组推荐的群组发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐的偏好融合算法"><span class="toc-text">群组推荐的偏好融合算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#偏好融合策略"><span class="toc-text">偏好融合策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#偏好融合方法"><span class="toc-text">偏好融合方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#偏好融合策略比较"><span class="toc-text">偏好融合策略比较</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#群组推荐的评价"><span class="toc-text">群组推荐的评价</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#群组推荐研究的难点和发展方向"><span class="toc-text">群组推荐研究的难点和发展方向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐的偏好融合"><span class="toc-text">群组推荐的偏好融合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于模型的群组推荐方法"><span class="toc-text">基于模型的群组推荐方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐中的不确定性"><span class="toc-text">群组推荐中的不确定性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐的解释和可视化"><span class="toc-text">群组推荐的解释和可视化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐的效用评价"><span class="toc-text">群组推荐的效用评价</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#上下文感知的群组推荐"><span class="toc-text">上下文感知的群组推荐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#移动群组推荐"><span class="toc-text">移动群组推荐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐的用户隐私和安全"><span class="toc-text">群组推荐的用户隐私和安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#群组推荐中存在传统推荐问题"><span class="toc-text">群组推荐中存在传统推荐问题</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】组推荐系统及其应用研究
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-04-13 21:50:16</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>这篇文章主要是普及一下<strong>群组推荐系统</strong>，众所周知，推荐系统已经应用十分广泛，群组推荐的应用不仅老用户上发挥了极大的作用，在新用户的冷启动上也发挥了很大的作用。</p>
+<p>由于后续会有一篇文章介绍结合深度学习的群组推荐，所以这里先借用该篇论文，借花献佛，介绍一下群组推荐系统和其应用。</p>
+<p>本文中所涉及的内容算是比较老了，但在不同公司或者推荐系统的不同阶段仍然有应用，其中群组推荐的思想更是经久不衰，所以本文比较适合以“温习知识”或“了解群组推荐”，至于群组推荐的更加先进和业界比较常用的做法可以持续关注公众号，后续会进行介绍。</p>
+<h2 id="传统推荐系统"><a href="#传统推荐系统" class="headerlink" title="传统推荐系统"></a>传统推荐系统</h2><p>推荐问题通常被形式化描述为一个定义在用户空间和项目空间上的效用函数，推荐系统的目的是把特定的项目推荐给用户，使效用函数最大化。</p>
+<p>目前推荐系统的分类没有统一的标准，从不同的角度可以进行不同的划分。</p>
+<ul>
+<li>从推荐模型的角度：<ul>
+<li>协同过滤推荐</li>
+<li>基于内容的推荐</li>
+<li>基于知识的推荐</li>
+<li>组合推荐</li>
+<li>基于人口统计学的土建</li>
+<li>基于效用的推荐</li>
+<li>基于关联规则的推荐</li>
+<li>基于网络结构的推荐</li>
+</ul>
+</li>
+<li>从推荐系统的数据源和应用环境的角度：<ul>
+<li>上下文感知推荐</li>
+<li>社会化推荐</li>
+<li>移动推荐</li>
+</ul>
+</li>
+<li>从推荐系统技术的角度：<ul>
+<li>基于规则的推荐</li>
+<li>基于机器学习的推荐</li>
+<li>基于深度学习的推荐</li>
+<li>基于强化学习的推荐</li>
+<li>基于知识图谱的推荐</li>
+</ul>
+</li>
+</ul>
+<h2 id="群组推荐系统的形式化定义"><a href="#群组推荐系统的形式化定义" class="headerlink" title="群组推荐系统的形式化定义"></a>群组推荐系统的形式化定义</h2><p>许多日常活动中是由多个用户以群组的形式参与的，因此推荐系统需要考虑群组中每个用户的偏好来进行推荐，这种推荐系统称为群组推荐系统（Group Recommend System），它将推荐对象由单个用户扩展为一个群组，这为推荐系统带来了一些挑战。</p>
+<p>群组成员的兴趣偏好可能很相似，也可能存在较大差异，如何获取群组成员的共同偏好，来缓解群组成员之间的偏好冲突，使推荐的结果尽可能满足所有群组成员的需求，则是群组推荐研究需要解决的关键问题。</p>
+<p>群组推荐目前还没有统一的形式化定义，有文献基于<strong>共识分数</strong>的概念给出形式化定义：</p>
+<p>1、群组预测评分</p>
+<p>群组$G$对项目$i$的预测评分$grouprate(G,i)$由群组中每个用户预测评分$rate(u,i)$融合得到，使用的偏好融合策略不同，群组计算的预测方法也不同，其中最常用的则是均值策略。</p>
+<script type="math/tex; mode=display">
+grouprate(G,i) = \frac{1}{|G|} \sum_{u \in G} rate(u,i)</script><p>2、群组分歧度</p>
+<p>群组对项目度分歧度$dis(G,i)$表示群组$G$中的用户对项目$i$预测评分的差异程度。群组分歧度也有多种计算方法，这里给出一种最常用的方法：<strong>利用分歧方差（disagreeement variabce）</strong> 计算群组分歧度。</p>
+<script type="math/tex; mode=display">
+dis(G,i) = \frac{1}{|G|} \sum_{u \in G} ( rate(u,i) -mean(G,i) )^2</script><p>其中 $mean(G,i)$是群组$G$中的用户对项目$i$预测评分的均值。</p>
+<p>3、共识函数</p>
+<p>共识函数$F(G,i)$利用群组预测评分和组分歧计算得出群组$G$对项目$i$的共识分数。</p>
+<script type="math/tex; mode=display">
+F(G,i) = w_1 * grouprate(G,i) + w_2 * (1- dis(G,i))</script><p>其中:</p>
+<ul>
+<li>$w_1$ 表示群组预测分在共识函数中的权重</li>
+<li>$w_2$ 表示群组分歧度在共识函数中的权重</li>
+</ul>
+<p>组推荐的目标是对于给定的群组$G$和项目集合$I$，找到特定的项目$i$使共识函数最大化。即群组预测评分最高，群组分歧度越低，就越能满足所有群组成员的偏好。</p>
+<p>4、Top-k 组推荐</p>
+<p>群组推荐将前 $k$个共识分数最高的项目推荐给群组，即Top-k推荐，推荐列表中的项目$i$按照共识分数降序排序。</p>
+<p>从上述的形式化定义看出，群组推荐系统首先通过传统的推荐算法为每个用户生成预测评分，然后根据用户预测评分得到群组预测评分。然而<strong>这并不是所有群组推荐系统通用的方法</strong>。此外，<strong>该形式化定义与传统推荐系统的形式化定义并不统一不利于组推荐问题的描述与求解</strong>。因此，群组推荐系统的形式化定义仍是一个开放问题。</p>
+<p>虽然上述的群组推荐的形式化定义不通用，但是在具体的应用场景可以结合自己的<strong>群组预测评分</strong>和<strong>群组分歧度</strong>进行使用。</p>
+<h2 id="群组推荐与传统推荐的异同"><a href="#群组推荐与传统推荐的异同" class="headerlink" title="群组推荐与传统推荐的异同"></a>群组推荐与传统推荐的异同</h2><p>下表展示了群组推荐系统与传统推荐系统的比较</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>传统推荐系统</th>
+<th>群组推荐系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 推荐目标</td>
+<td>单个用户</td>
+<td>群组</td>
+</tr>
+<tr>
+<td>用户偏好获取</td>
+<td>不需要偏好共享</td>
+<td>需要偏好共享</td>
+</tr>
+<tr>
+<td>偏好融合</td>
+<td>不需要</td>
+<td>需要</td>
+</tr>
+<tr>
+<td>推荐结果展示</td>
+<td>独立方式</td>
+<td>共享方式</td>
+</tr>
+<tr>
+<td>支持用户交互</td>
+<td>不需要</td>
+<td>需要</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>当然群组推荐也和传统的推荐系统存在一些相同之处，比如：</p>
+<ul>
+<li>常见的协同、基于内容、组合推荐等也会用在群组推荐中</li>
+<li>群组推荐也可以作为一路召回为单个用户推荐</li>
+<li>群组推荐可以帮助解决“用户冷启动”问题</li>
+</ul>
+<h2 id="群组推荐系统研究框架"><a href="#群组推荐系统研究框架" class="headerlink" title="群组推荐系统研究框架"></a>群组推荐系统研究框架</h2><p>群组推荐的生命周期分为4个阶段：</p>
+<ul>
+<li>收集群组成员数据</li>
+<li>获取群组成员偏好信息</li>
+<li>生成群组推荐</li>
+<li>推荐结果的评价和反馈</li>
+</ul>
+<p>下面展示的是从面向过程角度提出的4层群组推荐系统研究框架：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200409190643819.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="4层群组推荐系统研究框架"></p>
+<p>底层的数据源包括：</p>
+<ul>
+<li>群组成员行为历史</li>
+<li>群组成员浏览记录</li>
+<li>群组用户-项目评分</li>
+<li>群组成员人口统计学特征</li>
+<li>项目特征</li>
+<li>上下文信息</li>
+<li>…</li>
+</ul>
+<p>数据预处理层则是通过分析用户和项目的源数据信息构建用户偏好模型。与传统推荐系统相比，群组推荐系统的用户偏好过程更加关注用户的负向偏好（因为，负向偏好数据更加容易获取，且在构建群组推荐候选池的时候可以过滤掉负向物品）和群组成员偏好的共享。</p>
+<p>推荐生成层则是将群组成员偏好映射到群组偏好，通过一定的融合策略和推荐融合方法生成群组推荐过程。</p>
+<p>群组推荐效果评价层则是采用一些评价方法对群组推荐进行评价，常见的：</p>
+<ul>
+<li>用户满意度</li>
+<li>准确度</li>
+<li>覆盖率</li>
+<li>多样性</li>
+<li>精细度</li>
+<li>…</li>
+</ul>
+<h2 id="群组推荐的关键技术"><a href="#群组推荐的关键技术" class="headerlink" title="群组推荐的关键技术"></a>群组推荐的关键技术</h2><h3 id="用户偏好获取"><a href="#用户偏好获取" class="headerlink" title="用户偏好获取"></a>用户偏好获取</h3><p>用户行为包括：</p>
+<ul>
+<li>显式反馈：能明确表示用户对内容喜好等级的数据，比如评分，打星等</li>
+<li>隐式反馈：用户与物品之间产生的交互行为，没有明确的表示喜好等级</li>
+</ul>
+<h3 id="群组推荐的群组发现"><a href="#群组推荐的群组发现" class="headerlink" title="群组推荐的群组发现"></a>群组推荐的群组发现</h3><p>目前群组发现方法主要是根据用户的偏好和人口统计学信息等特征对用户进行聚类（<strong>当然这已经不是目前的主流方法了，能对用户聚类的方式有很多，比如用户的偏好、人口统计学、使用设备、各种Embedding向量等</strong>）。</p>
+<p>进行聚类的算法主要有：</p>
+<ul>
+<li>层次化聚类</li>
+<li>划分式聚类<ul>
+<li>KMeans聚类</li>
+<li>二分KMeans聚类</li>
+</ul>
+</li>
+<li>基于滑窗的聚类<ul>
+<li>Mean-Shift 聚类</li>
+</ul>
+</li>
+<li>基于密度的聚类<ul>
+<li>DBSCAN</li>
+</ul>
+</li>
+<li>基于网格的聚类</li>
+<li>新发展的一些方法<ul>
+<li>基于约束（eg：EM聚类）</li>
+<li>基于模糊</li>
+<li>基于粒度</li>
+<li>量子聚类</li>
+<li>核聚类</li>
+<li>谱聚类</li>
+</ul>
+</li>
+</ul>
+<h3 id="群组推荐的偏好融合算法"><a href="#群组推荐的偏好融合算法" class="headerlink" title="群组推荐的偏好融合算法"></a>群组推荐的偏好融合算法</h3><h4 id="偏好融合策略"><a href="#偏好融合策略" class="headerlink" title="偏好融合策略"></a>偏好融合策略</h4><p><strong>基本融合策略</strong></p>
+<p>群组推荐中常用的融合策略如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200409231507829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="群组推荐中常用的融合策略"></p>
+<p><strong>加权模型</strong><br>在进行偏好融合时，应当考虑到不同的群组成员对群组偏好的不同影响。加权模型根据群组成员的特征、角色、影响力等因素，为每个群组成员分配不同的权重，这类加权模型可分为：</p>
+<ul>
+<li>静态模型：根据群组成员的年龄、性别等人口统计学信息对用户进行分类 然后对不同类别赋予不同的权重，比如：一个针对00后的社区对青年和老年人分配较小的权重</li>
+<li>交互模型：根据用户与内容之间的交互行为来分配权重。比如：用户的行为越多，说明用户越活跃，则权重越大</li>
+</ul>
+<p>研究表明：交互模型的推荐效果通常比静态模型要好。</p>
+<p>一种常见的交互模型加权方法为：根据用户$u_x$的角色$role(u_x)$和活跃度$act(u_x)$来计算用户在群组$f_a$中所占的权重可以用以下两种方式计算：</p>
+<ul>
+<li><p>The role-based model</p>
+<script type="math/tex; mode=display">
+w(u_x, f_a) = \frac{ \sum_{y \in U} act(u_y)|role(u_y)=role(u_x) }{\sum_{y \in U} act(u_y)}</script><blockquote>
+<p>$role(u_y)=role(u_x)$表示和用户$u_x$角色相同的用户</p>
+</blockquote>
+</li>
+<li><p>The family-log model</p>
+<script type="math/tex; mode=display">
+w(u_x, f_a) = \frac{  act(u_x) }{\sum_{y \in U} act(u_y)}</script></li>
+</ul>
+<p>上述公式来自论文：Group-Based Recipe Recommendations: Analysis of Data<br>Aggregation Strategies（<a href="https://dl.acm.org/doi/10.1145/1864708.1864732）" target="_blank" rel="external">https://dl.acm.org/doi/10.1145/1864708.1864732）</a></p>
+<p><strong>多种策略融合</strong></p>
+<p>在传统的推荐系统中，组合推荐方法通过组合多种推荐算法能够提高推荐效果，同样群组推荐系统也可以通过多种融合策略来应对单一融合策略的不足。同样是上文中提到的一篇论文，介绍的一种组合策略，公式如下：</p>
+<script type="math/tex; mode=display">
+w'(u_x, f_a) = \left\{\begin{matrix}
+1 & ,rat(u_x, item_i) \notin (r_1, r_2) \\ 
+(u_x, f_a) & , other
+\end{matrix}\right.</script><p>其中:</p>
+<ul>
+<li>$r_1$表示最小痛苦策略的最小阈值</li>
+<li>$r_2$表示最开心策略的最大阈值</li>
+<li>$rat(u_x, item_i) \notin (r_1, r_2)$表示 $u_x$对$item_i$的评分不在$(r_1, r_2)$时权重为1，其他为$w(u_x, f_a)$</li>
+</ul>
+<h4 id="偏好融合方法"><a href="#偏好融合方法" class="headerlink" title="偏好融合方法"></a>偏好融合方法</h4><p>偏好融合的方法分为：</p>
+<ul>
+<li>推荐结果融合</li>
+<li>评分融合</li>
+<li>群组偏好建模</li>
+</ul>
+<p>其中推荐结果融合和评分融合都是先为每个群组成员生成推荐结果，再汇聚到群组上，群组偏好建模则是先把群组成员的偏好模型融合生成群组的偏好模型，再根据群组偏好模型生成群组推荐。</p>
+<p>因此根据偏好融合的时机，可以将偏好融合方法分为：</p>
+<ul>
+<li>模型融合</li>
+<li>推荐融合</li>
+</ul>
+<p>其区别如下：<br><img src="https://img-blog.csdnimg.cn/20200410101311578.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==,size_16,color_FFFFFF,t_70" alt="偏好融合方法"></p>
+<p><strong>模型融合</strong></p>
+<p>模型融合的形式化表示如下：</p>
+<script type="math/tex; mode=display">
+rat(g_a, item_i) = \frac{ \sum_{u_x \in g_a} w(u_x, g_a) rat(u_x, item_i) }{ \sum_{u_x \in g_a} w(u_x, g_a) }
+\\
+pred(g_a, item_n) = \frac{ \sum_{g_b \in G} sim(g_a, g_b)rat(g_b, item_n) }{ \sum_{g_b \in G} sim(g_a, g_b) }</script><p>其中 ：</p>
+<ul>
+<li>$rat(g_a, item_i)$表示群组$g_a$对项目$item_i$的评分</li>
+<li>$rat(u_x, item_i)$表示用户$u_x$对项目$item_i$的评分</li>
+<li>$w(u_x, g_a)$表示用户$u_x$在群组$g_a$中的权重</li>
+<li>$pred(g_a, item_n)$ 表示群组$g_a$对未评分项目$item_n$的预测评分</li>
+<li>$sim(g_a, g_b)$表示群组$g_a$和$g_b$的偏好相似度</li>
+</ul>
+<p>当然这里只是举例说明模型融合的策略，也有很多其他方式的形式化表示。</p>
+<p><strong>推荐融合</strong></p>
+<p>推荐融合的形式化表示为：</p>
+<script type="math/tex; mode=display">
+pred(g_a, item_i) = \frac{ \sum_{u_x \in g_a} w(u_x, g_a) pred(u_x, item_i) }{ \sum_{u_x \in g_a} w(u_x, g_a) }</script><blockquote>
+<p>模型融合和推荐融合的形式化表示公式来自论文：Group-Based Recipe Recommendations: Analysis of Data<br>Aggregation Strategies（<a href="https://dl.acm.org/doi/10.1145/1864708.1864732）" target="_blank" rel="external">https://dl.acm.org/doi/10.1145/1864708.1864732）</a></p>
+</blockquote>
+<h4 id="偏好融合策略比较"><a href="#偏好融合策略比较" class="headerlink" title="偏好融合策略比较"></a>偏好融合策略比较</h4><p>下表给出了推荐准确率较高的几种偏好融合策略、偏好融合方法、推荐算法组合</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>偏好融合策略</th>
+<th>偏好融合方法</th>
+<th>推荐算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最开心策略</td>
+<td>模型融合</td>
+<td>基于内容的推荐</td>
+</tr>
+<tr>
+<td>最小痛苦策略</td>
+<td>推荐融合</td>
+<td>基于内容的推荐</td>
+</tr>
+<tr>
+<td>痛苦避免均值策略</td>
+<td>模型融合</td>
+<td>基于用户的协同过滤</td>
+</tr>
+<tr>
+<td>均值策略</td>
+<td>推荐融合</td>
+<td>组合推荐</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="群组推荐的评价"><a href="#群组推荐的评价" class="headerlink" title="群组推荐的评价"></a>群组推荐的评价</h4><ul>
+<li>准确度：RMSE、MAP、F1、E(k)、Recall、Precision、AUC、NDCG</li>
+<li>用户满意度</li>
+<li>多样性</li>
+<li>覆盖率</li>
+<li>惊喜度</li>
+</ul>
+<h2 id="群组推荐研究的难点和发展方向"><a href="#群组推荐研究的难点和发展方向" class="headerlink" title="群组推荐研究的难点和发展方向"></a>群组推荐研究的难点和发展方向</h2><h3 id="群组推荐的偏好融合"><a href="#群组推荐的偏好融合" class="headerlink" title="群组推荐的偏好融合"></a>群组推荐的偏好融合</h3><p>包括偏好融合策略和偏好融合方法。目前的融合策略主要关注的是公平性，但是这些预定义的策略和数据本身无关。</p>
+<h3 id="基于模型的群组推荐方法"><a href="#基于模型的群组推荐方法" class="headerlink" title="基于模型的群组推荐方法"></a>基于模型的群组推荐方法</h3><p>现有的群组推荐方法也可以分为：</p>
+<ul>
+<li>基于内存</li>
+<li>基于模型</li>
+</ul>
+<p>基于偏好融合的群组推荐算法则属于基于内存的方式，主要缺陷是使用启发式的融合策略，忽略了群组成员之间的相互影响。</p>
+<p>基于模型的方法通过构建一个生成模型，对群组选择项目的生成过程进行建模，从而能够通过考虑群组成员之间的交互来进行更精准的推荐。</p>
+<h3 id="群组推荐中的不确定性"><a href="#群组推荐中的不确定性" class="headerlink" title="群组推荐中的不确定性"></a>群组推荐中的不确定性</h3><p>大部分推荐系统假设获取的用户偏好是准确的，但用户偏好本身存在不确定性，特别是通过隐式反馈获取的数据本身就具有很大的不确定性。</p>
+<h3 id="群组推荐的解释和可视化"><a href="#群组推荐的解释和可视化" class="headerlink" title="群组推荐的解释和可视化"></a>群组推荐的解释和可视化</h3><p>对群组推荐的结果进行合理的解释并以合适的方式呈现给群组能够提高透明度，使用户能够更好的理解推荐机制的其他成员的偏好，从而更加容易接受推荐系统。</p>
+<h3 id="群组推荐的效用评价"><a href="#群组推荐的效用评价" class="headerlink" title="群组推荐的效用评价"></a>群组推荐的效用评价</h3><p>由于群组类型、规模以及群组推荐生成方式的多样性使得群组推荐的评价比传统推荐系统的评价更加困难。</p>
+<p>此外，目前推荐系统的评价集中在推荐准确度方面，而对推荐的覆盖率、多样性、惊喜度等方面关注较少。</p>
+<h3 id="上下文感知的群组推荐"><a href="#上下文感知的群组推荐" class="headerlink" title="上下文感知的群组推荐"></a>上下文感知的群组推荐</h3><p>除了用户和内容之间的交互信息，如何将用户的地理位置、时间、环境、情绪等因素应用到群组推荐中也是一大难点。</p>
+<h3 id="移动群组推荐"><a href="#移动群组推荐" class="headerlink" title="移动群组推荐"></a>移动群组推荐</h3><p>移动群组推荐关注的是在移动设备上，用户的需求变得更加不可，如何实时有效的捕获用户的兴趣也是非常值得关注的地方。</p>
+<h3 id="群组推荐的用户隐私和安全"><a href="#群组推荐的用户隐私和安全" class="headerlink" title="群组推荐的用户隐私和安全"></a>群组推荐的用户隐私和安全</h3><p>偏好共享和提供用户交互有利于群组推荐系统性能的提升，但同时也带来了用户隐私问题。</p>
+<p>虽然在传统的推荐系统中，用户隐私和安全也是值得关注的，但是和群组推荐相比，群组推荐则更加复杂。</p>
+<h3 id="群组推荐中存在传统推荐问题"><a href="#群组推荐中存在传统推荐问题" class="headerlink" title="群组推荐中存在传统推荐问题"></a>群组推荐中存在传统推荐问题</h3><p>比如冷启动等。</p>
+<blockquote>
+<p>OK，普及完毕！</p>
+</blockquote>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】基于三部图网络结构的知识推荐算法 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三部图网络结构算法"><span class="toc-text">三部图网络结构算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-项目的评分相似性及改进"><span class="toc-text">1. 项目的评分相似性及改进</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-项目的属性相似性"><span class="toc-text">2.项目的属性相似性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-项目的相似性和评分"><span class="toc-text">3. 项目的相似性和评分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实验结论"><span class="toc-text">实验结论</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】基于三部图网络结构的知识推荐算法
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-08-29 08:19:13</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>该论文是北京一高校学生的论文，其主要是基于用户-物品-标签这样的三部图网络展开描述的。下面主要介绍一些其中提出的可用的点，其余的详细介绍可参考原文章。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>推荐算法是个性化推荐的核心，现有的推荐算法（除了点击率预估之外的）包括：</p>
+<ul>
+<li>基于内容的推荐算法</li>
+<li>基于项目的协同过滤算法</li>
+<li>基于用户的协同过滤算法</li>
+<li>基于模型的协同过滤算法</li>
+<li>基于社会网络分析方法的算法</li>
+<li>基于网络结构的推荐算法</li>
+</ul>
+<p>基于网络结构的推荐算法大部分是基于二部图来对用户进行个性化推荐，这种推荐算法不能有效地解决用户冷启动和冷门物品推荐的问题，本文针对现有算法的不足，提出了一种加权的三部图网络结构的知识推荐算法，在三部图网络模型的基础上设计了新的推荐算法。</p>
+<h3 id="三部图网络结构算法"><a href="#三部图网络结构算法" class="headerlink" title="三部图网络结构算法"></a>三部图网络结构算法</h3><p>项目-用户-标签的三部图可以表示为：{U,I,T}，其中U表示用户集合，I表示物品结合，T表示标签集合。在此三部图结构中，不仅用户与项目以及 用户与标签之间存在联系，项目与项目、用户与用户以及标签 与标签之间也存在联系。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190805185607264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="300px"></center>
+
+<p>如图 1所示，使用三部图对项目—用户—标签的三元组进行相关模型建立，对三部图模型进行用户—项目、用户—标签 和项目—标签的二部图的扩散。最终的推荐算法是建立在用户—项目、用户—标签和项目—标签二部图网络结构的基础上。</p>
+<p>项目的度和权重对推荐算法的影响</p>
+<h4 id="1-项目的评分相似性及改进"><a href="#1-项目的评分相似性及改进" class="headerlink" title="1. 项目的评分相似性及改进"></a>1. 项目的评分相似性及改进</h4><p>基于用户-项目网络结构的推荐系统把用户和项目仅仅看成抽象的节点，所有算法利用的信息都隐藏在用户和项目的关系之中。用户-物品的二部图提出了一种资源分配的算法。假设 j 选择过的所有产品都具有某种向 i推荐其他产品的能力，这个 抽象的能力看做是相关产品上的某种可分的资源，表示产品 j 愿意分配给产品 i的资源配额(产品的相似性)。</p>
+<script type="math/tex; mode=display">
+sim(i,j) = \frac{1}{ k_j } \sum_{l=1}^{m}\frac{ a_{il} b_{jl} }{k_l}</script><p>其中：</p>
+<ul>
+<li>k_j 表示物品j的度（即被多少用户产生过行为）</li>
+<li>k_l 表示用户l的度（即用户u对多少个物品产生过行为）</li>
+<li>a_il 表示用户 l 是否对物品i产生过行为，产生过行为为1，没有产生过行为为0</li>
+</ul>
+<p>传统的二部网络图结构只注意到了用户是否对物品产生过行为，忽略了用户对物品的评分，容易造成信息的损失。本文中保留了用户对物品的评分信息，对用户到物品的边增加一个权重w，w的大小根据用户对物品的评分确定。</p>
+<p>假设用户对物品的评分最多为5分，则w=score/5，所以w的范围是[0,1]，score表示用户对物品的评分。则改进后的物品相似度计算公式为：</p>
+<script type="math/tex; mode=display">
+sim'{(i,j)} = \frac{1}{ d(I_j) } \sum_{a=1}^{m}\frac{ w_{ia} w_{ja} }{d(u_a)}</script><p>其中：</p>
+<script type="math/tex; mode=display">
+d(I_j) = \sum_{k=1}^{l} w_{kj}</script><p>表示项目I_j的所有权重之和，即对物品j有行为的用户到物品j的权重之和。</p>
+<script type="math/tex; mode=display">
+d(u_a) = \sum_{k=1}^{m} w_{ak}</script><p>表示用户u_a的所有权重之和，即用户u对其用行为物品的用户到物品的权重之和。</p>
+<h4 id="2-项目的属性相似性"><a href="#2-项目的属性相似性" class="headerlink" title="2.项目的属性相似性"></a>2.项目的属性相似性</h4><p>在现实的生产系统中，当用户进入一个系统时，可能从未对系统内的任何一个物品产生过行为，也可能只对很少的物品产生了行为。这时候系统无法根据其历史信息获取相关兴趣。</p>
+<p>这个时候可以对物品进行属性描述和标签描述，利用项目的属性相似性和利用标签相似性向用户提供更好的推荐服务。</p>
+<p>假设用户对物品的属性矩阵如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190805223801681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+
+<p>上表中1 表示物品拥有该属性，0表示物品不拥有该属性。假设物品i和j所拥有的属性分别表示为Qi 和 Qj，则项目i和j的属性相似度计算公式如下：</p>
+<script type="math/tex; mode=display">
+sim_{at}(i,j) = \frac{ |Q_i \bigcap Q_j | }{|Q_i \bigcup  Q_j |}</script><p>其中：</p>
+<ul>
+<li>Q_i 交 Q_j 表示物品i和物品j的属性交集</li>
+<li>Q_i 并 Q_j 表示物品i和物品j的属性并集</li>
+</ul>
+<script type="math/tex; mode=display">
+sim_a'(i,j) = \sum_{k=1}^{ m } sim_{ak}(i,j)</script><p>从上式中可以看出，当某一个项目属性相似性与所有项目的属性相似度之和 sim_a′(i，j)非常大时，表明该项目在整个系统中是非常活跃的，易被首先向其他用户和项目推荐。因此该项目可视做在整个推荐系统中的初始推荐资源，由此可解决用户冷启动问题。</p>
+<blockquote>
+<p>关于标签相似性，可以阅读原论文，这里不展开介绍。</p>
+</blockquote>
+<h4 id="3-项目的相似性和评分"><a href="#3-项目的相似性和评分" class="headerlink" title="3. 项目的相似性和评分"></a>3. 项目的相似性和评分</h4><p>从上边的1 和 2中的描述可以看出，项目的相似性衡量可以从两方面入手</p>
+<ul>
+<li>项目 i与 j的评分相似性。评分越相似，说明用户对这两个项目的喜好越相似。而且如果同时对它们评分的用户个 数越多，说明它们的相似性越高。</li>
+<li>项目 i与 j的属性相似性。如果项目 i与 j的属性属于 相同的类别，那么它们的相似性就越高。</li>
+</ul>
+<p>所以本文里采用的是项目的评分相似性和属性相似性组合的方法来计算项目的相似性。项目相似性的计算公式为：</p>
+<script type="math/tex; mode=display">
+\bar S(i,j) = sim'(i,j) + sim_a'(i,j)</script><p>如果两个用户同时对一个热门物品产生了行为，并不能说明这两个用户的兴趣相同；相反如果这两个用户同时选择了一个冷门物品，则这两个用户拥有相似的独特兴趣。算法中应该考虑项目的度（即热门程度），增强小度项目的推荐能力，降低大度项目的推荐能力，提高推荐的多样性。</p>
+<p>引入调节函数f(φ)对物品的相似度进行调节，计算相似度时考虑物品的度和物品的权重之和的比值φ，其中φ的定义为：</p>
+<script type="math/tex; mode=display">
+\varphi =\frac{k(I_j)}{ d(I_j )}</script><p>其中：</p>
+<ul>
+<li>k(I_j) 表示项目I_j的度</li>
+<li>d(I_j) 表示物品I_j的所有权重之和</li>
+</ul>
+<p>当所有用户对I_j没有行为时，φ取得最大值 1/w ，当所有用户都对I_j有行为且认为很重要时，φ取得最小值 1。即φ越小，用户选择该物品的概率越大，φ越大，用户不选择该物品的概率越大，算法中应该降低这种物品的推荐能力。<br>f(φ)的表达式为：</p>
+<script type="math/tex; mode=display">
+f(\varphi) =\varepsilon + \delta ln(\varphi +e)</script><p>经过多次实验总结，当 δ=0.5时，可以减少 f(φ)对项目相似度的影响，效果最佳。则计算项目相似度的最终公式为：</p>
+<script type="math/tex; mode=display">
+\bar S(i,j) = sim'(i,j) + sim_a'(i,j) =  \frac{1}{ d(I_j) } \sum_{a=1}^{m}\frac{ w_{ia} w_{ja} }{d^{f(\varphi )}(u_a)} + \sum_{k=1}^{ m } sim_{ak}(i,j)</script><p>其中：</p>
+<ul>
+<li>φ的取值为（1，1/w）</li>
+<li>ε 为 一 个 可 调 参 数 ，用 于 调 节 标 签度对推荐结果的影响，ε&gt;0表示大度标签的推荐能力被压制， ε&lt;0表示大度标签的推荐能力得到提高</li>
+</ul>
+<p>计算目标用户ui对未评分项目的评分 r_iα的公式为：</p>
+<script type="math/tex; mode=display">
+r_{ia} = \frac{ \sum_{j=1,j \neq i}^{n} \bar S(i,j) * w_{ja} } {\sum_{j=1,j \neq i}^{n}  \bar S(i,j)  }</script><p>标签的度和权值对推荐算法的影响 参考原论文，这里不过多介绍，论文标题为：《基于三部图网络结构的知识推荐算法 》</p>
+<h3 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h3><center><img src="https://img-blog.csdnimg.cn/20190805223958482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="400px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190805223911246.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="400px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190805224043927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="400px"></center>
+
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

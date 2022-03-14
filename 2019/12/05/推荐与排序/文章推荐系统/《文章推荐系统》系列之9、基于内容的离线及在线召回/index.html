@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之9、基于内容的离线及在线召回.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#离线召回"><span class="toc-text">离线召回</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#在线召回"><span class="toc-text">在线召回</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之9、基于内容的离线及在线召回.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:29</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>在上篇文章中，我们实现了基于模型的离线召回，属于基于协同过滤的召回算法。接下来，本文就讲一下另一个经典的召回方式，那就是如何实现基于内容的离线召回。相比于协同过滤来说，基于内容的召回会简单很多，主要思路就是召回用户点击过的文章的相似文章，通常也被叫做 u2i2i。</p>
+<h1 id="离线召回"><a href="#离线召回" class="headerlink" title="离线召回"></a>离线召回</h1><p>首先，读取用户历史行为数据，得到用户历史点击过的文章<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spark.sql('use profile')</span><br><span class="line">user_article_basic = spark.sql(<span class="string">"select * from user_article_basic"</span>)</span><br><span class="line">user_article_basic = user_article_basic.filter('clicked=True')</span><br></pre></td></tr></table></figure></p>
+<p><code>user_article_basic</code> 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-349e372abc54e502.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，遍历用户历史点击过的文章，获取与之相似度最高的 K 篇文章即可。可以根据之前计算好的文章相似度表 article_similar 进行相似文章查询，接着根据历史召回结果进行过滤，防止重复推荐。最后将召回结果按照频道分别存入召回结果表及历史召回结果表<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">user_article_basic.foreachPartition(get_clicked_similar_article)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_clicked_similar_article</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="string">"""召回用户点击文章的相似文章</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">import</span> happybase</span><br><span class="line">    pool = happybase.ConnectionPool(size=<span class="number">10</span>, host=<span class="string">'hadoop-master'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">        similar_table = conn.table(<span class="string">'article_similar'</span>)</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">            <span class="comment"># 读取文章相似度表,根据文章ID获取相似文章</span></span><br><span class="line">            similar_article = similar_table.row(str(row.article_id).encode(),</span><br><span class="line">                                                columns=[<span class="string">b'similar'</span>])</span><br><span class="line">            <span class="comment"># 按照相似度进行排序</span></span><br><span class="line">            similar_article_sorted = sorted(similar_article.items(), key=<span class="keyword">lambda</span> item: item[<span class="number">1</span>], reverse=<span class="keyword">True</span>)</span><br><span class="line">            <span class="keyword">if</span> similar_article_sorted:</span><br><span class="line">                <span class="comment"># 每次行为推荐10篇文章</span></span><br><span class="line">                similar_article_topk = [int(i[<span class="number">0</span>].split(<span class="string">b':'</span>)[<span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> similar_article_sorted][:<span class="number">10</span>]</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 根据历史召回结果进行过滤</span></span><br><span class="line">                history_table = conn.table(<span class="string">'history_recall'</span>)</span><br><span class="line">                history_article_data = history_table.cells(<span class="string">'reco:his:&#123;&#125;'</span>.format(row.user_id).encode(), <span class="string">'channel:&#123;&#125;'</span>.format(row.channel_id).encode())</span><br><span class="line">                <span class="comment"># 将多个版本都加入历史文章ID列表</span></span><br><span class="line">                history_article = []</span><br><span class="line">                <span class="keyword">if</span> len(history_article_data) &gt;= <span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">for</span> article <span class="keyword">in</span> history_article_data[:<span class="number">-1</span>]:</span><br><span class="line">                        history_article.extend(eval(article))</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    history_article = []</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 过滤history_article</span></span><br><span class="line">                recall_article = list(set(similar_article_topk) - set(history_article))</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 存储到召回结果表及历史召回结果表</span></span><br><span class="line">                <span class="keyword">if</span> recall_article:</span><br><span class="line">                    content_table = conn.table(<span class="string">'cb_recall'</span>)</span><br><span class="line">                    content_table.put(<span class="string">"recall:user:&#123;&#125;"</span>.format(row.user_id).encode(), &#123;<span class="string">'content:&#123;&#125;'</span>.format(row.channel_id).encode(): str(recall_article).encode()&#125;)</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 放入历史召回结果表</span></span><br><span class="line">                    history_table.put(<span class="string">"reco:his:&#123;&#125;"</span>.format(row.user_id).encode(), &#123;<span class="string">'channel:&#123;&#125;'</span>.format(row.channel_id).encode(): str(recall_article).encode()&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>可以根据用户 ID 和频道 ID 来查询召回结果<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">hbase</span><span class="params">(main)</span></span>:<span class="number">028</span>:<span class="number">0</span>&gt; get <span class="string">'cb_recall'</span>, <span class="string">'recall:user:2'</span></span><br><span class="line">COLUMN                     CELL                                                                        </span><br><span class="line"><span class="attribute">content</span>:<span class="number">13</span>                    timestamp=<span class="number">1558041569201</span>, value=[<span class="number">141431</span>,<span class="number">14381</span>, <span class="number">17966</span>, <span class="number">17454</span>, <span class="number">14125</span>, <span class="number">16174</span>]</span><br></pre></td></tr></table></figure></p>
+<p>最后，使用 Apscheduler 定时更新。在用户召回方法 <code>update_user_recall()</code> 中，增加基于内容的离线召回方法 <code>update_content_recall()</code>，首先读取用户行为日志，并筛选用户点击的文章，接着读取文章相似表，获取相似度最高的 K 篇文章，然后根据历史召回结果进行过滤，防止重复推荐，最后，按频道分别存入召回结果表及历史召回结果表<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user_recall</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    用户的频道推荐召回结果更新逻辑</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    ur = UpdateRecall(<span class="number">500</span>)</span><br><span class="line">    ur.update_als_recall()</span><br><span class="line">    ur.update_content_recall()</span><br></pre></td></tr></table></figure></p>
+<p>之前已经添加好了定时更新用户召回结果的任务，每隔 3 小时运行一次，这样就完成了基于内容的离线召回。<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from apscheduler.schedulers.blocking <span class="built_in">import</span> BlockingScheduler</span><br><span class="line">from apscheduler.executors.pool <span class="built_in">import</span> ProcessPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建scheduler，多进程执行</span></span><br><span class="line"><span class="attr">executors</span> = &#123;</span><br><span class="line">    'default': ProcessPoolExecutor(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">scheduler</span> = BlockingScheduler(<span class="attr">executors=executors)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加一个定时运行文章画像更新的任务， 每隔1个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_article_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=1)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行用户画像更新的任务， 每隔2个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_user_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=2)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行用户召回更新的任务，每隔3小时运行一次</span></span><br><span class="line">scheduler.add_job(update_user_recall, <span class="attr">trigger='interval',</span> <span class="attr">hours=3)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行特征中心平台的任务，每隔4小时更新一次</span></span><br><span class="line">scheduler.add_job(update_ctr_feature, <span class="attr">trigger='interval',</span> <span class="attr">hours=4)</span></span><br><span class="line"></span><br><span class="line">scheduler.start()</span><br></pre></td></tr></table></figure></p>
+<h1 id="在线召回"><a href="#在线召回" class="headerlink" title="在线召回"></a>在线召回</h1><p>前面我们实现了基于内容的离线召回，接下来我们将实现基于内容的在线召回。在线召回的实时性更好，能够根据用户的线上行为实时反馈，快速跟踪用户的偏好，也能够解决用户冷启动问题。离线召回和在线召回唯一的不同就是，离线召回读取的是用户历史行为数据，而在线召回读取的是用户实时的行为数据，从而召回用户当前正在阅读的文章的相似文章。</p>
+<p>首先，我们通过 Spark Streaming 读取 Kafka 中的用户实时行为数据，Spark Streaming 配置如下<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">from pyspark <span class="built_in">import</span> SparkConf</span><br><span class="line">from pyspark.sql <span class="built_in">import</span> SparkSession</span><br><span class="line">from pyspark <span class="built_in">import</span> SparkContext</span><br><span class="line">from pyspark.streaming <span class="built_in">import</span> StreamingContext</span><br><span class="line">from pyspark.streaming.kafka <span class="built_in">import</span> KafkaUtils</span><br><span class="line">from setting.default <span class="built_in">import</span> DefaultConfig</span><br><span class="line"><span class="built_in">import</span> happybase</span><br><span class="line"></span><br><span class="line"><span class="attr">SPARK_ONLINE_CONFIG</span> = (</span><br><span class="line">        (<span class="string">"spark.app.name"</span>, <span class="string">"onlineUpdate"</span>), </span><br><span class="line">        (<span class="string">"spark.master"</span>, <span class="string">"yarn"</span>),</span><br><span class="line">        (<span class="string">"spark.executor.instances"</span>, <span class="number">4</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="attr">KAFKA_SERVER</span> = <span class="string">"192.168.19.137:9092"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于读取hbase缓存结果配置</span></span><br><span class="line"><span class="attr">pool</span> = happybase.ConnectionPool(<span class="attr">size=10,</span> <span class="attr">host='hadoop-master',</span> <span class="attr">port=9090)</span></span><br><span class="line"><span class="attr">conf</span> = SparkConf()</span><br><span class="line">conf.setAll(SPARK_ONLINE_CONFIG)</span><br><span class="line"><span class="attr">sc</span> = SparkContext(<span class="attr">conf=conf)</span></span><br><span class="line"><span class="attr">stream_c</span> = StreamingContext(sc, <span class="number">60</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于内容召回配置,用于收集用户行为</span></span><br><span class="line"><span class="attr">similar_kafkaParams</span> = &#123;<span class="string">"metadata.broker.list"</span>: DefaultConfig.KAFKA_SERVER, <span class="string">"group.id"</span>: 'similar'&#125;</span><br><span class="line"><span class="attr">SIMILAR_DS</span> = KafkaUtils.createDirectStream(stream_c, ['click-trace'], similar_kafkaParams)</span><br></pre></td></tr></table></figure></p>
+<p>Kafka 中的用户行为数据，如下所示<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"actionTime"</span>:<span class="string">"2019-12-10 21:04:39"</span>,<span class="attr">"readTime"</span>:<span class="string">""</span>,<span class="attr">"channelId"</span>:<span class="number">18</span>,<span class="attr">"param"</span>:&#123;<span class="attr">"action"</span>: <span class="string">"click"</span>, <span class="attr">"userId"</span>: <span class="string">"2"</span>, <span class="attr">"articleId"</span>: <span class="string">"116644"</span>, <span class="attr">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来，利用 Spark Streaming 将用户行为数据传入到 <code>get_similar_online_recall()</code> 方法中，这里利用 <code>json.loads()</code> 方法先将其转换为了 json 格式，注意用户行为数据在每条 Kafka 消息的第二个位置<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SIMILAR_DS.map(<span class="keyword">lambda</span> x: json.loads(x[<span class="number">1</span>])).foreachRDD(get_similar_online_recall)</span><br></pre></td></tr></table></figure></p>
+<p>接着，遍历用户行为数据，这里可能每次读取到多条用户行为数据。筛选出被点击、收藏或分享过的文章，并获取与其相似度最高的 K 篇文章，再根据历史召回结果表进行过滤，防止重复推荐，最后，按频道分别存入召回结果表及历史召回结果表<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_online_similar_recall</span><span class="params">(rdd)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    获取在线相似文章</span></span><br><span class="line"><span class="string">    :param rdd:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">import</span> happybase</span><br><span class="line"></span><br><span class="line">    topk = <span class="number">10</span></span><br><span class="line">    <span class="comment"># 初始化happybase连接</span></span><br><span class="line">    pool = happybase.ConnectionPool(size=<span class="number">10</span>, host=<span class="string">'hadoop-master'</span>, port=<span class="number">9090</span>)</span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> rdd.collect():</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 根据用户行为筛选文章</span></span><br><span class="line">        <span class="keyword">if</span> data[<span class="string">'param'</span>][<span class="string">'action'</span>] <span class="keyword">in</span> [<span class="string">"click"</span>, <span class="string">"collect"</span>, <span class="string">"share"</span>]:</span><br><span class="line">            <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">                similar_table = conn.table(<span class="string">"article_similar"</span>)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 根据用户行为数据涉及文章找出与之最相似文章(基于内容的相似)</span></span><br><span class="line">                similar_article = similar_table.row(str(data[<span class="string">"param"</span>][<span class="string">"articleId"</span>]).encode(), columns=[<span class="string">b"similar"</span>])</span><br><span class="line">                similar_article = sorted(similar_article.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="keyword">True</span>)  <span class="comment"># 按相似度排序</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> similar_article:</span><br><span class="line">                    similar_article_topk = [int(i[<span class="number">0</span>].split(<span class="string">b":"</span>)[<span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> similar_article[:topk]] <span class="comment"># 选取K篇作为召回推荐结果</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 根据历史召回结果进行过滤</span></span><br><span class="line">                    history_table = conn.table(<span class="string">'history_recall'</span>)</span><br><span class="line">                    history_article_data = history_table.cells(<span class="string">b"reco:his:%s"</span> % data[<span class="string">"param"</span>][<span class="string">"userId"</span>].encode(), <span class="string">b"channel:%d"</span> % data[<span class="string">"channelId"</span>])</span><br><span class="line">                    <span class="comment"># 将多个版本都加入历史文章ID列表</span></span><br><span class="line">                    history_article = []</span><br><span class="line">                    <span class="keyword">if</span> len(history_article_data) &gt;<span class="number">1</span>:</span><br><span class="line">                        <span class="keyword">for</span> article <span class="keyword">in</span> history_article_data[:<span class="number">-1</span>]:</span><br><span class="line">                            history_article.extend(eval(article))</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        history_article = []</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 过滤history_article</span></span><br><span class="line">                    recall_article = list(set(similar_article_topk) - set(history_article))</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 如果有召回结果,按频道分别存入召回结果表及历史召回结果表</span></span><br><span class="line">                    <span class="keyword">if</span> recall_article:</span><br><span class="line">                        recall_table = conn.table(<span class="string">"cb_recall"</span>)</span><br><span class="line">                        recall_table.put(<span class="string">b"recall:user:%s"</span> % data[<span class="string">"param"</span>][<span class="string">"userId"</span>].encode(), &#123;<span class="string">b"online:%d"</span> % data[<span class="string">"channelId"</span>]: str(recall_article).encode()&#125;)</span><br><span class="line">                        history_table.put(<span class="string">b"reco:his:%s"</span> % data[<span class="string">"param"</span>][<span class="string">"userId"</span>].encode(), &#123;<span class="string">b"channel:%d"</span> % data[<span class="string">"channelId"</span>]: str(recall_article).encode()&#125;)</span><br><span class="line"></span><br><span class="line">                conn.close()</span><br></pre></td></tr></table></figure></p>
+<p>可以根据用户 ID 和频道 ID 来查询召回结果<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">hbase</span><span class="params">(main)</span></span>:<span class="number">028</span>:<span class="number">0</span>&gt; get <span class="string">'cb_recall'</span>, <span class="string">'recall:user:2'</span></span><br><span class="line">COLUMN                     CELL                                                                        </span><br><span class="line">online:<span class="number">13</span>                    timestamp=<span class="number">1558041569201</span>, value=[<span class="number">141431</span>,<span class="number">14381</span>, <span class="number">17966</span>, <span class="number">17454</span>, <span class="number">14125</span>, <span class="number">16174</span>]</span><br></pre></td></tr></table></figure></p>
+<p>创建 <code>online_update.py</code>，加入基于内容的在线召回逻辑<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="variable">__name__</span> == <span class="string">'__main__'</span>:</span><br><span class="line">    ore = OnlineRecall()</span><br><span class="line">    ore.update_content_recall()</span><br><span class="line">    stream_sc.start()</span><br><span class="line">    <span class="variable">_ONE_DAY_IN_SECONDS</span> = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="built_in">time</span>.<span class="built_in">sleep</span>(<span class="variable">_ONE_DAY_IN_SECONDS</span>)</span><br><span class="line">    except KeyboardInterrupt:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure></p>
+<p>利用 Supervisor 进行进程管理，并开启实时运行，配置如下，其中 environment 需要指定运行所需环境<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[program:online]</span></span><br><span class="line"><span class="attr">environment</span>=JAVA_HOME=/root/bigdata/jdk,SPARK_HOME=/root/bigdata/spark,HADOOP_HOME=/root/bigdata/hadoop,PYSPARK_PYTHON=/miniconda2/envs/reco_sys/bin/python ,PYSPARK_DRIVER_PYTHON=/miniconda2/envs/reco_sys/bin/python,PYSPARK_SUBMIT_ARGS=<span class="string">'--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.2.2 pyspark-shell'</span></span><br><span class="line"><span class="attr">command</span>=/miniconda2/envs/reco_sys/bin/python /root/toutiao_project/reco_sys/<span class="literal">on</span>line/<span class="literal">on</span>line_update.py</span><br><span class="line"><span class="attr">directory</span>=/root/toutiao_project/reco_sys/<span class="literal">on</span>line</span><br><span class="line"><span class="attr">user</span>=root</span><br><span class="line"><span class="attr">autorestart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">redirect_stderr</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">stdout_logfile</span>=/root/logs/<span class="literal">on</span>linesuper.log</span><br><span class="line"><span class="attr">loglevel</span>=info</span><br><span class="line"><span class="attr">stopsignal</span>=KILL</span><br><span class="line"><span class="attr">stopasgroup</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">killasgroup</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘， 提取码：eakp）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

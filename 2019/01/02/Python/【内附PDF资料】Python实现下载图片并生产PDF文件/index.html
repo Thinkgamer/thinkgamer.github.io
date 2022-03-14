@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【内附PDF资料】Python实现下载图片并生产PDF文件 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#下载函数"><span class="toc-text">下载函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#生成PDF函数"><span class="toc-text">生成PDF函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#定义要生成的PDF相关信息"><span class="toc-text">定义要生成的PDF相关信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#生成PDF"><span class="toc-text">生成PDF</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【内附PDF资料】Python实现下载图片并生产PDF文件
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-01-02 20:28:22</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Python" title="Python">Python</a>
+            <span>/</span>
+            
+            <a class="tag" href="/tags/#技术分享" title="技术分享">技术分享</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>背景：2018AICon大会中的一些PPT，官方没有提供完整的PDF文件，而是一张张图片，不方便下载和后续阅读，这里使用Python爬取相关演讲的图片，并生产PDF文件</p>
+</blockquote>
+<a id="more"></a> 
+<h1 id="下载函数"><a href="#下载函数" class="headerlink" title="下载函数"></a>下载函数</h1><p>创建下载图片函数，使用的是Python的urllib库，代码如下</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载图片</span></span><br><span class="line">def save_img(img_url,file_path=<span class="string">"./img/"</span>):</span><br><span class="line">    <span class="keyword">if</span> not os.path.exists(file_path):</span><br><span class="line">        print(<span class="string">"保存图片的文件不存在，创建该目录"</span>)</span><br><span class="line">        os.mkdir(file_path)</span><br><span class="line"><span class="comment">    # 图片后缀</span></span><br><span class="line">    file_suffix = os.path.splitext(img_url)[<span class="number">1</span>]</span><br><span class="line">    file_name = str ( int(img_url.<span class="keyword">split</span>(<span class="string">"-"</span>)[<span class="number">1</span>].<span class="keyword">split</span>(<span class="string">"."</span>)[<span class="number">0</span>]) )</span><br><span class="line"><span class="comment">    # 拼接图片名（包含路径）</span></span><br><span class="line">    <span class="keyword">filename</span> = <span class="string">'&#123;&#125;&#123;&#125;&#123;&#125;'</span>.<span class="keyword">format</span>(file_path,file_name,file_suffix)</span><br><span class="line"><span class="comment">    # urllib</span></span><br><span class="line">    urllib.request.urlretrieve(img_url, <span class="keyword">filename</span>=<span class="keyword">filename</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="生成PDF函数"><a href="#生成PDF函数" class="headerlink" title="生成PDF函数"></a>生成PDF函数</h1><p>创建图片生成PDF文件的函数，使用的是Python的reportlab库，代码如下<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成pdf</span></span><br><span class="line">def convert_img_to_pdf(img_path,pdf_path):</span><br><span class="line">    <span class="attr">pages</span> = <span class="number">0</span></span><br><span class="line">    (w, h) = landscape(portrait(A4))</span><br><span class="line">    <span class="attr">can</span> = canvas.Canvas(pdf_path, <span class="attr">pagesize=landscape(portrait(A4)))</span></span><br><span class="line">    <span class="comment"># 获取img_path下文件，并进行排序</span></span><br><span class="line">    <span class="attr">files</span> = os.listdir(img_path)</span><br><span class="line">    files.sort(<span class="attr">key=lambda</span> x: int(x[:-<span class="number">4</span>]))</span><br><span class="line">    <span class="comment"># 遍历每个文件</span></span><br><span class="line">    for f_name <span class="keyword">in</span> files:</span><br><span class="line">        <span class="comment"># 拼装成完整的file路径</span></span><br><span class="line">        <span class="attr">file_path</span> = img_path + os.sep + str(f_name)</span><br><span class="line">        can.drawImage(file_path, <span class="number">0</span>, <span class="number">0</span>, w, h)</span><br><span class="line">        can.showPage()</span><br><span class="line">        <span class="attr">pages</span> = pages + <span class="number">1</span></span><br><span class="line">    can.save()</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是，pagesize不能直接指定值portrait(A4)，因为一张图片会完整的嵌套在一页A4纸张上，极其不美观，这里需要将A4的大小进行转置，pagesize=landscape(portrait(A4))</p>
+<h1 id="定义要生成的PDF相关信息"><a href="#定义要生成的PDF相关信息" class="headerlink" title="定义要生成的PDF相关信息"></a>定义要生成的PDF相关信息</h1><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">_list = (</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"pdf_name"</span>: <span class="string">"FFM及DeepFFM模型在推荐系统的探索及实践.pdf"</span>,</span><br><span class="line">        <span class="string">"img_path"</span>: <span class="string">"./img_1/"</span>,</span><br><span class="line">        <span class="string">"page"</span>: <span class="number">52</span>,</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"3670025915"</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        <span class="string">"pdf_name"</span>: <span class="string">"知乎推荐系统的实践及重构之路.pdf"</span>,</span><br><span class="line">        <span class="string">"img_path"</span>: <span class="string">"./img_2/"</span>,</span><br><span class="line">        <span class="string">"page"</span>: <span class="number">38</span>,</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"4291192513"</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        <span class="string">"pdf_name"</span>: <span class="string">"深度树匹配——下一代推荐技术的探索和实践.pdf"</span>,</span><br><span class="line">        <span class="string">"img_path"</span>: <span class="string">"./img_3/"</span>,</span><br><span class="line">        <span class="string">"page"</span>: <span class="number">33</span>,</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"3621355867"</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        <span class="string">"pdf_name"</span>: <span class="string">"基于知识的搜索推荐技术及应用.pdf"</span>,</span><br><span class="line">        <span class="string">"img_path"</span>: <span class="string">"./img_4/"</span>,</span><br><span class="line">        <span class="string">"page"</span>: <span class="number">31</span>,</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"436657700"</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        <span class="string">"pdf_name"</span>: <span class="string">"瓜子二手车个性化推荐的挑战与应对.pdf"</span>,</span><br><span class="line">        <span class="string">"img_path"</span>: <span class="string">"./img_5/"</span>,</span><br><span class="line">        <span class="string">"page"</span>: <span class="number">40</span>,</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"1433077746"</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        <span class="string">"pdf_name"</span>: <span class="string">"机器学习在苏宁搜索平台中的实践.pdf"</span>,</span><br><span class="line">        <span class="string">"img_path"</span>: <span class="string">"./img_6/"</span>,</span><br><span class="line">        <span class="string">"page"</span>: <span class="number">55</span>,</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"1155556309"</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="生成PDF"><a href="#生成PDF" class="headerlink" title="生成PDF"></a>生成PDF</h1><p>遍历要生成PDF的每个信息<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="keyword">one</span> <span class="keyword">in</span> _list:</span><br><span class="line">    <span class="keyword">print</span>(<span class="keyword">one</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="keyword">range</span>(1,<span class="keyword">one</span>[<span class="string">"page"</span>]+1):</span><br><span class="line">        img_path = <span class="keyword">one</span>[<span class="string">"img_path"</span>]</span><br><span class="line">        pdf_path = <span class="keyword">one</span>[<span class="string">"pdf_name"</span>]</span><br><span class="line">        <span class="keyword">if</span> i &lt; 10:</span><br><span class="line">            img_url = <span class="string">"https://static001.geekbang.org/con/37/pdf/"</span> + <span class="keyword">one</span>[<span class="string">"id"</span>] + <span class="string">"/image/page-00"</span> + str(i) + <span class="string">".jpg"</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            img_url = <span class="string">"https://static001.geekbang.org/con/37/pdf/"</span> + <span class="keyword">one</span>[<span class="string">"id"</span>] + <span class="string">"/image/page-0"</span> + str(i) + <span class="string">".jpg"</span></span><br><span class="line">        <span class="keyword">print</span>(img_url)</span><br><span class="line">        # 下载图片</span><br><span class="line">        save_img(img_url,img_path)</span><br><span class="line">        # 合成pdf</span><br><span class="line">        convert_img_to_pdf(img_path, pdf_path)</span><br><span class="line">    <span class="keyword">print</span>(<span class="string">"Image转PDF完成！"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>PDF文件资料获取方式：百度网盘</p>
+<p>链接：<a href="https://pan.baidu.com/s/1MC_bH2x5jjsP1LvBB5cZCA" target="_blank" rel="external">https://pan.baidu.com/s/1MC_bH2x5jjsP1LvBB5cZCA</a></p>
+<p>提取码：58zq</p>
+<hr>
+<p>原文链接：<a href="https://blog.csdn.net/Gamer_gyt/article/details/85637436" target="_blank" rel="external">https://blog.csdn.net/Gamer_gyt/article/details/85637436</a></p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

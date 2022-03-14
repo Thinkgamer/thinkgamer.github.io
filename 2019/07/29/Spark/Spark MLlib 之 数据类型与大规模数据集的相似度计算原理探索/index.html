@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        Spark MLlib 之 数据类型与大规模数据集的相似度计算原理探索 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Spark支持的数据类型"><span class="toc-text">Spark支持的数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Local-Vector（本地向量）"><span class="toc-text">1.Local Vector（本地向量）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Labeled-point-带标签的点"><span class="toc-text">2. Labeled point(带标签的点)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Local-Matrix（本地矩阵）"><span class="toc-text">3. Local Matrix（本地矩阵）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Distributed-Matrix（分布式矩阵）"><span class="toc-text">4. Distributed Matrix（分布式矩阵）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Row-Matrix"><span class="toc-text">Row Matrix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexedRowMatrix"><span class="toc-text">IndexedRowMatrix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CoordinateMatrix"><span class="toc-text">CoordinateMatrix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BlockMatrix"><span class="toc-text">BlockMatrix</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相似度计算原理探索"><span class="toc-text">相似度计算原理探索</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#相似度计算"><span class="toc-text">相似度计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公式拆解"><span class="toc-text">公式拆解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#矩阵并行"><span class="toc-text">矩阵并行</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        Spark MLlib 之 数据类型与大规模数据集的相似度计算原理探索
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-29 15:41:15</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Spark与大数据" title="Spark与大数据">Spark与大数据</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>本文出自「xingoo」在原文的基础上加以小编自己的理解形成的学习笔记，希望对读者有帮助。原文出自：<a href="https://www.cnblogs.com/xing901022/p/9296882.html" target="_blank" rel="external">Spark MLlib 之 大规模数据集的相似度计算原理探索</a></p>
+</blockquote>
+<a id="more"></a>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近小编在做的是计算两两用户的粉丝重合度，根据粉丝重合度去评估两个用户之间的相似度，根据条件进行过滤之后大概有3000个用户，但每个用户的粉丝量参差不齐，有上百万的，有几千的，这样在去构建笛卡尔积的时候，进行粉丝数据关联，得到的用户集就会特别大，spark运行的时候就会很慢，而且会出现很严重的数据倾斜。这个时候了解到了spark支持的数据类型，看到了CoordinateMatrix，然后深究其原理，便看到了这篇文章，经过整理形成了此文。</p>
+<h1 id="Spark支持的数据类型"><a href="#Spark支持的数据类型" class="headerlink" title="Spark支持的数据类型"></a>Spark支持的数据类型</h1><p>官方文档地址：<a href="https://spark.apache.org/docs/latest/mllib-data-types.html" target="_blank" rel="external">https://spark.apache.org/docs/latest/mllib-data-types.html</a></p>
+<h2 id="1-Local-Vector（本地向量）"><a href="#1-Local-Vector（本地向量）" class="headerlink" title="1.Local Vector（本地向量）"></a>1.Local Vector（本地向量）</h2><p>本地向量是从0开始的下标和double类型的数据组成，存储在本地机器上，所以称为Local Vector。它支持两种形式：</p>
+<ul>
+<li>Dense （密集的向量）</li>
+<li>Sparse （稀疏的向量）</li>
+</ul>
+<p>比如一个向量[1.0,0.0,3.0]，用Dense表示为：[1.0,0.0,3.0]，用Sparse表示为：(3,[0,2],[1.0,3.0])，其中3为向量的长度，[0,2]表示元素[1.0,3.0]的位置，可见sparse形式下0.0是不存储的。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import org<span class="selector-class">.apache</span><span class="selector-class">.spark</span><span class="selector-class">.mllib</span><span class="selector-class">.linalg</span><span class="selector-class">.Vectors</span></span><br><span class="line"></span><br><span class="line">val denseVector = Vectors.dense(<span class="number">1.0</span>,<span class="number">0.0</span>,<span class="number">3.0</span>)</span><br><span class="line">val sparseVector1 = Vectors.sparse(<span class="number">3</span>,Array(<span class="number">0</span>,<span class="number">2</span>),Array(<span class="number">1.0</span>,<span class="number">3.0</span>))</span><br><span class="line">val sparseVector2 = Vectors.sparse(<span class="number">3</span>,Seq((<span class="number">0</span>,<span class="number">1.0</span>),(<span class="number">2</span>,<span class="number">3.0</span>)))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"DenseVector is : $denseVector"</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"DenseVector to Sparse is : $&#123;denseVector.toSparse&#125;"</span>)</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"sparseVector1 is : $sparseVector1"</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"sparseVector1 to Dense is : $&#123;sparseVector1.toDense&#125;"</span>)</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"sparseVector2 is : $sparseVector2"</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"sparseVector2 to Dense is : $&#123;sparseVector2.toDense&#125;"</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>输出为：<br><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DenseVector <span class="keyword">is</span> : <span class="comment">[1.0,0.0,3.0]</span></span><br><span class="line">DenseVector to Sparse <span class="keyword">is</span> : (3,<span class="comment">[0,2]</span>,<span class="comment">[1.0,3.0]</span>)</span><br><span class="line"></span><br><span class="line">sparseVector1 <span class="keyword">is</span> : (3,<span class="comment">[0,2]</span>,<span class="comment">[1.0,3.0]</span>)</span><br><span class="line">sparseVector1 to Dense <span class="keyword">is</span> : <span class="comment">[1.0,0.0,3.0]</span></span><br><span class="line"></span><br><span class="line">sparseVector2 <span class="keyword">is</span> : (3,<span class="comment">[0,2]</span>,<span class="comment">[1.0,3.0]</span>)</span><br><span class="line">sparseVector2 to Dense <span class="keyword">is</span> : <span class="comment">[1.0,0.0,3.0]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="2-Labeled-point-带标签的点"><a href="#2-Labeled-point-带标签的点" class="headerlink" title="2. Labeled point(带标签的点)"></a>2. Labeled point(带标签的点)</h2><p>labeled point由本地向量组成，既可以是dense向量，也可以是sparse向量。在mllib中常用于监督类算法，使用double类型来保存该类型的数据，因为也可以用于回归和分类算法。例如二分类，label可以是0（负例）或1（正例），对于多分类，label可以是0，1，2…</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import org<span class="selector-class">.apache</span><span class="selector-class">.spark</span><span class="selector-class">.mllib</span><span class="selector-class">.linalg</span><span class="selector-class">.Vectors</span></span><br><span class="line">import org<span class="selector-class">.apache</span><span class="selector-class">.spark</span><span class="selector-class">.mllib</span><span class="selector-class">.regression</span><span class="selector-class">.LabeledPoint</span></span><br><span class="line"></span><br><span class="line">val pos = LabeledPoint(<span class="number">1.0</span>, Vectors.dense(<span class="number">1.0</span>,<span class="number">0.0</span>,<span class="number">3.0</span>))</span><br><span class="line">val neg = LabeledPoint(<span class="number">0.0</span>, Vectors.sparse(<span class="number">3</span>, Array(<span class="number">0</span>, <span class="number">2</span>), Array(<span class="number">1.0</span>, <span class="number">3.0</span>)))</span><br></pre></td></tr></table></figure>
+<p><strong>sparse data</strong></p>
+<p>稀疏数据存储是非常普遍的现象，mllib支持读取libsvm格式的数据，其数据格式如下：<br><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">label index<span class="number">1</span>:<span class="keyword">value</span><span class="number">1</span>,index<span class="number">2</span>:<span class="keyword">value</span><span class="number">2</span> ...</span><br></pre></td></tr></table></figure></p>
+<p>其读取方式包括：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import org<span class="selector-class">.apache</span><span class="selector-class">.spark</span><span class="selector-class">.mllib</span><span class="selector-class">.util</span><span class="selector-class">.MLUtils</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// method 1</span></span><br><span class="line">spark<span class="selector-class">.read</span><span class="selector-class">.format</span>(<span class="string">"libsvm"</span>) .load(<span class="string">"libsvm data path"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// method 2</span></span><br><span class="line">MLUtils.loadLibSVMFile(spark<span class="selector-class">.sparkContext</span>, <span class="string">"libsvm data path"</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-Local-Matrix（本地矩阵）"><a href="#3-Local-Matrix（本地矩阵）" class="headerlink" title="3. Local Matrix（本地矩阵）"></a>3. Local Matrix（本地矩阵）</h2><p>local matrix由行下标，列索引和double类型的值组成，存储在本地机器上，mllib支持密集矩阵和稀疏矩阵，其存储是按照列进行存储的。</p>
+<p>例如下面的为密集矩阵:</p>
+<center><img src="https://img-blog.csdnimg.cn/20190722205304310.gif" width="100px"></center>
+
+<p>通过数组存储的形式为： [1.0, 3.0, 5.0, 2.0, 4.0, 6.0]，矩阵大小为[3，2]</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a dense matrix ((1.0, 2.0), (3.0, 4.0), (5.0, 6.0))</span></span><br><span class="line">val denseMatrix = Matrices.dense(<span class="number">3</span>,<span class="number">2</span>, Array(<span class="number">1.0</span>,<span class="number">3.0</span>,<span class="number">5.0</span>,<span class="number">2.0</span>,<span class="number">4.0</span>,<span class="number">6.0</span>))</span><br><span class="line">println(s<span class="string">"denseMatrix is : $denseMatrix"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a sparse matrix ((9.0, 0.0), (0.0, 8.0), (0.0, 6.0))</span></span><br><span class="line">val sparseMatrix = Matrices.sparse(<span class="number">3</span>,<span class="number">2</span>, Array(<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>),Array(<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>),Array(<span class="number">9</span>,<span class="number">6</span>,<span class="number">8</span>))</span><br><span class="line">println(s<span class="string">"sparseMatrix is : $sparseMatrix"</span>)</span><br></pre></td></tr></table></figure>
+<p>注：稀疏矩阵解释，首先指定矩阵是3行2列，Array(0, 1, 3)是指，第0个非零元素在第一列，第一第二个非零元素在第二列。</p>
+<p>Array(0, 2, 1)是指，第一个非零元素在第0行，第二个非零元素在第2行，第三个非零元素在第1行。</p>
+<p>此处设计比较好，假设100个元素分两列，不需要把每个元素所在列都标出来，只需要记录3个数字即可。Array(9, 6, 8)表示按顺序存储非零元素.</p>
+<hr>
+<p>Array(0,1,3)比较难理解，可以参考以下文章：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/lyy-blog/p/9288701.html" target="_blank" rel="external">https://www.cnblogs.com/lyy-blog/p/9288701.html</a></li>
+<li><a href="https://www.tuicool.com/articles/A3emmqi" target="_blank" rel="external">https://www.tuicool.com/articles/A3emmqi</a></li>
+</ul>
+<h2 id="4-Distributed-Matrix（分布式矩阵）"><a href="#4-Distributed-Matrix（分布式矩阵）" class="headerlink" title="4. Distributed Matrix（分布式矩阵）"></a>4. Distributed Matrix（分布式矩阵）</h2><p>一个分布式矩阵由下标和double类型的数据组成，不过分布式的矩阵的下标不是int类型，而是long类型，数据保存在一个或多个rdd中，选择一个正确的格式去存储分布式矩阵是非常重要的。分布式矩阵转换成不同的格式需要一个全局的shuffle(global shuffle)，而全局shuffle的代价会非常高。到目前为止，Spark MLlib中已经实现了三种分布式矩阵。</p>
+<p>最基本的分布式矩阵是RowMatrix，它是一个行式的分布式矩阵，没有行索引。比如一系列特征向量的集合。RowMatrix由一个RDD代表所有的行，每一行是一个本地向量。假设一个RowMatrix的列数不是特别巨大，那么一个简单的本地向量能够与driver进行联系，并且数据可以在单个节点上保存或使用。IndexedRowMatrix与RowMatrix类似但是有行索引，行索引可以用来区分行并且进行连接等操作。CoordinateMatrix是一个以协同列表（coordinate list)格式存储数据的分布式矩阵，数据以RDD形式存储。</p>
+<p>注意：因为我们需要缓存矩阵的大小，所以分布式矩阵的RDDs格式是需要确定的，使用非确定RDDs的话会报错。</p>
+<h3 id="Row-Matrix"><a href="#Row-Matrix" class="headerlink" title="Row Matrix"></a>Row Matrix</h3><p>RowMatrix它是一个行式的分布式矩阵，没有行索引。比如一系列特征向量的集合。RowMatrix由一个RDD代表所有的行，每一行是一个本地向量。因为每一行代表一个本地向量，所以它的列数被限制在Integer.max的范围内，在实际应用中不会太大。</p>
+<p>一个RowMatrix可以由一个RDD[Vector]的实例创建。因此我们可以计算统计信息或者进行分解。QR分解（QR decomposition）是A=QR，其中Q是一个矩阵，R是一个上三角矩阵。对sigular value decomposition(SVD和principal component analysis（PCA）,可以去参考降维的部分。<br>　　<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Row Matrix</span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Row Matrix ..."</span>)</span></span></span><br><span class="line">val arr = Array(Vectors.dense(<span class="number">1</span>,<span class="number">0</span>),Vectors.dense(<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">val rows = spark<span class="selector-class">.sparkContext</span><span class="selector-class">.parallelize</span>(arr)</span><br><span class="line">val mat: RowMatrix = new RowMatrix(rows)</span><br><span class="line">val m = mat.numRows()</span><br><span class="line">val n = mat.numCols()</span><br><span class="line">val qrResult = mat.tallSkinnyQR(true)</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"m is: $m，n is $n，\nqrResult is :"</span>)</span></span></span><br><span class="line">qrResult<span class="selector-class">.Q</span><span class="selector-class">.rows</span><span class="selector-class">.foreach</span>(println)</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">()</span></span></span><br><span class="line">qrResult<span class="selector-class">.R</span><span class="selector-class">.rowIter</span><span class="selector-class">.foreach</span>(println)</span><br></pre></td></tr></table></figure></p>
+<p>输出为：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Row Matrix ...</span><br><span class="line">m <span class="keyword">is</span>: <span class="number">2</span>，n <span class="keyword">is</span> <span class="number">2</span>，</span><br><span class="line">qrResult <span class="keyword">is</span> :</span><br><span class="line">[<span class="meta">1.0,0.0</span>]</span><br><span class="line">[<span class="meta">0.0,1.0</span>]</span><br><span class="line"></span><br><span class="line">[<span class="meta">1.0,0.0</span>]</span><br><span class="line">[<span class="meta">0.0,1.0</span>]</span><br></pre></td></tr></table></figure></p>
+<h3 id="IndexedRowMatrix"><a href="#IndexedRowMatrix" class="headerlink" title="IndexedRowMatrix"></a>IndexedRowMatrix</h3><p>IndexedRowMatrix与RowMatrix类似，但是它有行索引。由一个行索引RDD表示，索引每一行由一个long型行索引和一个本地向量组成。 </p>
+<p>一个IndexedRowMatrix可以由RDD[IndexedRow]的实例来生成，IndexedRow是一个（Long, Vector)的封装。去掉行索引，IndexedRowMatrix能够转换成RowMatrix。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// IndexedRowMatrix</span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Indexed Row Matrix ..."</span>)</span></span></span><br><span class="line">val arr2 = Array(</span><br><span class="line">        IndexedRow(<span class="number">0</span>,Vectors.dense(<span class="number">1</span>,<span class="number">0</span>)),</span><br><span class="line">        IndexedRow(<span class="number">1</span>,Vectors.dense(<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">    )</span><br><span class="line">val rows2: RDD[IndexedRow] = spark<span class="selector-class">.sparkContext</span><span class="selector-class">.parallelize</span>(arr2)</span><br><span class="line">val mat2 = new IndexedRowMatrix(rows2)</span><br><span class="line">val m2 = mat2.numRows()</span><br><span class="line">val n2 = mat2.numCols()</span><br><span class="line"><span class="comment">// 去掉行索引，转换成RowMatrix</span></span><br><span class="line">val qrResult2 = mat2.toRowMatrix().tallSkinnyQR(true)</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"m2 is: $m2，n2 is $n2，\nqrResult2 is :"</span>)</span></span></span><br><span class="line">qrResult2<span class="selector-class">.Q</span><span class="selector-class">.rows</span><span class="selector-class">.foreach</span>(println)</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">()</span></span></span><br><span class="line">qrResult2<span class="selector-class">.R</span><span class="selector-class">.rowIter</span><span class="selector-class">.foreach</span>(println)</span><br></pre></td></tr></table></figure>
+<p>输出为：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Indexed Row Matrix ...</span><br><span class="line">m2 <span class="keyword">is</span>: <span class="number">2</span>，n2 <span class="keyword">is</span> <span class="number">2</span>，</span><br><span class="line">qrResult2 <span class="keyword">is</span> :</span><br><span class="line">[<span class="meta">1.0,0.0</span>]</span><br><span class="line">[<span class="meta">0.0,1.0</span>]</span><br><span class="line"></span><br><span class="line">[<span class="meta">1.0,0.0</span>]</span><br><span class="line">[<span class="meta">0.0,1.0</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="CoordinateMatrix"><a href="#CoordinateMatrix" class="headerlink" title="CoordinateMatrix"></a>CoordinateMatrix</h3><p>CoordinateMatrix是一个分布式矩阵，其实体集合是一个RDD，每一个是一个三元组(i:Long, j:Long, value:Double）。其中i是行索引，j是列索引，value是实体的值。当矩阵的维度很大并且是稀疏矩阵时，才使用CoordinateMatrix。 </p>
+<p>一个CoordinateMatrix可以通过一个RDD[MatrixEntry]的实例来创建，MatrixEntry是一个(Long, Long, Double)的封装。CoordinateMatrix可以通过调用toIndexedRowMatrix转换成一个IndexedRowMatrix。CoordinateMatrix的其他降维方法暂时还不支持（Spark-1.6.2)。 
+　　</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CoordinateMatrix</span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Coordinate Matrix ..."</span>)</span></span></span><br><span class="line">val arr3 = Array(</span><br><span class="line">    MatrixEntry(<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>),</span><br><span class="line">    MatrixEntry(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">)</span><br><span class="line">val entries = spark<span class="selector-class">.sparkContext</span><span class="selector-class">.parallelize</span>(arr3)</span><br><span class="line">val mat3 = new CoordinateMatrix(entries)</span><br><span class="line">val m3 = mat.numRows()</span><br><span class="line">val n3 = mat.numCols()</span><br><span class="line">val qrResult3 = mat3.toIndexedRowMatrix().toRowMatrix().tallSkinnyQR(true)</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"m3 is: $m3，n3 is $n3，\nqrResult3 is :"</span>)</span></span></span><br><span class="line">qrResult3<span class="selector-class">.Q</span><span class="selector-class">.rows</span><span class="selector-class">.foreach</span>(println)</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">()</span></span></span><br><span class="line">qrResult3<span class="selector-class">.R</span><span class="selector-class">.rowIter</span><span class="selector-class">.foreach</span>(println)</span><br></pre></td></tr></table></figure>
+<p>输出为：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Coordinate Matrix ...</span><br><span class="line">m3 <span class="keyword">is</span>: <span class="number">2</span>，n3 <span class="keyword">is</span> <span class="number">2</span>，</span><br><span class="line">rowMat3 <span class="keyword">is</span> :</span><br><span class="line">[<span class="meta">1.0,0.0</span>]</span><br><span class="line">[<span class="meta">0.0,1.0</span>]</span><br><span class="line"></span><br><span class="line">[<span class="meta">1.0,0.0</span>]</span><br><span class="line">[<span class="meta">0.0,1.0</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="BlockMatrix"><a href="#BlockMatrix" class="headerlink" title="BlockMatrix"></a>BlockMatrix</h3><p>一个BlockMatrix是一个分布式的矩阵，由一个MatrixBlocks的RDD组成。MatrixBlock是一个三元组((Int, Int), Matrix),其中(Int, Int)是block的索引，Matrix是一个在指定位置上的维度为rowsPerBlock * colsPerBlock的子矩阵。BlockMatrix支持与另一个BlockMatrix对象的add和multiply操作。BlockMatrix提供了一个帮助方法validate，这个方法可以用于检测该`BlockMatrix·是否正确。</p>
+<p>可以通过IndexedRowMatrix或者CoordinateMatrix调用toBlockMatrix快速得到BlockMatrix对象。默认情况下toBlockMatrix方法会得到一个1024 x 1024的BlockMatrix。使用时可以通过手动传递维度值来设置维度，toBlockMatrix(rowsPerBlock, colsPerBlock)。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BlockMatrix</span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Block Matrix ..."</span>)</span></span></span><br><span class="line">val arr4 = Array(</span><br><span class="line">    MatrixEntry(<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>),</span><br><span class="line">    MatrixEntry(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">)</span><br><span class="line">val entries4: RDD[MatrixEntry] = spark<span class="selector-class">.sparkContext</span><span class="selector-class">.parallelize</span>(arr4)</span><br><span class="line">val coordMat: CoordinateMatrix = new CoordinateMatrix(entries4)</span><br><span class="line">val matA: BlockMatrix = coordMat.toBlockMatrix().cache()</span><br><span class="line"><span class="comment">// 检测BlockMatrix格式是否正确，错误的话会抛出异常，正确的话无其他影响</span></span><br><span class="line">matA.validate()</span><br><span class="line">matA<span class="selector-class">.blocks</span><span class="selector-class">.foreach</span>(println)</span><br><span class="line">val m4 = matA.numRowBlocks</span><br><span class="line">val n4 = matA.numColBlocks</span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(s<span class="string">"m4 is: $m4，n4 is $n4"</span>)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算A^T * A.</span></span><br><span class="line">val ata = matA<span class="selector-class">.transpose</span><span class="selector-class">.multiply</span>(matA)</span><br><span class="line">ata<span class="selector-class">.blocks</span><span class="selector-class">.foreach</span>(println)</span><br></pre></td></tr></table></figure>
+<p>输出为：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Block</span> <span class="selector-tag">Matrix</span> ...</span><br><span class="line">((0,0),2 <span class="selector-tag">x</span> 2 <span class="selector-tag">CSCMatrix</span></span><br><span class="line">(0,0) 1<span class="selector-class">.0</span></span><br><span class="line">(1,1) 1<span class="selector-class">.0</span>)</span><br><span class="line"><span class="selector-tag">m4</span> <span class="selector-tag">is</span>: 1，<span class="selector-tag">n4</span> <span class="selector-tag">is</span> 1</span><br><span class="line">((0,0),1<span class="selector-class">.0</span>  0<span class="selector-class">.0</span>  </span><br><span class="line">0<span class="selector-class">.0</span>  1<span class="selector-class">.0</span>  )</span><br></pre></td></tr></table></figure>
+<h1 id="相似度计算原理探索"><a href="#相似度计算原理探索" class="headerlink" title="相似度计算原理探索"></a>相似度计算原理探索</h1><blockquote>
+<p>无论是ICF基于物品的协同过滤、UCF基于用户的协同过滤、基于内容的推荐，最基本的环节都是计算相似度。如果样本特征维度很高或者<user, item,="" score="">的维度很大，都会导致无法直接计算。设想一下100w*100w的二维矩阵，计算相似度怎么算？</user,></p>
+<p>在spark中RowMatrix提供了一种并行计算相似度的思路，下面就来看看其中的奥妙吧！</p>
+</blockquote>
+<h2 id="相似度计算"><a href="#相似度计算" class="headerlink" title="相似度计算"></a>相似度计算</h2><p>相似度有很多种，每一种适合的场景都不太一样。比如：</p>
+<ul>
+<li>欧氏距离，在几何中最简单的计算方法</li>
+<li>夹角余弦，通过方向计算相似度，通常在用户对商品评分、NLP等场景使用</li>
+<li>杰卡德距离，在不考虑每一样的具体值时使用</li>
+<li>皮尔森系数，与夹角余弦类似，但是可以去中心化。比如评分时，有人倾向于打高分，有人倾向于打低分，他们的最后效果在皮尔森中是一样的</li>
+<li>曼哈顿距离，一般在路径规划、地图类中常用，比如A*算法中使用曼哈顿来作为每一步代价值的一部分（F=G+H, G是从当前点移动到下一个点的距离，H是距离目标点的距离，这个H就可以用曼哈顿距离表示）</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190722195328417.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70"> </center>
+
+<p>上面两个向量(x1,y1)和(x2,y2)计算夹角的余弦值就是两个向量方向的相似度，其公式为：</p>
+<script type="math/tex; mode=display">
+cos(\theta )=\frac { a\cdot b }{ ||a||\ast ||b|| } \\ =\quad \frac { { x }_{ 1 }\ast { x }_{ 2 }\quad +\quad { y }_{ 1 }\ast y_{ 2 } }{ \sqrt { { x }_{ 1 }^{ 2 }+{ y }_{ 1 }^{ 2 } } \ast \sqrt { { x }_{ 2 }^{ 2 }+{ y }_{ 2 }^{ 2 } }  }</script><p>其中，||a||表示a的模，即每一项的平方和再开方。</p>
+<h2 id="公式拆解"><a href="#公式拆解" class="headerlink" title="公式拆解"></a>公式拆解</h2><p>那么如果向量不只是两维，而是n维呢？比如有两个向量：</p>
+<script type="math/tex; mode=display">
+第一个向量：({x}_{1}, {x}_{2}, {x}_{3}, ..., {x}_{n})\\
+第二个向量：({y}_{1}, {y}_{2}, {y}_{3}, ..., {y}_{n})</script><p>他们的相似度计算方法套用上面的公式为：</p>
+<script type="math/tex; mode=display">
+cos(\theta )\quad =\quad \frac { \sum _{ i=1 }^{ n }{ ({ x }_{ i }\ast { y }_{ i }) }  }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  } \ast \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } \\ =\quad \frac { { x }_{ 1 }\ast { y }_{ 1 }+{ x }_{ 2 }\ast { y }_{ 2 }+...+{ x }_{ n }\ast { y }_{ n } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  } \ast \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } \\ =\quad \frac { { x }_{ 1 }\ast { y }_{ 1 } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  } \ast \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } +\frac { { x }_{ 2 }\ast { y }_{ 2 } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  } \ast \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } +...+\frac { { x }_{ n }\ast { y }_{ n } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  } \ast \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } \\ =\quad \frac { { x }_{ 1 } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  }  } \ast \frac { { y }_{ 1 } }{ \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } +\frac { { x }_{ 2 } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  }  } \ast \frac { { y }_{ 2 } }{ \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  } +...+\frac { { x }_{ n } }{ \sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  }  } \ast \frac { { y }_{ n } }{ \sqrt { \sum _{ i=1 }^{ n }{ y_{ i }^{ 2 } }  }  }</script><p>通过上面的公式就可以发现，夹角余弦可以拆解成每一项与另一项对应位置的乘积x1∗y1，再除以每个向量自己的</p>
+<script type="math/tex; mode=display">
+\sqrt { \sum _{ i=1 }^{ n }{ { x }_{ i }^{ 2 } }  }</script><p>就可以了。</p>
+<h2 id="矩阵并行"><a href="#矩阵并行" class="headerlink" title="矩阵并行"></a>矩阵并行</h2><p>画个图看看，首先创建下面的矩阵：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190722195942186.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70"></center>
+
+<p>注意，矩阵里面都是一列代表一个向量….上面是创建矩阵时的三元组，如果在spark中想要创建matrix，可以这样：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">val df = spark.createDataFrame(Seq(</span><br><span class="line">      (<span class="number">0</span>, <span class="number">0</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">1</span>, <span class="number">0</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">3</span>, <span class="number">0</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2.0</span>),</span><br><span class="line">      (<span class="number">1</span>, <span class="number">1</span>, <span class="number">2.0</span>),</span><br><span class="line">      (<span class="number">2</span>, <span class="number">1</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">3</span>, <span class="number">1</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">0</span>, <span class="number">2</span>, <span class="number">3.0</span>),</span><br><span class="line">      (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3.0</span>),</span><br><span class="line">      (<span class="number">2</span>, <span class="number">2</span>, <span class="number">3.0</span>),</span><br><span class="line">      (<span class="number">0</span>, <span class="number">3</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">1</span>, <span class="number">3</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">3</span>, <span class="number">3</span>, <span class="number">4.0</span>)</span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">val matrix = new CoordinateMatrix(df.map(row =&gt; MatrixEntry(row.getAs[Integer](<span class="number">0</span>).toLong, row.getAs[Integer](<span class="number">1</span>).toLong, row.getAs[Double](<span class="number">2</span>))).toJavaRDD)</span><br></pre></td></tr></table></figure>
+<p>然后计算每一个向量的normL2，即平方和开根号。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190722200134362.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70"></center>
+以第一个和第二个向量计算为例，第一个向量为(1,1,1,1)，第二个向量为(2,2,1,1)，每一项除以对应的normL2，得到后面的两个向量：
+$$
+0.5*0.63+0.5*0.63+0.5*0.31+0.5*0.31 \approx 0.94
+$$
+两个向量最终的相似度为0.94。
+
+那么在Spark如何快速并行处理呢？通过上面的例子，可以看到两个向量的相似度，需要把每一维度乘积后相加，但是一个向量一般都是跨RDD保存的，所以可以先计算所有向量的第一维，得出结果
+$$
+(向量1的第1维，向量2的第1维，value)\\
+(向量1的第2维，向量2的第2维，value)\\
+...\\
+(向量1的第n维，向量2的第n维，value)\\
+(向量1的第1维，向量3的第1维，value)\\
+..\\
+(向量1的第n维，向量3的第n维，value)\\
+$$
+最后对做一次reduceByKey累加结果即可.....
+
+## 阅读源码
+首先创建dataframe形成matrix：
+
+
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.spark.mllib.linalg.distributed.&#123;<span class="attribute">CoordinateMatrix, MatrixEntry&#125;</span></span><br><span class="line"><span class="attribute">import org.apache.spark.sql.SparkSession</span></span><br><span class="line"><span class="attribute"></span></span><br><span class="line"><span class="attribute">object MatrixSimTest &#123;</span></span><br><span class="line"><span class="attribute">  def main(args</span>: Array[String]): Unit = &#123;</span><br><span class="line">    // 创建dataframe，转换成matrix</span><br><span class="line">    val spark = SparkSession<span class="variable">.builder</span>()<span class="variable">.master</span>("local[*]")<span class="variable">.appName</span>("sim")<span class="variable">.getOrCreate</span>()</span><br><span class="line">    spark<span class="variable">.sparkContext</span><span class="variable">.setLogLevel</span>("WARN")</span><br><span class="line"></span><br><span class="line">    import spark<span class="variable">.implicits</span><span class="variable">._</span></span><br><span class="line"></span><br><span class="line">    val df = spark<span class="variable">.createDataFrame</span>(Seq(</span><br><span class="line">      (0, 0, 1.0),</span><br><span class="line">      (1, 0, 1.0),</span><br><span class="line">      (2, 0, 1.0),</span><br><span class="line">      (3, 0, 1.0),</span><br><span class="line">      (0, 1, 2.0),</span><br><span class="line">      (1, 1, 2.0),</span><br><span class="line">      (2, 1, 1.0),</span><br><span class="line">      (3, 1, 1.0),</span><br><span class="line">      (0, 2, 3.0),</span><br><span class="line">      (1, 2, 3.0),</span><br><span class="line">      (2, 2, 3.0),</span><br><span class="line">      (0, 3, 1.0),</span><br><span class="line">      (1, 3, 1.0),</span><br><span class="line">      (3, 3, 4.0)</span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">    val matrix = new CoordinateMatrix(df<span class="variable">.map</span>(row =&gt; MatrixEntry(row<span class="variable">.getAs</span>[Integer](0)<span class="variable">.toLong</span>, row<span class="variable">.getAs</span>[Integer](1)<span class="variable">.toLong</span>, row<span class="variable">.getAs</span>[Double](2)))<span class="variable">.toJavaRDD</span>)</span><br><span class="line">    // 调用sim方法</span><br><span class="line">    val x = matrix<span class="variable">.toRowMatrix</span>()<span class="variable">.columnSimilarities</span>()</span><br><span class="line">    // 得到相似度结果</span><br><span class="line">    x<span class="variable">.entries</span><span class="variable">.collect</span>()<span class="variable">.foreach</span>(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+得到的结果为：
+
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MatrixEntry(<span class="number">0</span>,<span class="number">3</span>,<span class="number">0.7071067811865476</span>)</span><br><span class="line">MatrixEntry(<span class="number">0</span>,<span class="number">2</span>,<span class="number">0.8660254037844386</span>)</span><br><span class="line">MatrixEntry(<span class="number">2</span>,<span class="number">3</span>,<span class="number">0.2721655269759087</span>)</span><br><span class="line">MatrixEntry(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.9486832980505139</span>)</span><br><span class="line">MatrixEntry(<span class="number">1</span>,<span class="number">2</span>,<span class="number">0.9128709291752768</span>)</span><br><span class="line">MatrixEntry(<span class="number">1</span>,<span class="number">3</span>,<span class="number">0.596284793999944</span>)</span><br></pre></td></tr></table></figure>
+
+直接进入columnSimilarities方法看看是怎么个流程吧！
+
+
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">columnSimilarities</span><span class="params">()</span></span>: CoordinateMatrix = &#123;</span><br><span class="line">  columnSimilarities(<span class="number">0</span>.<span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+内部调用了带阈值的相似度方法，这里的阈值是指相似度小于该值时，输出结果时，会自动过滤掉。
+
+
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def columnSimilarities(threshold: <span class="keyword">Double</span>): CoordinateMatrix = &#123;</span><br><span class="line">  //检查参数...</span><br><span class="line"></span><br><span class="line">  val <span class="built_in">gamma</span> = <span class="keyword">if</span> (threshold &lt; <span class="number">1e-6</span>) &#123;</span><br><span class="line">    <span class="keyword">Double</span>.PositiveInfinity</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="number">10</span> * math.<span class="built_in">log</span>(numCols()) / threshold</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> columnSimilaritiesDIMSUM(computeColumnSummaryStatistics().normL2.toArray, <span class="built_in">gamma</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+这里的gamma用于采样，具体的做法咱们来继续看源码。然后看一下computeColumnSummaryStatistics().normL2.toArray这个方法：
+
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def computeColumnSummaryStatistics(): MultivariateStatisticalSummary = &#123;</span><br><span class="line">  val summary = rows.treeAggregate(<span class="keyword">new</span> MultivariateOnlineSummarizer)(</span><br><span class="line">    (aggregator, data) =&gt; aggregator.add(data),</span><br><span class="line">    (aggregator1, aggregator2) =&gt; aggregator1.merge(aggregator2))</span><br><span class="line">  updateNumRows(summary.count)</span><br><span class="line">  summary</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+之前有介绍这个treeAggregate是一种带“预reduce”的map-reduce，返回的summary，里面帮我们统计了每一个向量的很多指标，比如
+
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">currMean    为 每一个向量的平均值</span><br><span class="line">currM2      为 每个向量的每一维的平方和</span><br><span class="line">currL1      为 每个向量的绝对值的和</span><br><span class="line">currMax     为 每个向量的最大值</span><br><span class="line">currMin     为 每个向量的最小值</span><br><span class="line">nnz         为 每个向量的非<span class="number">0</span>个数</span><br></pre></td></tr></table></figure>
+
+这里我们只需要currM2，它是每个向量的平方和。summary调用的normL2方法：
+
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">override def normL2: Vector = &#123;</span><br><span class="line">  require(totalWeightSum &gt; 0, s"Nothing has been added to this summarizer.")</span><br><span class="line"></span><br><span class="line">  val realMagnitude = Array.ofDim[<span class="string">Double</span>](<span class="link">n</span>)</span><br><span class="line"></span><br><span class="line">  var i = 0</span><br><span class="line">  val len = currM2.length</span><br><span class="line">  while (i <span class="xml"><span class="tag">&lt; <span class="attr">len</span>) &#123;</span></span></span><br><span class="line"><span class="xml">    realMagnitude(i) = math.sqrt(currM2(i))</span></span><br><span class="line"><span class="xml">    i += 1</span></span><br><span class="line"><span class="xml">  &#125;</span></span><br><span class="line"><span class="xml">  Vectors.dense(realMagnitude)</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+
+上面这步就是对平方和开个根号，这样就求出来了每个向量的分母部分。
+下面就是最关键的地方了：
+
+
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">private[mllib] def columnSimilaritiesDIMSUM(</span><br><span class="line">      colMags: <span class="type">Array</span>[<span class="type">Double</span>],</span><br><span class="line">      gamma: <span class="type">Double</span>): <span class="type">CoordinateMatrix</span> = &#123;</span><br><span class="line">    <span class="comment">// 一些参数校验</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对gamma进行开方</span></span><br><span class="line">    <span class="meta">val</span> sg = math.sqrt(gamma) <span class="comment">// sqrt(gamma) used many times</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里把前面算的平方根的值设置一个默认值，因为如果为0，除0会报异常，所以设置为1</span></span><br><span class="line">    <span class="meta">val</span> colMagsCorrected = colMags.map(x =&gt; <span class="keyword">if</span> (x == <span class="number">0</span>) <span class="number">1.0</span> <span class="keyword">else</span> x)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 把抽样概率数组 和 平方根数组进行广播</span></span><br><span class="line">    <span class="meta">val</span> sc = rows.context</span><br><span class="line">    <span class="meta">val</span> pBV = sc.broadcast(colMagsCorrected.map(c =&gt; sg / c))</span><br><span class="line">    <span class="meta">val</span> qBV = sc.broadcast(colMagsCorrected.map(c =&gt; math.min(sg, c)))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历每一行，计算每个向量该维的乘积，形成三元组</span></span><br><span class="line">    <span class="meta">val</span> sims = rows.mapPartitionsWithIndex &#123; (indx, iter) =&gt;</span><br><span class="line">      <span class="meta">val</span> p = pBV.value</span><br><span class="line">      <span class="meta">val</span> q = qBV.value</span><br><span class="line">      <span class="comment">// 获得随机值</span></span><br><span class="line">      <span class="meta">val</span> rand = <span class="function"><span class="keyword">new</span> <span class="title">XORShiftRandom</span>(indx)</span></span><br><span class="line"><span class="function">      <span class="title">val</span> <span class="title">scaled</span> = <span class="title">new</span> <span class="title">Array</span>[<span class="title">Double</span>](p.size)</span></span><br><span class="line"><span class="function">      <span class="title">iter</span>.<span class="title">flatMap</span> &#123; <span class="title">row</span> =&gt;</span></span><br><span class="line">        row <span class="keyword">match</span> &#123;</span><br><span class="line">          case <span class="type">SparseVector</span>(size, indices, values) =&gt;</span><br><span class="line">            <span class="comment">// 如果是稀疏向量，遍历向量的每一维，除以平方根</span></span><br><span class="line">            <span class="meta">val</span> nnz = indices.size</span><br><span class="line">            <span class="keyword">var</span> k = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> (k &lt; nnz) &#123;</span><br><span class="line">              scaled(k) = values(k) / q(indices(k))</span><br><span class="line">              k += <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 遍历向量数组，计算每一个数值与其他数值的乘机。</span></span><br><span class="line">            <span class="comment">// 比如向量(1, 2, 0 ,1)</span></span><br><span class="line">            <span class="comment">// 得到的结果为 (0,1,value)(0,3,value)(2,3,value)</span></span><br><span class="line">            <span class="type">Iterator</span>.tabulate (nnz) &#123; k =&gt;</span><br><span class="line">              <span class="meta">val</span> buf = <span class="function"><span class="keyword">new</span> <span class="title">ListBuffer</span>[((<span class="type">Int</span>, <span class="type">Int</span>), <span class="title">Double</span>)]()</span></span><br><span class="line"><span class="function">              <span class="title">val</span> <span class="title">i</span> = <span class="title">indices</span>(k)</span></span><br><span class="line"><span class="function">              <span class="title">val</span> <span class="title">iVal</span> = <span class="title">scaled</span>(k)</span></span><br><span class="line"><span class="function">              <span class="comment">// 判断当前列是否符合采样范围，如果小于采样值，就忽略</span></span></span><br><span class="line"><span class="function">              <span class="title">if</span> (iVal != <span class="number">0</span> &amp;&amp; rand.nextDouble() &lt; <span class="title">p</span>(i)) &#123;</span></span><br><span class="line"><span class="function">                <span class="title">var</span> <span class="title">l</span> = <span class="title">k</span> + 1</span></span><br><span class="line"><span class="function">                <span class="title">while</span> (l &lt; nnz) &#123;</span></span><br><span class="line"><span class="function">                  <span class="title">val</span> <span class="title">j</span> = <span class="title">indices</span>(l)</span></span><br><span class="line"><span class="function">                  <span class="title">val</span> <span class="title">jVal</span> = <span class="title">scaled</span>(l)</span></span><br><span class="line"><span class="function">                  <span class="title">if</span> (jVal != <span class="number">0</span> &amp;&amp; rand.nextDouble() &lt; <span class="title">p</span>(j)) &#123;</span></span><br><span class="line"><span class="function">                    <span class="comment">// 计算每一维与其他维的值</span></span></span><br><span class="line"><span class="function">                    <span class="title">buf</span> += (((i, j), <span class="title">iVal</span> * <span class="title">jVal</span>))</span></span><br><span class="line"><span class="function">                  &#125;</span></span><br><span class="line"><span class="function">                  <span class="title">l</span> += 1</span></span><br><span class="line"><span class="function">                &#125;</span></span><br><span class="line"><span class="function">              &#125;</span></span><br><span class="line"><span class="function">              <span class="title">buf</span></span></span><br><span class="line"><span class="function">            &#125;.<span class="title">flatten</span></span></span><br><span class="line"><span class="function">          <span class="title">case</span> <span class="title">DenseVector</span>(values) =&gt;</span></span><br><span class="line">            <span class="comment">// 跟稀疏同理</span></span><br><span class="line">            <span class="meta">val</span> n = values.size</span><br><span class="line">            <span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> (i &lt; n) &#123;</span><br><span class="line">              scaled(i) = values(i) / q(i)</span><br><span class="line">              i += <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">Iterator</span>.tabulate (n) &#123; i =&gt;</span><br><span class="line">              <span class="meta">val</span> buf = <span class="function"><span class="keyword">new</span> <span class="title">ListBuffer</span>[((<span class="type">Int</span>, <span class="type">Int</span>), <span class="title">Double</span>)]()</span></span><br><span class="line"><span class="function">              <span class="title">val</span> <span class="title">iVal</span> = <span class="title">scaled</span>(i)</span></span><br><span class="line"><span class="function">              <span class="title">if</span> (iVal != <span class="number">0</span> &amp;&amp; rand.nextDouble() &lt; <span class="title">p</span>(i)) &#123;</span></span><br><span class="line"><span class="function">                <span class="title">var</span> <span class="title">j</span> = <span class="title">i</span> + 1</span></span><br><span class="line"><span class="function">                <span class="title">while</span> (j &lt; n) &#123;</span></span><br><span class="line"><span class="function">                  <span class="title">val</span> <span class="title">jVal</span> = <span class="title">scaled</span>(j)</span></span><br><span class="line"><span class="function">                  <span class="title">if</span> (jVal != <span class="number">0</span> &amp;&amp; rand.nextDouble() &lt; <span class="title">p</span>(j)) &#123;</span></span><br><span class="line"><span class="function">                    <span class="title">buf</span> += (((i, j), <span class="title">iVal</span> * <span class="title">jVal</span>))</span></span><br><span class="line"><span class="function">                  &#125;</span></span><br><span class="line"><span class="function">                  <span class="title">j</span> += 1</span></span><br><span class="line"><span class="function">                &#125;</span></span><br><span class="line"><span class="function">              &#125;</span></span><br><span class="line"><span class="function">              <span class="title">buf</span></span></span><br><span class="line"><span class="function">            &#125;.<span class="title">flatten</span></span></span><br><span class="line"><span class="function">        &#125;</span></span><br><span class="line"><span class="function">      &#125;</span></span><br><span class="line"><span class="function">    <span class="comment">// 最后再执行一个reduceBykey，累加所有的值，就是i和j的相似度</span></span></span><br><span class="line"><span class="function">    &#125;.<span class="title">reduceByKey</span>(_ + _).<span class="title">map</span> &#123; <span class="title">case</span> ((i, j), <span class="title">sim</span>) =&gt;</span></span><br><span class="line">      <span class="type">MatrixEntry</span>(i.toLong, j.toLong, sim)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">new</span> <span class="title">CoordinateMatrix</span>(sims, numCols(), <span class="title">numCols</span>())</span></span><br><span class="line"><span class="function">  &#125;</span></span><br></pre></td></tr></table></figure>
+
+这样把所有向量的平方和广播后，每一行都可以在不同的节点并行处理了。
+
+总结来说，Spark提供的这个计算相似度的方法有两点优势：
+
+- 通过拆解公式，使得每一行独立计算，加快速度
+- 提供采样方案，以采样方式抽样固定的特征维度计算相似度
+
+不过杰卡德目前并不能使用这种方法来计算，因为杰卡德中间有一项需要对向量求dot，这种方式就不适合了；如果杰卡德想要快速计算，可以去参考LSH局部敏感哈希算法，这里就不详细说明了。
+
+---
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编的最新出版的技术图书，已经在京东，当当上线，感兴趣的朋友可以进行购买阅读！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

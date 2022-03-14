@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        Spark排序算法系列之（MLLib、ML）LR使用方式介绍 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LR介绍"><span class="toc-text">LR介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mllib中的LRWithLBFGS"><span class="toc-text">mllib中的LRWithLBFGS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ml中的二分类LR"><span class="toc-text">ml中的二分类LR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ml中的多分类LR"><span class="toc-text">ml中的多分类LR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        Spark排序算法系列之（MLLib、ML）LR使用方式介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-05-07 10:47:27</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Spark与推荐系统" title="Spark与推荐系统">Spark与推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>【Spark排序算法系列】主要介绍的是目前推荐系统或者广告点击方面用的比较广的几种算法，和他们在Spark中的应用实现，本篇文章主要介绍LR算法。</p>
+</blockquote>
+<a id="more"></a>
+<p>本系列还包括（持续更新）：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/86695837" target="_blank" rel="external">Spark排序算法系列之GBDT（梯度提升决策树）</a></li>
+<li>Spark排序算法系列之模型融合（GBDT+LR）</li>
+<li>Spark排序算法系列之XGBoost</li>
+<li>Spark排序算法系列之FTRL（Follow-the-regularized-Leader）</li>
+<li>Spark排序算法系列之FM与FFM</li>
+</ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>逻辑回归（Logistic Regression，LR）是较早应用在推荐排序上的，其属于线性模型，模型简单，可以引入海量离散特征，这样的好处就是模型可以考虑更加细节或者说针对具体个体的因素。如果想要引入非线性因素需要做特征交叉，这样很容易产生百亿特征，在很早之前ctr就主要靠堆人力搞特征工程工作来持续优化效果。</p>
+<p>虽然目前在工业界LR应用的并不多，但是对于初学者,一些中小企业或者应用场景不需要负责排序模型的时候，LR扔不失为一个不错的选择。</p>
+<p>关于LR的算法原理，这里不做过多说明，可参考：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Gamer_gyt/article/details/80115252" target="_blank" rel="external">回归分析之逻辑回归-Logistic Regression</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzI2MDU3OTgyOQ==&amp;mid=100001113&amp;idx=1&amp;sn=711c3af661c54aa2757ca41d867cef6a#rd" target="_blank" rel="external">线性模型篇之Logistic Regression数学公式推导</a></li>
+</ul>
+<h1 id="LR介绍"><a href="#LR介绍" class="headerlink" title="LR介绍"></a>LR介绍</h1><p>LR的数学表达式可以简写为：</p>
+<script type="math/tex; mode=display">
+L(w,x,y)=log(1+exp(-yw^Tx))</script><p>对于二分类模型，LR是一个分类算法，模型计算得到预测值后会通过以下函数进转化。</p>
+<script type="math/tex; mode=display">
+f(z) = \frac{1}{1+e^{-zx}}</script><p>如果L(w,x,y) &gt; 0.5 则是1 否则为0。当然在实际应用过程中，并不是一定取0.5作为界限值，而是根据实际情况进行调整。</p>
+<p>二进制回归可以转化为多分类回归问题。关于多分类介绍和基于Spark实现多分类可参考<a href="https://blog.csdn.net/Gamer_gyt/article/details/86378882" target="_blank" rel="external">多分类实现方式介绍和在Spark上实现多分类逻辑回归（Multinomial Logistic Regression）</a></p>
+<p>在Spark.mllib包中提供了两种LR分类模型，分别是：</p>
+<ul>
+<li>mini-batch gradient descent（LogisticRegressionWithLBFGS）</li>
+<li>L-BFGS（LogisticRegressionWithSGD）</li>
+</ul>
+<p>但官方给出的建议是：推荐使用LBFGS，因为基于LBFGS的LR比基于SGD的能更快的收敛。其原话如下：</p>
+<blockquote>
+<p>We implemented two algorithms to solve logistic regression: mini-batch gradient descent and L-BFGS. We recommend L-BFGS over mini-batch gradient descent for faster convergence.</p>
+</blockquote>
+<p>而且LRWithLBFGS不仅支持二分类还支持多分类，但LRWithSGD只支持二分类。所以后续只介绍下Spark mllib中的LogisticRegressionWithLBFGS相关操作。</p>
+<h1 id="mllib中的LRWithLBFGS"><a href="#mllib中的LRWithLBFGS" class="headerlink" title="mllib中的LRWithLBFGS"></a>mllib中的LRWithLBFGS</h1><p>设置变量和创建spark对象<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> file = <span class="string">"data/sample_libsvm_data.txt"</span></span><br><span class="line"><span class="keyword">val</span> model_path = <span class="string">"model/lr/"</span></span><br><span class="line"><span class="keyword">val</span> model_param = <span class="string">"numInterations:5,regParam:0.1,updater:SquaredL2Updater,gradient:LogisticGradient"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> spark = SparkSession.builder()</span><br><span class="line">	.master(<span class="string">"local[5]"</span>)</span><br><span class="line">    .appName(<span class="string">"LogisticRegression_Model_Train"</span>)</span><br><span class="line">	.getOrCreate()</span><br><span class="line">Logger.getRootLogger.setLevel(Level.WARN)</span><br></pre></td></tr></table></figure></p>
+<p>拆分数据集<br><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 记载数据集 并拆分成训练集和测试集</span><br><span class="line"><span class="title">val</span> <span class="class"><span class="keyword">data</span> = <span class="type">MLUtils</span>.loadLibSVMFile(<span class="title">spark</span>.<span class="title">sparkContext</span>,<span class="title">file</span>).randomSplit(<span class="type">Array</span>(0.7,0.3))</span></span><br><span class="line"><span class="title">val</span> (train, test) = (<span class="class"><span class="keyword">data</span>(0), <span class="keyword">data</span>(1))</span></span><br></pre></td></tr></table></figure></p>
+<p>LRWithLBFGS模型设置参数<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义分类的数目，默认为2，是logisticregression的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> numClass: <span class="built_in">Int</span> = <span class="number">2</span></span><br><span class="line"><span class="comment">// 定义是否添加截距,默认值为false，是logisticregression的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> isAddIntercept: Option[<span class="built_in">Boolean</span>] = None</span><br><span class="line"><span class="comment">// 定义是否在训练模型前进行验证，是logisticregression的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> isValidateData: Option[<span class="built_in">Boolean</span>] = None</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义迭代的次数，默认值是100，LBFGS的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> numInterations: Option[<span class="built_in">Int</span>] = None</span><br><span class="line"><span class="comment">// 定义正则化系数值，默认值是0.0，LBFGS的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> regParam: Option[<span class="built_in">Double</span>] = None</span><br><span class="line"><span class="comment">// 定义正则化参数，支持：L1Updater[L1]、SquaredL2Updater[L2]、SimpleUpdater[没有正则项]，LBFGS的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> updater: Option[String] = None</span><br><span class="line"><span class="comment">// 定义计算梯度的方式，支持：LogisticGradient、LeastSquaresGradient、HingeGradient ，LBFGS的参数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> gradient: Option[String] = None</span><br><span class="line"><span class="comment">// 人工定义的收敛阈值</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> threshold:Option[<span class="built_in">Double</span>]=None</span><br><span class="line"><span class="comment">// 定义模型收敛阈值，默认为 10^-6</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> convergenceTol: <span class="built_in">Double</span>= <span class="number">1.0e-6</span></span><br></pre></td></tr></table></figure></p>
+<p>创建模型<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">def createLRModel(model_param: <span class="type">String</span>): <span class="type">LogisticRegressionWithLBFGS</span>=&#123;</span><br><span class="line">	<span class="comment">// 设置模型参数</span></span><br><span class="line">	val optimizer = <span class="keyword">new</span> <span class="type">LROptimizer</span>()</span><br><span class="line">	optimizer.parseString(model_param)</span><br><span class="line">	println(s<span class="string">"模型训练参数为：$&#123;optimizer.toString&#125;"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 创建模型并指定相关参数</span></span><br><span class="line">	val LRModel = <span class="keyword">new</span> <span class="type">LogisticRegressionWithLBFGS</span>()</span><br><span class="line">	<span class="comment">// 设置分类数目</span></span><br><span class="line">	LRModel.setNumClasses(optimizer.getNumClass)</span><br><span class="line">	<span class="comment">// 设置是否添加截距</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getIsAddIntercept.nonEmpty) &#123;LRModel.setIntercept(optimizer.getIsAddIntercept.<span class="keyword">get</span>)&#125;</span><br><span class="line">	<span class="comment">// 设置是否进行验证模型</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getIsValidateData.nonEmpty)&#123;LRModel.setValidateData(optimizer.getIsValidateData.<span class="keyword">get</span>)&#125;</span><br><span class="line">	<span class="comment">// 设置迭代次数</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getNumInterations.nonEmpty)&#123;LRModel.optimizer.setNumIterations((optimizer.getNumInterations.<span class="keyword">get</span>))&#125;</span><br><span class="line">	<span class="comment">// 设置正则项参数</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getRegParam.nonEmpty) &#123; LRModel.optimizer.setRegParam(optimizer.getRegParam.<span class="keyword">get</span>) &#125;</span><br><span class="line">	<span class="comment">// 设置正则化参数</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getUpdater.nonEmpty)&#123;</span><br><span class="line">		optimizer.getUpdater match &#123;</span><br><span class="line">			<span class="keyword">case</span> Some(<span class="string">"L1Updater"</span>) =&gt; LRModel.optimizer.setUpdater( <span class="keyword">new</span> <span class="type">L1Updater</span>())</span><br><span class="line">			<span class="keyword">case</span> Some(<span class="string">"SquaredL2Updater"</span>) =&gt; LRModel.optimizer.setUpdater(<span class="keyword">new</span> <span class="type">SquaredL2Updater</span>())</span><br><span class="line">			<span class="keyword">case</span> Some(<span class="string">"SimpleUpdater"</span>) =&gt; LRModel.optimizer.setUpdater(<span class="keyword">new</span> <span class="type">SimpleUpdater</span>())</span><br><span class="line">			<span class="keyword">case</span> <span class="literal">_</span> =&gt; LRModel.optimizer.setUpdater(<span class="keyword">new</span> <span class="type">SquaredL2Updater</span>())</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 设置梯度计算方式</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getGradient.nonEmpty)&#123;</span><br><span class="line">		optimizer.getGradient match &#123;</span><br><span class="line">			<span class="keyword">case</span> Some(<span class="string">"LogisticGradient"</span>) =&gt; LRModel.optimizer.setGradient(<span class="keyword">new</span> <span class="type">LogisticGradient</span>())</span><br><span class="line">			<span class="keyword">case</span> Some(<span class="string">"LeastSquaresGradient"</span>) =&gt; LRModel.optimizer.setGradient(<span class="keyword">new</span> <span class="type">LeastSquaresGradient</span>())</span><br><span class="line">			<span class="keyword">case</span> Some(<span class="string">"HingeGradient"</span>) =&gt; LRModel.optimizer.setGradient(<span class="keyword">new</span> <span class="type">HingeGradient</span>())</span><br><span class="line">			<span class="keyword">case</span> <span class="literal">_</span> =&gt; LRModel.optimizer.setGradient(<span class="keyword">new</span> <span class="type">LogisticGradient</span>())</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 设置收敛阈值</span></span><br><span class="line">	<span class="keyword">if</span>(optimizer.getThreshold.nonEmpty)&#123; LRModel.optimizer.setConvergenceTol(optimizer.getThreshold.<span class="keyword">get</span>)&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;LRModel.optimizer.setConvergenceTol(optimizer.getConvergenceTol)&#125;</span><br><span class="line"></span><br><span class="line">	LRModel</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>模型效果评估<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def evaluteResult(result: RDD[(Double,Double,Double)]) :<span class="attr">Unit</span> = &#123;</span><br><span class="line">	// MSE</span><br><span class="line">	val <span class="attr">testMSE</span> = result.<span class="built_in">map</span>&#123; case(real, pre, _) =&gt; math.pow((real - pre), <span class="number">2</span>)&#125;.mean()</span><br><span class="line">	println(s<span class="string">"Test Mean Squared Error = $testMSE"</span>)</span><br><span class="line">	// AUC</span><br><span class="line">	val <span class="attr">metrics</span> = new BinaryClassificationMetrics(result.<span class="built_in">map</span>(<span class="attr">x</span> =&gt; (x._2,x._1)).sortByKey(<span class="attr">ascending</span> = <span class="literal">true</span>),<span class="attr">numBins</span> = <span class="number">2</span>)</span><br><span class="line">	println(s<span class="string">"0-1 label AUC is = <span class="subst">$&#123;metrics.areaUnderROC&#125;</span>"</span>)</span><br><span class="line">	val <span class="attr">metrics1</span> = new BinaryClassificationMetrics(result.<span class="built_in">map</span>(<span class="attr">x</span> =&gt; (x._3,x._1)).sortByKey(<span class="attr">ascending</span> = <span class="literal">true</span>),<span class="attr">numBins</span> = <span class="number">2</span>)</span><br><span class="line">	println(s<span class="string">"score-label AUC is = <span class="subst">$&#123;metrics1.areaUnderROC&#125;</span>"</span>)</span><br><span class="line">	// 错误率</span><br><span class="line">	val <span class="attr">error</span> = result.filter(<span class="attr">x</span> =&gt; x._1!=x._2).count().toDouble / result.count()</span><br><span class="line">	println(s<span class="string">"error is = $error"</span>)</span><br><span class="line">	// 准确率</span><br><span class="line">	val <span class="attr">accuracy</span> = result.filter(<span class="attr">x</span> =&gt; x.<span class="attr">_1==x._2).count().toDouble</span> / result.count()</span><br><span class="line">	println(s<span class="string">"accuracy is = $accuracy"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>保存模型<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def saveModel(model: LogisticRegressionModel, model_path: <span class="keyword">String</span>): Unit = &#123;</span><br><span class="line">	<span class="comment">// 保存模型文件 obj</span></span><br><span class="line">	val out_obj = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(model_path+<span class="string">"model.obj"</span>))</span><br><span class="line">	out_obj.writeObject(model)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 保存模型信息</span></span><br><span class="line">	val model_info=<span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(model_path+<span class="string">"model_info.txt"</span>))</span><br><span class="line">	model_info.<span class="built_in">write</span>(model.toString())</span><br><span class="line">	model_info.<span class="built_in">flush</span>()</span><br><span class="line">	model_info.<span class="built_in">close</span>()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 保存模型权重</span></span><br><span class="line">	val model_weights=<span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(model_path+<span class="string">"model_weights.txt"</span>))</span><br><span class="line">	model_weights.<span class="built_in">write</span>(model.weights.toString)</span><br><span class="line">	model_weights.<span class="built_in">flush</span>()</span><br><span class="line">	model_weights.<span class="built_in">close</span>()</span><br><span class="line"></span><br><span class="line">	<span class="built_in">println</span>(s<span class="string">"模型信息写入文件完成，路径为：$model_path"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加载模型<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">def loadModel(model_path: <span class="built_in">String</span>): Option[LogisticRegressionModel] = &#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		val <span class="keyword">in</span> = <span class="keyword">new</span> ObjectInputStream( <span class="keyword">new</span> FileInputStream(model_path) )</span><br><span class="line">		val model = Option( <span class="keyword">in</span>.readObject().asInstanceOf[LogisticRegressionModel] )</span><br><span class="line">		<span class="keyword">in</span>.close()</span><br><span class="line">		println(<span class="string">"Model Load Success"</span>)</span><br><span class="line">		model</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> ex: <span class="function"><span class="params">ClassNotFoundException</span> =&gt;</span> &#123;</span><br><span class="line">			println(ex.printStackTrace())</span><br><span class="line">			None</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">case</span> ex: <span class="function"><span class="params">IOException</span> =&gt;</span> &#123;</span><br><span class="line">			println(ex.printStackTrace())</span><br><span class="line">			println(ex)</span><br><span class="line">			None</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">case</span> _: <span class="function"><span class="params">Throwable</span> =&gt;</span> <span class="keyword">throw</span> <span class="keyword">new</span> Exception</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用加载的模型进行分值计算<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加载obj文件进行预测</span></span><br><span class="line">val model_new = loadModel(s<span class="string">"$model_path/model.obj"</span>)</span><br><span class="line"><span class="comment">// 使用加载的模型进行样例预测</span></span><br><span class="line">val result_new = <span class="keyword">test</span>.map(<span class="keyword">line</span> =&gt;&#123;</span><br><span class="line">	val pre_label = model_new.get.<span class="keyword">predict</span>(<span class="keyword">line</span>.features)</span><br><span class="line">	<span class="comment">// blas.ddot(x.length, x,1,y,1) (向量x的长度，向量x，向量x的索引递增间隔，向量y，向量y的索引递增间隔)</span></span><br><span class="line">	val pre_score = blas.ddot(model.numFeatures, <span class="keyword">line</span>.features.toArray, 1, model.weights.toArray, 1)</span><br><span class="line">	val <span class="keyword">score</span> = Math.pow(1+Math.pow(Math.<span class="keyword">E</span>, -2 * pre_score), -1)</span><br><span class="line">	(<span class="keyword">line</span>.<span class="keyword">label</span>, pre_label,<span class="keyword">score</span>)</span><br><span class="line">&#125; )</span><br><span class="line">result_new.take(2).<span class="keyword">foreach</span>(println)</span><br></pre></td></tr></table></figure></p>
+<h1 id="ml中的二分类LR"><a href="#ml中的二分类LR" class="headerlink" title="ml中的二分类LR"></a>ml中的二分类LR</h1><p>ml包中的LR既可以用来做二分类，也可以用来做多分类。</p>
+<ul>
+<li>二分类对应：Binomial logistic regression</li>
+<li>多分类对应：multinomial logistic regression</li>
+</ul>
+<p>其中二分类可以通过Binomial logistic regression 和 multinomial logistic regression实现。</p>
+<p>基于Binomial logistic regression的LR实现：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BinaryModel</span></span>(train: <span class="type">Dataset</span>[<span class="type">Row</span>], model_path: <span class="type">String</span>, spark: <span class="type">SparkSession</span>) = &#123;</span><br><span class="line">	<span class="comment">// 创建模型</span></span><br><span class="line">	<span class="keyword">val</span> <span class="type">LRModel</span> = <span class="keyword">new</span> <span class="type">LogisticRegression</span>()</span><br><span class="line">		.setMaxIter(<span class="number">20</span>)</span><br><span class="line">		.setRegParam(<span class="number">0.3</span>)</span><br><span class="line">		.setElasticNetParam(<span class="number">0.8</span>)</span><br><span class="line">	<span class="comment">// 训练评估模型</span></span><br><span class="line">	<span class="keyword">val</span> model = <span class="type">LRModel</span>.fit(train)</span><br><span class="line">	evalute(model, train, spark)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">evalute</span></span>(model: <span class="type">LogisticRegressionModel</span>, train: <span class="type">Dataset</span>[<span class="type">Row</span>], spark: <span class="type">SparkSession</span>):<span class="type">Unit</span> = &#123;</span><br><span class="line">		<span class="comment">// 打印模型参数</span></span><br><span class="line">		println(<span class="string">s"模型参数信息如下：\n <span class="subst">$&#123;model.parent.explainParams()&#125;</span> \n"</span>)</span><br><span class="line">		println(<span class="string">s"Coefficients（系数）: <span class="subst">$&#123;model.coefficients&#125;</span>"</span>)</span><br><span class="line">		println(<span class="string">s"Intercept（截距）: <span class="subst">$&#123;model.intercept&#125;</span>"</span>)</span><br><span class="line">		<span class="comment">// 查看训练集的预测结果 rawPrediction：row 计算的分值，probability：经过sigmoid转换后的概率</span></span><br><span class="line">		<span class="keyword">val</span> result = model.evaluate(train)</span><br><span class="line">		result.predictions.show(<span class="number">10</span>)</span><br><span class="line">		<span class="comment">// 将 label，0 值概率，predict label提取出来</span></span><br><span class="line">		result.predictions.select(<span class="string">"label"</span>,<span class="string">"probability"</span>,<span class="string">"prediction"</span>).rdd</span><br><span class="line">			.map(row =&gt; (row.getDouble(<span class="number">0</span>),row.get(<span class="number">1</span>).asInstanceOf[<span class="type">DenseVector</span>].toArray(<span class="number">0</span>),row.getDouble(<span class="number">2</span>)))</span><br><span class="line">			.take(<span class="number">10</span>).foreach(println)</span><br><span class="line">		<span class="comment">// 模型评估</span></span><br><span class="line">		<span class="keyword">val</span> trainSummary = model.summary</span><br><span class="line">		<span class="keyword">val</span> objectiveHistory = trainSummary.objectiveHistory</span><br><span class="line">		println(<span class="string">"objectiveHistoryLoss:"</span>)</span><br><span class="line">		objectiveHistory.foreach(loss =&gt; println(loss))</span><br><span class="line"></span><br><span class="line">		<span class="keyword">val</span> binarySummary = trainSummary.asInstanceOf[<span class="type">BinaryLogisticRegressionSummary</span>]</span><br><span class="line"></span><br><span class="line">		<span class="keyword">val</span> roc = binarySummary.roc</span><br><span class="line">		roc.show()</span><br><span class="line">		println(<span class="string">s"areaUnderROC: <span class="subst">$&#123;binarySummary.areaUnderROC&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Set the model threshold to maximize F-Measure</span></span><br><span class="line">		<span class="keyword">val</span> fMeasure = binarySummary.fMeasureByThreshold</span><br><span class="line">		fMeasure.show(<span class="number">10</span>)</span><br><span class="line">		<span class="keyword">val</span> maxFMeasure = fMeasure.select(max(<span class="string">"F-Measure"</span>)).head().getDouble(<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">import</span> spark.implicits ._</span><br><span class="line">		<span class="keyword">val</span> bestThreshold = fMeasure.where($<span class="string">"F-Measure"</span>===maxFMeasure).select(<span class="string">"threshold"</span>).head().getDouble(<span class="number">0</span>)</span><br><span class="line">		model.setThreshold(bestThreshold)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>基于Multimial logistic regression的LR实现：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BinaryModelWithMulti</span></span>(train: <span class="type">Dataset</span>[<span class="type">Row</span>], model_path: <span class="type">String</span>, spark: <span class="type">SparkSession</span>) = &#123;</span><br><span class="line">	<span class="comment">// 创建模型</span></span><br><span class="line">	<span class="keyword">val</span> <span class="type">LRModel</span> = <span class="keyword">new</span> <span class="type">LogisticRegression</span>()</span><br><span class="line">    	.setMaxIter(<span class="number">10</span>)</span><br><span class="line">    	.setRegParam(<span class="number">0.3</span>)</span><br><span class="line">    	.setElasticNetParam(<span class="number">0.8</span>)</span><br><span class="line">    	.setFamily(<span class="string">"multinomial"</span>)</span><br><span class="line">	<span class="comment">// 训练模型</span></span><br><span class="line">	<span class="keyword">val</span> model = <span class="type">LRModel</span>.fit(train)</span><br><span class="line">	<span class="comment">// 打印模型参数</span></span><br><span class="line">	println(<span class="string">s"模型参数信息如下：\n <span class="subst">$&#123;model.parent.explainParams()&#125;</span> \n"</span>)</span><br><span class="line">	println(<span class="string">s"Coefficients（系数）: <span class="subst">$&#123;model.coefficientMatrix&#125;</span>"</span>)</span><br><span class="line">	println(<span class="string">s"Intercept（截距）: <span class="subst">$&#123;model.interceptVector&#125;</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="ml中的多分类LR"><a href="#ml中的多分类LR" class="headerlink" title="ml中的多分类LR"></a>ml中的多分类LR</h1><p>某条样本属于类别k的概率计算为：</p>
+<script type="math/tex; mode=display">
+P(Y=k | X,\beta_k,\beta_{0k} ) = \frac { e^{ \beta _k \cdot X + \beta_{0k} }}
+{ \sum_{k^j=0}^{K-1} e^{ \beta _{k^j} \cdot X + \beta_{0k^j}} }</script><p>其中K表示类别，J表示特征个数</p>
+<p>权重最小化使用的是最大似然函数，其更新公式如下：</p>
+<script type="math/tex; mode=display">
+\underset{ \beta , \beta_0 }{min} - [\sum_{i=1}^{L}w_i \cdot logP(Y=y_i|X_i)  ] + \lambda [ \frac{1}{2}(1-\alpha )||\beta||_2^2 + \alpha ||\beta||_1]</script><p>使用的数据集形式为：<br><figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">1 </span><span class="number">1</span>:-<span class="number">0.222222</span> <span class="number">2</span>:<span class="number">0.5</span> <span class="number">3</span>:-<span class="number">0.762712</span> <span class="number">4</span>:-<span class="number">0.833333</span></span><br><span class="line"><span class="symbol">1 </span><span class="number">1</span>:-<span class="number">0.555556</span> <span class="number">2</span>:<span class="number">0.25</span> <span class="number">3</span>:-<span class="number">0.864407</span> <span class="number">4</span>:-<span class="number">0.916667</span></span><br><span class="line"><span class="symbol">1 </span><span class="number">1</span>:-<span class="number">0.722222</span> <span class="number">2</span>:-<span class="number">0.166667</span> <span class="number">3</span>:-<span class="number">0.864407</span> <span class="number">4</span>:-<span class="number">0.833333</span></span><br><span class="line"><span class="symbol">1 </span><span class="number">1</span>:-<span class="number">0.722222</span> <span class="number">2</span>:<span class="number">0.166667</span> <span class="number">3</span>:-<span class="number">0.694915</span> <span class="number">4</span>:-<span class="number">0.916667</span></span><br><span class="line"><span class="symbol">0 </span><span class="number">1</span>:<span class="number">0.166667</span> <span class="number">2</span>:-<span class="number">0.416667</span> <span class="number">3</span>:<span class="number">0.457627</span> <span class="number">4</span>:<span class="number">0.5</span></span><br><span class="line"><span class="symbol">1 </span><span class="number">1</span>:-<span class="number">0.833333</span> <span class="number">3</span>:-<span class="number">0.864407</span> <span class="number">4</span>:-<span class="number">0.916667</span></span><br><span class="line"><span class="symbol">2 </span><span class="number">1</span>:-<span class="number">1.32455e</span>-<span class="number">07</span> <span class="number">2</span>:-<span class="number">0.166667</span> <span class="number">3</span>:<span class="number">0.220339</span> <span class="number">4</span>:<span class="number">0.0833333</span></span><br><span class="line"><span class="symbol">2 </span><span class="number">1</span>:-<span class="number">1.32455e</span>-<span class="number">07</span> <span class="number">2</span>:-<span class="number">0.333333</span> <span class="number">3</span>:<span class="number">0.0169491</span> <span class="number">4</span>:-<span class="number">4.03573e</span>-<span class="number">08</span></span><br></pre></td></tr></table></figure></p>
+<p>多分类LR模型实现为：<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def <span class="type">MultiModel</span>(file_multi: <span class="type">String</span>, spark: <span class="type">SparkSession</span>, model_path: <span class="type">String</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">	<span class="meta">val</span> training = spark.read.format(<span class="string">"libsvm"</span>).load(file_multi)</span><br><span class="line">	<span class="meta">val</span> lr = <span class="function"><span class="keyword">new</span> <span class="title">LogisticRegression</span>()</span></span><br><span class="line"><span class="function">		.<span class="title">setMaxIter</span>(<span class="number">10</span>)</span></span><br><span class="line"><span class="function">		.<span class="title">setRegParam</span>(<span class="number">0.3</span>)</span></span><br><span class="line"><span class="function">		.<span class="title">setElasticNetParam</span>(<span class="number">0.8</span>)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	<span class="comment">// Fit the model</span></span></span><br><span class="line"><span class="function">	<span class="title">val</span> <span class="title">lrModel</span> = <span class="title">lr</span>.<span class="title">fit</span>(training)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	<span class="comment">// Print the coefficients and intercept for multinomial logistic regression</span></span></span><br><span class="line"><span class="function">	<span class="title">println</span>(s"<span class="type">Coefficients</span>: \n$&#123;lrModel.coefficientMatrix&#125;")</span></span><br><span class="line"><span class="function">	<span class="title">println</span>(s"<span class="type">Intercepts</span>: $&#123;lrModel.interceptVector&#125;")</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://spark.apache.org/docs/2.1.0/mllib-linear-methods.html#classification" target="_blank" rel="external">https://spark.apache.org/docs/2.1.0/mllib-linear-methods.html#classification</a></p>
+<p><a href="https://spark.apache.org/docs/2.1.0/ml-classification-regression.html#logistic-regression" target="_blank" rel="external">https://spark.apache.org/docs/2.1.0/ml-classification-regression.html#logistic-regression</a></p>
+<p><a href="https://blog.csdn.net/pupilxmk/article/details/80735599" target="_blank" rel="external">https://blog.csdn.net/pupilxmk/article/details/80735599</a></p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

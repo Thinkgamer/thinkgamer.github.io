@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之7、构建离线文章特征和用户特征.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#构建文章特征"><span class="toc-text">构建文章特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建用户特征"><span class="toc-text">构建用户特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apscheduler-定时更新"><span class="toc-text">Apscheduler 定时更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之7、构建离线文章特征和用户特征.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:27</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>前面我们完成了文章画像和用户画像的构建，画像数据主要是提供给召回阶段的各种召回算法使用。接下来，我们还要为排序阶段的各种排序模型做数据准备，通过特征工程将画像数据进一步加工为特征数据，以供排序模型直接使用。</p>
+<p>我们可以将特征数据存储到 Hbase 中，这里我们先在 Hbase 中创建好 ctr_feature_article 表 和 ctr_feature_user 表，分别存储文章特征数据和用户特征数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 文章特征表</span></span><br><span class="line"><span class="keyword">create</span> <span class="string">'ctr_feature_article'</span>, <span class="string">'article'</span></span><br><span class="line"><span class="comment">-- 如 article:13401 timestamp=1555635749357, value=[18.0,0.08196639249252607,0.11217275332895373,0.1353835167902181,0.16086650318453152,0.16356418791892943,0.16740082750337945,0.18091837445730974,0.1907214431716628,0.2........................-0.04634634410271921,-0.06451843378804649,-0.021564142420785692,0.10212902152136256]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 用户特征表</span></span><br><span class="line"><span class="keyword">create</span> <span class="string">'ctr_feature_user'</span>, <span class="string">'channel'</span></span><br><span class="line"><span class="comment">-- 如 4 column=channel:13, timestamp=1555647172980, value=[]</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="构建文章特征"><a href="#构建文章特征" class="headerlink" title="构建文章特征"></a>构建文章特征</h1><p>文章特征包括文章关键词权重、文章频道以及文章向量，我们首先读取文章画像<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use article"</span>)</span><br><span class="line">article_profile = spark.sql(<span class="string">"select * from article_profile"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>在文章画像中筛选出权重最高的 K 个关键词的权重，作为文章关键词的权重向量<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">article_profile_to_feature</span><span class="params">(row)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        article_weights = sorted(row.keywords.values())[:<span class="number">10</span>]</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        article_weights = [<span class="number">0.0</span>] * <span class="number">10</span></span><br><span class="line">    <span class="keyword">return</span> row.article_id, row.channel_id, article_weights</span><br><span class="line">article_profile = article_profile.rdd.map(article_profile_to_feature).toDF([<span class="string">'article_id'</span>, <span class="string">'channel_id'</span>, <span class="string">'weights'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>article_profile</code> 结果如下所示，weights 即为文章关键词的权重向量</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-bdc45d1e743a3c1b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，读取文章向量信息，再将频道 ID 和文章向量加入进来，利用 article_id 将 article_profile 和 article_vector 进行内连接，并将 weights 和 articlevector 转为 <code>vector</code> 类型<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">article_vector = spark.sql(<span class="string">"select * from article_vector"</span>)</span><br><span class="line">article_feature = article_profile.join(article_vector, on=[<span class="string">'article_id'</span>], how=<span class="string">'inner'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">feature_to_vector</span><span class="params">(row)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> pyspark.ml.linalg <span class="keyword">import</span> Vectors</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> row.article_id, row.channel_id, Vectors.dense(row.weights), Vectors.dense(row.articlevector)</span><br><span class="line"></span><br><span class="line">article_feature = article_feature.rdd.map(feature_to_vector).toDF([<span class="string">'article_id'</span>, <span class="string">'channel_id'</span>, <span class="string">'weights'</span>, <span class="string">'articlevector'</span>])</span><br></pre></td></tr></table></figure></p>
+<p>最后，我们将 channel_id, weights, articlevector 合并为一列 features 即可（通常 channel_id 可以进行 one-hot 编码，我们这里先省略了）<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature <span class="keyword">import</span> VectorAssembler</span><br><span class="line"></span><br><span class="line">columns = [<span class="string">'article_id'</span>, <span class="string">'channel_id'</span>, <span class="string">'weights'</span>, <span class="string">'articlevector'</span>]</span><br><span class="line">article_feature = VectorAssembler().setInputCols(columns[<span class="number">1</span>:<span class="number">4</span>]).setOutputCol(<span class="string">"features"</span>).transform(article_feature)</span><br></pre></td></tr></table></figure></p>
+<p><code>article_feature</code> 结果如下所示，features 就是我们准备好的文章特征</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-1d9a977180832173.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>最后，将文章特征结果保存到 Hbase 中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_article_feature_to_hbase</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> happybase</span><br><span class="line">    pool = happybase.ConnectionPool(size=<span class="number">10</span>, host=<span class="string">'hadoop-master'</span>)</span><br><span class="line">    <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">        table = conn.table(<span class="string">'ctr_feature_article'</span>)</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">            table.put(<span class="string">'&#123;&#125;'</span>.format(row.article_id).encode(),</span><br><span class="line">                     &#123;<span class="string">'article:&#123;&#125;'</span>.format(row.article_id).encode(): str(row.features).encode()&#125;)</span><br><span class="line"></span><br><span class="line">article_feature.foreachPartition(save_article_feature_to_hbase)</span><br></pre></td></tr></table></figure></p>
+<h1 id="构建用户特征"><a href="#构建用户特征" class="headerlink" title="构建用户特征"></a>构建用户特征</h1><p>由于用户在不同频道的偏好差异较大，所以我们要计算用户在每个频道的特征。首先读取用户画像，将空值列删除<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use profile"</span>)</span><br><span class="line"></span><br><span class="line">user_profile_hbase = spark.sql(<span class="string">"select user_id, information.birthday, information.gender, article_partial, env from user_profile_hbase"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>user_profile_hbase</code> 结果如下所示，其中 article_partial 为用户标签及权重，如 ([‘18:vars’: 0.2, ‘18: python’:0.2, …], [‘19:java’: 0.2, ‘19: javascript’:0.2, …], …) 表示某个用户在 18 号频道的标签包括 var、python 等，在 19 号频道的标签包括 java、javascript等。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-655ec8ea6979ab94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>由于 gender 和 birthday 两列空值较多，我们将这两列去除（实际场景中也可以根据数据情况选择填充）<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 去除空值列</span></span><br><span class="line"><span class="attr">user_profile_hbase</span> = user_profile_hbase.drop(<span class="string">'env'</span>, <span class="string">'birthday'</span>, <span class="string">'gender'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>提取用户 ID，获取 user_id 列的内容中 <code>:</code> 后面的数值即为用户 ID<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def get_user_id(<span class="built_in">row</span>):</span><br><span class="line">    <span class="built_in">return</span> int(<span class="built_in">row</span>.user_id.<span class="built_in">split</span>(<span class="string">":"</span>)[<span class="number">1</span>]), <span class="built_in">row</span>.article_partial</span><br><span class="line"></span><br><span class="line">user_profile_hbase = user_profile_hbase.rdd.<span class="built_in">map</span>(get_user_id)</span><br></pre></td></tr></table></figure></p>
+<p>将 <code>user_profile_hbase</code> 转为 DataFrame 类型<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.sql.types import *</span><br><span class="line"></span><br><span class="line">_schema = StructType([</span><br><span class="line">    StructField(<span class="string">"user_id"</span>, LongType()),</span><br><span class="line">    StructField(<span class="string">"weights"</span>, MapType(StringType(), DoubleType()))</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">user_profile_hbase = spark.createDataFrame(user_profile_hbase, schema=_schema)</span><br></pre></td></tr></table></figure></p>
+<p>接着，将每个频道内权重最高的 K 个标签的权重作为用户标签权重向量<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def frature_preprocess(<span class="built_in">row</span>):</span><br><span class="line"></span><br><span class="line">    from pyspark.ml.linalg import Vectors</span><br><span class="line"></span><br><span class="line">    user_weights = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">26</span>):</span><br><span class="line">        try:</span><br><span class="line">            channel_weights = sorted([<span class="built_in">row</span>.weights[<span class="built_in">key</span>] <span class="keyword">for</span> <span class="built_in">key</span> <span class="keyword">in</span> <span class="built_in">row</span>.weights.keys() <span class="keyword">if</span> <span class="built_in">key</span>.<span class="built_in">split</span>(':')[<span class="number">0</span>] == str(i)])[:<span class="number">10</span>]</span><br><span class="line">            user_weights.<span class="built_in">append</span>(channel_weights)</span><br><span class="line">        except:</span><br><span class="line">            user_weights.<span class="built_in">append</span>([<span class="number">0.0</span>] * <span class="number">10</span>)</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">row</span>.user_id, user_weights</span><br><span class="line"></span><br><span class="line">user_features = user_profile_hbase.rdd.<span class="built_in">map</span>(frature_preprocess).collect()</span><br></pre></td></tr></table></figure></p>
+<p><code>user_features</code> 就是我们计算好的用户特征，数据结构类似 (10, [[0.2, 2.1, …], [0.2, 2.1, …]], …)，其中元组第一个元素 10 即为用户 ID，第二个元素是长度为 25 的用户频道标签权重列表，列表中每个元素是长度为 K 的用户标签权重列表，代表用户在某个频道下的标签权重向量。</p>
+<p>最后，将用户特征结果保存到 Hbase，利用 Spark 的 <code>batch()</code> 方法，按频道批量存储用户特征<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import happybase</span><br><span class="line"></span><br><span class="line"># 批量插入Hbase数据库中</span><br><span class="line">pool = happybase.ConnectionPool(size=10, host='hadoop-master', port=9090)</span><br><span class="line">with pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">    ctr_feature = conn.<span class="keyword">table</span>('ctr_feature_user')</span><br><span class="line">    with ctr_feature.batch(transaction=True) <span class="keyword">as</span> b:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="keyword">range</span>(len(user_features)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="keyword">range</span>(25):</span><br><span class="line">                b.put(<span class="string">"&#123;&#125;"</span>.<span class="keyword">format</span>(res[i][0]).<span class="keyword">encode</span>(),&#123;<span class="string">"channel:&#123;&#125;"</span>.<span class="keyword">format</span>(j+1).<span class="keyword">encode</span>(): str(res[i][1][j]).<span class="keyword">encode</span>()&#125;)</span><br><span class="line">    conn.<span class="keyword">close</span>()</span><br></pre></td></tr></table></figure></p>
+<h1 id="Apscheduler-定时更新"><a href="#Apscheduler-定时更新" class="headerlink" title="Apscheduler 定时更新"></a>Apscheduler 定时更新</h1><p>定义文章特征和用户特征的离线更新方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_ctr_feature</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    更新文章特征和用户特征</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    fp = FeaturePlatform()</span><br><span class="line">    fp.update_user_ctr_feature_to_hbase()</span><br><span class="line">    fp.update_article_ctr_feature_to_hbase()</span><br></pre></td></tr></table></figure></p>
+<p>在 Apscheduler 中添加定时更新文章特征和用户特征的任务，每隔 4 小时运行一次<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from apscheduler.schedulers.blocking <span class="built_in">import</span> BlockingScheduler</span><br><span class="line">from apscheduler.executors.pool <span class="built_in">import</span> ProcessPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建scheduler，多进程执行</span></span><br><span class="line"><span class="attr">executors</span> = &#123;</span><br><span class="line">    'default': ProcessPoolExecutor(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">scheduler</span> = BlockingScheduler(<span class="attr">executors=executors)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加一个定时运行文章画像更新的任务， 每隔1个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_article_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=1)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行用户画像更新的任务， 每隔2个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_user_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=2)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行特征中心平台的任务，每隔4小时更新一次</span></span><br><span class="line">scheduler.add_job(update_ctr_feature, <span class="attr">trigger='interval',</span> <span class="attr">hours=4)</span></span><br><span class="line"></span><br><span class="line">scheduler.start()</span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘， 提取码：eakp）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之2、从搭建一个电影推荐系统开始学推荐系统开发实战 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#构建用户物品评分表"><span class="toc-text">构建用户物品评分表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相似度计算"><span class="toc-text">相似度计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#惩罚热门物品"><span class="toc-text">惩罚热门物品</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例实战"><span class="toc-text">案例实战</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之2、从搭建一个电影推荐系统开始学推荐系统开发实战
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:02</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>推荐系统在我们的生活中无处不在，比如购物网站，视频音乐网站，新闻网站等，那么推荐系统是如何工作的，他是基于什么方式实现的？可以在《推荐系统开发实战》这本书中进行系统的了解和学习，本篇文章是该系列文章的开篇之作，带领大家认识一下基于最近相似用户的推荐。以下内容摘自于《推荐系统开发实战》</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/93927941" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/93927941</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<ul>
+<li>嗨，Susan，最近有什么好看的电影吗？</li>
+<li>Thinkgamer，我觉得《芳华》不错，推荐你可以去看下。</li>
+</ul>
+<p>这样的场景相信我们会经常遇到，当我们不知道要看哪部电影时，会咨询一下身边的朋友，从他们那里得到一些意见。当我们在咨询别人时，往往会有自己的判断，Thinkgamer喜欢文艺片，他不会去征求喜欢动画片的Jake，但是他会去咨询同样喜欢文艺片的Susan。</p>
+<p>基于上边的描述，我们可以总结出UserCF的算法过程：</p>
+<ol>
+<li>计算用户相似度</li>
+<li>寻找给定用户最相近的K个用户</li>
+<li>将K个用户喜欢的且给定用户没有行为的物品推荐给给定用户</li>
+</ol>
+<p>简单的讲就是：给用户推荐“和他兴趣相投的其他用户”喜欢的物品。</p>
+<center>
+<img src="https://img-blog.csdnimg.cn/20190627234358613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="70%" height="/"></center>
+
+<p>上图所示是一个基于用户的协同过滤推荐的例子，用户A和用户C同时喜欢电影A和电影C，用户C还喜欢电影D，因此将用户A没有表达喜好的电影D推荐给用户A。</p>
+<p>针对上述过程，可以分为以下步骤：</p>
+<h2 id="构建用户物品评分表"><a href="#构建用户物品评分表" class="headerlink" title="构建用户物品评分表"></a>构建用户物品评分表</h2><p>假设用户与物品所表达的喜好程度（即评分），如下表所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>用户</th>
+<th>物品a</th>
+<th>物品b</th>
+<th>物品c</th>
+<th>物品d</th>
+<th>物品e</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>0</td>
+<td>3.5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>B</td>
+<td>4.0</td>
+<td>0</td>
+<td>4.5</td>
+<td>0</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td>C</td>
+<td>0</td>
+<td>3.5</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr>
+<td>D</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>3.5</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="相似度计算"><a href="#相似度计算" class="headerlink" title="相似度计算"></a>相似度计算</h2><p>计算用户之间相似度的方法有很多，这里选用的是余弦相似度，如下：</p>
+<center>
+<img src="https://img-blog.csdnimg.cn/20190707101722627.png">
+</center>
+
+<p>针对用户u和v，上述公式中的参数如下。</p>
+<ul>
+<li>N(u)：用户u有过评分的物品集合；</li>
+<li>N(v)：用户v有过评分的物品集合；</li>
+<li>Wuv：用户u和用户v的余弦相似度。</li>
+</ul>
+<p>结合上表，可以分别求得用户C和其他三个用户的相似度，见下面三公式：</p>
+<center>
+<img src="https://img-blog.csdnimg.cn/20190707101854595.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%">
+</center>
+从计算结果来看，D用户与C用户相似度最大。
+从表中也可以直接看出，用户D和C都在b和e物品上进行了评分，用户A、B和C也都在b物品上进行了评分。
+
+## 计算推荐结果
+用户C进行评分的物品是b和e，接下来计算用户C对物品a、c、d的偏好程度，见下面三公式：
+<center>
+<img src="https://img-blog.csdnimg.cn/2019070710202317.png" width="60%">
+</center>
+从上面的计算可以得到，在用户C没有进行评分的物品中倒序排列为a→c→e。这样就可以根据需要取前 K个物品推荐给C用户。
+
+<font color="red">完整代码可参考《推荐系统开发实战》</font>
+
+## 算法复杂度优化
+但是上面的计算存在一个问题——需要计算每一对用户的相似度。代码实现对应的时间复杂度为O(|U|*|U|)，U为用户个数。
+
+在实际生产环境中，很多用户之间并没有交集，也就是并没有对同一样物品产生过行为，所以很多情况下分子为0，这样的稀疏数据就没有计算的必要。
+
+上面的代码实现将时间浪费在计算这种用户之间的相似度上，所以这里可以进行优化：
+（1）计算出的用户对（u，v）；
+（2）对其除以分母得到u和v的相似度。
+
+针对以上优化思路，需要两步：
+（1）建立物品到用户的倒排表T，表示该物品被哪些用户产生过行为；
+（2）根据倒查表T，建立用户相似度矩阵W：
+
+- 在T中，对于每个物品i，设其对应的用户为j、k，
+- 在W中，更新对应位置的元素值，W[j][k]=W[j][k]+1，W[k][j]=W[k][j]+1。
+
+以此类推，这样在扫描完倒查表T之后，就能得到一个完整的用户相似度矩阵W了。
+这里的W对应的是前面介绍的余弦相似度中的分子部分，然后用W除以分母，便能最终得到两个用户的兴趣相似度。
+以上表为例，总共有4个用户，那么要建一个4行4列的倒排表，具体建立过程如下：
+（1）由用户的评分数据得到每个物品被哪些用户评价过，如图5-6所示。
+
+<center>
+<img src="https://img-blog.csdnimg.cn/20190707144648916.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="70%">
+</center>
+
+<p>（2）建立用户相似度矩阵W，如图5-7所示。</p>
+<center>
+<img src="https://img-blog.csdnimg.cn/20190707144715866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="70%">
+</center>
+
+<p>得到的相似度矩阵W对应的是计算两两用户相似度的分子部分，然后除以分母得到的便是两两用户的相似度。</p>
+<p>还是以C用户为例。从图5-7可知，A、B用户与C用户相似度计算的分子都为1，D用户与C用户相似度计算的分子部分为2。其他用户与C用户的相似度计算如下：</p>
+<center>
+<img src="https://img-blog.csdnimg.cn/20190707152109180.png" width="50%">
+</center>
+得到用户的相似度之后，就可以计算用户对未评分物品的可能评分了。采用的计算方式依旧是：
+<center>
+<img src="https://img-blog.csdnimg.cn/20190707152129605.png" width="50%">
+</center>
+
+<p>其中各参数说明如下。</p>
+<ul>
+<li>P(u,i)：用户u对物品i的感兴趣程度；</li>
+<li>S(u,K)：和用户u兴趣最接近的K个用户；</li>
+<li>N(i)：对物品i有过行为的用户集合；</li>
+<li>Wuv：用户u和用户v的兴趣相似度；</li>
+<li>rvi：用户v对物品i的兴趣，即用户对物品的评分。<br>依据上式，分别计算用户C对物品a、c、d的可能评分：<br><center><img src="https://img-blog.csdnimg.cn/20190707152205766.png" width="50%"></center><br>同样，对比优化前后的计算可知，结果是一致的。</li>
+</ul>
+<font color="red">具体的代码实现可参考：《推荐系统开发实战》一书。</font>
+
+<h2 id="惩罚热门物品"><a href="#惩罚热门物品" class="headerlink" title="惩罚热门物品"></a>惩罚热门物品</h2><p>如果两个用户都买过《新华字典》，这并不能说明他们兴趣相同，因为绝大多数中国人都买过《新华字典》。<br>但如果两个用户都买过《机器学习实战》，那可以认为他们的兴趣比较相似，因为只有研究机器学习的人才可能买这本书。<br>因此，John S. Breese在论文中提出了式（5.4），根据用户行为计算用户的兴趣相似度：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190707152309805.png" width="50%"></center>
+
+<ul>
+<li>分子中的倒数部分，惩罚了用户u和用户v共同兴趣列表中热门物品，减小了热门物品对用户相似度的影响。</li>
+<li>N(i)是对物品i有过行为的用户集合。物品i越热门，N(i)越大。</li>
+</ul>
+<p>对此，修改用户相似度的计算方式，具体的代码实现如函数userSimilarityBest()所示。</p>
+<font color="red">具体的代码实现可参考：《推荐系统开发实战》一书。</font>
+
+<h2 id="案例实战"><a href="#案例实战" class="headerlink" title="案例实战"></a>案例实战</h2><p>在了解完UserCF的算法原理之后，来开发一个电影推荐系统。这里我们选用的MovieLens数据集，该数据集在《实战》一书中的第三章有详细介绍。</p>
+<p>搭建一个推荐系统的步骤包括：</p>
+<ul>
+<li>准备数据</li>
+<li>选择算法</li>
+<li>模型训练</li>
+<li>效果评估</li>
+</ul>
+<p>这里不过多进行介绍，欢迎关注小编图书。</p>
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+
+<hr>
+<p><font color="red">注：文中多次提到的《推荐系统开发实战》是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

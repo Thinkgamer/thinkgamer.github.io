@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        【论文】RecSys18-序列推荐模型TransFM(Translation-based Factorization Machines for Sequential Recommendation) - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关研究"><span class="toc-text">相关研究</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#序列推荐"><span class="toc-text">序列推荐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数优化"><span class="toc-text">参数优化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FM模型和其他模型的融合"><span class="toc-text">FM模型和其他模型的融合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#我的总结"><span class="toc-text">我的总结</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        【论文】RecSys18-序列推荐模型TransFM(Translation-based Factorization Machines for Sequential Recommendation)
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-08-29 08:19:12</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#论文" title="论文">论文</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>序列推荐模型 Translation-based Recommendation，参考：<a href="https://thinkgamer.blog.csdn.net/article/details/100129827" target="_blank" rel="external">点击阅读</a></p>
+<a id="more"></a>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>论文是由Rajiv Pasricha和Julian McAuley两位大佬提出的发表在RecSys18 上的，是TransRec和FM的结合版本（论文下载地址：<a href="https://cseweb.ucsd.edu/~jmcauley/pdfs/recsys18a.pdf）。在下面会简单介绍TransRec和FM。" target="_blank" rel="external">https://cseweb.ucsd.edu/~jmcauley/pdfs/recsys18a.pdf）。在下面会简单介绍TransRec和FM。</a></p>
+<p>对于电商网站（如亚马逊），媒体网站（如Netflix，Youtube）等而言，推荐系统是其中至关重要的一环。传统的推荐方法尝试对用户和物品的全局交互进行建模。例如矩阵分解和其派生模型，虽然能够有效的捕获到用户的偏好，但是未考虑到时序特征，其忽略了用户的最近交互行为，提供了一个静态的推荐列表。</p>
+<p>序列推荐的目的是基于用户的历史行为序列去预测用户将来的行为。Julian McAuley作为主要作者的另一篇论文（Translation-based Recommendation）提出了“翻译”空间的概念，将物品作为一个点嵌入到“翻译”空间内，用户的序列行为则作为一个翻译向量存在于该空间，然后通过距离计算便根据用户u的当前行为物品i，预测其接下来可能有行为的物品，具体可参考：<a href="https://mp.weixin.qq.com/s/YovZKGd2BDqnpW5BBGLA-A。TransRec的主要思路如下图所示：" target="_blank" rel="external">https://mp.weixin.qq.com/s/YovZKGd2BDqnpW5BBGLA-A。TransRec的主要思路如下图所示：</a></p>
+<center><img src="https://img-blog.csdnimg.cn/20190831085905828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+
+<p>本论文中提出了TransFM，其结合了FM和TransRec的思想，将其应用在序列推荐中，这样做的好处是使用简单的模型对复杂的交互之间进行建模并能取得不错的效果。</p>
+<blockquote>
+<p>FM能够对任意的实值特征向量进行操作，并通过参数分解对特征之间的高阶交互进行建模。他可以应用在一般的预测任务里，并可以通过特征替换，取代常见的推荐算法模型。</p>
+</blockquote>
+<p>TransFM的主要思路如下图所示：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831085920392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+
+<p>TransFM是对所有观察到的行为之间可能的交互进行建模，对于每一个特征i，模型学习到两部分：一个低维的embedding向量$\overrightarrow{v_i}$和一个翻译向量$\overrightarrow{v_i’}$</p>
+<p>特征之间的交互强度使用平方欧几里德距离来进行计算，在上图中，展示了user，item，time的embedding特征和翻译向量，交互行为之间的权重由起始点和结束点之间的平方欧几里德距离进行计算。与FM一样，TransFM可以在参数和特征纬度的线性时间内进行计算，从而有效的实现大规模数据集的计算。</p>
+<h1 id="相关研究"><a href="#相关研究" class="headerlink" title="相关研究"></a>相关研究</h1><h2 id="序列推荐"><a href="#序列推荐" class="headerlink" title="序列推荐"></a>序列推荐</h2><p>已经存在了许多基于MC（马尔可夫链，Markov Chains）的序列推荐模型，比如FPMC（Factorized Personalized Markov Chains），使用独立分解矩阵对三阶交互行为进行分解，继而来模拟成对的相互作用。PRME使用欧几里德距离替换内积对用户-物品之间的交互行为进行建模。TransRec同样也是一个序列推荐模型，通过共享物品的embedding向量空间，将用户行为转化为翻译向量，其计算公式如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831085937428.png" width="200px"></center>
+这些对于给定的用户历史行为序列十分有效，但是在不改变模型结构的前提下，并不能捕获时间，地理和其他的上下文特征。
+
+## 因子分解机
+FM对于任意的机器学习任务来讲是一个通用的学习框架，他模型任意任意特征之间的二阶交互，并很容易扩招到更高阶，每个特征的交互通过参数之间的内积来权衡。其公式如下（这里讨论的是FM的二阶形式）：
+<center><img src="https://img-blog.csdnimg.cn/20190831085947201.png" width="200px"></center>
+通过选择合适的损失函数，FM可以应用在任意的分类，回归或者排序任务中，在这篇文章里主要是针对隐式反馈结合BPR算法框架去优化预测的结果。
+
+## 混合推荐
+混合推荐结合了协同和conetnt-based，目的在于提升效果并且为行为很较少的用户提供有效的选择，在一定程度上缓解了用户冷启动。这里可以利用的潜在的信息包括：时间特征，地理特征，社交特征等。最近的一些关于混合推荐的工作结合了图像特征，或者是使用深度学习自动生成有用的内容特征。
+
+虽然这些方法都取得了不错的表现，但依赖于专门的模型和技术。相比之间，论文里提出的TransFM是一种更广义的办法，可以对任意的特征向量和预测任务进行操作，通过适当的特征工程，TransFM模型可以结合时间，地理，人口统计和其他内容特征，而无需更改模型本身结构。
+
+# TransFM模型
+## 问题定义
+<center><img src="https://img-blog.csdnimg.cn/20190831085958369.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+
+<p>TransFM使用平方欧几里德距离替换FM中的内积计算，并用embedding 向量和翻译向量之和表示特征v_i的向量，其公式如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090026658.png" width="300px"></center>
+其中距离计算方式为：
+<center><img src="https://img-blog.csdnimg.cn/20190831090035517.png" width="230px"></center>
+
+<p>使用平方欧几里德距离替换内积的好处是：提高模型的泛化能力，更有效的捕获embedding之间的传递性。比如(a,b)，(b,c)之间有很高的交互权重，那么(a,c)之间的相关性也会更强。</p>
+<p>下图展示了TransFM和其他几种算法的预测方法，从中可以看出PRME学习的是两个用户的embedding向量之间的距离，FM学习的是任意特征与相应参数之间的内积，TransRec学习的是物品的embedding向量和用户行为的翻译序列，TransFM学习的是每个特征的embedding向量和翻译向量，使用平方欧几里德距离去度量特征之间的交互。</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090058665.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+## 模型计算
+FM是可以将计算复杂度降低到nk的，同样TransFM也可以降低其计算负责度。首先：
+<center><img src="https://img-blog.csdnimg.cn/20190831090139230.png" width="300px"></center>
+
+<p>其次进行化简得：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090151717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="400px"></center>
+
+<p>上面的第一个总和可以分成六个单独项，每一项又可以继续进行化简：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090204314.png" width="300px"></center>
+
+<p>假设输入的特征是n维，隐向量长度为k，那么时间复杂度就是O(nk)，而不是O(n^2k)。</p>
+<h2 id="参数优化"><a href="#参数优化" class="headerlink" title="参数优化"></a>参数优化</h2><p>模型使用S-BPR（Sequential Bayesian Personalized Ranking）进行优化，其优化方式如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090239744.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="350px"></center>
+其中Ω(Θ)为L2正则。
+
+## 实践和推断
+作者等人在TensorFlow中对TransFM进行了实现，用的是mini-batch gradient descent 和 Adam进行模型的训练（adam对于有大量参数且稀疏的数据集上表现良好）。
+作者这里也罢代码进行了开源，包括数据集，已经不同算法实现实现对比，其地址为：https://github.com/rpasricha/TransFM
+
+# 实验
+作者结合了一些算法在亚马逊和谷歌数据集上进行测试，其中评价的指标是AUC，效果如下：
+<center><img src="https://img-blog.csdnimg.cn/20190831090454914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20190831090503108.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="350px"></center>
+
+<p>上边的Table 3是指从Amazon选取top5 品类 ，从Google Local 中选取6个城市作为实验依据。</p>
+<h1 id="FM模型和其他模型的融合"><a href="#FM模型和其他模型的融合" class="headerlink" title="FM模型和其他模型的融合"></a>FM模型和其他模型的融合</h1><p>PRME（Personalized Ranking Metric Embedding）</p>
+<center><img src="https://img-blog.csdnimg.cn/2019083109063261.png" width="300px"></center>
+
+<blockquote>
+<p>和TransFM对比的不同在于TransFM中i的向量是embedding向量和translation向量和，而这里没有translation向量。实时证明TransFM效果要好很多。</p>
+</blockquote>
+<p>HRM（Hierarchical Representation Model ）</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090640757.png" width="300px"></center>
+
+<p>对比的实验结果如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190831090647827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="500px"></center>
+
+<h1 id="我的总结"><a href="#我的总结" class="headerlink" title="我的总结"></a>我的总结</h1><ol>
+<li>TransFM结合了TransRec 和 FM和优势，在大量，稀疏的数据集上取得了不错的效果。</li>
+<li>在参数和特征纬度下，计算时间线性增大（nk）</li>
+<li>改变FM中的内积计算方式，使用平方欧几里德距离，提高了模型的泛化能力，和样本特征之间的传递性</li>
+<li>在不改变模型结构的前提下，可以轻易将时间，地域或者其他内容特征加入到模型中</li>
+<li>数据集拆分时避免了从整体数据集中的随机拆分，而是按照时间先后的顺序进行拆分。保证了一定的时间连续性，很多论文中划分训练集和测试集时都是这样做的，在工业界中模型的训练和评估大部分也是这样做的。</li>
+<li>根据经验将参数限定在一个范围内，根据网格搜索法寻找最佳参数</li>
+<li>实验对比的丰富性，使结论更具有说服力</li>
+</ol>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

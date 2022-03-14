@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        梯度提升决策树-GBDT（Gradient Boosting Decision Tree） - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Boosting-amp-Bagging"><span class="toc-text">Boosting&Bagging</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Gradient-Boosting"><span class="toc-text">Gradient Boosting</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分类树-amp-回归树-amp-分类回归树"><span class="toc-text">分类树&回归树&分类回归树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分类树"><span class="toc-text">分类树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#回归树"><span class="toc-text">回归树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类回归树"><span class="toc-text">分类回归树</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#损失函数"><span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GBDT思想"><span class="toc-text">GBDT思想</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GBDT在Scikit-learn中的调用"><span class="toc-text">GBDT在Scikit-learn中的调用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参数说明"><span class="toc-text">参数说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类库参数"><span class="toc-text">　类库参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#决策树参数"><span class="toc-text">决策树参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-text">分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#回归"><span class="toc-text">回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型评价"><span class="toc-text">模型评价</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        梯度提升决策树-GBDT（Gradient Boosting Decision Tree）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-04-12 23:44:15</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Spark与推荐系统" title="Spark与推荐系统">Spark与推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>研究GBDT的背景是业务中使用到了该模型，用于做推荐场景，当然这里就引出了GBDT的一个应用场景-回归，他的另外一个应用场景便是分类，接下来我会从以下几个方面去学习和研究GBDT的相关知识，当然我也是学习者，只是把我理解到的整理出来。本文参考了网上各路大神的笔记，在此感谢！</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="Boosting-amp-Bagging"><a href="#Boosting-amp-Bagging" class="headerlink" title="Boosting&amp;Bagging"></a>Boosting&amp;Bagging</h1><p>集成学习方法不是单独的一个机器学习算法，而是通过构建多个机器学习算法来达到一个强学习器。集成学习可以用来进行分类，回归，特征选取和异常点检测等。随机森林算法就是一个典型的集成学习方法，简单的说就是由一个个弱分类器（决策树）来构建一个强分类器，从而达到比较好的分类效果。</p>
+<p>那么如何得到单个的学习器，一般有两种方法：</p>
+<ul>
+<li>同质（对于一个强学习器而言，所用的单个弱学习器都是一样的，比如说用的都是决策树，或者都是神经网络）</li>
+<li>异质（相对于同质而言，对于一个强学习器而言，所用的单个弱学习器不全是一样的，比如说用的决策树和神经网络的组合）</li>
+</ul>
+<p>相对异质而言，同质学习期用的最为广泛，我们平时所讨论的集成学习方法指的就是同质个体学习器，同质个体学习器按照个体学习器之间的依赖关系分为串行（有强依赖关系）和并行（不存在关系或者有很弱的依赖关系），而在串行关系中有代表性的就是boosting系列算法，并行关系中具有代表性的就是bagging和随机森林（random forest）</p>
+<p>Boosting流程图<br><img src="https://img-blog.csdn.net/20180410010257504?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>Bagging流程图<br><img src="https://img-blog.csdn.net/20180410010305827?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dhbWVyX2d5dA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>上边简单的介绍了集成学习方法和boosting&amp;bagging的区别，那么对于单个学习器采用何种策略才能得到一个强学习器呢？</p>
+<ul>
+<li>平均法（加权（个体学习器性能相差较大），简单（性能相近））</li>
+<li>投票法（绝对多数（超过半数标记。否则拒绝预测），相对多数，加权投票）</li>
+<li>学习法（通过另一个学习器来进行结合，Stacking算法）</li>
+</ul>
+<blockquote>
+<p>Stacking算法：<br>基本思想：先从初始数据集训练出初级学习器，然后生成一个新数据集用于训练次级学习器。在这个新数据集中，初级学习器的输出被当作样例输入特征，而出事样本的标记仍被当作样例标记。<br><br><br>注意点：若直接用初级学习器的训练集来产生次级训练集，则过拟合风险会比较大；一般会通过交叉验证等方式，用训练初级学习器未使用的样本来产生次级学习器的训练样本。</p>
+</blockquote>
+<hr>
+<h1 id="Gradient-Boosting"><a href="#Gradient-Boosting" class="headerlink" title="Gradient Boosting"></a>Gradient Boosting</h1><p>Gradient Boosting是一种Boosting的方法，它主要的思想是，每一次建立模型是在之前建立模型损失函数的梯度下降方向。损失函数是评价模型性能（一般为拟合程度+正则项），认为损失函数越小，性能越好。而让损失函数持续下降，就能使得模型不断改性提升性能，其最好的方法就是使损失函数沿着梯度方向下降（讲道理梯度方向上下降最快）。</p>
+<p>Gradient Boost是一个框架，里面可以套入很多不同的算法。</p>
+<h1 id="分类树-amp-回归树-amp-分类回归树"><a href="#分类树-amp-回归树-amp-分类回归树" class="headerlink" title="分类树&amp;回归树&amp;分类回归树"></a>分类树&amp;回归树&amp;分类回归树</h1><h2 id="分类树"><a href="#分类树" class="headerlink" title="分类树"></a>分类树</h2><p>三种比较常见的分类决策树分支划分方式包括：ID3, C4.5, CART。</p>
+<blockquote>
+<p>以C4.5分类树为例，C4.5分类树在每次分枝时，是穷举每一个feature的每一个阈值，找到使得按照feature&lt;=阈值，和feature&gt;阈值分成的两个分枝的熵最大的阈值(熵最大的概念可理解成尽可能每个分枝的男女比例都远离1:1)，按照该标准分枝得到两个新节点，用同样方法继续分枝直到所有人都被分入性别唯一的叶子节点，或达到预设的终止条件，若最终叶子节点中的性别不唯一，则以多数人的性别作为该叶子节点的性别。</p>
+</blockquote>
+<p>总结：分类树使用信息增益或增益比率来划分节点；每个节点样本的类别情况投票决定测试样本的类别。</p>
+<h2 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h2><blockquote>
+<p>回归树总体流程也是类似，区别在于，回归树的每个节点（不一定是叶子节点）都会得一个预测值，以年龄为例，该预测值等于属于这个节点的所有人年龄的平均值。分枝时穷举每一个feature的每个阈值找最好的分割点，但衡量最好的标准不再是最大熵，而是最小化均方差即(每个人的年龄-预测年龄)^2 的总和 / N。也就是被预测出错的人数越多，错的越离谱，均方差就越大，通过最小化均方差能够找到最可靠的分枝依据。分枝直到每个叶子节点上人的年龄都唯一或者达到预设的终止条件(如叶子个数上限)，若最终叶子节点上人的年龄不唯一，则以该节点上所有人的平均年龄做为该叶子节点的预测年龄。</p>
+</blockquote>
+<p>总结：回归树使用最大均方差划分节点；每个节点样本的均值作为测试样本的回归预测值。</p>
+<h2 id="分类回归树"><a href="#分类回归树" class="headerlink" title="分类回归树"></a>分类回归树</h2><blockquote>
+<p>Classification And Regression Trees，即既能做分类任务又能做回归任务，CART也是决策树的一种，是一种二分决策树，但是也可以用来做回归，CART同决策树类似，不同于 ID3 与 C4.5 ,分类树采用基尼指数来选择最优的切分特征，而且每次都是二分。至于怎么利用基尼系数进行最优的特征切分，大家可以参考这篇文章的详细介绍 <a href="https://www.cnblogs.com/ooon/p/5647309.html" target="_blank" rel="external">决策树之 CART</a></p>
+</blockquote>
+<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><p>机器学习中的损失函数有很多，常见的有</p>
+<ul>
+<li>0-1损失函数（0-1 loss function）<script type="math/tex; mode=display">
+L(Y,f(X))=\left\{ \begin{aligned}&1,\quad Y\ne f(X)\\& 0,\quad Y=f(X) \end{aligned} \right.</script></li>
+</ul>
+<blockquote>
+<p>该损失函数的意义就是，当预测错误时，损失函数值为1，预测正确时，损失函数值为0。该损失函数不考虑预测值和真实值的误差程度，也就是只要预测错误，预测错误差一点和差很多是一样的。</p>
+</blockquote>
+<ul>
+<li><p>平方损失函数（quadratic loss function）</p>
+<script type="math/tex; mode=display">
+L(Y,f(X))=(Y-f(X))^2</script><blockquote>
+<p>取预测差距的平方</p>
+</blockquote>
+</li>
+<li><p>绝对值损失函数（absolute loss function）</p>
+<script type="math/tex; mode=display">
+L(Y,f(X))=|Y-f(X)|</script><blockquote>
+<p>取预测值与真实值的差值绝对值，差距不会被平方放大</p>
+</blockquote>
+</li>
+<li><p>对数损失函数（logarithmic loss function）</p>
+<script type="math/tex; mode=display">
+L(Y,P(Y|X))=-logP(Y|X)</script><blockquote>
+<p>该损失函数用到了极大似然估计的思想。P(Y|X)通俗的解释就是：在当前模型的基础上，对于样本X，其预测值为Y，也就是预测正确的概率。由于概率之间的同时满足需要使用乘法，为了将其转化为加法，我们将其取对数。最后由于是损失函数，所以预测正确的概率越高，其损失值应该是越小，因此再加个负号取个反。</p>
+</blockquote>
+</li>
+<li><p>全局损失函数 </p>
+<blockquote>
+<p>上面的损失函数仅仅是对于一个样本来说的。而我们的优化目标函数应当是使全局损失函数最小。因此，全局损失函数往往是每个样本的损失函数之和，即： </p>
+<script type="math/tex; mode=display">
+J(w,b)=\frac{1}{m} \sum_{i=1}^m L(Y,f(X))</script><p>对于平方损失函数，为了求导方便，我们可以在前面乘上一个1/2，和平方项求导后的2抵消，即： </p>
+<script type="math/tex; mode=display">
+J(w,b)=\frac{1}{2m} \sum_{i=1}^m L(Y,f(X))</script></blockquote>
+</li>
+<li>逻辑回归中的损失函数<blockquote>
+<p>在逻辑回归中，我们采用的是对数损失函数。由于逻辑回归是服从伯努利分布(0-1分布)的，并且逻辑回归返回的sigmoid值是处于(0,1)区间，不会取到0,1两个端点。因此我们能够将其损失函数写成以下形式： </p>
+<script type="math/tex; mode=display">
+L(\hat y,y)=-(y\log{\hat y}+(1-y)\log(1-\hat y))</script></blockquote>
+</li>
+</ul>
+<h1 id="GBDT思想"><a href="#GBDT思想" class="headerlink" title="GBDT思想"></a>GBDT思想</h1><blockquote>
+<p>以下部分学习于 <a href="https://www.zybuluo.com/yxd/note/611571" target="_blank" rel="external">GBDT算法原理深入解析</a> ，原文作者讲的很好，照搬过来，毕竟笔者不是推导数学公式的料，哈哈</p>
+</blockquote>
+<p>GBDT 可以看成是由K棵树组成的加法模型：</p>
+<script type="math/tex; mode=display">
+\hat{y}_i=\sum_{k=1}^K f_k(x_i), f_k \in F \tag 0</script><p>其中F为所有树组成的函数空间，以回归任务为例，回归树可以看作为一个把特征向量映射为某个score的函数。该模型的参数为：$\Theta=\{f_1,f_2, \cdots, f_K \}$。于一般的机器学习算法不同的是，加法模型不是学习d维空间中的权重，而是直接学习函数（决策树）集合</p>
+<p>上述加法模型的目标函数定义为：$Obj=\sum_{i=1}^n l(y_i, \hat{y}_i) + \sum_{k=1}^K \Omega(f_k)$，其中$\Omega$表示决策树的复杂度，那么该如何定义树的复杂度呢？比如，可以考虑树的节点数量、树的深度或者叶子节点所对应的分数的L2范数等等。</p>
+<p>如何来学习加法模型呢？</p>
+<p>解这一优化问题，可以用前向分布算法（forward stagewise algorithm）。因为学习的是加法模型，如果能够从前往后，每一步只学习一个基函数及其系数（结构），逐步逼近优化目标函数，那么就可以简化复杂度。这一学习过程称之为Boosting。具体地，我们从一个常量预测开始，每次学习一个新的函数，过程如下： </p>
+<script type="math/tex; mode=display">
+\begin{split}
+\hat{y}_i^0 &= 0 \\
+\hat{y}_i^1 &= f_1(x_i) = \hat{y}_i^0 + f_1(x_i) \\
+\hat{y}_i^2 &= f_1(x_i) + f_2(x_i) = \hat{y}_i^1 + f_2(x_i) \\
+& \cdots \\
+\hat{y}_i^t &= \sum_{k=1}^t f_k(x_i) = \hat{y}_i^{t-1} + f_t(x_i) \\
+\end{split}</script><p>那么，在每一步如何决定哪一个函数$f$被加入呢？指导原则还是最小化目标函数。<br>在第$t$步，模型对$x_i$的预测为：$\hat{y}_i^t= \hat{y}_i^{t-1} + f_t(x_i)$，其中$f_t(x_i)$为这一轮我们要学习的函数（决策树）。这个时候目标函数可以写为：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+Obj^{(t)} &= \sum_{i=1}^nl(y_i, \hat{y}_i^t) + \sum_{i=i}^t \Omega(f_i) \\
+&=  \sum_{i=1}^n l\left(y_i, \hat{y}_i^{t-1} + f_t(x_i) \right) + \Omega(f_t) + constant
+\end{split}\tag{1}</script><p>举例说明，假设损失函数为平方损失（square loss），则目标函数为：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+Obj^{(t)} &= \sum_{i=1}^n \left(y_i - (\hat{y}_i^{t-1} + f_t(x_i)) \right)^2 + \Omega(f_t) + constant \\
+&= \sum_{i=1}^n \left[2(\hat{y}_i^{t-1} - y_i)f_t(x_i) + f_t(x_i)^2 \right] + \Omega(f_t) + constant
+\end{split}\tag{2}</script><p>其中，$(\hat{y}_i^{t-1} - y_i)$称之为残差（residual）。因此，使用平方损失函数时，GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差。</p>
+<blockquote>
+<p>泰勒公式：设$n$是一个正整数，如果定义在一个包含$a$的区间上的函数$f$在点$a$处$n+1$次可导，那么对于这个区间上的任意$x$都有：$\displaystyle f(x)=\sum _{n=0}^{N}\frac{f^{(n)}(a)}{n!}(x-a)^ n+R_ n(x)$，其中的多项式称为函数在$a$处的泰勒展开式，$R_ n(x)$是泰勒公式的余项且是$(x-a)^ n$的高阶无穷小。</p>
+</blockquote>
+<p>根据泰勒公式把函数$f(x+\Delta x)$在点$x$处二阶展开，可得到如下等式： </p>
+<script type="math/tex; mode=display">
+f(x+\Delta x) \approx f(x) + f'(x)\Delta x + \frac12 f''(x)\Delta x^2 \tag 3</script><p>由等式(1)可知，目标函数是关于变量$\hat{y}_i^{t-1} + f_t(x_i)$的函数，若把变量$\hat{y}_i^{t-1}$看成是等式(3)中的$x$，把变量$f_t(x_i)$看成是等式(3)中的$\Delta x$，则等式(1)可转化为：</p>
+<script type="math/tex; mode=display">
+Obj^{(t)} = \sum_{i=1}^n \left[ l(y_i, \hat{y}_i^{t-1}) + g_if_t(x_i) + \frac12h_if_t^2(x_i) \right]  + \Omega(f_t) + constant \tag 4</script><p>其中$g_i$，定义为损失函数的一阶导数，即$g_i=\partial_{\hat{y}^{t-1}}l(y_i,\hat{y}^{t-1})$；$h_i$定义为损失函数的二阶导数，即$h_i=\partial_{\hat{y}^{t-1}}^2l(y_i,\hat{y}^{t-1})$。<br>假设损失函数为平方损失函数，则$g_i=\partial_{\hat{y}^{t-1}}(\hat{y}^{t-1} - y_i)^2 = 2(\hat{y}^{t-1} - y_i)$，$h_i=\partial_{\hat{y}^{t-1}}^2(\hat{y}^{t-1} - y_i)^2 = 2$，把$g_i$和$h_i$代入等式(4)即得等式(2)。<br>由于函数中的常量在函数最小化的过程中不起作用，因此我们可以从等式(4)中移除掉常量项，得： </p>
+<script type="math/tex; mode=display">
+Obj^{(t)} \approx \sum_{i=1}^n \left[ g_if_t(x_i) + \frac12h_if_t^2(x_i) \right]  + \Omega(f_t) \tag 5</script><p>由于要学习的函数仅仅依赖于目标函数，从等式(5)可以看出只需为学习任务定义好损失函数，并为每个训练样本计算出损失函数的一阶导数和二阶导数，通过在训练样本集上最小化等式(5)即可求得每步要学习的函数$f(x)$，从而根据加法模型等式(0)可得最终要学习的模型。</p>
+<h1 id="GBDT在Scikit-learn中的调用"><a href="#GBDT在Scikit-learn中的调用" class="headerlink" title="GBDT在Scikit-learn中的调用"></a>GBDT在Scikit-learn中的调用</h1><p>关于GBDT在Scikit-learn中的实现原文在 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html" target="_blank" rel="external">点击查看</a><br>GBDT在sklearn中导入的包不一样，分类是  from sklearn.ensemble import GradientBoostingClassifier，回归是 from sklearn.ensemble import GradientBoostingRegressor</p>
+<h2 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h2><p>GBDT的参数分为boosting类库参数和弱学习器参数，其中有GBDT的弱学习器为CART，所以弱学习器参数基本为决策树的参数，参考<a href="https://www.cnblogs.com/DjangoBlog/p/6201663.html" target="_blank" rel="external">点击阅读</a></p>
+<h3 id="类库参数"><a href="#类库参数" class="headerlink" title="　类库参数"></a>　类库参数</h3><ul>
+<li>loss：损失函数，对于分类模型，有对数似然损失函数”deviance”和指数损失函数”exponential”两者输入选择。默认是对数似然损失函数”deviance”。在原理篇中对这些分类损失函数有详细的介绍。一般来说，推荐使用默认的”deviance”。它对二元分离和多元分类各自都有比较好的优化。而指数损失函数等于把我们带到了Adaboost算法。</li>
+<li>learning_rate：即每个弱学习器的权重缩减系数νν，也称作步长。</li>
+<li>n_estimators：就是弱学习器的最大迭代次数，或者说最大的弱学习器的个数。一般来说n_estimators太小，容易欠拟合，n_estimators太大，又容易过拟合，一般选择一个适中的数值。默认是100。在实际调参的过程中，我们常常将n_estimators和下面介绍的参数learning_rate一起考虑。</li>
+<li>subsample：子采样，取值是[0,1]。注意这里的子采样和随机森林不一样，随机森林使用的是放回抽样，而这里是不放回抽样。如果取值为1，则全部样本都使用，等于没有使用子采样。如果取值小于1，则只有一部分样本会去做GBDT的决策树拟合。选择小于1的比例可以减少方差，即防止过拟合，但是会增加样本拟合的偏差，因此取值不能太低。推荐在[0.5, 0.8]之间，默认是1.0，即不使用子采样。</li>
+<li>init：即我们的初始化的时候的弱学习器，如果不输入，则用训练集样本来做样本集的初始化分类回归预测。否则用init参数提供的学习器做初始化分类回归预测。一般用在我们对数据有先验知识，或者之前做过一些拟合的时候，如果没有的话就不用管这个参数了。</li>
+<li>verbose：默认是0，代表启用详细输出，若为1，代表偶尔输出进度信息</li>
+<li>warm_start：默认为false</li>
+<li>random_state：如果int，random_state随机数生成器使用的种子；如果randomstate实例，random_state是随机数发生器；如果没有，随机数生成器使用的np.random的randomstate实例。</li>
+<li>presort：默认情况下会在密集的数据上使用，默认是在稀疏数据正常排序。设置对true的稀疏数据将会引起错误。</li>
+</ul>
+<h3 id="决策树参数"><a href="#决策树参数" class="headerlink" title="决策树参数"></a>决策树参数</h3><ul>
+<li>max_depth：决策树最大深度</li>
+<li>criterion：衡量分裂指标的度量方法，支持的是均方误差</li>
+<li>min_samples_split：内部节点再划分所需最小样本数。这个值限制了子树继续划分的条件，如果某节点的样本数少于min_samples_split，则不会继续再尝试选择最优特征来进行划分。 默认是2.如果样本量不大，不需要管这个值。如果样本量数量级非常大，则推荐增大这个值。</li>
+<li>min_samples_leaf：叶子节点最少样本数。这个值限制了叶子节点最少的样本数，如果某叶子节点数目小于样本数，则会和兄弟节点一起被剪枝。 默认是1,可以输入最少的样本数的整数，或者最少样本数占样本总数的百分比。如果样本量不大，不需要管这个值。如果样本量数量级非常大，则推荐增大这个值。</li>
+<li>min_weight_fraction_leaf：叶子节点最小的样本权重和。这个值限制了叶子节点所有样本权重和的最小值，如果小于这个值，则会和兄弟节点一起被剪枝。 默认是0，就是不考虑权重问题。一般来说，如果我们有较多样本有缺失值，或者分类树样本的分布类别偏差很大，就会引入样本权重，这时我们就要注意这个值了。</li>
+<li>max_features：划分时考虑的最大特征数。可以使用很多种类型的值，默认是”None”,意味着划分时考虑所有的特征数；如果是”log2”意味着划分时最多考虑log2Nlog2N个特征；如果是”sqrt”或者”auto”意味着划分时最多考虑N−−√N个特征。如果是整数，代表考虑的特征绝对数。如果是浮点数，代表考虑特征百分比，即考虑（百分比xN）取整后的特征数。其中N为样本总特征数。一般来说，如果样本特征数不多，比如小于50，我们用默认的”None”就可以了，如果特征数非常多，我们可以灵活使用刚才描述的其他取值来控制划分时考虑的最大特征数，以控制决策树的生成时间。</li>
+<li>max_leaf_nodes：最大叶子节点数。通过限制最大叶子节点数，可以防止过拟合，默认是”None”，即不限制最大的叶子节点数。如果加了限制，算法会建立在最大叶子节点数内最优的决策树。如果特征不多，可以不考虑这个值，但是如果特征分成多的话，可以加以限制，具体的值可以通过交叉验证得到。</li>
+<li>min_impurity_split：节点划分最小不纯度。这个值限制了决策树的增长，如果某节点的不纯度(基于基尼系数，均方差)小于这个阈值，则该节点不再生成子节点。即为叶子节点 。一般不推荐改动默认值1e-7。</li>
+<li>min_impurity_decrease：默认值为0。如果分裂</li>
+</ul>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; from sklearn.datasets import make_hastie_10_2</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; from sklearn.ensemble import GradientBoostingClassifier</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; X, y = make_hastie_10_2(random_state=<span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; X_train, X_test = X[<span class="symbol">:</span><span class="number">2000</span>], X[<span class="number">2000</span><span class="symbol">:</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; y_train, y_test = y[<span class="symbol">:</span><span class="number">2000</span>], y[<span class="number">2000</span><span class="symbol">:</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; clf = GradientBoostingClassifier(n_estimators=<span class="number">100</span>, learning_rate=<span class="number">1.0</span>,</span><br><span class="line">...     max_depth=<span class="number">1</span>, random_state=<span class="number">0</span>).fit(X_train, y_train)</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; clf.score(X_test, y_test)                 </span><br><span class="line"><span class="number">0</span>.<span class="number">913</span>...</span><br></pre></td></tr></table></figure>
+<h2 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import numpy as np</span><br><span class="line">&gt;&gt;&gt; <span class="keyword">from</span> sklearn.metrics import mean_squared_error</span><br><span class="line">&gt;&gt;&gt; <span class="keyword">from</span> sklearn.datasets import make_friedman1</span><br><span class="line">&gt;&gt;&gt; <span class="keyword">from</span> sklearn.ensemble import GradientBoostingRegressor</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; X, y = make_friedman1(<span class="attribute">n_samples</span>=1200, <span class="attribute">random_state</span>=0, <span class="attribute">noise</span>=1.0)</span><br><span class="line">&gt;&gt;&gt; X_train, X_test = X[:200], X[200:]</span><br><span class="line">&gt;&gt;&gt; y_train, y_test = y[:200], y[200:]</span><br><span class="line">&gt;&gt;&gt; est = GradientBoostingRegressor(<span class="attribute">n_estimators</span>=100, <span class="attribute">learning_rate</span>=0.1,</span><br><span class="line"><span class="built_in">..</span>.     <span class="attribute">max_depth</span>=1, <span class="attribute">random_state</span>=0, <span class="attribute">loss</span>=<span class="string">'ls'</span>).fit(X_train, y_train)</span><br><span class="line">&gt;&gt;&gt; mean_squared_error(y_test, est.predict(X_test))    </span><br><span class="line">5.00<span class="built_in">..</span>.</span><br></pre></td></tr></table></figure>
+<h2 id="模型评价"><a href="#模型评价" class="headerlink" title="模型评价"></a>模型评价</h2><figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> cross_validation, metrics</span><br><span class="line">metrics.accuracy_score(y.values, y_pred) <span class="comment"># 准确度</span></span><br><span class="line">metrics.roc_auc_score(y, y_predprob)  <span class="comment"># AUC大小</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/pinard/p/6131423.html" target="_blank" rel="external">集成学习原理小结</a></li>
+<li><a href="https://blog.csdn.net/weixin_40604987/article/details/79296427" target="_blank" rel="external">Regression Tree 回归树</a></li>
+<li><a href="https://blog.csdn.net/qq547276542/article/details/77980042" target="_blank" rel="external">浅析机器学习中各种损失函数及其含义</a></li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+    <img src="http://img.blog.csdn.net/20180204165223361?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="35%" height="35%">
+    <br>
+打开微信扫一扫，加入数据与算法交流大群
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

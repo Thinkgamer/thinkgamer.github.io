@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        回归分析之Sklearn实现电力预测 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1：数据集介绍"><span class="toc-text">1：数据集介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2：准备数据"><span class="toc-text">2：准备数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3：使用pandas来进行数据的读取"><span class="toc-text">3：使用pandas来进行数据的读取</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4：准备运行算法的数据"><span class="toc-text">4：准备运行算法的数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5：划分训练集和测试集"><span class="toc-text">5：划分训练集和测试集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6：运行sklearn-线性模型"><span class="toc-text">6：运行sklearn 线性模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7：模型评价"><span class="toc-text">7：模型评价</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8：交叉验证"><span class="toc-text">8：交叉验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9：画图查看结果"><span class="toc-text">9：画图查看结果</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        回归分析之Sklearn实现电力预测
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-11-07 13:39:15</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>参考原文：<a href="http://www.cnblogs.com/pinard/p/6016029.html" target="_blank" rel="external">http://www.cnblogs.com/pinard/p/6016029.html</a><br>这里进行了手动实现，增强记忆。<br><a id="more"></a></p>
+<h1 id="1：数据集介绍"><a href="#1：数据集介绍" class="headerlink" title="1：数据集介绍"></a>1：数据集介绍</h1><p>使用的数据是UCI大学公开的机器学习数据</p>
+<p>数据的介绍在这： <a href="http://archive.ics.uci.edu/ml/datasets/Combined+Cycle+Power+Plant" target="_blank" rel="external">http://archive.ics.uci.edu/ml/datasets/Combined+Cycle+Power+Plant</a></p>
+<p>数据的下载地址在这：<a href="http://archive.ics.uci.edu/ml/machine-learning-databases/00294/" target="_blank" rel="external">http://archive.ics.uci.edu/ml/machine-learning-databases/00294/</a></p>
+<p>里面是一个循环发电场的数据，共有9568个样本数据，每个数据有5列，分别是:AT（温度）, V（压力）, AP（湿度）, RH（压强）, PE（输出电力)。我们不用纠结于每项具体的意思。</p>
+<p>我们的问题是得到一个线性的关系，对应PE是样本输出，而AT/V/AP/RH这4个是样本特征， 机器学习的目的就是得到一个线性回归模型，即:</p>
+<script type="math/tex; mode=display">
+PE = \theta _{0} + \theta _{0} * AT + \theta _{0} * V +\theta _{0} * AP +\theta _{0}*RH</script><p>而需要学习的，就是θ0,θ1,θ2,θ3,θ4这5个参数。</p>
+<hr>
+<h1 id="2：准备数据"><a href="#2：准备数据" class="headerlink" title="2：准备数据"></a>2：准备数据</h1><p>下载源数据之后，解压会得到一个xlsx的文件，打开另存为csv文件，数据已经整理好，没有非法数据，但是数据并没有进行归一化，不过这里我们可以使用sklearn来帮我处理</p>
+<p>sklearn的归一化处理参考：<a href="http://blog.csdn.net/gamer_gyt/article/details/77761884" target="_blank" rel="external">http://blog.csdn.net/gamer_gyt/article/details/77761884</a></p>
+<hr>
+<h1 id="3：使用pandas来进行数据的读取"><a href="#3：使用pandas来进行数据的读取" class="headerlink" title="3：使用pandas来进行数据的读取"></a>3：使用pandas来进行数据的读取</h1><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"># pandas 读取数据</span><br><span class="line"><span class="keyword">data</span> = pd.read_csv(<span class="string">"Folds5x2_pp.csv"</span>)</span><br><span class="line"><span class="keyword">data</span>.head()</span><br></pre></td></tr></table></figure>
+<p>然后会看到如下结果，说明数据读取成功：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	AT	V	AP	RH	PE</span><br><span class="line"><span class="number">0</span>	<span class="number">8.34</span>	<span class="number">40.77</span>	<span class="number">1010.84</span>	<span class="number">90.01</span>	<span class="number">480.48</span></span><br><span class="line"><span class="number">1</span>	<span class="number">23.64</span>	<span class="number">58.49</span>	<span class="number">1011.40</span>	<span class="number">74.20</span>	<span class="number">445.75</span></span><br><span class="line"><span class="number">2</span>	<span class="number">29.74</span>	<span class="number">56.90</span>	<span class="number">1007.15</span>	<span class="number">41.91</span>	<span class="number">438.76</span></span><br><span class="line"><span class="number">3</span>	<span class="number">19.07</span>	<span class="number">49.69</span>	<span class="number">1007.22</span>	<span class="number">76.79</span>	<span class="number">453.09</span></span><br><span class="line"><span class="number">4</span>	<span class="number">11.80</span>	<span class="number">40.66</span>	<span class="number">1017.13</span>	<span class="number">97.20</span>	<span class="number">464.43</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4：准备运行算法的数据"><a href="#4：准备运行算法的数据" class="headerlink" title="4：准备运行算法的数据"></a>4：准备运行算法的数据</h1><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X = data<span class="string">[["AT","V","AP","RH"]]</span></span><br><span class="line"><span class="built_in">print</span> X.shape</span><br><span class="line">y = data<span class="string">[["PE"]]</span></span><br><span class="line"><span class="built_in">print</span> y.shape</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">9568</span>, <span class="number">4</span>)</span><br><span class="line">(<span class="number">9568</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>说明有9658条数据，其中”AT”,”V”,”AP”,”RH” 四列作为样本特征，”PE”列作为样本输出。</p>
+<hr>
+<h1 id="5：划分训练集和测试集"><a href="#5：划分训练集和测试集" class="headerlink" title="5：划分训练集和测试集"></a>5：划分训练集和测试集</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cross_validation import train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,<span class="attribute">random_state</span>=1)</span><br><span class="line"><span class="builtin-name">print</span> X_train.shape</span><br><span class="line"><span class="builtin-name">print</span> y_train.shape</span><br><span class="line"><span class="builtin-name">print</span> X_test.shape</span><br><span class="line"><span class="builtin-name">print</span> y_test.shape</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">7176</span>, <span class="number">4</span>)</span><br><span class="line">(<span class="number">7176</span>, <span class="number">1</span>)</span><br><span class="line">(<span class="number">2392</span>, <span class="number">4</span>)</span><br><span class="line">(<span class="number">2392</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>75%的数据被划分为训练集，25的数据划分为测试集。</p>
+<hr>
+<h1 id="6：运行sklearn-线性模型"><a href="#6：运行sklearn-线性模型" class="headerlink" title="6：运行sklearn 线性模型"></a>6：运行sklearn 线性模型</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model import LinearRegression</span><br><span class="line"></span><br><span class="line">linreg = LinearRegression()</span><br><span class="line">linreg.fit(X_train,y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型完毕，查看结果</span></span><br><span class="line"><span class="builtin-name">print</span> linreg.intercept_</span><br><span class="line"><span class="builtin-name">print</span> linreg.coef_</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ <span class="number">447.06297099</span>]</span><br><span class="line">[[<span class="number">-1.97376045</span> <span class="number">-0.23229086</span>  <span class="number">0.0693515</span>  <span class="number">-0.15806957</span>]]</span><br></pre></td></tr></table></figure>
+<p>即我们得到的模型结果为：</p>
+<script type="math/tex; mode=display">
+PE = 447.06297099 - 1.97376045*AT - 0.23229086*V + 0.0693515*AP -0.15806957*RH</script><hr>
+<h1 id="7：模型评价"><a href="#7：模型评价" class="headerlink" title="7：模型评价"></a>7：模型评价</h1><p>我们需要评价模型的好坏，通常对于线性回归来讲，我么一般使用均方差（MSE，Mean Squared Error）或者均方根差（RMSE，Root Mean Squared Error）来评价模型的好坏</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">y_pred = linreg.predict(X_test)</span><br><span class="line"><span class="keyword">from</span> sklearn import metrics</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用sklearn来计算mse和Rmse</span></span><br><span class="line"><span class="builtin-name">print</span> <span class="string">"MSE:"</span>,metrics.mean_squared_error(y_test, y_pred)</span><br><span class="line"><span class="builtin-name">print</span> <span class="string">"RMSE:"</span>,np.sqrt(metrics.mean_squared_error(y_test, y_pred))</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">MSE:</span> <span class="number">20.0804012021</span></span><br><span class="line"><span class="symbol">RMSE:</span> <span class="number">4.48111606657</span></span><br></pre></td></tr></table></figure>
+<p>得到了MSE或者RMSE，如果我们用其他方法得到了不同的系数，需要选择模型时，就用MSE小的时候对应的参数。</p>
+<hr>
+<h1 id="8：交叉验证"><a href="#8：交叉验证" class="headerlink" title="8：交叉验证"></a>8：交叉验证</h1><p>我们可以通过交叉验证来持续优化模型，代码如下，我们采用10折交叉验证，即cross_val_predict中的cv参数为10：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 交叉验证</span></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection import cross_val_predict</span><br><span class="line">predicted = cross_val_predict(linreg,X,y,<span class="attribute">cv</span>=10)</span><br><span class="line"><span class="builtin-name">print</span> <span class="string">"MSE:"</span>,metrics.mean_squared_error(y, predicted)</span><br><span class="line"><span class="builtin-name">print</span> <span class="string">"RMSE:"</span>,np.sqrt(metrics.mean_squared_error(y, predicted))</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">MSE:</span> <span class="number">20.7955974619</span></span><br><span class="line"><span class="symbol">RMSE:</span> <span class="number">4.56021901469</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，采用交叉验证模型的MSE比第6节的大，主要原因是我们这里是对所有折的样本做测试集对应的预测值的MSE，而第6节仅仅对25%的测试集做了MSE。两者的先决条件并不同。</p>
+<hr>
+<h1 id="9：画图查看结果"><a href="#9：画图查看结果" class="headerlink" title="9：画图查看结果"></a>9：画图查看结果</h1><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 画图查看结果</span></span><br><span class="line">import matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">fig, ax = plt.subplots()</span><br><span class="line">ax.scatter(y, predicted)</span><br><span class="line">ax.plot([y.<span class="built_in">min</span>(), y.<span class="built_in">max</span>()], [y.<span class="built_in">min</span>(), y.<span class="built_in">max</span>()], <span class="string">'k--'</span>, lw=<span class="number">4</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'Measured'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'Predicted'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171107133222238?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

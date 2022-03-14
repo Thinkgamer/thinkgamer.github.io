@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        线性模型篇之Logistic Regression数学公式推导 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#两分类与多分类"><span class="toc-text">两分类与多分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Logistic回归"><span class="toc-text">Logistic回归</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LR回归"><span class="toc-text">LR回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数学习"><span class="toc-text">参数学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        线性模型篇之Logistic Regression数学公式推导
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-02 22:31:51</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>本文主要介绍 线性模型篇之Logistic Regression数学公式推导。<br><a id="more"></a></p>
+</blockquote>
+<h1 id="两分类与多分类"><a href="#两分类与多分类" class="headerlink" title="两分类与多分类"></a>两分类与多分类</h1><ul>
+<li>两类分类（Binary Classification）<ul>
+<li>类别标签y只有两种取值，通常设为{0，1}</li>
+<li>线性判别函数，即形如 y = w^T*x + b</li>
+<li>分割超平面（hyper plane）,由满足f(w,x)=0的点组成</li>
+<li>决策边界（Decision boundary）、决策平面（Decision surface）：即分分割超平面，决策边界将特征空间一分为二，划分成两个区域，每个区域对应一个类别。</li>
+<li>有向距离（signed distance）</li>
+</ul>
+</li>
+<li>多样分类（Multi-class Classification）<ul>
+<li>分类的类别个数大于2，多分类一般需要多个线性判别函数，但设计这些判别函数有很多方式。eg：<ul>
+<li>一对其余：属于和不属于</li>
+<li>一对一</li>
+<li>argmax（改进的一对其余）：属于每个类别的概率，找概率最大值</li>
+</ul>
+</li>
+<li>参考：<a href="https://blog.csdn.net/Gamer_gyt/article/details/86378882" target="_blank" rel="external">多分类实现方式介绍和在Spark上实现多分类逻辑回归</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h1><h2 id="LR回归"><a href="#LR回归" class="headerlink" title="LR回归"></a>LR回归</h2><p>Logistic回归（Logistic Regression，LR）是一种常见的处理二分类的线性回归模型。</p>
+<p>为了解决连续的线性回归函数不适合做分类的问题，引入函数g：R^d -&gt; (0,1)来预测类别标签的后验概率p(y=1 | x)</p>
+<p>其中g(.)通常称为激活函数（activation function），其作用是把线性函数的值域从实数区间“挤压”到了（0，1）之间，可以用概率表示。在统计文献中，g(.)的逆函数g(.)^-1也称为联系函数（Link Function）</p>
+<p>在逻辑回归中使用Logistic作为激活函数，标签y=1的后验概率为(公式-1)：</p>
+<script type="math/tex; mode=display">
+p(y=1 | x) = \sigma (w^T x)</script><script type="math/tex; mode=display">
+p(y=1 | x)= \frac{1}{1+exp(-w^T x)}</script><p>标签 y=0的后验概率为(公式-2)：</p>
+<script type="math/tex; mode=display">
+p(y=0 | x) =1-p(y=0 | x)</script><script type="math/tex; mode=display">
+p(y=0 | x)= \frac{exp(-w^T x)}{1+exp(-w^T x)}</script><p>将公式-1进行等价变换，可得(公式-3)：</p>
+<script type="math/tex; mode=display">
+w^T x = log \frac{p(y=1 | x)}{1-p(y=1 | x)}</script><script type="math/tex; mode=display">
+w^T x = log \frac { p(y=1 | x)}{p(y=0|x)}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\frac { p(y=1 | x)}{p(y=0|x)}</script><p>为样本x正反例后验概率的比例，称为几率（odds），几率的对数称为对数几率（log odds或者logit），公式-3中第一个表达式，左边是线性函数，logistic回归可以看做是预测值为“标签的对数几率”的线性回归模型，因为Logistic回归也称为对数几率回归（Logit Regression）。</p>
+<p>附公式-1到公式-3的推导：</p>
+<script type="math/tex; mode=display">
+p(y=1 | x)= \frac{1}{1+exp(-w^T x)}</script><script type="math/tex; mode=display">
+=> exp(-w^Tx) = \frac{1-p(y=1 | x)}{p(y=1 | x)}</script><script type="math/tex; mode=display">
+=> - w^T x = log \frac{1- p(y=1 | x)}{p(y=1 | x)}</script><script type="math/tex; mode=display">
+=>  w^T x = log (\frac{1- p(y=1 | x)}{p(y=1 | x)})^{-1}</script><script type="math/tex; mode=display">
+=> w^T x = log \frac{p(y=1 | x)}{1-p(y=1 | x)}</script><script type="math/tex; mode=display">
+=> w^T x = log \frac{p(y=1 | x)}{p(y=0 | x)}</script><h2 id="参数学习"><a href="#参数学习" class="headerlink" title="参数学习"></a>参数学习</h2><p>LR回归采用交叉熵作为损失函数，并使用梯度下降法对参数进行优化。给定N个训练样本{x_i,y_i}，i&lt;=N，使用LR对每个样本进行预测，并用输出x_i的标签为1的后验概率，记为y’_i(x)  (公式-4)</p>
+<script type="math/tex; mode=display">
+y'_i(x) = \sigma(w^Tx_i),i\in N</script><p>由于y_i属于{0，1}，样本{x_i,y_i}的真实概率可以表示为(公式-5)：</p>
+<script type="math/tex; mode=display">
+p_r(y_i =1 | x_i) = y_i</script><script type="math/tex; mode=display">
+p_r(y_i =0 | x_i) = 1- y_i</script><p>使用交叉熵损失函数，其风险函数为(公式-6)：</p>
+<script type="math/tex; mode=display">
+R(w)= - \frac{1}{N}\sum_{n=1}^{N} (p_r(y_i =1 | x_i) log(y_i') + p_r(y_i =0 | x_i) log(1-y_i') )</script><script type="math/tex; mode=display">
+= - \frac{1}{N}\sum_{n=1}^{N} ( y_i log(y_i') + (1-y_i') log(1-y_i') )</script><p>风险函数R(w)关于参数w的导数为(公式-7)：</p>
+<script type="math/tex; mode=display">
+\frac{ \partial R(w)}{ \partial w} = - \frac{1}{N}\sum_{n=1}^{N}( y_i \frac{y_i'(1-y_i')}{y_i'}x_i -(1-y_i)\frac{y_i'(1-y_i')}{1-y_i'}x_i  )</script><script type="math/tex; mode=display">
+= - \frac{1}{N}\sum_{n=1}^{N}( y_i(1-y_i')x_i -(1-y_i)y_i'x_i)</script><script type="math/tex; mode=display">
+= - \frac{1}{N}\sum_{n=1}^{N}x_i(y_i-y_i')</script><p>采用梯度下降算法，Logistic的回归训练过程为：初始化w_0 为0，然后通过下式来更新迭代参数(公式-8)。</p>
+<script type="math/tex; mode=display">
+w_{t+1} \leftarrow w_t + \alpha \frac{1}{N}\sum_{n=1}^{N} x_i(y_i-y_{w_t}')</script><p>其中a是学习率，y_{wt}’是当参数为w_t 时，Logistic回归的输出。</p>
+<p>从公式-6可知，风险函数R(w)是关于参数w的连续可导的凸函数，因此除了梯度下降算法外，Logistic还可以使用高阶的优化算法，比如牛顿法来进行优化。</p>
+<p>说明:</p>
+<ul>
+<li>两个未知数相乘求导：<script type="math/tex; mode=display">
+(ab)' = a'b + ab'</script></li>
+<li>sigmoid函数求导后为：<script type="math/tex; mode=display">
+\sigma ' = \sigma (1-\sigma )x</script></li>
+</ul>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/44591359" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/44591359</a></li>
+<li><a href="https://blog.csdn.net/wgdzz/article/details/48816307" target="_blank" rel="external">https://blog.csdn.net/wgdzz/article/details/48816307</a></li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

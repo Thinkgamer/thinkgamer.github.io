@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        线性模型篇之SVM数学公式推导 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参数学习"><span class="toc-text">参数学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#核函数"><span class="toc-text">核函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#软间隔"><span class="toc-text">软间隔</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        线性模型篇之SVM数学公式推导
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-21 00:17:00</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>支持向量机（Support Vector Machine，SVM）是一个经典两类分类算法，其找到的分割超平面具有更好的鲁棒性，因此广泛使用在很多任务上，并表现出了很强优势。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>给定一个两分类数据集D={(x^n, y^n)}，n属于N，其中y_n 属于{+1,-1}，如果两类样本是线性可分的，即存在一个超平面（公式-1）</p>
+<script type="math/tex; mode=display">
+w^Tx + b =0</script><p>将两类样本分开，那么对于每个样本都有</p>
+<script type="math/tex; mode=display">
+y^n(w^Tx^n + b) > 0</script><p>数据集D中的每个样本x^n 到分隔超平面的距离为：</p>
+<script type="math/tex; mode=display">
+\gamma ^n = \frac{\left \| w^Tx^n +b \right \|}{ \left \| w \right \|} = \frac{y^n(w^Tx^n + b)}{ \left \| w \right \| }</script><p>我们定义整个数据集D中所有样本到分隔超平面的最短距离为间隔（Margin）（公式-2）</p>
+<script type="math/tex; mode=display">
+\gamma = \underset{n}{min} \gamma ^ n</script><p>如果间隔 gamma越大，其分隔超平面对两个数据集的划分越稳定，不容易受噪声等因素影响，支持向量机的目的是找到一个超平面(w^<em> , b^ </em>)使得gamma最大，即（公式-3）</p>
+<script type="math/tex; mode=display">
+\underset{w,b}{max} \qquad \gamma 
+\\
+s.t.  \qquad  \frac{y^n (w^Tx^n + b)}{\left \| w \right \|} \geq \gamma,\forall_n</script><p>令 </p>
+<script type="math/tex; mode=display">
+\left \| w \right \| . \gamma =1</script><p>则（公式-3）等价于（公式-4）</p>
+<script type="math/tex; mode=display">
+\underset{w,b}{max} \qquad \frac{1}{ \left \| w \right \| ^2} 
+\\
+s.t.  \qquad  y^n(w^Tx^n + b) \geq 1, \forall_n</script><p>数据集中所有满足 y^n (w^T x^n +b) =1 的样本点，都称为支持向量（support vertor）</p>
+<p>对于一个线性可分数据集，其分隔的超平面有多个，但是间隔最大的超平面是唯一的。下图给定了支持最大间隔分隔超平面的示例，其红色样本点为支持向量。</p>
+<center>
+
+![支持向量机示例](https://img-blog.csdnimg.cn/20190417110614374.png)
+
+</center>
+
+<h1 id="参数学习"><a href="#参数学习" class="headerlink" title="参数学习"></a>参数学习</h1><p><strong>凸函数 &amp; 凹函数</strong><br>关于凹凸函数的定义和性质可以参考下图：</p>
+<center>
+
+![image](https://img-blog.csdnimg.cn/20190420165249483.jpg)
+</center>
+
+<p>为了找到最大间隔分割超平面，将公式-4改写为凸优化问题（公式-5）：</p>
+<script type="math/tex; mode=display">
+\underset{w,b}{min} \qquad \frac{1}{ 2} {\left \| w \right \| ^2} 
+\\
+s.t.  \qquad  1-y^n(w^Tx^n + b) \leq 0, \forall n</script><p>使用拉格朗日乘数法，公式-5的拉格朗日函数为（公式-6）：</p>
+<script type="math/tex; mode=display">
+\Lambda (w,b,\lambda )=\frac{1}{2} \left \| w^2 \right \| + \sum_{n-1}^{N} \lambda _n( 1-y^n(w^Tx^n + b) )</script><p>其中</p>
+<script type="math/tex; mode=display">
+\lambda _1 \geq 0,...,\lambda _N \geq 0</script><p>为拉格朗日乘数。计算公式-6关于w和b的导数，并令其等于0得到（公式-7）</p>
+<script type="math/tex; mode=display">
+w = \sum_{n=1}^{ N }\lambda _n y^nx^n</script><p>和（公式-8）</p>
+<script type="math/tex; mode=display">
+0 = \sum_{n=1}^{N} \lambda _n y^n</script><p>将公式-7代入公式-6，并利用公式-8，得到拉格朗日对偶函数（公式-9）：</p>
+<script type="math/tex; mode=display">
+\Gamma(\lambda) = -\frac{1}{2} \sum_{n=1}^{N}\sum_{m=1}^{N} \lambda_n \lambda_m y^m y^n (x^m)^Tx^n + \sum_{n=1}^{N}\lambda_n</script><p>支持向量机的主优化问题为凸优化问题，满足强对偶性，即主优化问题可以通过最大化对偶函数</p>
+<script type="math/tex; mode=display">
+max_{\lambda \geq 0} \Gamma(\lambda)</script><p>对偶函数 Gamma(lambda)是一个凹函数，因此最大化对偶数是一个凸优化问题，可以通过多种凸优化方法进行求解，得到拉格朗日乘数的最优值 lambda^* 。但由于其约束条件的数量为训练样本数量，一般的优化方法代价比较高，因此在实践中通常采样比较高效的优化方法，比如SMO(Sequential Minimal Optimization)算法等。</p>
+<p>根据KKT条件中的互补松弛条件，最优解满足(公式-10)</p>
+<script type="math/tex; mode=display">
+ \lambda_n ^*(1-y^n(w^{*T}x^n+b^*))=0</script><p>如果样本x^n 不在约束边界上，(lambda_n)^<em>，其约束失效；如果样本x^n在约束边界上，(lambda_n)^</em> &gt;=0。这些在约束边界上的样本点称为支持向量（support vector），即离决策平面距离最近的点。</p>
+<p>再计算出 lambda^<em>后，根据公式-7计算出最优权重w^</em>，最优偏置b^*可以通过任选一个支持向量(x,y)计算得到（公式-11）</p>
+<script type="math/tex; mode=display">
+b^* = \tilde{y} - w^{*T}\tilde{x}</script><p>最优参数的支持向量机的决策函数为（公式-12）</p>
+<script type="math/tex; mode=display">
+f(x)=sgn(w^{*T}x+b^*)=sgn(\sum_{n=1}^{N} \lambda_n^* y^n(x^n)^Tx + b^* )</script><p>支持向量机的决策函数只依赖 lambda_n^*&gt;0的样本点，即支持向量。</p>
+<p>支持向量机的目标函数可以通过SMO等优化方法得到全局最优解，因此比其他分类器的学习效率更高。此外，支持向量机的决策函数只依赖与支持向量。与训练样本总数无关，分类速度比较快。</p>
+<h1 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h1><p>支持向量机还有一个重要的优点是可以使用核函数(kernal)隐式的将样本从原始特征空间映射到更高维的空间，并解决原始特征空间中的线性不可分问题。比如在一个变换后的特征空间中，支持向量机的决策函数为（公式-13）</p>
+<script type="math/tex; mode=display">
+f(x)=sgn(w^{*T} \phi(x)+b^*)=sgn(\sum_{n=1}^{N} \lambda_n^* y^n K(x^n,x) + b^* )</script><p>其中</p>
+<script type="math/tex; mode=display">
+K(x,z)=\phi(x)^T \phi(z)</script><p>为核函数，通常不需要显式的给出φ(x)的具体形式，可以通过核技巧(kernel trick)来构造。比如以x,z属于R^2为例，我们可以构造一个核函数（公式-14）</p>
+<script type="math/tex; mode=display">
+K(x,z)=(1+x^Tz)^2=\phi(x)^T\phi(z)</script><p>来隐式的计算x,z在特征空间φ中的内积，其中:</p>
+<script type="math/tex; mode=display">
+\phi(x)=[1,\sqrt{2}x_1,\sqrt{2}x_2,\sqrt{2}x_1x_2,x_1^2,x_2^2]^T</script><h1 id="软间隔"><a href="#软间隔" class="headerlink" title="软间隔"></a>软间隔</h1><p>在支持向量机的优化问题中，约束条件比较严格。如果训练集中的样本在特征空间中不是线性可分的，就无法找到最优解。为了能够容忍部分不满足约束的样本，我们可以引入松弛变量，将优化问题变为（公式-15）：</p>
+<script type="math/tex; mode=display">
+\underset{w,b}{min} \qquad \frac{1}{ 2} {\left \| w \right \| ^2} + C \sum_{n=1}^{N}\xi _n
+\\
+s.t.  \qquad  1-y^n(w^Tx^n + b) -\xi _n \leq 0, \forall n
+\\
+\xi _n \geq 0, \forall n</script><p>其中参数C&gt;0用来控制间隔和松弛变量惩罚的平衡，引入松弛变量的间隔称为软间隔（soft margin）。公式-15也可以表示为经验风险+正则化项的形式（公式-16）。</p>
+<script type="math/tex; mode=display">
+\underset{w,b}{min} \qquad \sum_{n=1}^{N}max(0,1-y^n(w^Tx^n + b)) + \frac{1}{C}.\frac{1}{2}\left \| w \right \|^2</script><p>其中</p>
+<script type="math/tex; mode=display">
+max(0,1-y^n(w^Tx^n + b))</script><p>称为hinge损失函数，1/C可以看作是正则化系数。软间隔支持向量机的参数学习和原始支持向量机类似，其最终决策函数也只和支持向量有关，即满足</p>
+<script type="math/tex; mode=display">
+1-y^n(w^Tx^n + b) - \xi_n = 0</script><p>的样本。</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

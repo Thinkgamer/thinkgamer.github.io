@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之4、构建离线文章画像 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#计算文章完整信息"><span class="toc-text">计算文章完整信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#计算-TF-IDF"><span class="toc-text">计算 TF-IDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#计算-TextRank"><span class="toc-text">计算 TextRank</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#画像计算"><span class="toc-text">画像计算</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apscheduler-定时更新"><span class="toc-text">Apscheduler 定时更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之4、构建离线文章画像
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:24</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>在上述步骤中，我们已经将业务数据和用户行为数据同步到了推荐系统数据库当中，接下来，我们就要对文章数据和用户数据进行分析，构建文章画像和用户画像，本文我们主要讲解如何构建文章画像。文章画像由关键词和主题词组成，我们将每个词的 TF-IDF 权重和 TextRank 权重的乘积作为关键词权重，筛选出权重最高的 K 个词作为关键词，将 TextRank 权重最高的 K 个词与 TF-IDF 权重最高的 K 个词的共现词作为主题词。</p>
+<p>首先，在 Hive 中创建文章数据库 article 及相关表，其中表 article_data 用于存储完整的文章信息，表 idf_keywords_values 用于存储关键词和索引信息，表 tfidf_keywords_values 用于存储关键词和 TF-IDF 权重信息，表 textrank_keywords_values 用于存储关键词和 TextRank 权重信息，表 article_profile 用于存储文章画像信息。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建文章数据库</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> article <span class="keyword">comment</span> <span class="string">"artcile information"</span> location <span class="string">'/user/hive/warehouse/article.db/'</span>;</span><br><span class="line"><span class="comment">-- 创建文章信息表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> article_data</span><br><span class="line">(</span><br><span class="line">    article_id   <span class="built_in">BIGINT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    channel_id   <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    channel_name <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"channel_name"</span>,</span><br><span class="line">    title        <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"title"</span>,</span><br><span class="line">    <span class="keyword">content</span>      <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"content"</span>,</span><br><span class="line">    sentence     <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"sentence"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"toutiao news_channel"</span></span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/article.db/article_data'</span>;</span><br><span class="line"><span class="comment">-- 创建关键词索引信息表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> idf_keywords_values</span><br><span class="line">(</span><br><span class="line">    keyword <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    idf     <span class="keyword">DOUBLE</span> <span class="keyword">comment</span> <span class="string">"idf"</span>,</span><br><span class="line">    <span class="keyword">index</span>   <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"index"</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 创建关键词TF-IDF权重信息表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> tfidf_keywords_values</span><br><span class="line">(</span><br><span class="line">    article_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    channel_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    keyword    <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"keyword"</span>,</span><br><span class="line">    tfidf      <span class="keyword">DOUBLE</span> <span class="keyword">comment</span> <span class="string">"tfidf"</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 创建关键词TextRank权重信息表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> textrank_keywords_values</span><br><span class="line">(</span><br><span class="line">    article_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    channel_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    keyword    <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"keyword"</span>,</span><br><span class="line">    textrank   <span class="keyword">DOUBLE</span> <span class="keyword">comment</span> <span class="string">"textrank"</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 创建文章画像信息表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> article_profile</span><br><span class="line">(</span><br><span class="line">    article_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"article_id"</span>,</span><br><span class="line">    channel_id <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"channel_id"</span>,</span><br><span class="line">    keyword    <span class="keyword">map</span> <span class="keyword">comment</span> <span class="string">"keyword"</span>,</span><br><span class="line">    topics     <span class="built_in">array</span> <span class="keyword">comment</span> <span class="string">"topics"</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h1 id="计算文章完整信息"><a href="#计算文章完整信息" class="headerlink" title="计算文章完整信息"></a>计算文章完整信息</h1><p>为了计算文章画像，需要将文章信息表（news_article_basic）、文章内容表（news_article_content）及频道表（news_channel）进行合并，从而得到完整的文章信息，通常使用 Spark SQL 进行处理。</p>
+<p>通过关联表 news_article_basic, news_article_content 和 news_channel 获得文章完整信息，包括 article_id, channel_id, channel_name, title, content，这里获取一个小时内的文章信息。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use toutiao"</span>)</span><br><span class="line">_now = datetime.today().replace(minute=<span class="number">0</span>, second=<span class="number">0</span>, microsecond=<span class="number">0</span>)</span><br><span class="line">start = datetime.strftime(_now + timedelta(days=<span class="number">0</span>, hours=<span class="number">-1</span>, minutes=<span class="number">0</span>), <span class="string">"%Y-%m-%d %H:%M:%S"</span>)</span><br><span class="line">end = datetime.strftime(_now, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)</span><br><span class="line">basic_content = spark.sql(</span><br><span class="line">            <span class="string">"select a.article_id, a.channel_id, a.title, b.content from news_article_basic a "</span></span><br><span class="line">            <span class="string">"inner join news_article_content b on a.article_id=b.article_id where a.review_time &gt;= '&#123;&#125;' "</span></span><br><span class="line">            <span class="string">"and a.review_time &lt; '&#123;&#125;' and a.status = 2"</span>.format(start, end))</span><br><span class="line">basic_content.registerTempTable(<span class="string">"temp_article"</span>)</span><br><span class="line">channel_basic_content = spark.sql(</span><br><span class="line">            <span class="string">"select t.*, n.channel_name from temp_article t left join news_channel n on t.channel_id=n.channel_id"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>channel_basic_content</code> 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-96f4fc864f469275.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>利用 <code>concat_ws()</code> 方法，将 channel_name, title, content 这 3 列数据合并为一列 sentence，并将结果写入文章完整信息表 article_data 中<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import pyspark.sql.<span class="built_in">functions</span> as F</span><br><span class="line"></span><br><span class="line">spark.sql(<span class="string">"use article"</span>)</span><br><span class="line">sentence_df = channel_basic_content.select(<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"channel_name"</span>, <span class="string">"title"</span>, <span class="string">"content"</span>, \</span><br><span class="line">                                           F.concat_ws(</span><br><span class="line">                                               <span class="string">","</span>,</span><br><span class="line">                                               channel_basic_content.channel_name,</span><br><span class="line">                                               channel_basic_content.<span class="built_in">title</span>,</span><br><span class="line">                                               channel_basic_content.<span class="built_in">content</span></span><br><span class="line">                                           ).<span class="built_in">alias</span>(<span class="string">"sentence"</span>)</span><br><span class="line">                                           )</span><br><span class="line"><span class="built_in">del</span> basic_content</span><br><span class="line"><span class="built_in">del</span> channel_basic_content</span><br><span class="line">gc.collect() # 垃圾回收</span><br><span class="line"></span><br><span class="line">sentence_df.write.insertInto(<span class="string">"article_data"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>sentence_df</code> 结果如下所示，文章完整信息包括 article_id, channel_id, channel_name, title, content, sentence，其中 sentence 为 channel_name, title, content 合并而成的长文本内容</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-b87fe4016480095b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="计算-TF-IDF"><a href="#计算-TF-IDF" class="headerlink" title="计算 TF-IDF"></a>计算 TF-IDF</h1><p>前面我们得到了文章的完整内容信息，接下来，我们要先对文章进行分词，然后计算每个词的 TF-IDF 权重，将 TF-IDF 权重最高的 K 个词作为文章的关键词。首先，读取文章信息<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use article"</span>)</span><br><span class="line">article_dataframe = spark.sql(<span class="string">"select * from article_data"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>利用 <code>mapPartitions()</code> 方法，对每篇文章进行分词，这里使用的是 <code>jieba</code> 分词器<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">words_df = article_dataframe.rdd.mapPartitions(segmentation).toDF([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"words"</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">segmentation</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> os</span><br><span class="line">    <span class="keyword">import</span> re</span><br><span class="line">    <span class="keyword">import</span> jieba</span><br><span class="line">    <span class="keyword">import</span> jieba.analyse</span><br><span class="line">    <span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line">    <span class="keyword">import</span> codecs</span><br><span class="line"></span><br><span class="line">    abspath = <span class="string">"/root/words"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 结巴加载用户词典</span></span><br><span class="line">    userdict_path = os.path.join(abspath, <span class="string">"ITKeywords.txt"</span>)</span><br><span class="line">    jieba.load_userdict(userdict_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 停用词文本</span></span><br><span class="line">    stopwords_path = os.path.join(abspath, <span class="string">"stopwords.txt"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_stopwords_list</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""返回stopwords列表"""</span></span><br><span class="line">        stopwords_list = [i.strip() <span class="keyword">for</span> i <span class="keyword">in</span> codecs.open(stopwords_path).readlines()]</span><br><span class="line">        <span class="keyword">return</span> stopwords_list</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 所有的停用词列表</span></span><br><span class="line">    stopwords_list = get_stopwords_list()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 分词</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cut_sentence</span><span class="params">(sentence)</span>:</span></span><br><span class="line">        <span class="string">"""对切割之后的词语进行过滤，去除停用词，保留名词，英文和自定义词库中的词，长度大于2的词"""</span></span><br><span class="line">        seg_list = pseg.lcut(sentence)</span><br><span class="line">        seg_list = [i <span class="keyword">for</span> i <span class="keyword">in</span> seg_list <span class="keyword">if</span> i.flag <span class="keyword">not</span> <span class="keyword">in</span> stopwords_list]</span><br><span class="line">        filtered_words_list = []</span><br><span class="line">        <span class="keyword">for</span> seg <span class="keyword">in</span> seg_list:</span><br><span class="line">            <span class="keyword">if</span> len(seg.word) &lt;= <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">elif</span> seg.flag == <span class="string">"eng"</span>:</span><br><span class="line">                <span class="keyword">if</span> len(seg.word) &lt;= <span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    filtered_words_list.append(seg.word)</span><br><span class="line">            <span class="keyword">elif</span> seg.flag.startswith(<span class="string">"n"</span>):</span><br><span class="line">                filtered_words_list.append(seg.word)</span><br><span class="line">            <span class="keyword">elif</span> seg.flag <span class="keyword">in</span> [<span class="string">"x"</span>, <span class="string">"eng"</span>]:  <span class="comment"># 是自定一个词语或者是英文单词</span></span><br><span class="line">                filtered_words_list.append(seg.word)</span><br><span class="line">        <span class="keyword">return</span> filtered_words_list</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">        sentence = re.sub(<span class="string">"&lt;.*?&gt;"</span>, <span class="string">""</span>, row.sentence)    <span class="comment"># 替换掉标签数据</span></span><br><span class="line">        words = cut_sentence(sentence)</span><br><span class="line">        <span class="keyword">yield</span> row.article_id, row.channel_id, words</span><br></pre></td></tr></table></figure></p>
+<p><code>words_df</code> 结果如下所示，words 为将 sentence 分词后的单词列表</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-55862171336abc52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>使用分词结果对词频统计模型（CountVectorizer）进行词频统计训练，并将 CountVectorizer 模型保存到 HDFS 中<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature import CountVectorizer</span><br><span class="line"><span class="comment"># vocabSize是总词汇的大小，minDF是文本中出现的最少次数</span></span><br><span class="line">cv = CountVectorizer(<span class="attribute">inputCol</span>=<span class="string">"words"</span>, <span class="attribute">outputCol</span>=<span class="string">"countFeatures"</span>, <span class="attribute">vocabSize</span>=200*10000, <span class="attribute">minDF</span>=1.0)</span><br><span class="line"><span class="comment"># 训练词频统计模型</span></span><br><span class="line">cv_model = cv.fit(words_df)</span><br><span class="line">cv_model.write().overwrite().save(<span class="string">"hdfs://hadoop-master:9000/headlines/models/CV.model"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>加载 CountVectorizer 模型，计算词频向量<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.ml.feature import CountVectorizerModel</span><br><span class="line">cv_model = CountVectorizerModel.load(<span class="string">"hdfs://hadoop-master:9000/headlines/models/CV.model"</span>)</span><br><span class="line"><span class="comment"># 得出词频向量结果</span></span><br><span class="line">cv_result = cv_model.transform(words_df)</span><br></pre></td></tr></table></figure></p>
+<p><code>cv_result</code> 结果如下所示，countFeatures 为词频向量，如 (986, [2, 4, …], [3.0, 5.0, …]) 表示总词汇的大小为 986 个，索引为 2 和 4 的词在某篇文章中分别出现 3 次和 5 次，</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-760b54a16a9e780b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>得到词频向量后，再利用逆文本频率模型（ IDF ），根据词频向量进行 IDF 统计训练，并将 IDF 模型保存到 HDFS<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature import IDF</span><br><span class="line">idf = IDF(<span class="attribute">inputCol</span>=<span class="string">"countFeatures"</span>, <span class="attribute">outputCol</span>=<span class="string">"idfFeatures"</span>)</span><br><span class="line">idf_model = idf.fit(cv_result)</span><br><span class="line">idf_model.write().overwrite().save(<span class="string">"hdfs://hadoop-master:9000/headlines/models/IDF.model"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>我们已经分别计算了文章信息中每个词的 TF 和 IDF，这时就可以加载 CountVectorizer 模型和 IDF 模型，计算每个词的 TF-IDF<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.ml.feature import CountVectorizerModel</span><br><span class="line">cv_model = CountVectorizerModel.load(<span class="string">"hdfs://hadoop-master:9000/headlines/models/countVectorizerOfArticleWords.model"</span>)</span><br><span class="line">from pyspark.ml.feature import IDFModel</span><br><span class="line">idf_model = IDFModel.load(<span class="string">"hdfs://hadoop-master:9000/headlines/models/IDFOfArticleWords.model"</span>)</span><br><span class="line"></span><br><span class="line">cv_result = cv_model.transform(words_df)</span><br><span class="line">tfidf_result = idf_model.transform(cv_result)</span><br></pre></td></tr></table></figure></p>
+<p><code>tfidf_result</code> 结果如下所示，idfFeatures 为 TF-IDF 权重向量，如 (986, [2, 4, …], [0.3, 0.5, …]) 表示总词汇的大小为 986 个，索引为 2 和 4 的词在某篇文章中的 TF-IDF 值分别为 0.3 和 0.5</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-44cdf662e1e2adb2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>对文章的每个词都根据 TF-IDF 权重排序，保留 TF-IDF 权重最高的前 K 个词作为关键词<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def sort_by_tfidf(<span class="built_in">partition</span>):</span><br><span class="line">    TOPK = <span class="number">20</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">row</span> <span class="keyword">in</span> <span class="built_in">partition</span>:</span><br><span class="line">        # 找到索引与IDF值并进行排序</span><br><span class="line">        _dict = list(zip(<span class="built_in">row</span>.idfFeatures.<span class="built_in">indices</span>, <span class="built_in">row</span>.idfFeatures.<span class="built_in">values</span>))</span><br><span class="line">        _dict = sorted(_dict, <span class="built_in">key</span>=<span class="built_in">lambda</span> x: x[<span class="number">1</span>], <span class="built_in">reverse</span>=True)</span><br><span class="line">        result = _dict[:TOPK]</span><br><span class="line">        <span class="keyword">for</span> word_index, tfidf <span class="keyword">in</span> result:</span><br><span class="line">            yield <span class="built_in">row</span>.article_id, <span class="built_in">row</span>.channel_id, int(word_index), <span class="built_in">round</span>(<span class="built_in">float</span>(tfidf), <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">keywords_by_tfidf = tfidf_result.rdd.mapPartitions(sort_by_tfidf).toDF([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"index"</span>, <span class="string">"weights"</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>keywords_by_tfidf</code> 结果如下所示，每篇文章保留了权重最高的 K 个单词，index 为单词索引，weights 为对应单词的 TF-IDF 权重</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-566af87857d1c5bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，我们需要知道每个词的对应的 TF-IDF 值，可以利用 <code>zip()</code> 方法，将所有文章中的每个词及其 TF-IDF 权重组成字典，再加入索引列，由此得到每个词对应的 TF-IDF 值，将该结果保存到 idf_keywords_values 表<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">keywords_list_with_idf = <span class="keyword">list</span>(zip(cv_model.vocabulary, idf_model.idf.toArray()))</span><br><span class="line">def append_index(data):</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">index</span> in <span class="built_in">range</span>(<span class="built_in">len</span>(data)):</span><br><span class="line">        data[<span class="built_in">index</span>] = <span class="keyword">list</span>(data[<span class="built_in">index</span>]) # 将元组转为<span class="keyword">list</span></span><br><span class="line">        data[<span class="built_in">index</span>].<span class="keyword">append</span>(<span class="built_in">index</span>)       # 加入索引 </span><br><span class="line">        data[<span class="built_in">index</span>][<span class="number">1</span>] = float(data[<span class="built_in">index</span>][<span class="number">1</span>])</span><br><span class="line">append_index(keywords_list_with_idf)</span><br><span class="line">sc = spark.sparkContext</span><br><span class="line">rdd = sc.parallelize(keywords_list_with_idf) # 创建rdd</span><br><span class="line">idf_keywords = rdd.toDF([<span class="string">"keywords"</span>, <span class="string">"idf"</span>, <span class="string">"index"</span>])</span><br><span class="line"></span><br><span class="line">idf_keywords.<span class="keyword">write</span>.insertInto(<span class="string">'idf_keywords_values'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>idf_keywords</code> 结果如下所示，包含了所有单词的名称、TF-IDF 权重及索引</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-bbf3babed9a9ccfb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>通过 index 列，将 <code>keywords_by_tfidf</code> 与表 idf_keywords_values 进行连接，选取文章 ID、频道 ID、关键词、TF-IDF 权重作为结果，并保存到 TF-IDF 关键词表 tfidf_keywords_values<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">keywords_index = spark.sql(<span class="string">"select keyword, index idx from idf_keywords_values"</span>)</span><br><span class="line">keywords_result = keywords_by_tfidf.join(keywords_index, keywords_index<span class="selector-class">.idx</span> == keywords_by_tfidf.index).select([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"keyword"</span>, <span class="string">"weights"</span>])</span><br><span class="line">keywords_result<span class="selector-class">.write</span><span class="selector-class">.insertInto</span>(<span class="string">"tfidf_keywords_values"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>keywords_result</code> 结果如下所示，keyword 和 weights 即为所有词在每个文章中的 TF-IDF 权重</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-7c39214d62083c30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="计算-TextRank"><a href="#计算-TextRank" class="headerlink" title="计算 TextRank"></a>计算 TextRank</h1><p>前面我们已经计算好了每个词的 TF-IDF 权重，为了计算关键词，还需要得到每个词的 TextRank 权重，接下来，还是先读取文章完整信息<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(<span class="string">"use article"</span>)</span><br><span class="line">article_dataframe = spark.sql(<span class="string">"select * from article_data"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>对文章 sentence 列的内容进行分词，计算每个词的 TextRank 权重，并将每篇文章 TextRank 权重最高的 K 个词保存到 TextRank 结果表 textrank_keywords_values<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">textrank_keywords_df = article_dataframe<span class="selector-class">.rdd</span><span class="selector-class">.mapPartitions</span>(textrank).toDF([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"keyword"</span>, <span class="string">"textrank"</span>])</span><br><span class="line"></span><br><span class="line">textrank_keywords_df<span class="selector-class">.write</span><span class="selector-class">.insertInto</span>(<span class="string">"textrank_keywords_values"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>TextRank 计算细节：分词后只保留指定词性的词，滑动截取长度为 K 的窗口，计算窗口内的各个词的投票数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">textrank</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> os</span><br><span class="line">    <span class="keyword">import</span> jieba</span><br><span class="line">    <span class="keyword">import</span> jieba.analyse</span><br><span class="line">    <span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line">    <span class="keyword">import</span> codecs</span><br><span class="line"></span><br><span class="line">    abspath = <span class="string">"/root/words"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 结巴加载用户词典</span></span><br><span class="line">    userDict_path = os.path.join(abspath, <span class="string">"ITKeywords.txt"</span>)</span><br><span class="line">    jieba.load_userdict(userDict_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 停用词文本</span></span><br><span class="line">    stopwords_path = os.path.join(abspath, <span class="string">"stopwords.txt"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_stopwords_list</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""返回stopwords列表"""</span></span><br><span class="line">        stopwords_list = [i.strip() <span class="keyword">for</span> i <span class="keyword">in</span> codecs.open(stopwords_path).readlines()]</span><br><span class="line">        <span class="keyword">return</span> stopwords_list</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 所有的停用词列表</span></span><br><span class="line">    stopwords_list = get_stopwords_list()</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TextRank</span><span class="params">(jieba.analyse.TextRank)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, window=<span class="number">20</span>, word_min_len=<span class="number">2</span>)</span>:</span></span><br><span class="line">            super(TextRank, self).__init__()</span><br><span class="line">            self.span = window  <span class="comment"># 窗口大小</span></span><br><span class="line">            self.word_min_len = word_min_len  <span class="comment"># 单词的最小长度</span></span><br><span class="line">            <span class="comment"># 要保留的词性，根据jieba github ，具体参见https://github.com/baidu/lac</span></span><br><span class="line">            self.pos_filt = frozenset(</span><br><span class="line">                (<span class="string">'n'</span>, <span class="string">'x'</span>, <span class="string">'eng'</span>, <span class="string">'f'</span>, <span class="string">'s'</span>, <span class="string">'t'</span>, <span class="string">'nr'</span>, <span class="string">'ns'</span>, <span class="string">'nt'</span>, <span class="string">"nw"</span>, <span class="string">"nz"</span>, <span class="string">"PER"</span>, <span class="string">"LOC"</span>, <span class="string">"ORG"</span>))</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">pairfilter</span><span class="params">(self, wp)</span>:</span></span><br><span class="line">            <span class="string">"""过滤条件，返回True或者False"""</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> wp.flag == <span class="string">"eng"</span>:</span><br><span class="line">                <span class="keyword">if</span> len(wp.word) &lt;= <span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> wp.flag <span class="keyword">in</span> self.pos_filt <span class="keyword">and</span> len(wp.word.strip()) &gt;= self.word_min_len \</span><br><span class="line">                    <span class="keyword">and</span> wp.word.lower() <span class="keyword">not</span> <span class="keyword">in</span> stopwords_list:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="comment"># TextRank过滤窗口大小为5，单词最小为2</span></span><br><span class="line">    textrank_model = TextRank(window=<span class="number">5</span>, word_min_len=<span class="number">2</span>)</span><br><span class="line">    allowPOS = (<span class="string">'n'</span>, <span class="string">"x"</span>, <span class="string">'eng'</span>, <span class="string">'nr'</span>, <span class="string">'ns'</span>, <span class="string">'nt'</span>, <span class="string">"nw"</span>, <span class="string">"nz"</span>, <span class="string">"c"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">        tags = textrank_model.textrank(row.sentence, topK=<span class="number">20</span>, withWeight=<span class="keyword">True</span>, allowPOS=allowPOS, withFlag=<span class="keyword">False</span>)</span><br><span class="line">        <span class="keyword">for</span> tag <span class="keyword">in</span> tags:</span><br><span class="line">            <span class="keyword">yield</span> row.article_id, row.channel_id, tag[<span class="number">0</span>], tag[<span class="number">1</span>]</span><br></pre></td></tr></table></figure></p>
+<p><code>textrank_keywords_df</code> 结果如下所示，keyword 和 textrank 即为每个单词在文章中的 TextRank 权重</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-4453fb49ff5e39e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="画像计算"><a href="#画像计算" class="headerlink" title="画像计算"></a>画像计算</h1><p>我们计算出 TF-IDF 和 TextRank 后，就可以计算关键词和主题词了，读取 TF-IDF 权重<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf_keywords_values = oa<span class="selector-class">.spark</span><span class="selector-class">.sql</span>(<span class="string">"select * from idf_keywords_values"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>读取 TextRank 权重<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">textrank_keywords_values = oa<span class="selector-class">.spark</span><span class="selector-class">.sql</span>(<span class="string">"select * from textrank_keywords_values"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>通过 <code>keyword</code> 关联 TF-IDF 权重和 TextRank 权重<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">keywords_res</span> = textrank_keywords_values.join(idf_keywords_values, <span class="literal">on</span>=[<span class="string">'keyword'</span>], how=<span class="string">'left'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>计算 TF-IDF 权重和 TextRank 权重的乘积作为关键词权重<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">keywords_weights</span> = keywords_res.withColumn(<span class="string">'weights'</span>, keywords_res.textrank * keywords_res.idf).select([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"keyword"</span>, <span class="string">"weights"</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>keywords_weights</code> 结果如下所示</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-bd60d34728a7aff8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这里，我们需要将相同文章的词都合并到一条记录中，将 <code>keywords_weights</code> 按照 article_id 分组，并利用 <code>collect_list()</code> 方法，分别将关键词和权重合并为列表<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">keywords_weights.registerTempTable('temp')</span><br><span class="line"></span><br><span class="line">keywords_weights = spark.sql("<span class="keyword">select</span> article_id, <span class="built_in">min</span>(channel_id) channel_id, collect_list(keyword) keywords, collect_list(weights) weights <span class="keyword">from</span> temp <span class="keyword">group</span> <span class="keyword">by</span> article_id<span class="string">")`</span></span><br></pre></td></tr></table></figure></p>
+<p><code>keywords_weights</code> 结果如下所示，keywords 为每篇文章的关键词列表，weights 为关键词对应的权重列表</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-562748d12a395121.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>为了方便查询，我们需要将关键词和权重合并为一列，并存储为 map 类型，这里利用 <code>dict()</code> 和 <code>zip()</code> 方法，将每个关键词及其权重组合成字典<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_map</span><span class="params">(row)</span></span><span class="symbol">:</span></span><br><span class="line">    <span class="keyword">return</span> row.article_id, row.channel_id, dict(zip(row.keywords, row.weights))</span><br><span class="line"></span><br><span class="line">article_keywords = keywords_weights.rdd.map(to_map).toDF([<span class="string">'article_id'</span>, <span class="string">'channel_id'</span>, <span class="string">'keywords'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>article_keywords</code> 结果如下所示，keywords 即为每篇文章的关键词和对应权重</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-5a02c70d3f93eb78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>前面我们计算完了关键词，接下来我们将 TF-IDF 和 TextRank 的共现词作为主题词，将 TF-IDF 权重表 tfidf_keywords_values 和 TextRank 权重表 textrank_keywords_values 进行关联，并利用 <code>collect_set()</code> 对结果进行去重，即可得到 TF-IDF 和 TextRank 的共现词，即主题词<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">topic_sql</span> = <span class="string">"""</span></span><br><span class="line"><span class="string">                select t.article_id article_id2, collect_set(t.keyword) topics from tfidf_keywords_values t</span></span><br><span class="line"><span class="string">                inner join </span></span><br><span class="line"><span class="string">                textrank_keywords_values r</span></span><br><span class="line"><span class="string">                where t.keyword=r.keyword</span></span><br><span class="line"><span class="string">                group by article_id2</span></span><br><span class="line"><span class="string">                """</span></span><br><span class="line"><span class="attr">article_topics</span> = spark.sql(topic_sql)</span><br></pre></td></tr></table></figure></p>
+<p><code>article_topics</code> 结果如下所示，topics 即为每篇文章的主题词列表</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-ca3825c269a0581b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>最后，将主题词结果和关键词结果合并，即为文章画像，保存到表 <code>article_profile</code><br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">article_profile = article_keywords.join(article_topics, article_keywords.article_id==article_topics.article_id2).select([<span class="string">"article_id"</span>, <span class="string">"channel_id"</span>, <span class="string">"keywords"</span>, <span class="string">"topics"</span>])</span><br><span class="line"></span><br><span class="line">article_profile<span class="selector-class">.write</span><span class="selector-class">.insertInto</span>(<span class="string">"article_profile"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>文章画像数据查询测试<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="built_in">select</span> * <span class="keyword">from</span> article_profile limit <span class="number">1</span>;</span><br><span class="line">OK</span><br><span class="line"><span class="number">26</span>      <span class="number">17</span>      &#123;<span class="string">"策略"</span>:<span class="number">0.3973770571351729</span>,<span class="string">"jpg"</span>:<span class="number">0.9806348975390871</span>,<span class="string">"用户"</span>:<span class="number">1.2794959063944176</span>,<span class="string">"strong"</span>:<span class="number">1.6488457985625076</span>,<span class="string">"文件"</span>:<span class="number">0.28144603583387057</span>,<span class="string">"逻辑"</span>:<span class="number">0.45256526469610714</span>,<span class="string">"形式"</span>:<span class="number">0.4123994242601279</span>,<span class="string">"全自"</span>:<span class="number">0.9594604850547191</span>,<span class="string">"h2"</span>:<span class="number">0.6244481634710125</span>,<span class="string">"版本"</span>:<span class="number">0.44280276959510817</span>,<span class="string">"Adobe"</span>:<span class="number">0.8553618185108718</span>,<span class="string">"安装"</span>:<span class="number">0.8305037437573172</span>,<span class="string">"检查更新"</span>:<span class="number">1.8088946300014435</span>,<span class="string">"产品"</span>:<span class="number">0.774842382276899</span>,<span class="string">"下载页"</span>:<span class="number">1.4256311032544344</span>,<span class="string">"过程"</span>:<span class="number">0.19827163395829256</span>,<span class="string">"json"</span>:<span class="number">0.6423301791599972</span>,<span class="string">"方式"</span>:<span class="number">0.582762869780791</span>,<span class="string">"退出应用"</span>:<span class="number">1.2338671268242603</span>,<span class="string">"Setup"</span>:<span class="number">1.004399549339134</span>&#125;   [<span class="string">"Electron"</span>,<span class="string">"全自动"</span>,<span class="string">"产品"</span>,<span class="string">"版本号"</span>,<span class="string">"安装包"</span>,<span class="string">"检查更新"</span>,<span class="string">"方案"</span>,<span class="string">"版本"</span>,<span class="string">"退出应用"</span>,<span class="string">"逻辑"</span>,<span class="string">"安装过程"</span>,<span class="string">"方式"</span>,<span class="string">"定性"</span>,<span class="string">"新版本"</span>,<span class="string">"Setup"</span>,<span class="string">"静默"</span>,<span class="string">"用户"</span>]</span><br><span class="line"><span class="built_in">Time</span> taken: <span class="number">0.322</span> seconds, Fetched: <span class="number">1</span> row(s)</span><br></pre></td></tr></table></figure></p>
+<h1 id="Apscheduler-定时更新"><a href="#Apscheduler-定时更新" class="headerlink" title="Apscheduler 定时更新"></a>Apscheduler 定时更新</h1><p>定义离线更新文章画像的方法，首先合并最近一个小时的文章信息，接着计算每个词的 TF-IDF 和 TextRank 权重，并根据 TF-IDF 和 TextRank 权重计算得出文章关键词和主题词，最后将文章画像信息保存到 Hive<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_article_profile</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    定时更新文章画像</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    ua = UpdateArticle()</span><br><span class="line">    <span class="comment"># 合并文章信息</span></span><br><span class="line">    sentence_df = ua.merge_article_data()</span><br><span class="line">    <span class="keyword">if</span> sentence_df.rdd.collect():</span><br><span class="line">        textrank_keywords_df, keywordsIndex = ua.generate_article_label()</span><br><span class="line">        ua.get_article_profile(textrank_keywords_df, keywordsIndex)</span><br></pre></td></tr></table></figure></p>
+<p>利用 Apscheduler 添加定时更新文章画像任务，设定每隔 1 个小时更新一次<br><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</span><br><span class="line"><span class="title">from</span> apscheduler.executors.pool <span class="keyword">import</span> ProcessPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="meta"># 创建scheduler,多进程执行</span></span><br><span class="line"><span class="title">executors</span> = &#123;</span><br><span class="line">    '<span class="keyword">default</span>': <span class="type">ProcessPoolExecutor</span>(3)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title">scheduler</span> = <span class="type">BlockingScheduler</span>(executors=executors)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 添加一个定时更新文章画像的任务,每隔1个小时运行一次</span></span><br><span class="line"><span class="title">scheduler</span>.add_job(update_article_profile, trigger='interval', hours=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="title">scheduler</span>.start()</span><br></pre></td></tr></table></figure></p>
+<p>利用 Supervisor 进行进程管理，配置文件如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[program:offline]</span><br><span class="line">environment=JAVA_HOME=/root/bigdata/jdk,SPARK_HOME=/root/bigdata/spark,HADOOP_HOME=/root/bigdata/hadoop,PYSPARK_PYTHON=/miniconda2/envs/reco_sys/bin/python,PYSPARK_DRIVER_PYTHON=/miniconda2/envs/reco_sys/bin/python</span><br><span class="line">command=/miniconda2/envs/reco_sys/bin/python /root/toutiao_project/scheduler/main.py</span><br><span class="line">directory=/root/toutiao_project/scheduler</span><br><span class="line">user=root</span><br><span class="line">autorestart=true</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/root/logs/offlinesuper.log</span><br><span class="line">loglevel=info</span><br><span class="line">stopsignal=KILL</span><br><span class="line">stopasgroup=true</span><br><span class="line">killasgroup=true</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>原文出自（已授权）：<a href="https://www.jianshu.com/u/ac833cc5146e" target="_blank" rel="external">https://www.jianshu.com/u/ac833cc5146e</a></p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a></li>
+<li><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘，提取码 EakP）</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之3、推荐系统的灵魂伴侣-数据挖掘 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#数据预处理"><span class="toc-text">数据预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据标准化"><span class="toc-text">数据标准化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据离散化"><span class="toc-text">数据离散化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据抽样"><span class="toc-text">数据抽样</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据降维"><span class="toc-text">数据降维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据清理"><span class="toc-text">数据清理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相似度计算"><span class="toc-text">相似度计算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据分类"><span class="toc-text">数据分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#KNN算法"><span class="toc-text">KNN算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树"><span class="toc-text">决策树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#朴素贝叶斯算法"><span class="toc-text">朴素贝叶斯算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据聚类"><span class="toc-text">数据聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#K-means算法"><span class="toc-text">K-means算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二分-Kmeans算法"><span class="toc-text">二分-Kmeans算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关联分析"><span class="toc-text">关联分析</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之3、推荐系统的灵魂伴侣-数据挖掘
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:03</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>个性化推荐是数据挖掘（Data Mining）中的一个目的明确的应用场景，所以，可以利用数据挖掘技术为推荐系统做一些基本工作，如了解数据、异常值处理、对用户群进行分类、对物品的价格进行聚类、构建用户的价格段偏好等，从而让推荐系统能够“千人千面”。本篇文章主要介绍一下常见的数据挖掘算法应用案例。</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/95162286" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/95162286</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><p>数据预处理（Data Preprocessing）是指：在使用数据进行建模或分析之前，对其进行一定的处理。真实环境中产生的数据往往都是不完整、不一致的“脏数据”，无法直接用来建模或进行数据分析。为了提高数据挖掘质量，需要先对数据进行一定的处理。</p>
+<p>常见的数据预处理包括：标准化、离散化、抽样、降维、去噪等。</p>
+<h2 id="数据标准化"><a href="#数据标准化" class="headerlink" title="数据标准化"></a>数据标准化</h2><p>数据标准化（Normalization）是指：将数据按照一定的比例进行缩放，使其落入一个特定的小区间。其中，最典型的就是数据的归一化处理，即将数据统一映射到0～1之间。</p>
+<blockquote>
+<p>数据标准化的好处有：加快模型的收敛速度，提高模型的精度。</p>
+</blockquote>
+<p>常见的数据标准化方法包括：</p>
+<ul>
+<li><p>Min-Max标准化<br>Min-Max标准化是指对原始数据进行线性变换，将值映射到[0,1]之间。其计算公式为：<br><center><img src="https://img-blog.csdnimg.cn/20190709083829394.png"></center><br>式中，x为原始数据中的一个数据，x_min表示原始数据中的最小值，x_max表示原始数据中的最大值，x’为Min-Max标准化后的数据。</p>
+</li>
+<li><p>Z-Score标准化<br>Z-Score（也叫Standard Score，标准分数）标准化是指：基于原始数据的均值（mean）和标准差（standard deviation）来进行数据的标准化。Z-Score标准化的计算公式为：</p>
+</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190709083909697.png"></center>
+式中，x为原始数据中的一个数据，μ表示原始数据的均值，σ表示原始数据的标准差，x'为Z-Score标准化后的数据。
+
+- 小数定标（Decimal scaling）标准化
+小数定标标准化是指：通过移动小数点的位置来进行数据的标准化。小数点移动的位数取决于原始数据中的最大绝对值。小数定标标准化的计算公式为：
+
+<center><img src="https://img-blog.csdnimg.cn/20190709084036701.png"></center>
+
+<p>例如，一组数据为[-309, -10, -43,87,344,970]，其中绝对值最大的是970。为使用小数定标标准化，用1000（即j=3）除以每个值。这样，-309被标准化为-0.309，970被标准化为0.97。</p>
+<ul>
+<li>均值归一化法<br>均值归一化是指：通过原始数据中的均值、最大值和最小值来进行数据的标准化。均值归一化法的计算公式为：</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190709084107869.png"></center>
+
+<ul>
+<li>向量归一化<br>向量归一化是指：通过用原始数据中的每个值除以所有数据之和来进行数据的标准化。向量归一化的计算公式为：</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190709084122912.png"></center>
+
+<ul>
+<li>指数转换<br>指数转换是指：通过对原始数据的值进行相应的指数函数变换来进行数据的标准化。常见的函数方法有lg函数、Softmax函数和Sigmoid函数。</li>
+</ul>
+<p><font color="red">由于篇幅原因，数据标准化的具体实现不贴代码了，可在《推荐系统开发实战》一书中找到找到！</font></p>
+<h2 id="数据离散化"><a href="#数据离散化" class="headerlink" title="数据离散化"></a>数据离散化</h2><p>数据离散化（也叫数据分组）是指将连续的数据进行分组，使其变为一段段离散化的区间。<br>根据离散化过程中是否考虑类别属性，可以将离散化算法分为有监督算法和无监督算法两类。由于有监督算法（如基于熵进行数据的离散化）充分利用了类别属性的信息，所以在分类中能获得较高的正确率。<br>常见的数据离散化方法有以下几种：</p>
+<ul>
+<li>等宽分组</li>
+<li>等频分组</li>
+<li>单变量分组</li>
+<li>基于信息熵分组</li>
+</ul>
+<p><font color="red">由于篇幅原因，基于信息熵的数据离散化实例这里贴代码了，可在《推荐系统开发实战》一书中找到!</font></p>
+<h2 id="数据抽样"><a href="#数据抽样" class="headerlink" title="数据抽样"></a>数据抽样</h2><p>数据抽样也叫数据采样。数据抽样是选择数据子集对象的一种常用方法。</p>
+<ul>
+<li>在统计学中，抽样的目的是实现数据的调查和分析。</li>
+<li>在数据挖掘中，抽样的目的是压缩数据量，减小数据挖掘算法的资源开销。</li>
+</ul>
+<p>在数据挖掘中，抽样主要是从海量数据中产生训练集（Train Set）、测试集（Test Set）和验证集（Validation Set）。训练集、测试集和验证集三者的区别如下：</p>
+<ul>
+<li>训练集用来进行模型训练。</li>
+<li>测试集用来衡量模型的一些统计指标，如准确率、召回率等。在训练模型的过程中不允许使用测试集，否则会导致模型过拟合。<br>验证集用来验证模型、辅助构建模型。在使用机器学习算法时，验证集是可选的。<blockquote>
+<p>“过拟合”表示：模型学习特征过于彻底时，噪声数据也会进入模型，导致后期测试时不能很好地识别数据，泛化能力太差。“欠拟合”表示：没有很好地捕捉到数据特征，不能很好地拟合数据。</p>
+</blockquote>
+</li>
+</ul>
+<p>常见的数据抽样方法包括：</p>
+<ul>
+<li>随机抽样</li>
+<li>分层抽样</li>
+<li>系统抽样</li>
+<li>渐进抽样</li>
+</ul>
+<h2 id="数据降维"><a href="#数据降维" class="headerlink" title="数据降维"></a>数据降维</h2><p>在构建机器学习模型时，有时特征是极其复杂的，当特征的维度达到几千维时，模型训练将会耗费大量的时间。另外，如果特征较多，还会出现多重共线性、稀疏性的问题。<br>因此，需要简化属性、去噪、去冗余，以求取更典型的属性，但同时又希望不损失数据本身的意义，这时就需要对特征进行降维。</p>
+<p>数据降维分为线性降维和非线性降维。</p>
+<ul>
+<li>线性降维：分为主成分分析（PCA）、线性判断分析（LDA）。</li>
+<li><p>非线性降维：分为基于核函数的KPCA、KICA、KDA和基于特征值的ISOMAP、LLE、LE、LPP、LTSA、MVU等。</p>
+<h2 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h2><p>“脏数据”对算法模型的直接影响是不能被使用，间接影响是降低模型的精度。这种情况下就需要对数据进行清理，包括（但不局限于）：不合格数据修正、缺失值填充、噪声值处理、离群点处理。</p>
+</li>
+<li><p>不合格数据修正</p>
+</li>
+<li>缺失值填充</li>
+<li>噪声值处理</li>
+<li>离群点处理<h2 id="相似度计算"><a href="#相似度计算" class="headerlink" title="相似度计算"></a>相似度计算</h2>相似度计算在数据挖掘和推荐系统中有着广泛的应用场景。例如：</li>
+<li>在协同过滤算法中，利用相似度计算用户之间或物品之间的相似度。</li>
+<li>在利用k-means进行聚类时，利用相似度计算公式计算个体到簇类中心的距离，进而判断个体所属的类别。</li>
+<li>利用KNN进行分类时，利用相似度计算个体与已知类别之间的相似性，从而判断个体所属的类别等。<br>下面将依次介绍常见的相似度计算方法。</li>
+<li>欧式距离</li>
+<li>曼哈顿距离</li>
+<li>切比雪夫距离</li>
+<li>马氏距离</li>
+<li>夹交余弦距离</li>
+<li>杰卡德相似系数与杰卡德距离</li>
+<li>相关系数与相关距离<h1 id="数据分类"><a href="#数据分类" class="headerlink" title="数据分类"></a>数据分类</h1>分类算法是数据挖掘中常用的基本算法之一，属于有监督学习算法（Supervised Learning）。<br>在实际应用场景中，往往利用分类算法对基础数据进行处理，或者做一些基础模型供推荐系统使用。<h2 id="KNN算法"><a href="#KNN算法" class="headerlink" title="KNN算法"></a>KNN算法</h2>KNN算法的原理和具体的代码实现，这里不过多介绍，可参考《推荐系统开发实战》</li>
+</ul>
+<p>KNN是一个分类算法，但可以使用KNN的原始算法思路进行推荐，即，为每个内容或物品寻找K个与其最相似的内容或物品，然后推荐给用户。<br>例如，在一个简单的电商网站中，用户浏览了一本图书，则推荐系统会依据图书的一些性质特征为用户推荐前 K个与该图书最相似的图书。</p>
+<p>对性别进行预测在电商网站中也常用到。某些用户在填写注册信息时并没有注明性别，或者填写的数据不正确。如果在性别未知的情况下进行商品推荐，则容易将男性商品推荐给女性，或者将女性商品推荐给男性。这种情况下就需要对用户性别进行判定。这时候KNN算法就可以被派上用场了。</p>
+<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><p>在点击率预估场景中我们经常使用的GBDT/XGBoost，其底层也是一棵棵决策树。了解决策树的算法和原因对我们后续学习GBDT也是很重要的。<br>决策树（Decision Tree）是根据一系列规则对数据进行分类的过程。分为回归决策树和分类决策树。</p>
+<ul>
+<li>回归决策树是对连续变量构建决策树。</li>
+<li>分类决策树是对离散变量构建决策树。<br>其中分类决策树的代表为ID3算法，C4.5和CART既可构建分类决策树也可以构建回归决策树。</li>
+</ul>
+<h2 id="朴素贝叶斯算法"><a href="#朴素贝叶斯算法" class="headerlink" title="朴素贝叶斯算法"></a>朴素贝叶斯算法</h2><p>在电商网站中，往往会存在一些异常用户，包括恶意刷单用户、爬虫爬取数据的用户等。这些异常用户产生的数据信息在推荐场景中往往是没有用的，即所说的“脏数据”。那么在准备推荐算法相关数据时，应过滤掉这些异常用户所产生的数据。</p>
+<p>这个时候就可以使用贝叶斯算法了，贝叶斯算法是一类算法的总称，这些算法均以贝叶斯定理为基础。</p>
+<p>贝叶斯理论是以18世纪的一位神学家托马斯•贝叶斯（Thomas Bayes）的名字命名的。通常，在事件B已经发生的前提下事件A发生的概率，与事件A已经发生的前提下事件B发生的概率是不一样的，然而这两者是有关系的。贝叶斯定理就是针对这种关系所做的陈述。</p>
+<p>P(A|B)表示在事件B已经发生的前提下事件A发生的概率。其基本求解公式为：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190709085708314.png"></center>
+
+<p>贝叶斯定理便是基于条件概率的等式定理，其计算公式如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190709085717276.png"></center>
+
+<p>特征独立性假设是指，假设每个特征之间是没有联系的，朴素贝叶斯算法则是建立在这样的基础之上的。</p>
+<p>朴素贝叶斯算法有三种常见模型：</p>
+<ul>
+<li>多项式模型</li>
+<li>高斯模型</li>
+<li>伯努利模型。<h1 id="数据聚类"><a href="#数据聚类" class="headerlink" title="数据聚类"></a>数据聚类</h1>聚类算法也是数据挖掘中常用的基本算法之一，属于无监督学习算法（Unsupervised Learning）。在实际应用场景中，会利用聚类算法对基础数据进行处理，或者做一些基础模型供推荐系统使用。<h2 id="K-means算法"><a href="#K-means算法" class="headerlink" title="K-means算法"></a>K-means算法</h2>在电商网站中，商品的数目很多，对应的商品价格也很多。但对于用户来讲，并不是对所有价格的商品都感兴趣。例如，一个经常网购1000元左右手机的用户，通常没必要向他推荐价格超过5000元的手机。</li>
+</ul>
+<p>所以，需要对商品的价格进行聚类，进而求出用户感兴趣的价格段，从而提高推荐系统的准确度和可信赖度。</p>
+<p>这时候基于kMeans算法进行商品价格聚类算法就随之产生了。</p>
+<p>kMeans（K均值聚类算法）的基本原理是：<br>（1）随机初始化K个初始簇类中心，对应K个初始簇类，按照“距离最近”原则，将每条数据都划分到最近的簇类；<br>（2）第一次迭代之后，更新各个簇类中心，然后进行第二次迭代，依旧按照“距离最近”原则进行数据归类；<br>（3）直到簇类中心不再改变，或者前后变化小于给定的误差值，或者达到迭代次数，才停止迭代。</p>
+<p>具体的执行步骤如下：<br>（1）在数据集中初始K个簇类中心，对应K个初始簇类；<br>（2）计算给定数据集中每条数据到K个簇类中心的距离；<br>（3）按照“距离最近”原则，将每条数据都划分到最近的簇类中；<br>（4）更新每个簇类的中心；<br>（5）迭代执行步骤（2）～步骤（4），直至簇类中心不再改变，或者变化小于给定的误差区间，或者达到迭代次数；<br>（6）结束算法，输出最后的簇类中心和对应的簇类。</p>
+<h2 id="二分-Kmeans算法"><a href="#二分-Kmeans算法" class="headerlink" title="二分-Kmeans算法"></a>二分-Kmeans算法</h2><p>二分-kMeans算法（二分-K均值聚类算法）是分层聚类（Hierarchical Clustering）的一种，是基于kMeans算法（K-均值聚类算法）实现的。</p>
+<p>在二分-kMeans算法中，调用kMeans（k =2）把一个簇类分成两个，迭代此过程，直至分成k个。其实现的具体思路为：<br>（1）初始化簇类表，使之包含所有的数据；<br>（2）对每一个簇类应用k均值聚类算法（k = 2）；<br>（3）计算划分后的误差，选择所有被划分的聚簇中总误差最小的并保存；<br>（4）迭代步骤（2）和步骤（3），簇类数目达到K后停止。</p>
+<p>相对于kMeans算法，二分-kMeans的改进点有以下两点：</p>
+<ul>
+<li>加速了kMeans的执行速度，减少了相似度的计算次数；</li>
+<li>能够克服“kMeans收敛于局部最优”的缺点。</li>
+</ul>
+<h1 id="关联分析"><a href="#关联分析" class="headerlink" title="关联分析"></a>关联分析</h1><p>关联分析的目的是，找到具有某种相关性的物品。这种分析在推荐系统中也有很大的作用，如经常出现在一个购物篮中的商品就可以相互推荐。关联算法最常见的就是Apriori。</p>
+<p>该算法中涉及的一些概念解释为：</p>
+<ul>
+<li>关联分析（Association Analysis）：从大规模数据集中寻找商品的隐含关系。</li>
+<li>项集（Item Set）：包含0个或多个项的集合。</li>
+<li>频繁项集：那些经常一起出现的物品集合。</li>
+<li>支持度计数（Support Count）：一个项集出现的次数（即，整个交易数据集中包含该项集的事物数）。</li>
+<li>项集支持度：一个项集出现的次数与数据集所有事物数的百分比，计算公式如下：</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/2019070909025024.png"></center>
+
+<ul>
+<li>项集置信度（confidence）：数据集中同时包含A、B的百分比，计算公式如下：</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190709090259813.png"></center>
+
+<p>Apriori算法使用一种称为逐层搜索的迭代方法，其中k项集用于探索（k+1）项集（如使用频繁1项集找到频繁2项集），其实现过程如下：</p>
+<ul>
+<li>（1）通过扫描数据库，累计每个项的计数，并收集满足最小支持度的项，找出频繁1项集的集合。该集合记作L1；</li>
+<li>（2）使用L1找出频繁2项集的集合L2，使用L2找出L3；</li>
+<li>（3）如此下去，直至不能再找到频繁k项集，每找出一个Lk需要一次完整的数据库扫描。</li>
+</ul>
+<hr>
+<p>数据挖掘在推荐系统中的应用非常广泛，无论是数据预处理还是基础模型开发，他都发挥着举足轻重的作用，因此在理解推荐算法的同时，对数据挖掘也要进行一定程度的掌握。关于文中的更多详细内容请持续关注<font color="red">《推荐系统开发实战》</font></p>
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

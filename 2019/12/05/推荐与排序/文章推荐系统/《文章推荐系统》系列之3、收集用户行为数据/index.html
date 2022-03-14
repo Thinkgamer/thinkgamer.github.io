@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之3、收集用户行为数据 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用户离线行为数据"><span class="toc-text">用户离线行为数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用户实时行为数据"><span class="toc-text">用户实时行为数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#进程管理"><span class="toc-text">进程管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之3、收集用户行为数据
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:23</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>在上一篇文章中，我们完成了业务数据的同步，在推荐系统中另一个必不可少的数据就是用户行为数据，可以说用户行为数据是推荐系统的基石，巧妇难为无米之炊，所以接下来，我们就要将用户的行为数据同步到推荐系统数据库中。</p>
+<p>在文章推荐系统中，用户行为包括曝光、点击、停留、收藏、分享等，所以这里我们定义的用户行为数据的字段包括：发生时间（actionTime）、停留时间（readTime）、频道 ID（channelId）、事件名称（action）、用户 ID（userId）、文章 ID（articleId）以及算法 ID（algorithmCombine），这里采用 json 格式，如下所示<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># 曝光的参数</span></span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:35"</span>,<span class="string">"readTime"</span>:<span class="string">""</span>,<span class="string">"channelId"</span>:<span class="number">0</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"exposure"</span>, <span class="string">"userId"</span>: <span class="string">"2"</span>, <span class="string">"articleId"</span>: <span class="string">"[18577, 14299]"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta"># 对文章触发行为的参数</span></span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:36"</span>,<span class="string">"readTime"</span>:<span class="string">""</span>,<span class="string">"channelId"</span>:<span class="number">18</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"click"</span>, <span class="string">"userId"</span>: <span class="string">"2"</span>, <span class="string">"articleId"</span>: <span class="string">"18577"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:38"</span>,<span class="string">"readTime"</span>:<span class="string">"1621"</span>,<span class="string">"channelId"</span>:<span class="number">18</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"read"</span>, <span class="string">"userId"</span>: <span class="string">"2"</span>, <span class="string">"articleId"</span>: <span class="string">"18577"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:39"</span>,<span class="string">"readTime"</span>:<span class="string">""</span>,<span class="string">"channelId"</span>:<span class="number">18</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"click"</span>, <span class="string">"userId"</span>: <span class="string">"1"</span>, <span class="string">"articleId"</span>: <span class="string">"14299"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:39"</span>,<span class="string">"readTime"</span>:<span class="string">""</span>,<span class="string">"channelId"</span>:<span class="number">18</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"click"</span>, <span class="string">"userId"</span>: <span class="string">"2"</span>, <span class="string">"articleId"</span>: <span class="string">"14299"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:41"</span>,<span class="string">"readTime"</span>:<span class="string">"914"</span>,<span class="string">"channelId"</span>:<span class="number">18</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"read"</span>, <span class="string">"userId"</span>: <span class="string">"2"</span>, <span class="string">"articleId"</span>: <span class="string">"14299"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="string">"actionTime"</span>:<span class="string">"2019-04-10 18:15:47"</span>,<span class="string">"readTime"</span>:<span class="string">"7256"</span>,<span class="string">"channelId"</span>:<span class="number">18</span>,<span class="string">"param"</span>:&#123;<span class="string">"action"</span>: <span class="string">"read"</span>, <span class="string">"userId"</span>: <span class="string">"1"</span>, <span class="string">"articleId"</span>: <span class="string">"14299"</span>, <span class="string">"algorithmCombine"</span>: <span class="string">"C2"</span>&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="用户离线行为数据"><a href="#用户离线行为数据" class="headerlink" title="用户离线行为数据"></a>用户离线行为数据</h1><p>由于用户行为数据规模庞大，通常是每天更新一次，以供离线计算使用。首先，在 Hive 中创建用户行为数据库 profile 及用户行为表 user_action，设置按照日期进行分区，并匹配 json 格式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建用户行为数据库</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> profile <span class="keyword">comment</span> <span class="string">"use action"</span> location <span class="string">'/user/hive/warehouse/profile.db/'</span>;</span><br><span class="line"><span class="comment">-- 创建用户行为信息表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> user_action</span><br><span class="line">(</span><br><span class="line">    actionTime <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"user actions time"</span>,</span><br><span class="line">    readTime   <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"user reading time"</span>,</span><br><span class="line">    channelId  <span class="built_in">INT</span> <span class="keyword">comment</span> <span class="string">"article channel id"</span>,</span><br><span class="line">    param <span class="keyword">map</span> <span class="keyword">comment</span> <span class="string">"action parameter"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"user primitive action"</span></span><br><span class="line">    PARTITIONED <span class="keyword">BY</span> (dt <span class="keyword">STRING</span>) # 按照日期分区</span><br><span class="line">    <span class="keyword">ROW</span> <span class="keyword">FORMAT</span> SERDE <span class="string">'org.apache.hive.hcatalog.data.JsonSerDe'</span> # 匹配<span class="keyword">json</span>格式</span><br><span class="line">    LOCATION <span class="string">'/user/hive/warehouse/profile.db/user_action'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>通常用户行为数据被保存在应用服务器的日志文件中，我们可以利用 Flume 监听应用服务器上的日志文件，将用户行为数据收集到 Hive 的 user_action 表对应的 HDFS 目录中，Flume 配置如下<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">a1.sources = s1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"></span><br><span class="line">a1.sources.s1.channels= c1</span><br><span class="line">a1.sources.s1.type = exec</span><br><span class="line">a1.sources.s1.command = tail -F /root/logs/userClick.log</span><br><span class="line">a1.sources.s1.<span class="attribute">interceptors</span>=i1 i2</span><br><span class="line">a1.sources.s1.interceptors.i1.<span class="attribute">type</span>=regex_filter</span><br><span class="line">a1.sources.s1.interceptors.i1.<span class="attribute">regex</span>=\\&#123;.*\\&#125;</span><br><span class="line">a1.sources.s1.interceptors.i2.<span class="attribute">type</span>=timestamp</span><br><span class="line"></span><br><span class="line"><span class="comment"># c1</span></span><br><span class="line">a1.channels.c1.<span class="attribute">type</span>=memory</span><br><span class="line">a1.channels.c1.<span class="attribute">capacity</span>=30000</span><br><span class="line">a1.channels.c1.<span class="attribute">transactionCapacity</span>=1000</span><br><span class="line"></span><br><span class="line"><span class="comment"># k1</span></span><br><span class="line">a1.sinks.k1.<span class="attribute">type</span>=hdfs</span><br><span class="line">a1.sinks.k1.<span class="attribute">channel</span>=c1</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">path</span>=hdfs://192.168.19.137:9000/user/hive/warehouse/profile.db/user_action/%Y-%m-%d</span><br><span class="line">a1.sinks.k1.hdfs.useLocalTimeStamp = <span class="literal">true</span></span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">fileType</span>=DataStream</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">writeFormat</span>=Text</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">rollInterval</span>=0</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">rollSize</span>=10240</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">rollCount</span>=0</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">idleTimeout</span>=60</span><br></pre></td></tr></table></figure></p>
+<p>编写 Flume 启动脚本 collect_click.sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/root/bigdata/jdk</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/root/bigdata/hadoop</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">/root/bigdata/flume/bin/flume-ng agent -c /root/bigdata/flume/conf -f /root/bigdata/flume/conf/collect_click.conf -Dflume.root.logger=INFO,console -name a1</span><br></pre></td></tr></table></figure></p>
+<p>Flume 自动生成目录后，需要手动关联 Hive 分区后才能加载到数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> user_action <span class="keyword">add</span> <span class="keyword">partition</span> (dt=<span class="string">'2019-11-11'</span>) location <span class="string">"/user/hive/warehouse/profile.db/user_action/2011-11-11/"</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="用户实时行为数据"><a href="#用户实时行为数据" class="headerlink" title="用户实时行为数据"></a>用户实时行为数据</h1><p>为了提高推荐的实时性，我们也需要收集用户的实时行为数据，以供在线计算使用。这里利用 Flume 将日志收集到 Kafka，在线计算任务可以从 Kafka 读取用户实时行为数据。首先，开启 zookeeper，以守护进程运行<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/root/</span>bigdata<span class="regexp">/kafka/</span>bin<span class="regexp">/zookeeper-server-start.sh -daemon /</span>root<span class="regexp">/bigdata/</span>kafka<span class="regexp">/config/</span>zookeeper.properties</span><br></pre></td></tr></table></figure></p>
+<p>开启 Kafka<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/root/bigdata/kafka/bin/kafka-server-start.sh /root/bigdata/kafka/config/server.properties</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 开启消息生产者</span></span><br><span class="line">/root/bigdata/kafka/bin/kafka-console-producer.sh --broker-list 192.168.19.19092 --sync --topic click-trace</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开启消费者</span></span><br><span class="line">/root/bigdata/kafka/bin/kafka-console-consumer.sh --bootstrap-server 192.168.19.137:9092 --topic  click-trace</span><br></pre></td></tr></table></figure></p>
+<p>修改 Flume 的日志收集配置文件，添加 c2 和 k2 ，将日志数据收集到 Kafka<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">a1.sources = s1</span><br><span class="line">a1.sinks = k1 k2</span><br><span class="line">a1.channels = c1 c2</span><br><span class="line"></span><br><span class="line">a1.sources.s1.channels= c1 c2</span><br><span class="line">a1.sources.s1.type = exec</span><br><span class="line">a1.sources.s1.command = tail -F /root/logs/userClick.log</span><br><span class="line">a1.sources.s1.<span class="attribute">interceptors</span>=i1 i2</span><br><span class="line">a1.sources.s1.interceptors.i1.<span class="attribute">type</span>=regex_filter</span><br><span class="line">a1.sources.s1.interceptors.i1.<span class="attribute">regex</span>=\\&#123;.*\\&#125;</span><br><span class="line">a1.sources.s1.interceptors.i2.<span class="attribute">type</span>=timestamp</span><br><span class="line"></span><br><span class="line"><span class="comment"># c1</span></span><br><span class="line">a1.channels.c1.<span class="attribute">type</span>=memory</span><br><span class="line">a1.channels.c1.<span class="attribute">capacity</span>=30000</span><br><span class="line">a1.channels.c1.<span class="attribute">transactionCapacity</span>=1000</span><br><span class="line"></span><br><span class="line"><span class="comment"># c2</span></span><br><span class="line">a1.channels.c2.<span class="attribute">type</span>=memory</span><br><span class="line">a1.channels.c2.<span class="attribute">capacity</span>=30000</span><br><span class="line">a1.channels.c2.<span class="attribute">transactionCapacity</span>=1000</span><br><span class="line"></span><br><span class="line"><span class="comment"># k1</span></span><br><span class="line">a1.sinks.k1.<span class="attribute">type</span>=hdfs</span><br><span class="line">a1.sinks.k1.<span class="attribute">channel</span>=c1</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">path</span>=hdfs://192.168.19.137:9000/user/hive/warehouse/profile.db/user_action/%Y-%m-%d</span><br><span class="line">a1.sinks.k1.hdfs.useLocalTimeStamp = <span class="literal">true</span></span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">fileType</span>=DataStream</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">writeFormat</span>=Text</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">rollInterval</span>=0</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">rollSize</span>=10240</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">rollCount</span>=0</span><br><span class="line">a1.sinks.k1.hdfs.<span class="attribute">idleTimeout</span>=60</span><br><span class="line"></span><br><span class="line"><span class="comment"># k2</span></span><br><span class="line">a1.sinks.k2.<span class="attribute">channel</span>=c2</span><br><span class="line">a1.sinks.k2.<span class="attribute">type</span>=org.apache.flume.supervisorctl</span><br><span class="line">我们可以利用supervisorctl来管理supervisor。sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k2.kafka.bootstrap.<span class="attribute">servers</span>=192.168.19.137:9092</span><br><span class="line">a1.sinks.k2.kafka.<span class="attribute">topic</span>=click-trace</span><br><span class="line">a1.sinks.k2.kafka.<span class="attribute">batchSize</span>=20</span><br><span class="line">a1.sinks.k2.kafka.producer.<span class="attribute">requiredAcks</span>=1</span><br></pre></td></tr></table></figure></p>
+<p>编写 Kafka 启动脚本 start_kafka.sh<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env bash</span></span><br><span class="line"><span class="comment"># 启动zookeeper</span></span><br><span class="line"><span class="regexp">/root/</span>bigdata<span class="regexp">/kafka/</span>bin<span class="regexp">/zookeeper-server-start.sh -daemon /</span>root<span class="regexp">/bigdata/</span>kafka<span class="regexp">/config/</span>zookeeper.properties</span><br><span class="line"><span class="comment"># 启动kafka</span></span><br><span class="line"><span class="regexp">/root/</span>bigdata<span class="regexp">/kafka/</span>bin<span class="regexp">/kafka-server-start.sh /</span>root<span class="regexp">/bigdata/</span>kafka<span class="regexp">/config/</span>server.properties</span><br><span class="line"><span class="comment"># 增加topic</span></span><br><span class="line"><span class="regexp">/root/</span>bigdata<span class="regexp">/kafka/</span>bin<span class="regexp">/kafka-topics.sh --zookeeper 192.168.19.137:2181 --create --replication-factor 1 --topic click-trace --partitions 1</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h1><p>我们这里使用 Supervisor 进行进程管理，当进程异常时可以自动重启，Flume 进程配置如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[program:collect-click]</span><br><span class="line">command=/bin/bash /root/toutiao_project/scripts/collect_click.sh</span><br><span class="line">user=root</span><br><span class="line">autorestart=true</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/root/logs/collect.log</span><br><span class="line">loglevel=info</span><br><span class="line">stopsignal=KILL</span><br><span class="line">stopasgroup=true</span><br><span class="line">killasgroup=true</span><br></pre></td></tr></table></figure></p>
+<p>Kafka 进程配置如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[program:kafka]</span><br><span class="line">command=/bin/bash /root/toutiao_project/scripts/start_kafka.sh</span><br><span class="line">user=root</span><br><span class="line">autorestart=true</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/root/logs/kafka.log</span><br><span class="line">loglevel=info</span><br><span class="line">stopsignal=KILL</span><br><span class="line">stopasgroup=true</span><br><span class="line">killasgroup=true</span><br></pre></td></tr></table></figure></p>
+<p>启动 Supervisor<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisord -c <span class="regexp">/etc/</span>supervisord.conf</span><br></pre></td></tr></table></figure></p>
+<p>启动 Kafka 消费者，并在应用服务器日志文件中写入日志数据，Kafka 消费者即可收集到实时行为数据<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动Kafka消费者</span></span><br><span class="line">/root/bigdata/kafka/bin/kafka-console-consumer.sh --bootstrap-server 192.168.19.137:9092 --topic  click-trace</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 写入日志数据</span></span><br><span class="line">echo &#123;\"actionTime\":\"2019-04-10 21:04:39\",\"readTime\":\"\",\"channelId\":18,\"param\":&#123;\"action\": \"click\", \"userId\": \"2\", \"articleId\": \"14299\", \"algorithmCombine\": \"C2\"&#125;&#125; &gt;&gt; userClick.log</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 消费者接收到日志数据</span></span><br><span class="line">&#123;"actionTime":"2019-04-10 21:04:39","readTime":"","channelId":18,"param":&#123;"action": "click", "userId": "2", "articleId": "14299", "algorithmCombine": "C2"&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Supervisor 常用命令如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> status              <span class="comment"># 查看程序状态</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> start apscheduler   <span class="comment"># 启动apscheduler单一程序</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> stop toutiao:*      <span class="comment"># 关闭toutiao组程序</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> start toutiao:*     <span class="comment"># 启动toutiao组程序</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> restart toutiao:*   <span class="comment"># 重启toutiao组程序</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> update              <span class="comment"># 重启配置文件修改过的程序</span></span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>原文出自（已授权）：<a href="https://www.jianshu.com/u/ac833cc5146e" target="_blank" rel="external">https://www.jianshu.com/u/ac833cc5146e</a></p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a></li>
+<li><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘，提取码 EakP）</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

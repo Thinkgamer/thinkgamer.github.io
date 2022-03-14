@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之8、基于模型的离线召回.md - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ALS-原理"><span class="toc-text">ALS 原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ALS-模型训练和预测"><span class="toc-text">ALS 模型训练和预测</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#预测结果处理"><span class="toc-text">预测结果处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#推荐结果存储"><span class="toc-text">推荐结果存储</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apscheduler-定时更新"><span class="toc-text">Apscheduler 定时更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之8、基于模型的离线召回.md
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:28</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>前面我们完成了所有的数据准备，接下来，就要开始召回阶段的工作了，可以做离线召回，也可以做在线召回，召回算法通常包括基于内容的召回和基于协同过滤的召回。ALS 模型是一种基于模型的协同过滤召回算法，本文将通过 ALS 模型实现离线召回。</p>
+<p>首先，我们在 Hbase 中创建召回结果表 cb_recall，这里用不同列族来存储不同方式的召回结果，其中 als 表示模型召回，content 表示内容召回，online 表示在线召回。通过设置多个版本来存储多次召回结果，通过设置生存期来清除长时间未被使用的召回结果。<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'cb_recall'</span>, &#123;<span class="function"><span class="params">NAME</span>=&gt;</span><span class="string">'als'</span>, <span class="function"><span class="params">TTL</span>=&gt;</span><span class="number">7776000</span>, <span class="function"><span class="params">VERSIONS</span>=&gt;</span><span class="number">999999</span>&#125;</span><br><span class="line">alter <span class="string">'cb_recall'</span>, &#123;<span class="function"><span class="params">NAME</span>=&gt;</span><span class="string">'content'</span>, <span class="function"><span class="params">TTL</span>=&gt;</span><span class="number">7776000</span>, <span class="function"><span class="params">VERSIONS</span>=&gt;</span><span class="number">999999</span>&#125;</span><br><span class="line">alter <span class="string">'cb_recall'</span>, &#123;<span class="function"><span class="params">NAME</span>=&gt;</span><span class="string">'online'</span>, <span class="function"><span class="params">TTL</span>=&gt;</span><span class="number">7776000</span>, <span class="function"><span class="params">VERSIONS</span>=&gt;</span><span class="number">999999</span>&#125;</span><br><span class="line"></span><br><span class="line"># 插入样例</span><br><span class="line">put <span class="string">'cb_recall'</span>, <span class="string">'recall:user:5'</span>, <span class="string">'als:2'</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line">put <span class="string">'cb_recall'</span>, <span class="string">'recall:user:2'</span>, <span class="string">'content:1'</span>,[<span class="number">45</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">289</span>,<span class="number">11</span>,<span class="number">65</span>,<span class="number">52</span>,<span class="number">109</span>,<span class="number">8</span>]</span><br><span class="line">put <span class="string">'cb_recall'</span>, <span class="string">'recall:user:2'</span>, <span class="string">'online:2'</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br></pre></td></tr></table></figure></p>
+<p>在 Hive 中建立外部表，用于离线分析<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> cb_recall_hbase</span><br><span class="line">(</span><br><span class="line">    user_id <span class="keyword">STRING</span> <span class="keyword">comment</span> <span class="string">"userID"</span>,</span><br><span class="line">    als     <span class="keyword">map</span>&lt;<span class="keyword">string</span>, <span class="built_in">ARRAY</span>&lt;<span class="built_in">BIGINT</span>&gt;&gt; <span class="keyword">comment</span> <span class="string">"als recall"</span>,</span><br><span class="line">    <span class="keyword">content</span> <span class="keyword">map</span>&lt;<span class="keyword">string</span>, <span class="built_in">ARRAY</span>&lt;<span class="built_in">BIGINT</span>&gt;&gt; <span class="keyword">comment</span> <span class="string">"content recall"</span>,</span><br><span class="line">    <span class="keyword">online</span>  <span class="keyword">map</span>&lt;<span class="keyword">string</span>, <span class="built_in">ARRAY</span>&lt;<span class="built_in">BIGINT</span>&gt;&gt; <span class="keyword">comment</span> <span class="string">"online recall"</span></span><br><span class="line">)</span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">"user recall table"</span></span><br><span class="line">    <span class="keyword">STORED</span> <span class="keyword">BY</span> <span class="string">'org.apache.hadoop.hive.hbase.HBaseStorageHandler'</span></span><br><span class="line">        <span class="keyword">WITH</span> SERDEPROPERTIES (<span class="string">"hbase.columns.mapping"</span> = <span class="string">":key,als:,content:,online:"</span>)</span><br><span class="line">    TBLPROPERTIES (<span class="string">"hbase.table.name"</span> = <span class="string">"cb_recall"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>接着，在 Hbase 中创建历史召回结果表，用于过滤已历史召回结果，避免重复推荐。这里同样设置了多个版本来存储多次历史召回结果，设置了生存期来清除很长时间以前的历史召回结果<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'history_recall'</span>, &#123;<span class="function"><span class="params">NAME</span>=&gt;</span><span class="string">'channel'</span>, <span class="function"><span class="params">TTL</span>=&gt;</span><span class="number">7776000</span>, <span class="function"><span class="params">VERSIONS</span>=&gt;</span><span class="number">999999</span>&#125;</span><br><span class="line"></span><br><span class="line"># 插入示例</span><br><span class="line">put <span class="string">'history_recall'</span>, <span class="string">'recall:user:5'</span>, <span class="string">'als:1'</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">put <span class="string">'history_recall'</span>, <span class="string">'recall:user:5'</span>, <span class="string">'als:1'</span>,[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br><span class="line">put <span class="string">'history_recall'</span>, <span class="string">'recall:user:5'</span>, <span class="string">'als:1'</span>,[<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br></pre></td></tr></table></figure></p>
+<h1 id="ALS-原理"><a href="#ALS-原理" class="headerlink" title="ALS 原理"></a>ALS 原理</h1><p><img src="https://upload-images.jianshu.io/upload_images/12790782-e608ec3e758c49d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>我们先简单了解一下 ALS 模型，上图为用户和物品的关系矩阵，其中，每一行代表一个用户，每一列代表一个物品。蓝色元素代表用户查看过该物品，灰色元素代表用户未查看过该物品，假设有 m 个用户，n 个物品，为了得到用户对物品的评分，我们可以利用矩阵分解将原本较大的稀疏矩阵拆分成两个较小的稠密矩阵，即 m x k 维的用户隐含矩阵和 k x n 维的物品隐含矩阵，如下所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-26825ddee138897c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>其中，用户矩阵的每一行就包括了影响用户偏好的 k 个隐含因子，物品矩阵的每一列就包括了影响物品内容的 k 个隐含因子。这里用户矩阵和物品矩阵中每个隐含因子的值就是利用交替最小二乘（Alternating Least Squares，ALS）优化算法计算而得的，所以叫做 ALS 模型。接下来，再将用户矩阵和物品矩阵相乘即可得到用户对物品的  m x n  维的评分矩阵，其中就包括每一个用户对每一个物品的评分了，进而可以根据评分进行推荐。</p>
+<h1 id="ALS-模型训练和预测"><a href="#ALS-模型训练和预测" class="headerlink" title="ALS 模型训练和预测"></a>ALS 模型训练和预测</h1><p>Spark 已经实现了 ALS 模型，我们可以直接调用。首先，我们读取用户历史点击行为，构造训练集数据，其中只需要包括用户 ID、文章 ID 以及是否点击<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql('use profile')</span><br><span class="line">user_article_basic = spark.sql(<span class="string">"select user_id, article_id, clicked from user_article_basic"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>user_article_basic</code> 结果如下所示，其中 clicked 表示用户对文章是否发生过点击</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-abb6c53b98c88373.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>我们需要将 clicked 由 boolean 类型转成 int 类型，即 true 为 1，false 为 0<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_boolean_int</span><span class="params">(row)</span></span><span class="symbol">:</span></span><br><span class="line">    <span class="keyword">return</span> row.user_id, row.article_id, int(row.clicked)</span><br><span class="line"></span><br><span class="line">user_article_basic = user_article_basic.rdd.map(convert_boolean_int).toDF([<span class="string">'user_id'</span>, <span class="string">'article_id'</span>, <span class="string">'clicked'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>user_article_basic</code> 结果如下所示，clicked 已经是 int 类型</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-f0075684b769f328.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>另外，Spark 的 ALS 模型还要求输入的用户 ID 和文章 ID 必须是从 1 开始递增的连续数字，所以需要利用 Spark 的 <code>Pipeline</code> 和 <code>StringIndexer</code>，将用户 ID 和文章 ID 建立从 1 开始递增的索引<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.feature import StringIndexer</span><br><span class="line"><span class="keyword">from</span> pyspark.ml import Pipeline</span><br><span class="line"></span><br><span class="line">user_indexer = StringIndexer(<span class="attribute">inputCol</span>=<span class="string">'user_id'</span>, <span class="attribute">outputCol</span>=<span class="string">'als_user_id'</span>)</span><br><span class="line">article_indexer = StringIndexer(<span class="attribute">inputCol</span>=<span class="string">'article_id'</span>, <span class="attribute">outputCol</span>=<span class="string">'als_article_id'</span>)</span><br><span class="line">pip = Pipeline(stages=[user_indexer, article_indexer])</span><br><span class="line">pip_model = pip.fit(user_article_basic)</span><br><span class="line">als_user_article = pip_model.transform(user_article_basic)</span><br></pre></td></tr></table></figure></p>
+<p><code>als_user_article</code> 结果如下所示，als_user_id 和 als_article_id 即是 ALS 模型所需的用户索引和文章索引</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-98ff5968a2cdd731.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来，将用户行为数据中的 als_user_id, als_article_id, clicked 三列作为训练集，对 ALS 模型进行训练，并利用 ALS 模型计算用户对文章的偏好得分，这里可以指定为每个用户保留偏好得分最高的 K 篇文章<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.ml.recommendation import ALS</span><br><span class="line"></span><br><span class="line">top_k = 100</span><br><span class="line">als = ALS(<span class="attribute">userCol</span>=<span class="string">'als_user_id'</span>, <span class="attribute">itemCol</span>=<span class="string">'als_article_id'</span>, <span class="attribute">ratingCol</span>=<span class="string">'clicked'</span>)</span><br><span class="line">als_model = als.fit(als_user_article)</span><br><span class="line"></span><br><span class="line">recall_res = als_model.recommendForAllUsers(top_k)</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，其中，als_user_id 为用户索引，recommendations 为每个用户的推荐列表，包括文章索引和偏好得分，如 [[255,0.1], [10,0.08], …]</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-a966583c33d30c06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="预测结果处理"><a href="#预测结果处理" class="headerlink" title="预测结果处理"></a>预测结果处理</h1><p>接着，我们要将推荐结果中的用户索引和文章索引还原为用户 ID 和文章 ID，这就需要建立用户 ID 与用户索引的映射及文章 ID 与文章索引的映射，可以将前面包含用户索引和文章索引的用户行为数据 <code>als_user_article</code> 分别按照 user_id 和 article_id 分组，即可得到用户 ID 与用户索引的映射以及文章 ID 与文章索引的映射<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">user_real_index</span> = als_user_article.groupBy([<span class="string">'user_id'</span>]).max(<span class="string">'als_user_id'</span>).withColumnRenamed(<span class="string">'max(als_user_id)'</span>, <span class="string">'als_user_id'</span>)</span><br><span class="line"><span class="attr">article_real_index</span> = als_user_article.groupBy([<span class="string">'article_id'</span>]).max(<span class="string">'als_article_id'</span>).withColumnRenamed(<span class="string">'max(als_article_id)'</span>, <span class="string">'als_article_id'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>user_real_index</code> 结果如下所示，即用户 ID 与用户索引的映射</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-4517cce545326e63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>再利用 <code>als_user_id</code> 将 <code>recall_res</code> 和 <code>user_real_index</code> 进行连接，加入用户 ID<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">recall_res = recall_res.<span class="keyword">join</span>(user_real_index, <span class="keyword">on</span>=[<span class="string">'als_user_id'</span>], how=<span class="string">'left'</span>).<span class="keyword">select</span>([<span class="string">'als_user_id'</span>, <span class="string">'recommendations'</span>, <span class="string">'user_id'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，得到用户索引，推荐列表和用户 ID</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-6939d47b670c5716.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">存储</p>
+<p>接下来，我们要构建出用户和文章的关系，利用 <code>explode()</code> 方法将 recommendations 中的每篇文章都转换为单独的一条记录，并只保留用户 ID 和文章索引这两列数据<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import pyspark<span class="selector-class">.sql</span><span class="selector-class">.functions</span> as F</span><br><span class="line"></span><br><span class="line">recall_res = recall_res.withColumn(<span class="string">'als_article_id'</span>, F.explode(<span class="string">'recommendations'</span>)).drop(<span class="string">'recommendations'</span>).select([<span class="string">'user_id'</span>, <span class="string">'als_article_id'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，als_article_id 包括文章索引和偏好得分</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-4f010be4233f8f6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>我们将 als_article_id 中的偏好得分去除，只保留文章索引<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_article_index</span><span class="params">(row)</span></span><span class="symbol">:</span></span><br><span class="line">    <span class="keyword">return</span> row.user_id, row.als_article_id[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">recall_res = recall_res.rdd.map(get_article_index).toDF([<span class="string">'user_id'</span>, <span class="string">'als_article_id'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，得到用户 ID 和文章索引</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-251a47b794797f2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>之前我们将文章 ID 和文章索引保存到了 <code>article_real_index</code>，这里利用 als_article_id 将 recall_res 和 <code>article_real_index</code> 进行连接，得到文章 ID<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">recall_res = recall_res.<span class="keyword">join</span>(article_real_index, <span class="keyword">on</span>=[<span class="string">'als_article_id'</span>], how=<span class="string">'left'</span>).<span class="keyword">select</span>([<span class="string">'user_id'</span>, <span class="string">'article_id'</span>])</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，得到用户 ID 和要向其推荐的文章 ID</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-d42ac7e8e540cdb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="推荐结果存储"><a href="#推荐结果存储" class="headerlink" title="推荐结果存储"></a>推荐结果存储</h1><p>为了方便查询，我们需要将推荐结果按频道分别进行存储。首先，读取文章完整信息，得到频道 ID<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.sql('use article')</span><br><span class="line">article_data = spark.sql(<span class="string">"select article_id, channel_id from article_data"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>利用 article_id 将 <code>recall_res</code> 和 <code>article_data</code> 进行连接，在推荐结果中加入频道 ID<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">recall_res</span> = recall_res.join(article_data, <span class="literal">on</span>=[<span class="string">'article_id'</span>], how=<span class="string">'left'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，推荐结果加入了频道 ID</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-d23360fcb5da1901.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>将推荐结果按照 user_id 和 channel_id 进行分组，利用 <code>collect_list()</code> 方法将文章 ID 合并为文章列表<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">recall_res</span> = recall_res.groupBy([<span class="string">'user_id'</span>, <span class="string">'channel_id'</span>]).agg(F.collect_list(<span class="string">'article_id'</span>)).withColumnRenamed(<span class="string">'collect_list(article_id)'</span>, <span class="string">'article_list'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><code>recall_res</code> 结果如下所示，article_list 为某用户在某频道下的推荐文章列表</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-29f5ad6c579f4ee4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>最后，将推荐结果按频道分别存入召回结果表 cb_recall 及历史召回结果表 history_recall。注意，在保存新的召回结果之前需要根据历史召回结果进行过滤，防止重复推荐<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">recall_res = recall_res.dropna()</span><br><span class="line">recall_res.foreachPartition(save_offline_recall_hbase)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_offline_recall_hbase</span><span class="params">(partition)</span>:</span></span><br><span class="line">    <span class="string">"""ALS模型离线召回结果存储</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">import</span> happybase</span><br><span class="line">    pool = happybase.ConnectionPool(size=<span class="number">10</span>, host=<span class="string">'hadoop-master'</span>, port=<span class="number">9090</span>)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> partition:</span><br><span class="line">        <span class="keyword">with</span> pool.connection() <span class="keyword">as</span> conn:</span><br><span class="line">            <span class="comment"># 读取历史召回结果表</span></span><br><span class="line">            history_table = conn.table(<span class="string">'history_recall'</span>)</span><br><span class="line">            <span class="comment"># 读取包含多个版本的历史召回结果</span></span><br><span class="line">            history_article_data = history_table.cells(<span class="string">'reco:his:&#123;&#125;'</span>.format(row.user_id).encode(),</span><br><span class="line">                                       <span class="string">'channel:&#123;&#125;'</span>.format(row.channel_id).encode())</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 合并多个版本历史召回结果</span></span><br><span class="line">            history_article = []（比如有的用户会比较怀旧）</span><br><span class="line">            <span class="keyword">if</span> len(history_article_data) &gt;= <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">for</span> article <span class="keyword">in</span> history_article_data[:<span class="number">-1</span>]:</span><br><span class="line">                    history_article.extend(eval(article))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                history_article = []</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 过滤history_article</span></span><br><span class="line">            recall_article = list(set(row.article_list) - set(history_article))</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> recall_article:</span><br><span class="line">                table = conn.table(<span class="string">'cb_recall'</span>)</span><br><span class="line">                table.put(<span class="string">'recall:user:&#123;&#125;'</span>.format(row.user_id).encode(), &#123;<span class="string">'als:&#123;&#125;'</span>.format(row.channel_id).encode(): str(recall_article).encode()&#125;)</span><br><span class="line">                history_table.put(<span class="string">"reco:his:&#123;&#125;"</span>.format(row.user_id).encode(), &#123;<span class="string">'channel:&#123;&#125;'</span>.format(row.channel_id): str(recall_article).encode()&#125;)</span><br><span class="line">            conn.close()</span><br></pre></td></tr></table></figure></p>
+<p>可以根据用户 ID 和频道 ID 来查询召回结果<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">hbase</span><span class="params">(main)</span></span>:<span class="number">028</span>:<span class="number">0</span>&gt; get <span class="string">'cb_recall'</span>, <span class="string">'recall:user:2'</span></span><br><span class="line">COLUMN                     CELL                                                                        </span><br><span class="line">als:<span class="number">13</span>                    timestamp=<span class="number">1558041569201</span>, value=[<span class="number">141431</span>,<span class="number">14381</span>, <span class="number">17966</span>, <span class="number">17454</span>, <span class="number">14125</span>, <span class="number">16174</span>]</span><br></pre></td></tr></table></figure></p>
+<h1 id="Apscheduler-定时更新"><a href="#Apscheduler-定时更新" class="headerlink" title="Apscheduler 定时更新"></a>Apscheduler 定时更新</h1><p>在用户召回方法 <code>update_user_recall()</code> 中，增加基于模型的离线召回方法 <code>update_content_recall()</code>，首先读取用户行为日志，进行数据预处理，构建训练集，接着对 ALS 模型进行训练和预测，最后对预测出的推荐结果进行解析并按频道分别存入召回结果表和历史召回结果表<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user_recall</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    用户的频道推荐召回结果更新逻辑</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    ur = UpdateRecall(<span class="number">500</span>)</span><br><span class="line">    ur.update_als_recall()</span><br></pre></td></tr></table></figure></p>
+<p>添加定时更新用户召回结果的任务，每隔 3 小时运行一次<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from apscheduler.schedulers.blocking <span class="built_in">import</span> BlockingScheduler</span><br><span class="line">from apscheduler.executors.pool <span class="built_in">import</span> ProcessPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建scheduler，多进程执行</span></span><br><span class="line"><span class="attr">executors</span> = &#123;</span><br><span class="line">    'default': ProcessPoolExecutor(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">scheduler</span> = BlockingScheduler(<span class="attr">executors=executors)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加一个定时运行文章画像更新的任务， 每隔1个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_article_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=1)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行用户画像更新的任务， 每隔2个小时运行一次</span></span><br><span class="line">scheduler.add_job(update_user_profile, <span class="attr">trigger='interval',</span> <span class="attr">hours=2)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行用户召回更新的任务，每隔3小时运行一次</span></span><br><span class="line">scheduler.add_job(update_user_recall, <span class="attr">trigger='interval',</span> <span class="attr">hours=3)</span></span><br><span class="line"><span class="comment"># 添加一个定时运行特征中心平台的任务，每隔4小时更新一次</span></span><br><span class="line">scheduler.add_job(update_ctr_feature, <span class="attr">trigger='interval',</span> <span class="attr">hours=4)</span></span><br><span class="line"></span><br><span class="line">scheduler.start()</span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a><br><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘， 提取码：eakp）</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

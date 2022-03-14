@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        Spark求统计量的两种方法 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DataFrame形式"><span class="toc-text">DataFrame形式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加载Json数据源"><span class="toc-text">加载Json数据源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDD形式"><span class="toc-text">RDD形式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自己实现"><span class="toc-text">自己实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#本地碰见的一个错误"><span class="toc-text">本地碰见的一个错误</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        Spark求统计量的两种方法
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-02-04 15:04:27</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Spark与大数据" title="Spark与大数据">Spark与大数据</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>Spark对于统计量中的最大值，最小值，平均值和方差（均值）的计算都提供了封装，这里小编知道两种计算方法，整理一下分享给大家</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="DataFrame形式"><a href="#DataFrame形式" class="headerlink" title="DataFrame形式"></a>DataFrame形式</h1><h2 id="加载Json数据源"><a href="#加载Json数据源" class="headerlink" title="加载Json数据源"></a>加载Json数据源</h2><p>example.json文件格式如下<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"thinkgamer"</span>,<span class="attr">"age"</span>:<span class="number">23</span>,<span class="attr">"math"</span>:<span class="number">78</span>,<span class="attr">"chinese"</span>:<span class="number">78</span>,<span class="attr">"english"</span>:<span class="number">95</span>&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"think"</span>,<span class="attr">"age"</span>:<span class="number">25</span>,<span class="attr">"math"</span>:<span class="number">95</span>,<span class="attr">"chinese"</span>:<span class="number">88</span>,<span class="attr">"english"</span>:<span class="number">93</span>&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"gamer"</span>,<span class="attr">"age"</span>:<span class="number">24</span>,<span class="attr">"math"</span>:<span class="number">93</span>,<span class="attr">"chinese"</span>:<span class="number">68</span>,<span class="attr">"english"</span>:<span class="number">88</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// persist(StorageLevel.MEMORY_AND_DISK) 当内存不够时cache到磁盘里</span></span><br><span class="line">val df = spark<span class="selector-class">.read</span><span class="selector-class">.json</span>(<span class="string">"/path/to/example.json"</span>).persist(StorageLevel.MEMORY_AND_DISK)</span><br><span class="line">df.show()</span><br><span class="line">df.describe()</span><br></pre></td></tr></table></figure>
+<p>我们便可以看到如下的形式<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">+---+-------+-------+----+----------+</span><br><span class="line">|<span class="string">age</span>|<span class="string">chinese</span>|<span class="string">english</span>|<span class="string">math</span>|<span class="string">      name</span>|</span><br><span class="line">+---+-------+-------+----+----------+</span><br><span class="line">|<span class="string"> 23</span>|<span class="string">     78</span>|<span class="string">     95</span>|<span class="string">  78</span>|<span class="string">thinkgamer</span>|</span><br><span class="line">|<span class="string"> 25</span>|<span class="string">     88</span>|<span class="string">     93</span>|<span class="string">  95</span>|<span class="string">     think</span>|</span><br><span class="line">|<span class="string"> 24</span>|<span class="string">     68</span>|<span class="string">     88</span>|<span class="string">  93</span>|<span class="string">     gamer</span>|</span><br><span class="line">+---+-------+-------+----+----------+</span><br><span class="line"></span><br><span class="line">+-------+----+-------+-----------------+-----------------+----------+</span><br><span class="line">|<span class="string">summary</span>|<span class="string"> age</span>|<span class="string">chinese</span>|<span class="string">          english</span>|<span class="string">             math</span>|<span class="string">      name</span>|</span><br><span class="line">+-------+----+-------+-----------------+-----------------+----------+</span><br><span class="line">|<span class="string">  count</span>|<span class="string">   3</span>|<span class="string">      3</span>|<span class="string">                3</span>|<span class="string">                3</span>|<span class="string">         3</span>|</span><br><span class="line">|<span class="string">   mean</span>|<span class="string">24.0</span>|<span class="string">   78.0</span>|<span class="string">             92.0</span>|<span class="string">88.66666666666667</span>|<span class="string">      null</span>|</span><br><span class="line">|<span class="string"> stddev</span>|<span class="string"> 1.0</span>|<span class="string">   10.0</span>|<span class="string">3.605551275463989</span>|<span class="string"> 9.29157324317757</span>|<span class="string">      null</span>|</span><br><span class="line">|<span class="string">    min</span>|<span class="string">  23</span>|<span class="string">     68</span>|<span class="string">               88</span>|<span class="string">               78</span>|<span class="string">     gamer</span>|</span><br><span class="line">|<span class="string">    max</span>|<span class="string">  25</span>|<span class="string">     88</span>|<span class="string">               95</span>|<span class="string">               95</span>|<span class="string">thinkgamer</span>|</span><br><span class="line">+-------+----+-------+-----------------+-----------------+----------+</span><br></pre></td></tr></table></figure></p>
+<p>如果是想看某列的通知值的话，可以用下面的方式<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">df</span><span class="selector-class">.select</span>(<span class="string">"age"</span>)<span class="selector-class">.describe</span>()<span class="selector-class">.show</span>()</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">+-------+</span>----+</span><br><span class="line">|summary| age|</span><br><span class="line"><span class="code">+-------+</span>----+</span><br><span class="line">|  count|   3|</span><br><span class="line">|   mean|24.0|</span><br><span class="line">| stddev| 1.0|</span><br><span class="line">|    min|  23|</span><br><span class="line">|    max|  25|</span><br><span class="line"><span class="code">+-------+</span>----+</span><br></pre></td></tr></table></figure>
+<h1 id="RDD形式"><a href="#RDD形式" class="headerlink" title="RDD形式"></a>RDD形式</h1><p>假设同样还是上边的数据，只不过现在变成按\t分割的普通文本<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">thinkgamer  <span class="number">23</span>  <span class="number">78</span>  <span class="number">78</span>  <span class="number">95</span></span><br><span class="line">think   <span class="number">25</span>  <span class="number">95</span>  <span class="number">88</span>  <span class="number">93</span></span><br><span class="line">gamer   <span class="number">24</span>  <span class="number">93</span>  <span class="number">68</span>  <span class="number">88</span></span><br></pre></td></tr></table></figure></p>
+<p>这里可以将rdd转换成dataframe洗形式，也可以使用rdd计算，转化为df的样例如下<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val new_data = data_txt</span><br><span class="line">      <span class="string">.map</span><span class="params">(_.split("\\s+")</span>)</span><br><span class="line">      <span class="string">.map</span><span class="params">(<span class="attr">one</span> =&gt; Person(one(0)</span>,one<span class="params">(1)</span><span class="string">.toInt</span>,one<span class="params">(2)</span><span class="string">.toDouble</span>,one<span class="params">(3)</span><span class="string">.toDouble</span>,one<span class="params">(4)</span><span class="string">.toDouble</span>))</span><br><span class="line">      <span class="string">.toDF</span><span class="params">()</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来就是进行和上边df一样的操作了。</p>
+<p>那么对于rdd形式的文件如何操作：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import org<span class="selector-class">.apache</span><span class="selector-class">.spark</span><span class="selector-class">.mllib</span><span class="selector-class">.linalg</span><span class="selector-class">.Vectors</span></span><br><span class="line">import org<span class="selector-class">.apache</span><span class="selector-class">.spark</span><span class="selector-class">.mllib</span><span class="selector-class">.stat</span>.&#123;MultivariateStatisticalSummary, Statistics&#125;</span><br><span class="line"></span><br><span class="line">val data_txt = SparkSC<span class="selector-class">.spark</span><span class="selector-class">.sparkContext</span><span class="selector-class">.textFile</span>(input_txt).persist(StorageLevel.MEMORY_AND_DISK)</span><br><span class="line">    val new_data = data_txt</span><br><span class="line">      .map(_.split(<span class="string">"\\s+"</span>))</span><br><span class="line">      .map(one =&gt; Vectors.dense(one(<span class="number">1</span>)<span class="selector-class">.toInt</span>,one(<span class="number">2</span>)<span class="selector-class">.toDouble</span>,one(<span class="number">3</span>)<span class="selector-class">.toDouble</span>,one(<span class="number">4</span>).toDouble))</span><br><span class="line">    val <span class="selector-tag">summary</span>: MultivariateStatisticalSummary = Statistics.colStats(new_data)</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Max:"</span>+summary.max)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Min:"</span>+summary.min)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Count:"</span>+summary.count)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Variance:"</span>+summary.variance)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Mean:"</span>+summary.mean)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"NormL1:"</span>+summary.normL1)</span></span></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Norml2:"</span>+summary.normL2)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>输出结果为：<br><figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Max:[<span class="number">25.0,95.0</span>,<span class="number">88.0,95.0</span>]</span><br><span class="line">Min:[<span class="number">23.0,78.0</span>,<span class="number">68.0,88.0</span>]</span><br><span class="line">Count:<span class="number">3</span></span><br><span class="line">Variance:[<span class="number">1</span>.<span class="number">0</span>,<span class="number">86</span>.<span class="number">33333333333331</span>,<span class="number">100.0,13.0</span>]</span><br><span class="line">Mean:[<span class="number">24</span>.<span class="number">0</span>,<span class="number">88</span>.<span class="number">66666666666667</span>,<span class="number">78.0,92.0</span>]</span><br><span class="line">NormL1:[<span class="number">72.0,266</span>.<span class="number">0,234.0</span>,<span class="number">276</span>.<span class="number">0</span>]</span><br><span class="line">Norml2:[<span class="number">41</span>.<span class="number">593268686170845</span>,<span class="number">154</span>.<span class="number">1363033162532</span>,<span class="number">135</span>.<span class="number">83813897429545</span>,<span class="number">159</span>.<span class="number">43023552638942</span>]</span><br></pre></td></tr></table></figure></p>
+<p>这里可以得到相关的统计信息，主要区别在于dataframe得到的是标准差，而使用mllib得到的统计值中是方差，但这并不矛盾，两者可以相互转化得到。</p>
+<p>当然如果要求四分位数，可以转化成df，使用sql语句进行查询<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> PERCENTILE(<span class="keyword">col</span>,&lt;<span class="number">0.25</span>,<span class="number">0.75</span>&gt;) <span class="keyword">from</span> tableName;</span><br></pre></td></tr></table></figure></p>
+<h1 id="自己实现"><a href="#自己实现" class="headerlink" title="自己实现"></a>自己实现</h1><p>下面是我自己实现的一个方法，传入的参数是一个rdd，返回的是一个字符串<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 计算最大值，最小值，平均值，方差，标准差，四分位数</span><br><span class="line">def getStat(data: RDD[String]):<span class="attr">String=</span> &#123;</span><br><span class="line">   val <span class="attr">sort_data</span> = data</span><br><span class="line">      .filter(<span class="attr">one</span> =&gt; Verify.istoDouble(one))</span><br><span class="line">      .<span class="built_in">map</span>(_.toDouble)</span><br><span class="line">      .sortBy(<span class="attr">line=&gt;line)</span></span><br><span class="line">      .persist(StorageLevel.MEMORY_AND_DISK)  // 默认是<span class="literal">true</span> 升序，<span class="literal">false</span>为降序</span><br><span class="line"></span><br><span class="line">   val <span class="attr">data_list</span> = sort_data.collect()</span><br><span class="line">   val <span class="attr">len</span> = data_list.length</span><br><span class="line">   val <span class="attr">min</span> = data_list(<span class="number">0</span>)</span><br><span class="line">   val <span class="attr">max</span> = data_list(len-<span class="number">1</span>)</span><br><span class="line">   val <span class="attr">mean</span> = sort_data.reduce((a,b) =&gt; a+b) / len</span><br><span class="line">   val <span class="attr">variance</span> = sort_data.<span class="built_in">map</span>(<span class="attr">one</span> =&gt; math.pow(one-mean,<span class="number">2</span>)).reduce((a,b)=&gt;a+b)/len</span><br><span class="line">   val <span class="attr">stdder</span> = math.sqrt(variance)</span><br><span class="line">   var <span class="attr">quant</span> = <span class="string">""</span></span><br><span class="line">   <span class="keyword">if</span>(len&lt;<span class="number">4</span>)&#123;</span><br><span class="line">      val <span class="attr">q1</span> = min</span><br><span class="line">      val <span class="attr">q2</span> = min</span><br><span class="line">      val <span class="attr">q3</span> = max</span><br><span class="line">      <span class="attr">quant</span> = q1+<span class="string">"\t"</span>+q2+<span class="string">"\t"</span>+q3</span><br><span class="line">   &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">      val <span class="attr">q1</span> = data_list((len * <span class="number">0.25</span>).toInt - <span class="number">1</span>)</span><br><span class="line">      val <span class="attr">q2</span> = data_list((len * <span class="number">0.5</span>).toInt - <span class="number">1</span>)</span><br><span class="line">      val <span class="attr">q3</span> = data_list((len * <span class="number">0.75</span>).toInt - <span class="number">1</span>)</span><br><span class="line">      <span class="attr">quant</span> = q1+<span class="string">"\t"</span>+q2+<span class="string">"\t"</span>+q3</span><br><span class="line">   &#125;</span><br><span class="line">   max+<span class="string">"\t"</span>+min+<span class="string">"\t"</span>+mean+<span class="string">"\t"</span>+variance+<span class="string">"\t"</span>+stdder+<span class="string">"\t"</span>+quant</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="本地碰见的一个错误"><a href="#本地碰见的一个错误" class="headerlink" title="本地碰见的一个错误"></a>本地碰见的一个错误</h1><p>1：错误1<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scala.Predef$.refArrayOps([Ljava/lang/<span class="built_in">Object</span>;)Lscala/collection/mutable/<span class="built_in">Array</span></span><br></pre></td></tr></table></figure></p>
+<p>原因是Spark中spark-sql_2.11-2.2.1 ，是用scala 2.11版本上编译的，而我的本地的scala版本为2.12.4，所以就错了，可以在<br>里边把相应的scala版本就行修改就行了</p>
+<p>2：错误2<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.<span class="symbol">NoSuchMethodError:</span> scala.Product.<span class="variable">$init</span><span class="variable">$(</span>Lscala/Product;)V</span><br></pre></td></tr></table></figure></p>
+<p>原因也是因为我下载安装的scala2.12版本，换成scala2.11版本就可以了</p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

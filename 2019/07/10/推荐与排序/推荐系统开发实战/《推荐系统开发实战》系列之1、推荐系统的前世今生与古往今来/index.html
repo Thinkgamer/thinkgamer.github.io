@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之1、推荐系统的前世今生与古往今来 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前世"><span class="toc-text">前世</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#今生"><span class="toc-text">今生</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用途"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#技术栈"><span class="toc-text">技术栈</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之1、推荐系统的前世今生与古往今来
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:01</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>接下来将会用10篇文章介绍下推荐系统的起源，应用，算法和案例，并带领大家从0到1实现属于自己的推荐系统。本篇文章为该系列文章的第一篇，不会涉及具体的技术，用科普的形式让大家对推荐系统有一个感性的认识。</p>
+</blockquote>
+<a id="more"></a>
+<p>推荐系统在我们的生活中应用的非常广泛，无论是生活，娱乐，工作都会或多或少的涉及一些，接下来将会整理一个系列的文章，介绍一下推荐系统，并从0到1的去实现一个推荐系统，本篇内容主要涉及的是推荐系统的背景发展和开发一个自己的推荐系统需要掌握的技能和知识。</p>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/95116871" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/95116871</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<h1 id="前世"><a href="#前世" class="headerlink" title="前世"></a>前世</h1><p>“啤酒”与“尿布”的故事对推荐系统的学习有着积极的影响。从该故事出发，我们依旧能看到从20世纪90年代到现在个性化推荐系统的演进和发展。</p>
+<p>“啤酒与尿布”的故事相信很多人都知道。它讲述的是20世纪90年代，在美国沃尔玛超市中，管理人员分析数据时，发现了一个奇怪的现象：在某些特定的情况下，“啤酒”与“尿布”两件看上去毫无关系的商品出现在了同一个购物篮中。这种独特的销售现象引起了管理人员的注意，经过后续调查发现，一些年轻的爸爸常到超市去购买婴儿尿布，有30％～40％的新爸爸，会顺便买点啤酒犒劳自己。随后，沃尔玛对啤酒和尿布进行了捆绑销售，不出意料，销售量双双增加。</p>
+<p>该案例出自于涂子沛先生的《数据之巅》一书。在这个案例中，数据和情节让这个故事不容置疑，然而据吴甘沙先生透漏，该案例是TeraData公司一位经理编出来的“故事”。目的是让数据分析看起来更有力，更有趣。在历史上该案例并没有出在美国的任何一个沃尔玛超市中。<br>虽然这个“故事”是杜撰的，但其中涉及的“捆绑销售”却不失为一种购物推荐。物品A与物品B经常出现在一个购物篮中，那么向购买物品A（物品B）的人推荐物品B（物品A）是有数据依据和理论基础的。依据该理论，后来衍生出了关联规则算法，很多电商类或者视频类的网站都使用到该类算法进行商品或者视频的推荐。</p>
+<h1 id="今生"><a href="#今生" class="headerlink" title="今生"></a>今生</h1><p>在19世纪和20世纪，推荐系统在互联网这片肥沃的土壤中得到了充分的发展，如今已经在各个公司开发结果。以下列了一些有代表性的发展点：</p>
+<ul>
+<li>Xerox公司在1992年设计的应用协同过滤算法的邮件系统——Tapestry。同年，Goldberg提出了“推荐系统”这个概念。</li>
+<li>1994年，明尼苏达大学的GroupLens研究组使用基于主动协同过滤的推荐算法，开发了第一个自动化推荐系统 GroupLens，并将其应用在Usenet新闻组中。</li>
+<li>1996年，卡内基梅隆大学的Dunja Mladenic在Web Watcher的基础上进行了改进，提出了个性化推荐系统Personal Wgb Watchero。1996年，著名的网络公司Yahoo也注意到了个性化服务的巨大优势和潜在商机，推出个性化入口MyYahoo。</li>
+<li>1997年，Resnick和Varian首次在学术届正式提出推荐系统的定义。他们认为：推荐系统可以帮助电子商务网站向用户提供商品和建议，促成用户的产品购买行为，模拟销售人员协助客户完成购买过程。</li>
+<li>1998年，亚马逊（Amazon.com）上线了基于物品的协同过滤算法，将推荐系统的规模扩大至服务千万级用户和处理百万级商品，并带来了良好的推荐效果。</li>
+<li>2003年，亚马逊（Amazon.com）的Linden等人发表论文，公布了“基于物品的协同过滤算法”。</li>
+<li>2005年，Adomavicius等人发表综述论文，将推荐系统分为3类——基于内容的推荐、基于协同过滤的推荐和混合推荐，并提出了未来可能的主要研究方向。</li>
+<li>2006年10月，北美在线视频服务提供商 Netflix 宣布了一项竞赛，任何人只要能够将它现有电影推荐算法 Cinematch 的预测准确度提高10%，就能获得100万美元的奖金。</li>
+<li>2007年，第一届ACM推荐系统大会在美国举行，到2017年已经是第11届。这是推荐系统领域的顶级会议，展示了推荐系统在不同领域的最近研究成果、系统和方法。</li>
+<li>2016年，YouTube发表论文，将深度神经网络应用推荐系统中，实现了从“大规模可选的推荐内容”中找到“最有可能的推荐结果”。</li>
+<li>2018年，阿里巴巴提出论文《基于注意力机制的用户行为建模框架以及在推荐领域的应用（ATRank）》，被AAAI录用。</li>
+</ul>
+<h1 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h1><p>推荐系统已经广泛存在于我们的生活之中，其主要应用场景如下：</p>
+<ul>
+<li><p>电商类（京东/淘宝/拼多多…）</p>
+<center><img src="https://img-blog.csdnimg.cn/2019070900060147.png" width="70%/"></center>
+</li>
+<li><p>社交类（微博/微信/豆瓣…）</p>
+<center><img src="https://img-blog.csdnimg.cn/20190709000507866.png" width="70%/"></center>
+</li>
+<li><p>音乐类（网易云音乐/QQ音乐/虾米…）</p>
+<center><img src="https://img-blog.csdnimg.cn/20190709000039604.png" width="70%/"></center>
+</li>
+<li><p>视频类（YouTube/爱奇艺/腾讯视频…）</p>
+<center><img src="https://img-blog.csdnimg.cn/20190709000122366.png" width="70%/"></center>
+</li>
+<li><p>阅读类（头条/知乎/书旗…）</p>
+</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190709000247410.png" width="70%/"></center>
+
+<ul>
+<li>服务类（美团/饿了么/口碑…）<center><img src="https://img-blog.csdnimg.cn/20190709000402258.png" width="70%/"></center>
+
+</li>
+</ul>
+<h1 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h1><p>目前工业界所使用的推荐系统整个框架是比较大的，并非一个人所能完成，那么作为初学者，我们如何能够充分理解推荐算法的知识，如何自己手动开发一个推荐系统呢？</p>
+<p>首先是选定开发语言，Python作为使用最广泛的编程语言，当之无愧，而且py也已经成为了算法工程师的必备知识技能。同时在开发Python版本推荐系统过程中，不能缺失的是数据结构思想，不能缺失的是工程能力！</p>
+<p>那如何去定义一个人工程能力的好坏呢？主要从以下几方面去判断：</p>
+<ul>
+<li>编码能力<blockquote>
+<p>强悍的编码能力，并不是说在很短的时间内完成一个业务开发，而是说在高效完成的同时能够追求代码的质量和可读性。只有同时具备高效、质量和可读性，才能说是工程能力很强。</p>
+</blockquote>
+</li>
+<li>解决问题能力<blockquote>
+<p>工程能力的核心在于发现问题、分析问题和解决问题。<br>能够发现问题，说明拥有创新能力和自觉性的态度。<br>而对于已经发生的问题，能够慎密地进行分析、定位，继而快速解决，这样才真正到了“知其然，知其所以然”的境界。</p>
+</blockquote>
+</li>
+<li>快速学习能力<blockquote>
+<p>计算机行业中，知识的迭代是非常快的。就好比，2014年左右Hadoop分布式计算框架是主流的，但到2017年，基于内存计算的Spark框架成了分布式处理的新宠。如果一个从业者没有很强的学习、适应和突破能力，是不行的。<br>好的学习能力前提是：拥有一个好的学习技巧，在学习之初就明白学习的目的是什么。然后围绕该目的，列出一系列的问题，然后在学习的过程中进行解决，同时进行手动实践，总结和积累经验。</p>
+</blockquote>
+</li>
+<li>文档梳理能力<blockquote>
+<p>工程能力的强弱很多时候体现在文档上。是否完成过一个项目，对项目的理解是不一样的。对项目是否有深入的思考，写出的文档深浅也是不一样的。<br>一个优秀的文档，除了对自己，对于团队、他人来说也是十分重要的。</p>
+</blockquote>
+</li>
+<li>产品质量责任心<blockquote>
+<p>好的工程能力还要拥有一个负责任的心。试想一下，上级交给你一个任务，你如果敷衍了事，那么你在这个岗位上是走不远的。</p>
+</blockquote>
+</li>
+<li>沟通协作<blockquote>
+<p>在实际的工作环境中，往往每个任务都需要多人协作完成。一个从业者，如果不懂得沟通和协作，所完成的任务必然是不能满足需求的。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+
+<hr>
+<p><font color="red">注：以上内容摘自于《推荐系统开发实战》，该书是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        二、hadoop伪分布搭建 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、创建hadoop用户"><span class="toc-text">1、创建hadoop用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、切换到hadoop用户下"><span class="toc-text">2、切换到hadoop用户下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、安装SSH-server、配置SSH无密码登陆"><span class="toc-text">3、安装SSH server、配置SSH无密码登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、安装Java环境"><span class="toc-text">4、安装Java环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、安装hadoop"><span class="toc-text">5、安装hadoop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6、hadoop伪分布配置"><span class="toc-text">6、hadoop伪分布配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#验证"><span class="toc-text">验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#提示"><span class="toc-text">提示</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        二、hadoop伪分布搭建
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2015-07-07 20:14:00</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>本文主要介绍Hadoop的伪分布安装，基于Ubuntu14.04进行。</p>
+<a id="more"></a>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>虚拟机：VirtualBox<br>Ubuntu:14.04<br>hadoop:2.6</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="1、创建hadoop用户"><a href="#1、创建hadoop用户" class="headerlink" title="1、创建hadoop用户"></a>1、创建hadoop用户</h2><p>sudo useradd -m hadoop -s/bin/bash<br>【Ubuntu终端复制粘贴快捷键】<br>【在Ubuntu终端窗口中，复制粘贴的快捷键需要加上shift，即粘贴是 ctrl+shift+v。】<br>使用如下命令修改密码，按提示输入两次密码 hadoop :</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sudo passwd hadoop</span></span><br></pre></td></tr></table></figure>
+<p>可为 hadoop 用户增加管理员权限，方便部署，避免一些对新手来说比较棘手的权限问题：<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">sudo</span> <span class="keyword">adduser </span>hadoop sudo</span><br></pre></td></tr></table></figure></p>
+<h2 id="2、切换到hadoop用户下"><a href="#2、切换到hadoop用户下" class="headerlink" title="2、切换到hadoop用户下"></a>2、切换到hadoop用户下</h2><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">su hadoop</span></span><br></pre></td></tr></table></figure>
+<h2 id="3、安装SSH-server、配置SSH无密码登陆"><a href="#3、安装SSH-server、配置SSH无密码登陆" class="headerlink" title="3、安装SSH server、配置SSH无密码登陆"></a>3、安装SSH server、配置SSH无密码登陆</h2><p>集群、单节点模式都需要用到SSH登陆（类似于远程登陆，你可以登录某台Linux电脑，并且在上面运行命令），Ubuntu 默认已安装了 SSH client，此外还需要安装 SSH server：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install openssh-server</span><br></pre></td></tr></table></figure></p>
+<p>安装后，可以使用如下命令登陆本机：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ssh localhost</span></span><br></pre></td></tr></table></figure></p>
+<p>此时会有提示(SSH首次登陆提示)，输入 yes 。然后按提示输入密码hadoop，这样就登陆到本机了。</p>
+<p>但这样登陆是需要每次输入密码的，我们需要配置成SSH无密码登陆比较方便。</p>
+<p>首先退出刚才的 ssh，就回到了我们原先的终端窗口，然后利用 ssh-keygen 生成密钥，并将密钥加入到授权中：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">exit</span>                                   <span class="comment"># 退出刚才的 ssh localhost</span></span><br><span class="line">cd ~<span class="regexp">/.ssh/</span>                             <span class="comment"># 若没有该目录，请先执行一次ssh localhost</span></span><br><span class="line">ssh-keygen -t rsa                      <span class="comment"># 会有提示，都按回车就可以</span></span><br><span class="line">cat id_rsa.pub &gt;&gt; authorized_keys     <span class="comment"># 加入授权</span></span><br></pre></td></tr></table></figure></p>
+<p>此时再用 ssh localhost 命令，无需输入密码就可以直接登陆此时再用 ssh localhost 命令，无需输入密码就可以直接登陆</p>
+<p><img src="http://img.blog.csdn.net/20150707210848767?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="此处输入图片的描述"></p>
+<h2 id="4、安装Java环境"><a href="#4、安装Java环境" class="headerlink" title="4、安装Java环境"></a>4、安装Java环境</h2><p>Java环境可选择 Oracle 的 JDK，或是 OpenJDK，按<a href="http://wiki.apache.org/hadoop/HadoopJavaVersions中说的，新版本在" target="_blank" rel="external">http://wiki.apache.org/hadoop/HadoopJavaVersions中说的，新版本在</a> OpenJDK 1.7 下是没问题的。为图方便，这边直接通过命令安装 OpenJDK 7。<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openjdk<span class="number">-7</span>-jre openjdk<span class="number">-7</span>-jdk</span><br></pre></td></tr></table></figure></p>
+<p>OpenJDK 默认的安装位置为: /usr/lib/jvm/java-7-openjdk-amd64 (32位系统则是 /usr/lib/jvm/java-7-openjdk-i86 ，可通过命令dpkg -L openjdk-7-jdk查看到)。安装完后就可以使用了，可以用java -version 检查一下。</p>
+<p>接着需要配置一下 JAVA_HOME 环境变量，为方便，我们在 ~/.bashrc 中进行设置（扩展阅读:设置Linux环境变量的方法和区别）：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi ~<span class="string">/.bashrc</span></span><br></pre></td></tr></table></figure></p>
+<p>在文件最前面添加如下单独一行（注意 = 号前后不能有空格），并保存：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/usr/lib/jvm/java-7-openjdk-amd64</span><br></pre></td></tr></table></figure></p>
+<p>如下图所示（该文件原本可能不存在，内容为空，这不影响）：</p>
+<p><img src="http://img.blog.csdn.net/20150707210939550?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="此处输入图片的描述"></p>
+<p>配置JAVA_HOME变量</p>
+<p>接着还需要让该环境变量生效，执行如下代码：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc<span class="comment"># 使变量设置生效</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$JAVA_HOME</span><span class="comment"># 检验是否设置正确</span></span><br></pre></td></tr></table></figure></p>
+<p>设置正确的话，会输出如下结果：</p>
+<p><img src="http://img.blog.csdn.net/20150707211039921?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="此处输入图片的描述"></p>
+<p>成功配置JAVA_HOME变量</p>
+<h2 id="5、安装hadoop"><a href="#5、安装hadoop" class="headerlink" title="5、安装hadoop"></a>5、安装hadoop</h2><p>进入hadoop所在的目录将其解压到/usr/local/hadoop<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxvf <span class="string">./hadoop-2.6.0.tar.gz</span> -C <span class="string">/usr/local</span>  <span class="comment"># 解压到/usr/local中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">cd</span> <span class="string">/usr/local/</span></span><br><span class="line">sudo mv <span class="string">./hadoop-2.6.0/</span> <span class="string">./hadoop</span>            <span class="comment"># 将文件夹名改为hadoop</span></span><br><span class="line">sudo chown -R hadoop<span class="function">:hadoop</span> <span class="string">./hadoop</span>        <span class="comment"># 修改文件权限</span></span><br></pre></td></tr></table></figure></p>
+<p>Hadoop解压后即可使用。输入如下命令来检查 Hadoop<br>是否可用，成功则会显示命令用法：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> <span class="string">./hadoop</span></span><br><span class="line"><span class="string">./bin/hadoop</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="6、hadoop伪分布配置"><a href="#6、hadoop伪分布配置" class="headerlink" title="6、hadoop伪分布配置"></a>6、hadoop伪分布配置</h2><p>Hadoop 的配置文件位于 /usr/local/hadoop/etc/hadoop/ 中，伪分布式需要修改2个配置文件core-site.xml 和hdfs-site.xml 。Hadoop的配置文件是 xml 格式，每个配置以声明 property 的 name 和 value 的方式来实现。</p>
+<p>修改配置文件 core-site.xml (vim /usr/local/hadoop/etc/hadoop/core-site.xml)，将当中的<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;configuration&gt;</span></span><br><span class="line"><span class="section">&lt;/configuration&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>修改为下面配置：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="params">&lt;configuration&gt;</span></span><br><span class="line">    <span class="params">&lt;property&gt;</span></span><br><span class="line">        <span class="params">&lt;name&gt;</span>hadoop.tmp.dir<span class="params">&lt;/name&gt;</span></span><br><span class="line">        <span class="params">&lt;value&gt;</span>file:<span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/hadoop/</span>tmp<span class="params">&lt;/value&gt;</span></span><br><span class="line">        <span class="params">&lt;description&gt;</span>Abase for other temporary directories.<span class="params">&lt;/description&gt;</span></span><br><span class="line">    <span class="params">&lt;/property&gt;</span></span><br><span class="line">    <span class="params">&lt;property&gt;</span></span><br><span class="line">        <span class="params">&lt;name&gt;</span>fs.defaultFS<span class="params">&lt;/name&gt;</span></span><br><span class="line">        <span class="params">&lt;value&gt;</span>hdfs:<span class="comment">//localhost:9000&lt;/value&gt;</span></span><br><span class="line">    <span class="params">&lt;/property&gt;</span></span><br><span class="line"><span class="params">&lt;/configuration&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>同样的，修改配置文件 hdfs-site.xml：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="params">&lt;configuration&gt;</span></span><br><span class="line">    <span class="params">&lt;property&gt;</span></span><br><span class="line">        <span class="params">&lt;name&gt;</span>dfs.replication<span class="params">&lt;/name&gt;</span></span><br><span class="line">        <span class="params">&lt;value&gt;</span><span class="number">1</span><span class="params">&lt;/value&gt;</span></span><br><span class="line">    <span class="params">&lt;/property&gt;</span></span><br><span class="line">    <span class="params">&lt;property&gt;</span></span><br><span class="line">        <span class="params">&lt;name&gt;</span>dfs.namenode.name.dir<span class="params">&lt;/name&gt;</span></span><br><span class="line">        <span class="params">&lt;value&gt;</span>file:<span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/hadoop/</span>tmp<span class="meta-keyword">/dfs/</span>name<span class="params">&lt;/value&gt;</span></span><br><span class="line">    <span class="params">&lt;/property&gt;</span></span><br><span class="line">    <span class="params">&lt;property&gt;</span></span><br><span class="line">        <span class="params">&lt;name&gt;</span>dfs.datanode.data.dir<span class="params">&lt;/name&gt;</span></span><br><span class="line">        <span class="params">&lt;value&gt;</span>file:<span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/hadoop/</span>tmp<span class="meta-keyword">/dfs/</span>data<span class="params">&lt;/value&gt;</span></span><br><span class="line">    <span class="params">&lt;/property&gt;</span></span><br><span class="line"><span class="params">&lt;/configuration&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>修改配置文件yarn-site.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span> </span><br><span class="line">     <span class="tag">&lt;<span class="name">property</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">   <span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>配置完成后，执行 namenode 的格式<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bin/hdfs </span>namenode -format</span><br></pre></td></tr></table></figure></p>
+<p>成功的话，会看到successfully formatted 的提示，且倒数第5行的提示如下，Exitting with status 0 表示成功，若为Exitting with status 1 则是出错</p>
+<p>接着开启如下进程<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sbin/<span class="literal">start</span>-dfs.sh</span><br><span class="line">sbin/<span class="literal">start</span>-yarn.sh</span><br></pre></td></tr></table></figure></p>
+<p>至此，所有的已经安装完事，且所有服务都已经启动</p>
+<h1 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h1><p><a href="http://127.0.0.1:8088" target="_blank" rel="external">http://127.0.0.1:8088</a></p>
+<p><img src="http://img.blog.csdn.net/20150707220733097?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="此处输入图片的描述"></p>
+<p><a href="http://localhost:50070" target="_blank" rel="external">http://localhost:50070</a></p>
+<p><img src="http://img.blog.csdn.net/20150708115937081?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="此处输入图片的描述"><br><img src="http://img.blog.csdn.net/20150707220808406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="此处输入图片的描述"></p>
+<h1 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h1><p>每次进入虚拟机系统时必须先进入hadoop用户下（su hadoop），才能开启服务，否则会报错<br>参考文章：www.powerxing.com/install-hadoop/</p>
+<p>QQ交流：1923361654</p>
+<p>hadoop完全分布式部署参考：<a href="http://blog.csdn.net/gamer_gyt/article/details/51991893" target="_blank" rel="external">http://blog.csdn.net/gamer_gyt/article/details/51991893</a></p>
+<p>hadoop单机版部署参考：<a href="http://blog.csdn.net/gamer_gyt/article/details/46545303" target="_blank" rel="external">http://blog.csdn.net/gamer_gyt/article/details/46545303</a></p>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

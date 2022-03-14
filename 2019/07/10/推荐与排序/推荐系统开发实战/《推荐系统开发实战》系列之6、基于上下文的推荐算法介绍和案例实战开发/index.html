@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《推荐系统开发实战》系列之6、基于上下文的推荐算法介绍和案例实战开发 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基于时间特征的推荐"><span class="toc-text">基于时间特征的推荐</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是时间效应？"><span class="toc-text">什么是时间效应？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#时间效应分析"><span class="toc-text">时间效应分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐系统的实时性"><span class="toc-text">推荐系统的实时性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协同过滤中的实时推荐"><span class="toc-text">协同过滤中的实时推荐</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-UserCF中的时间特征"><span class="toc-text">1.UserCF中的时间特征</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于地域和热度特征的推荐"><span class="toc-text">基于地域和热度特征的推荐</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他上下文特征信息"><span class="toc-text">其他上下文特征信息</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《推荐系统开发实战》系列之6、基于上下文的推荐算法介绍和案例实战开发
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-07-10 08:03:06</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#推荐系统开发实战" title="推荐系统开发实战">推荐系统开发实战</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>在本系列之前介绍的推荐算法主要是为了联系用户的偏好和物品，将符合用户偏好的物品推荐给用户。例如“基于标签的推荐算法”中介绍的偏好是“用户的主观意见表达”，物品本身所传达的含义和用户所处的客观环境对推荐系统而言也是极其重要的，如冬天推荐短袖、中秋节推荐粽子等都是不合理的，不能说用户在冬天搜索了短袖或在中秋节搜索了粽子就给用户推荐不合时节的物品。因此，准确地了解用户的上下文信息（包括用户访问推荐系统的时间、地点、访问时的心情等），并将这些信息应用到推荐系统中，是实现一个好的推荐系统的关键。</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<p>转载请注明出处：<a href="https://thinkgamer.blog.csdn.net/article/details/95445593" target="_blank" rel="external">https://thinkgamer.blog.csdn.net/article/details/95445593</a><br>博主微博：<a href="http://weibo.com/234654758" target="_blank" rel="external">http://weibo.com/234654758</a><br>Github：<a href="https://github.com/thinkgamer" target="_blank" rel="external">https://github.com/thinkgamer</a><br>公众号：搜索与推荐Wiki<br>个人网站：<a href="http://thinkgamer.github.io" target="_blank" rel="external">http://thinkgamer.github.io</a></p>
+<hr>
+<h1 id="基于时间特征的推荐"><a href="#基于时间特征的推荐" class="headerlink" title="基于时间特征的推荐"></a>基于时间特征的推荐</h1><h2 id="什么是时间效应？"><a href="#什么是时间效应？" class="headerlink" title="什么是时间效应？"></a>什么是时间效应？</h2><p>时间效应在日常生活中随处可见。例如，随着年龄的增长，人们的穿衣风格会改变，钟爱的课外读物也会改变；季节不同，人们的穿着会改变，果蔬供给也会改变等。</p>
+<p>在推荐系统中，时间效应可以定义为：用户的偏好兴趣、物品的生命周期等随着时间的变化而发生变化。</p>
+<p>时间效应对推荐系统的效果有着直接的影响，其对用户兴趣的影响主要表现在以下几方面。</p>
+<ul>
+<li><p>偏好迁移。<br>由于用户自身原因，随着时间的变化其偏好、兴趣发生了改变。例如，人们在不同年龄所热爱的事物不一样，用户A小时候喜欢吃糖果，长大了却不再吃糖果了；用户B在上高中时喜欢读一些小说之类的读物，可在念了大学之后，便开始阅读一些和专业课相关的读物。</p>
+<p>  用户的偏好直接影响着推荐的结果集，所以，推荐系统需要实时关注用户的实时兴趣变化。例如，用户在某个时刻点击或关注了某个商品，那么在下一刻，用户已经点击或者关注的相关商品就应该出现在推荐结果集中。但是，推荐系统还要注意挖掘用户的短期偏好和长期偏好（即挖掘用户兴趣中的长尾商品），这时就需要根据用户过去一段时间内的行为习惯进行兴趣建模。</p>
+</li>
+<li><p>生命周期。<br>  生命周期即事物合理存在的时间周期。例如某个热门新闻，在新闻刚发布时，受关注的程度很高，各大媒体网站都会进行报道，但随着时间的推移，该新闻的热度在逐渐减小，最后慢慢被人遗忘，这就是该热门新闻的生命周期。</p>
+<p>  推荐系统在进行事物推荐时，要注意该事物的有效性。一个合理的推荐系统不会在2018年推荐2004年雅典奥运会刘翔打破奥运纪录的新闻，也不会推荐某种过时的食物。不同场景下的推荐系统中，推荐事物的生命周期长度也不尽相同。新闻的生命周期较短，一般在几天之内就会褪去热度，而食物的生命周期就较长。</p>
+</li>
+<li><p>季节效应。<br>  季节效应：事物的流行度与季节是强相关的，反映的是时间本身对用户偏好兴趣的影响。例如，人们在夏天穿短袖，在冬天穿羽绒服，在夏天喝啤酒，在冬天吃火锅等。</p>
+<p>  在不同季节，人们的衣食住行选择都会发生变化。在推荐系统中要实时捕捉到季节的变化，进而给用户推荐符合时节的物品。</p>
+</li>
+<li><p>节日选择。<br>  节日选择：不同的节日对用户的选择会产生影响，也是时间效应中的一种。例如，端午节人们会选购一些粽子送给亲朋好友，而在中秋节则会选购一些月饼、螃蟹。又如，美国的感恩节，人们会购买火鸡作为餐桌上的主菜。</p>
+<p>  在不同的节日适当地给用户推送一些节日主打物品，不仅可以提高用户点击率，而且可以在一定程度上发掘用户的隐含兴趣</p>
+<h2 id="时间效应分析"><a href="#时间效应分析" class="headerlink" title="时间效应分析"></a>时间效应分析</h2><p>推荐系统中引入时间信息后，就从一个静态的推荐系统变成了一个动态的推荐系统。时间信息对推荐系统的影响主要表现在以下三方面：</p>
+</li>
+<li>个人兴趣度会随时间发生变化；</li>
+<li>物品流行度会随时间发生变化；</li>
+<li>社会群体兴趣度会随时间发生变化。<blockquote>
+<p>那么个人兴趣，物品流行度，社会群体兴趣度是如何随时间变化呢？</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="推荐系统的实时性"><a href="#推荐系统的实时性" class="headerlink" title="推荐系统的实时性"></a>推荐系统的实时性</h2><p>用户的兴趣是不断发生变化的，其变化体现在用户不断增加的行为中。例如电商网站中的点击、加购、分享、收藏等，或者新闻网站中的点击、评论、停留时长等。 一个实时的推荐系统应实时响应用户的新行为，让推荐结果不断发生变化，从而满足用户实时兴趣需求。</p>
+<p>现在几乎所有的电商网站中都引入了实时推荐，而且响应时间在“秒”之内。例如当当，京东，淘宝等电商，内容，娱乐平台。</p>
+<blockquote>
+<p>那么他们是如何做到实时推荐呢？实时推荐的具体表现是什么？</p>
+</blockquote>
+<h2 id="协同过滤中的实时推荐"><a href="#协同过滤中的实时推荐" class="headerlink" title="协同过滤中的实时推荐"></a>协同过滤中的实时推荐</h2><h3 id="1-UserCF中的时间特征"><a href="#1-UserCF中的时间特征" class="headerlink" title="1.UserCF中的时间特征"></a>1.UserCF中的时间特征</h3><p>使用UserCF为用户推荐物品时，先找到与目标用户兴趣相近的用户集合，然后根据这些用户的购买行为为用户进行物品推荐，故该算法的关键是“找到相似用户集合”（即计算用户之间的相似度）。两个用户产生过行为的物品集合交集越大，则两个用户越相似。用户相似度计算公式如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190711090120314.png" width="200px"></center>
+
+<p> 式中，N(x)表示用户x产生过行为的物品集合，分子表示的是用户u和用户v有交集的物品的个数，分母表示的是用户u和用户v产生行为的并集物品的个数。<br>但是由于热门物品被很多用户有过行为，但相对于热门共有物品而言，冷门物品更能说明两个用户之间的相似性，所以在计算两个用户之间的相似度时，对热门物品加一个惩罚项，所以这里的用户相似度计算式可以修改为：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190711090134644.png" width="200px"></center>
+
+<p>式（7.2）中，N(i)表示对物品i产生过行为的所有用户的个数。<br>但由于最近的行为最能表达用户当前的兴趣，所以在计算两个用户相似度时要增加时间衰减函数，可得到以下公式：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190711090151739.png" width="250px"></center>
+
+<p>式中，f(|tui-tvi|)为时间衰减函数，其形式为：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190711090206776.png" width="250px"></center>
+
+<p>式中，为时间衰减因子，tui表示用户u对物品i产生行为的时间，tvi表示用户v对物品i产生行为的时间。<br>用户当前的评分受相似用户集合最近评分的影响比较大，所以在计算用户对物品的评分时还要加上时间衰减函数f(|t0-tvi|)，所以最终得到的用户u对物品i的偏好程度为：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190711090228501.png" width="300px"></center>
+
+<p>其中f(|t0-tvi|)的表达式如下：</p>
+<center><img src="https://img-blog.csdnimg.cn/20190711090242554.png" width="300px"></center>
+
+<p>式中，t0表示当前时间，tvi表示用户v对物品i产生行为的时间。</p>
+<blockquote>
+<p>那么ItemCF中的时间特征如何理解呢？我们如何使用代码来实现CF中的时间衰减呢？</p>
+</blockquote>
+<h1 id="基于地域和热度特征的推荐"><a href="#基于地域和热度特征的推荐" class="headerlink" title="基于地域和热度特征的推荐"></a>基于地域和热度特征的推荐</h1><p>除了时间，地域特征在推荐系统中也十分重要，不同地区的用户喜欢的事物不一样，用户到了不同的地方喜欢的事物也会发生变化。例如南方人喜欢吃米，北方人喜欢吃面；又如，一个国内的人去韩国可能是为了购物和旅游等。<br>而另外一种经常和地域一同出现的是热度特征，最常见的如排行榜，就是基于地域和统计的一种排序。</p>
+<blockquote>
+<p>为什么要把时间和地域特征放在一起讨论呢？</p>
+</blockquote>
+<p>明尼苏达大学的研究人员提出过一个称为LARS（Location Aware Recommender System，位置感知推荐系统）的推荐系统。该系统首先将物品分为两类：</p>
+<ul>
+<li>有空间属性（如餐厅、商店、景点等）物品；</li>
+<li>无空间属性（如图书、电影、音乐）物品。<br>同时，也将用户分为两类：</li>
+<li>有空间属性（如用户包含相应的空间属性信息）用户。</li>
+<li>无空间属性（如用户没有相应的空间属性信息）用户。</li>
+</ul>
+<p>基于地域和热度的推荐算法的基本原理是：按照地域对事物进行划分，然后根据热度对事物进行排序，进而推荐给用户。下面以新闻为例说明热度算法的基本原理。</p>
+<p>在一则新闻录入数据库后，初始化一个热度分（S0），此时该新闻就进入了新闻推荐的候选池。</p>
+<ul>
+<li>随着新闻不断被用户点击（click）、转发（share）、关注（follow）、评论（comment）、点赞（up）等，对应的和用户交互维度的热度（S1）不断增加。</li>
+<li>另外，新闻要求具有时效性，因此在新闻发布后，热度（S2）会随着时间衰减。<br>随着时间的后移，新闻的热度不断发生变化，对应的推荐抽选池排序也在不断地发生变化。最终新闻热度对应的计算公式为：</li>
+</ul>
+<center><img src="https://img-blog.csdnimg.cn/20190711204214130.png" width="150px"></center>
+
+<p>但这里需要考虑三个因素：</p>
+<ul>
+<li>新闻的初始热度应该不一致</li>
+<li>用户的行为规则应该发生变化</li>
+<li>热度随时间衰减的趋势非线性</li>
+</ul>
+<h1 id="其他上下文特征信息"><a href="#其他上下文特征信息" class="headerlink" title="其他上下文特征信息"></a>其他上下文特征信息</h1><p>上述介绍了时间、地域和热度信息在推荐系统中的应用。但在实际的应用环境中，上下文信息更加丰富（如用户使用的客户端、用户的性别、天气、用户调用接口的次数、推荐商品的位置等），这些信息在很大程度上影响用户浏览物品时的心情和兴趣。</p>
+<p>在实际的建模应用过程中，如果能够正确地使用这些信息，可提高推荐系统的效率。</p>
+<blockquote>
+<p>文中的相关疑问和更详细的介绍都可以在《推荐系统开发实战》一书中找到答案。</p>
+</blockquote>
+<hr>
+<center>
+<img src="http://img.blog.csdn.net/20171231111930492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvR2FtZXJfZ3l0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+</center>
+<center>打开微信扫一扫，关注微信公众号【搜索与推荐Wiki】 </center>
+
+
+<hr>
+<p><font color="red">注：《推荐系统开发实战》是小编近期要上的一本图书，预计本月（7月末）可在京东，当当上线，感兴趣的朋友可以进行关注！</font></p>
+<center><img src="https://img-blog.csdnimg.cn/20190708234949217.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="50%"></center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

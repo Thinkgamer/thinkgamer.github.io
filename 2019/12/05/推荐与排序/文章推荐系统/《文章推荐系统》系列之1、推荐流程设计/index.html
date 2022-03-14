@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thinkgamer的博客">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+    <title>
+        
+        《文章推荐系统》系列之1、推荐流程设计 - Thinkgamer的博客 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> All In CTR、DL、ML、RL、NLP、KG </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> All In CTR、DL、ML、RL、NLP、KG </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《文章推荐系统》系列之1、推荐流程设计
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-05 21:21:21</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/tags/#文章推荐系统" title="文章推荐系统">文章推荐系统</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span></span>
+        </span>
+    </div>
+    <div class="post-content no-indent">
+        <p>推荐系统主要解决的是信息过载的问题，目标是从海量物品筛选出不同用户各自喜欢的物品，从而为每个用户提供个性化的推荐。推荐系统往往架设在大规模的业务系统之上，面临着用户的不断增长，物品的不断变化，并且有着全面的推荐评价指标和严格的性能要求（Netflix 的请求时间在 250 ms 以内，今日头条的请求时间在 200ms 以内），所以推荐系统很难一次性地快速计算出用户所喜好的物品，并且同时满足准确度、多样性等评价指标。为了解决如上这些问题，推荐系统通常被设计为三个阶段：召回、排序和调整，如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-ee044ed9dd9cc759.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="召回、排序和调整"></p>
+<p>在召回阶段，首先筛选出和用户直接相关或间接相关的物品，将原始数据从万、百万、亿级别缩小到万、千级别；在排序阶段，通常使用二分类算法来预测用户对物品的喜好程度（或者是点击率），然后将物品按照喜好程序从大到小依次排列，筛选出用户最有可能喜欢的物品，这里又将召回数据从万、千级别缩小到千、百级别；最后在调整阶段，需要过滤掉重复推荐的、已经购买或阅读的、已经下线的物品，当召回和排序结果不足时，需要使用热门物品进行补充，最后合并物品基础信息，将包含完整信息的物品推荐列表返回给客户端。</p>
+<p>这里以文章推荐系统为例，讲述一下推荐系统的完整流程，如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/12790782-40327d59055eba56.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="推荐系统的完整流程"></p>
+<ol>
+<li><p>同步业务数据<br>为了避免推荐系统的数据读写、计算等对应用产生影响，我们首先要将业务数据从应用数据库 MySQL 同步到推荐系统数据库 Hive 中，这里利用 Sqoop 先将 MySQL 中的业务数据同步到推荐系统的 HDFS 中，再关联到指定的 Hive 表中，这样就可以在推荐系统数据库 Hive 中使用用户数据和文章数据了，并且不会对应用产生任何影响。</p>
+</li>
+<li><p>收集用户行为数据<br>除了用户数据和文章数据，我们还需要得到用户对文章的行为数据，比如曝光、点击、阅读、点赞、收藏、分享、评论等。我们的用户行为数据是记录在应用服务器的日志文件中的，所以可以利用 Flume 对应用服务器的日志文件进行监听，一方面将收集到的用户行为数据同步到 HDFS 中，并关联到 Hive 的用户行为表，每天更新一次，以供离线计算使用。另一方面将 Flume 收集到的用户行为数据同步到 Kafka，实时更新，以供在线计算使用。</p>
+</li>
+<li><p>构建离线画像和特征</p>
+</li>
+</ol>
+<ul>
+<li><p>文章画像由关键词和主题词组成，我们首先读取 Hive 中的文章数据，将文章内容进行分词，根据 TF-IDF 模型计算每个词的权重，将 TF-IDF 权重最高的 K 个词作为关键词，再根据 TextRank 模型计算每个词的权重，将 TextRank 权重最高的 K 个词与 TF-IDF 权重最高的 K 个词的共现词作为主题词，将关键词和主题词存储到 Hive 的文章画像表中。接下来，利用 Word2Vec 模型，计算得到所有关键词的平均向量，作为文章的词向量，存储到 Hive 的文章向量表中，并利用 BucketedRandomProjectionLSH 模型计算得到文章的相似度，将每篇文章相似度最高的 K 篇文章，存储到 Hbase 的文章相似表中。这样我们就得到了每篇文章的画像、词向量以及相似文章列表。</p>
+</li>
+<li><p>构建离线用户画像<br>我们可以将用户喜欢的文章的主题词作为用户标签，以便后面根据用户标签来推荐符合其偏好的文章。首先读取用户行为数据和文章画像数据，计算在用户产生过行为的所有文章中，每个主题词的权重，不同的行为，权重不同，计算公式为：用户标签权重 =（用户行为分值之和）x 时间衰减，这样就计算得到了用户的标签及标签权重，接着读取用户数据，得到用户基础信息，将用户标签、标签权重及用户基础信息一并存储到 Hbase 的用户画像表中。到这里我们已经通过机器学习算法，基于用户和文章的业务数据得到了用户和文章的画像，但为了后面可以更方便地将数据提供给深度学习模型进行训练，我们还需要将画像数据进一步抽象为特征数据。</p>
+</li>
+<li><p>构建离线文章特征<br>由于已经有了画像信息，特征构造就变得简单了。读取文章画像数据，将文章权重最高的 K 个关键词的权重作为文章关键词权重向量，将频道 ID、关键词权重向量、词向量作为文章特征存储到 Hbase 的文章特征表。</p>
+</li>
+<li><p>构建离线用户特征<br>读取用户画像数据，将权重最高的 K 个标签的权重作为用户标签权重向量，将用户标签权重向量作为用户特征存储到 Hbase 的用户特征表。</p>
+</li>
+</ul>
+<ol>
+<li>多路召回</li>
+</ol>
+<ul>
+<li><p>基于模型的离线召回<br>我们可以根据用户的历史点击行为来预测相似用户，并利用相似用户的点击行为来预测对文章的偏好得分，这种召回方式称为 u2u2i。获取用户历史点击行为数据，利用 ALS 模型计算得到用户对文章的偏好得分及文章列表，读取并过滤历史召回结果，防止重复推荐，将过滤后的偏好得分最高的 K 篇文章存入 Hbase 的召回结果表中，key 为 als，表明召回类型为 ALS 模型召回，并记录到 Hbase 的历史召回结果表。</p>
+</li>
+<li><p>基于内容的离线召回<br>我们可以根据用户的历史点击行为，向用户推荐其以前喜欢的文章的相似文章，这种方式称为 u2i2i。读取用户历史行为数据，获取用户历史发生过点击、阅读、收藏、分享等行为的文章，接着读取文章相似表，获取与发生行为的每篇文章相似度最高的 K 篇文章，然后读取并过滤历史召回结果，防止重复推荐，最后将过滤后的文章存入 Hbase 的召回结果表中，key 为 content，表明召回类型为内容召回，并记录到 Hbase 的历史召回结果表。</p>
+</li>
+<li><p>基于内容的在线召回<br>和上面一样，还是根据用户的点击行为，向用户推荐其喜欢的文章的相似文章，不过这里是用户实时发生的行为，所以叫做在线召回。读取 Kafka 中的用户实时行为数据，获取用户实时发生点击、阅读、收藏、分享等行为的文章，接着读取文章相似表，获取与发生行为的每篇文章相似度最高的 K 篇文章，然后读取并过滤历史召回结果，防止重复推荐，最后将过滤后的文章存入 Hbase 的召回结果表中，key 为 online，表明召回类型为在线召回，并记录到 Hbase 的历史召回结果表。</p>
+</li>
+<li><p>基于热门文章的在线召回<br>读取 Kafka 中的用户实时行为数据，获取用户当前发生点击、阅读、收藏、分享等行为的文章，增加这些文章在 Redis 中的热度分数。</p>
+</li>
+<li><p>基于新文章的在线召回<br>读取 Kafka 中的实时用户行为数据，获取新发布的文章，将其加入到 Redis 中，并设置过期时间。</p>
+</li>
+</ul>
+<ol>
+<li>排序</li>
+</ol>
+<p>不同模型的做法大致相同，这里以 LR 模型为例。</p>
+<ul>
+<li><p>基于 LR 模型的离线训练<br>读取 Hive 的用户历史行为数据，并切分为训练集和测试集，根据其中的用户 ID 和文章 ID，读取 Hbase 的用户特征数据和文章特征数据，将二者合并作为训练集的输入特征，将用户对文章是否点击作为训练集的标签，将上一次的模型参数作为 LR 模型的初始化参数，进行点击率预估训练，计算得出 AUC 等评分指标并进行推荐效果分析。</p>
+</li>
+<li><p>基于 LR 模型的在线排序<br>当推荐中心读取 Hbase 的推荐结果表无数据时，推荐中心将调用在线排序服务来重新获取推荐结果。排序服务首先读取 Hbase 的召回结果作为测试集，读取 Hbase 的用户特征数据和文章特征数据，将二者合并作为测试集的输入特征，使用 LR 模型进行点击率预估，计算得到点击率最高的前 K 个文章，然后读取并过滤历史推荐结果，防止重复推荐，最后将过滤后的文章列表存入 Hbase 的推荐结果表中，key 为 lr，表明排序类型为 LR 排序。</p>
+</li>
+</ul>
+<ol>
+<li>推荐中心</li>
+</ol>
+<ul>
+<li><p>流量切分（ABTest）<br>我们可以根据用户 ID 进行哈希分桶，将流量切分到多个桶，每个桶对应一种排序策略，从而对比不同排序策略在线上环境的效果。</p>
+</li>
+<li><p>推荐数据读取逻辑<br>优先读取 Redis 和 Hbase 中缓存的推荐结果，若 Redis 和 Hbase 都为空，则调用在线排序服务获得推荐结果。</p>
+</li>
+<li><p>兜底补足（超时截断）<br>当调用排序服务无结果，或者读取超时的时候，推荐中心会截断当前请求，直接读取 Redis 中的热门文章和新文章作为推荐结果。</p>
+</li>
+<li><p>合并信息<br>合并物品基础信息，将包含完整信息的物品推荐列表返回给客户端。</p>
+</li>
+</ul>
+<blockquote>
+<p>原文出自（已授权）：<a href="https://www.jianshu.com/u/ac833cc5146e" target="_blank" rel="external">https://www.jianshu.com/u/ac833cc5146e</a></p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://space.bilibili.com/61036655/channel/detail?cid=91348" target="_blank" rel="external">https://space.bilibili.com/61036655/channel/detail?cid=91348</a>（强烈推荐，蚂蚁大神的视频讲得很棒）</li>
+<li><a href="https://www.bilibili.com/video/av68356229" target="_blank" rel="external">https://www.bilibili.com/video/av68356229</a></li>
+<li><a href="https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw" target="_blank" rel="external">https://pan.baidu.com/s/1-uvGJ-mEskjhtaial0Xmgw</a>（学习资源已保存至网盘，提取码 EakP）</li>
+</ul>
+<hr>
+<center>
+【技术服务】，详情点击查看：
+<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a>
+</center>
+
+<hr>
+<center>
+<img src="https://img-blog.csdnimg.cn/20191108184219834.jpeg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+
+<hr>
+<center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+
+<center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        || Created By <a href="https://blog.csdn.net/gamer_gyt">Thinkgamer</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

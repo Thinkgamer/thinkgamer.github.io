@@ -8,6 +8,21 @@
   <link rel="dns-prefetch" href="http://thinkgamer.cn">
   <title>科技向善 | Thinkgamer的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <style>
+    .pace .pace-progress {
+        background: #6d6d6d; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #6d6d6d; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #6d6d6d;    /*上边框颜色*/
+        border-left-color: #6d6d6d;    /*左边框颜色*/
+    }
+  </style>
   <meta name="description" content="沈阳航空航天大学计算机院系，就职于京东，主要研究推荐系统，机器学习，云计算，深度学习。">
 <meta name="keywords" content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
 <meta property="og:type" content="website">
@@ -42,7 +57,7 @@
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
-<div class="overlay" style="background: #7F7F7F"></div>
+<div class="overlay" style="background: #122A0A"></div>
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
@@ -60,11 +75,9 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/categories/技术篇/">技术篇</a></li>
+				<li><a href="/categories/技术篇">技术篇</a></li>
 	        
-				<li><a href="/categories/随手记/">随手记</a></li>
-	        
-				<li><a href="/categories/夏未眠/">夏未眠</a></li>
+				<li><a href="/categories/随手记">随手记</a></li>
 	        
 				<li><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
 	        
@@ -111,7 +124,7 @@
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       
 <nav id="mobile-nav">
-  	<div class="overlay js-overlay" style="background: #7F7F7F"></div>
+  	<div class="overlay js-overlay" style="background: #122A0A"></div>
 	<div class="btnctn js-mobile-btnctn">
   		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
 	</div>
@@ -127,8 +140,6 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>科技向善，知识无界！<i class="icon icon-quo-right"></i></p>
 			
 			
-			
-				
 			
 				
 			
@@ -164,15 +175,13 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 20%"><a href="/">主页</a></li>
+					<li style="width: 25%"><a href="/">主页</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/技术篇/">技术篇</a></li>
+					<li style="width: 25%"><a href="/categories/技术篇">技术篇</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/随手记/">随手记</a></li>
+					<li style="width: 25%"><a href="/categories/随手记">随手记</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/夏未眠/">夏未眠</a></li>
-		        
-					<li style="width: 20%"><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
+					<li style="width: 25%"><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
 		        
 				</ul>
 			</nav>
@@ -228,8 +237,6 @@
 <li>海量数据的分布式计算处理</li>
 </ul>
         
-          <a class="article-more-a" href="/2088/08/08/合作/商务合作介绍/#more">more >></a>
-        
       
 
       
@@ -280,7 +287,6 @@
 
 
 
-
   
     <article id="post-合作/关于我" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -304,8 +310,6 @@
       
         <p><strong> ## 关于我：</strong></p>
 <p>I&nbsp;&nbsp;&nbsp;D：&nbsp;&nbsp;&nbsp;&nbsp;<strong>Thinkgamer</strong><br>邮箱：&nbsp;&nbsp;&nbsp;&nbsp;<strong>thinkgamer@163.com</strong><br>毕业：&nbsp;&nbsp;&nbsp;&nbsp;<strong>沈阳航空航天大学-计算机学院-软件工程</strong><br>就职：&nbsp;&nbsp;&nbsp;&nbsp;<strong>北京 | 某厂 | 算法工程师</strong></p>
-        
-          <a class="article-more-a" href="/2066/06/06/合作/关于我/#more">more >></a>
         
       
 
@@ -357,7 +361,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏｜论文阅读笔记集锦" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -366,7 +369,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/10/值得收藏/值得收藏｜论文阅读笔记集锦/">值得收藏｜论文阅读笔记集锦.md</a>
+      <a class="article-title" href="/2019/07/10/值得收藏/值得收藏｜论文阅读笔记集锦/">值得收藏｜论文阅读笔记集锦</a>
     </h1>
   
 
@@ -380,8 +383,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>关于推荐系统的论文每年都层出不穷，数不胜数，本文章主要是集合以往读过的一些经典论文，希望对你有帮助。论文笔记详情如下：</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏｜论文阅读笔记集锦/#more">more >></a>
         
       
 
@@ -448,7 +449,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏｜算法工程师的数学基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -471,8 +471,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>【算法工程师的数学基础】系列将会从线性代数、微积分、数值优化、概率论、信息论五个方面进行介绍，感兴趣的欢迎关注【搜索与推荐Wiki】公众号，获得最新文章。</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏｜算法工程师的数学基础/#more">more >></a>
         
       
 
@@ -539,7 +537,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏｜神经网络中的网络优化和正则化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -562,8 +559,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>神经网络中的网络优化和正则化问题介绍主要分为一，二，三，四篇进行介绍。详情如下：</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏｜神经网络中的网络优化和正则化/#more">more >></a>
         
       
 
@@ -630,7 +625,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏｜文章推荐系统系列文章集合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -653,8 +647,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>推荐系统主要解决的是信息过载的问题，目标是从海量物品筛选出不同用户各自喜欢的物品，从而为每个用户提供个性化的推荐。推荐系统往往架设在大规模的业务系统之上，面临着用户的不断增长，物品的不断变化，并且有着全面的推荐评价指标和严格的性能要求（Netflix 的请求时间在 250 ms 以内，今日头条的请求时间在 200ms 以内），所以推荐系统很难一次性地快速计算出用户所喜好的物品，并且同时满足准确度、多样性等评价指标。为了解决如上这些问题，推荐系统通常被设计为三个阶段：召回、排序和调整，更多详细内容参考下面：</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏｜文章推荐系统系列文章集合/#more">more >></a>
         
       
 
@@ -721,7 +713,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏｜收录各种技术分享" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -744,8 +735,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>旨在收录各种技术分享和资料，详情如下：</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏｜收录各种技术分享/#more">more >></a>
         
       
 
@@ -812,7 +801,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏｜推荐系统开发实战系列文章集合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -835,8 +823,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>推荐系统在我们的生活中应用的非常广泛，无论是生活，娱乐，工作都会或多或少的涉及一些，接下来将会整理一个系列的文章，介绍一下推荐系统，并从0到1的去实现一个推荐系统，该系列共 11 篇文章，详情如下：</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏｜推荐系统开发实战系列文章集合/#more">more >></a>
         
       
 
@@ -903,7 +889,6 @@
 
 
 
-
   
     <article id="post-值得收藏/值得收藏 ｜近100页的常见的五种神经网络汇总电子书" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -926,8 +911,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>该篇文章主要分享的是2019年整理的《常见的五种神经网络》系列文章，当时也是看书记笔记，坚持了很久才更新完，不过阅读量就xxx，可能大家对这种硬核性文章不感兴趣吧，不过没关系，今天把该系列的文章整理成PDF分享给大家，<strong>关注「搜索与推荐Wiki」公众号，回复 0301 即可获得</strong>。</p>
-        
-          <a class="article-more-a" href="/2019/07/10/值得收藏/值得收藏 ｜近100页的常见的五种神经网络汇总电子书/#more">more >></a>
         
       
 
@@ -994,7 +977,6 @@
 
 
 
-
   
     <article id="post-随手记/2022有感：怎么才能够坚持做一件事并且把它做好" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1018,8 +1000,6 @@
       
         <p>好久没写过碎言碎语的文章了，一直都是更新技术文章，那么今天就换换口味，聊一聊近况和想法。</p>
 <p>自从回北京之后，就一直在家办公，十几平方的卧室内支撑着北漂的身体和灵魂，我相信这不是我一个人的情况，而是无数在异国他乡追求自己理想的人的缩影。</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2022有感：怎么才能够坚持做一件事并且把它做好/#more">more >></a>
         
       
 
@@ -1071,7 +1051,6 @@
 
 
 
-
   
     <article id="post-随手记/2019有感：陆月，我想说的和我要改名了！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1094,8 +1073,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>当你看到这篇文章的时候不要惊讶，因为我已经两个月没有发技术文章了！突然又接着更新了，不要害怕，因为这就是我，我都不确定我什么时候会发出一篇文章来。 首先要明确的是这不是一篇技术文章，只是这一段时间内我的一些胡思乱想和东拼西凑。其中不免包含了近段时间我的经历和思考，也会包含一些接下来做事的计划和思考。</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2019有感：陆月，我想说的和我要改名了！/#more">more >></a>
         
       
 
@@ -1158,7 +1135,6 @@
 
 
 
-
   
     <article id="post-随手记/2019有感：重庆保时捷女司机揭露了丑恶世道，但终要相信有善有正义有张小敬这样的长安不良帅" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1182,8 +1158,6 @@
       
         <p>世道很好，只是被藏的很好，只有走在那些青石板上，我才能看到石砖墙瓦的流芳百年</p>
 <p>世道很坏，只是很少的存在，只有遇见那些孤立无援，我才能看到人心冷暖的肆无忌惮</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2019有感：重庆保时捷女司机揭露了丑恶世道，但终要相信有善有正义有张小敬这样的长安不良帅/#more">more >></a>
         
       
 
@@ -1246,7 +1220,6 @@
 
 
 
-
   
     <article id="post-随手记/2019年终总结-埋下的种子是讲给自己的故事" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1269,8 +1242,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>窗外有漆黑的夜，心中是明亮的灯。其实每个人的内心都有一颗属于自己的灯塔，不渡远方的邮轮，不引迷路的灵魂。</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2019年终总结-埋下的种子是讲给自己的故事/#more">more >></a>
         
       
 
@@ -1333,7 +1304,6 @@
 
 
 
-
   
     <article id="post-随手记/2018年终总结-趁“未老”，再认真一次，我觉得你能更好！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1356,8 +1326,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>每一年的年尾，我都会问自己：这一年，我收获了什么？            你呢？</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2018年终总结-趁“未老”，再认真一次，我觉得你能更好！/#more">more >></a>
         
       
 
@@ -1420,7 +1388,6 @@
 
 
 
-
   
     <article id="post-随手记/2017年终总结-用大把的时间仿徨，却用几个瞬间成长" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1443,8 +1410,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>人总要在特定的阶段去完成特定的事情，然后转身告诉自己，继续往前。</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2017年终总结-用大把的时间仿徨，却用几个瞬间成长/#more">more >></a>
         
       
 
@@ -1507,7 +1472,6 @@
 
 
 
-
   
     <article id="post-随手记/2016有感：一切的闹闹哄哄，只是他在水帘洞躲避风沙那晚做的一个梦" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1530,8 +1494,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>送同学走之后，我在路边默默的站了有五分钟，突然觉得我无处可去，有一种深入骨髓的悲哀和无奈，然后我就想起了一个命题，“如今的你，何去何从！”我不知道为什么会突然想到这样一个命题，或许是我们每个人都是至尊宝吧。其实每个人对《大话》的理解都是有所不同的，同样的人在不同的时期认识也会有偏差，就好比我第一次看的时候，笑得腹背抽筋，呲牙咧嘴，第二次看的时候，笑得少了，想的多了，过后便什么感觉也没有了，第三次看得时候，忽然觉得不知道是该哭还是该笑，笑得时候太牵强，哭得时候太尴尬。第四次便是这一次，看完之后觉得有一种无可奈何的悲哀。</p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2016有感：一切的闹闹哄哄，只是他在水帘洞躲避风沙那晚做的一个梦/#more">more >></a>
         
       
 
@@ -1594,7 +1556,6 @@
 
 
 
-
   
     <article id="post-随手记/2016年终总结-别了青春与流年，遇见下一个自己" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1617,8 +1578,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <font size="3">如果说岁月是年轮，我们便是推行者，如果说成长是一场华丽的蜕变，我们便是领舞者。一路走来，太多不易，告别青春的年少轻狂，我们成了岁月里被磨平的棱角，静静的守在属于自己的一亩三分地。</font>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2016年终总结-别了青春与流年，遇见下一个自己/#more">more >></a>
         
       
 
@@ -1681,7 +1640,6 @@
 
 
 
-
   
     <article id="post-随手记/2013有感：逝去的夏天" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1712,8 +1670,6 @@
 <br>
 寂寥与苦恼，我们一起去熬 
 <br>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/2013有感：逝去的夏天/#more">more >></a>
         
       
 
@@ -1776,7 +1732,6 @@
 
 
 
-
   
     <article id="post-随手记/Hexo-Yilia加入相册功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1799,8 +1754,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>参考：<a href="http://maker997.com/2017/07/01/hexo-Yilia-%E4%B8%BB%E9%A2%98%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD" target="_blank" rel="external">点击查看</a></p>
-        
-          <a class="article-more-a" href="/2017/12/14/随手记/Hexo-Yilia加入相册功能/#more">more >></a>
         
       
 
@@ -1863,100 +1816,7 @@
 
 
 
-
   
-    <article id="post-夏未眠/这夏未眠-简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/17/夏未眠/这夏未眠-简介/">这夏未眠.简介</a>
-    </h1>
-  
-
-        
-        <a href="/2016/09/17/夏未眠/这夏未眠-简介/" class="archive-article-date">
-  	<time datetime="2016-09-17T07:02:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>书整体分为三部分《夏之过往》，《夏之流年》，《夏之未至》。整本书讲的是男主人公顾艾哲（小艾）与莫晨（晨晨）之间的故事，从初中到高中再到大学，从相遇到相知再到相离。</p>
-<p>两人同在陌乘一中念初中，同班同学，在中考来临的那段日子，两人相互鼓励，于是顾艾哲（小艾）考上了他从来都没有想过能考上的孟川一高，而莫晨（晨晨）呢，考上了预料之中的平阳一高，而她在这之前却从来没告诉过顾艾哲（小艾）她要去平阳，就这样，两个人分开了，一些都看起来那么顺理成章，一切又看起来那么暗淡失望。</p>
-        
-          <a class="article-more-a" href="/2016/09/17/夏未眠/这夏未眠-简介/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">这夏未眠</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/夏未眠//" class="article-tag-list-link color4">夏未眠</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/09/17/夏未眠/这夏未眠-简介/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -1981,7 +1841,7 @@
       </div>
     </div>
 
-  </div>
+  </div>  
 </footer>
     </div>
     <script>
@@ -2083,11 +1943,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2104,10 +1964,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">随手记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">这夏未眠</a>
               </li>
              
               <li class="article-tag-list-item">

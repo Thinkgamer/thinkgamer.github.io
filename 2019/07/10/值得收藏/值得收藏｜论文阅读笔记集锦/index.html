@@ -6,21 +6,36 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://thinkgamer.cn">
-  <title>值得收藏｜论文阅读笔记集锦.md | 科技向善 | Thinkgamer的博客</title>
+  <title>值得收藏｜论文阅读笔记集锦 | 科技向善 | Thinkgamer的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <style>
+    .pace .pace-progress {
+        background: #6d6d6d; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #6d6d6d; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #6d6d6d;    /*上边框颜色*/
+        border-left-color: #6d6d6d;    /*左边框颜色*/
+    }
+  </style>
   <meta name="description" content="关于推荐系统的论文每年都层出不穷，数不胜数，本文章主要是集合以往读过的一些经典论文，希望对你有帮助。论文笔记详情如下：">
 <meta name="keywords" content="值得收藏,论文">
 <meta property="og:type" content="article">
-<meta property="og:title" content="值得收藏｜论文阅读笔记集锦.md">
+<meta property="og:title" content="值得收藏｜论文阅读笔记集锦">
 <meta property="og:url" content="http://thinkgamer.cn/2019/07/10/值得收藏/值得收藏｜论文阅读笔记集锦/index.html">
 <meta property="og:site_name" content="科技向善 | Thinkgamer的博客">
 <meta property="og:description" content="关于推荐系统的论文每年都层出不穷，数不胜数，本文章主要是集合以往读过的一些经典论文，希望对你有帮助。论文笔记详情如下：">
 <meta property="og:image" content="http://thinkgamer.cn/assets/img/gongzhonghao.jpg">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2022-03-14T17:06:51.737Z">
+<meta property="og:updated_time" content="2022-03-15T15:30:02.752Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="值得收藏｜论文阅读笔记集锦.md">
+<meta name="twitter:title" content="值得收藏｜论文阅读笔记集锦">
 <meta name="twitter:description" content="关于推荐系统的论文每年都层出不穷，数不胜数，本文章主要是集合以往读过的一些经典论文，希望对你有帮助。论文笔记详情如下：">
 <meta name="twitter:image" content="http://thinkgamer.cn/assets/img/gongzhonghao.jpg">
   
@@ -47,7 +62,7 @@
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
-<div class="overlay" style="background: #7F7F7F"></div>
+<div class="overlay" style="background: #122A0A"></div>
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
@@ -65,11 +80,9 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/categories/技术篇/">技术篇</a></li>
+				<li><a href="/categories/技术篇">技术篇</a></li>
 	        
-				<li><a href="/categories/随手记/">随手记</a></li>
-	        
-				<li><a href="/categories/夏未眠/">夏未眠</a></li>
+				<li><a href="/categories/随手记">随手记</a></li>
 	        
 				<li><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
 	        
@@ -116,7 +129,7 @@
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       
 <nav id="mobile-nav">
-  	<div class="overlay js-overlay" style="background: #7F7F7F"></div>
+  	<div class="overlay js-overlay" style="background: #122A0A"></div>
 	<div class="btnctn js-mobile-btnctn">
   		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
 	</div>
@@ -132,8 +145,6 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>科技向善，知识无界！<i class="icon icon-quo-right"></i></p>
 			
 			
-			
-				
 			
 				
 			
@@ -169,15 +180,13 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 20%"><a href="/">主页</a></li>
+					<li style="width: 25%"><a href="/">主页</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/技术篇/">技术篇</a></li>
+					<li style="width: 25%"><a href="/categories/技术篇">技术篇</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/随手记/">随手记</a></li>
+					<li style="width: 25%"><a href="/categories/随手记">随手记</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/夏未眠/">夏未眠</a></li>
-		        
-					<li style="width: 20%"><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
+					<li style="width: 25%"><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
 		        
 				</ul>
 			</nav>
@@ -199,7 +208,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      值得收藏｜论文阅读笔记集锦.md
+      值得收藏｜论文阅读笔记集锦
     </h1>
   
 
@@ -418,6 +427,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    目录，不存在的…
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -432,7 +454,6 @@
   
 
   
-
 
           </div>
         </div>
@@ -455,7 +476,7 @@
       </div>
     </div>
 
-  </div>
+  </div>  
 </footer>
     </div>
     <script>
@@ -557,11 +578,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -578,10 +599,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">随手记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">这夏未眠</a>
               </li>
              
               <li class="article-tag-list-item">

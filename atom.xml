@@ -75,11 +75,11 @@
   </entry>
   
   <entry>
-    <title>值得收藏｜论文阅读笔记集锦.md</title>
+    <title>值得收藏｜论文阅读笔记集锦</title>
     <link href="http://thinkgamer.cn/2019/07/10/%E5%80%BC%E5%BE%97%E6%94%B6%E8%97%8F/%E5%80%BC%E5%BE%97%E6%94%B6%E8%97%8F%EF%BD%9C%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E9%9B%86%E9%94%A6/"/>
     <id>http://thinkgamer.cn/2019/07/10/值得收藏/值得收藏｜论文阅读笔记集锦/</id>
     <published>2019-07-10T00:05:01.000Z</published>
-    <updated>2022-03-14T17:06:51.737Z</updated>
+    <updated>2022-03-15T15:30:02.752Z</updated>
     
     <content type="html"><![CDATA[<p>关于推荐系统的论文每年都层出不穷，数不胜数，本文章主要是集合以往读过的一些经典论文，希望对你有帮助。论文笔记详情如下：</p><a id="more"></a><ul><li><a href="https://mp.weixin.qq.com/s/f8R7gLGEU_eznqz2ZZBa0w" target="_blank" rel="external">基于三部图网络结构的知识推荐算法</a></li><li><a href="https://mp.weixin.qq.com/s/QmYfqQ0HU2ZWzp3U8ci2qw" target="_blank" rel="external">Entire Space Multi-Task Model</a></li><li><a href="https://mp.weixin.qq.com/s/YovZKGd2BDqnpW5BBGLA-A" target="_blank" rel="external">序列推荐模型 TransRec</a></li><li><a href="https://mp.weixin.qq.com/s/YVtTDBz2GN7fKymuydM7vw" target="_blank" rel="external">序列推荐模型 TransFM</a></li><li><a href="https://mp.weixin.qq.com/s/hc1Y9NNpf_NYT4zlbWM0hw" target="_blank" rel="external">文本相似度计算综述</a></li><li><a href="https://mp.weixin.qq.com/s/boUy1h_SuiMohLBu1Tatkg" target="_blank" rel="external">LinUCB论文的思想解读、场景应用与痛点说明</a></li><li><a href="https://mp.weixin.qq.com/s/EUEqO9JkoerdxVrcXuMDTw" target="_blank" rel="external">看腾讯如何玩转实时推荐-TencentRec</a></li><li><a href="https://mp.weixin.qq.com/s/M4Wx2zsS9pNZf7ttFdq3Lg" target="_blank" rel="external">被“玩烂”了的协同过滤加上神经网络怎么搞？</a></li><li><a href="https://mp.weixin.qq.com/s/dpoyFTmxUMBw9lMCSIGw6g" target="_blank" rel="external">组推荐系统及其应用研究</a></li><li><a href="https://mp.weixin.qq.com/s/0jHaNYOs_aIFMr0ZibdY2Q" target="_blank" rel="external">AGREE-基于注意力机制的群组推荐（附代码）</a></li><li><a href="https://mp.weixin.qq.com/s/ozKXQCgzuM1IL1O6cDFVUA" target="_blank" rel="external">从DSSM语义匹配到Google的双塔深度模型召回和广告场景中的双塔模型思考</a></li><li><a href="https://mp.weixin.qq.com/s/RJHIUm0SPRr-BZjyu8xDTw" target="_blank" rel="external">Airbnb Embedding的实践和思考</a></li><li><a href="https://mp.weixin.qq.com/s/XiHzsjTK0TpQSjaOC6qFjw" target="_blank" rel="external">万物皆可Vector之语言模型：从N-Gram到NNLM、RNNLM</a></li><li><a href="https://mp.weixin.qq.com/s/Yy-mAPOdIEj0u65mxCwzaQ" target="_blank" rel="external">万物皆可Vector之Word2vec：2个模型、2个优化及实战使用</a></li><li><a href="https://mp.weixin.qq.com/s/xXYkySG7JHuCux862jXwcQ" target="_blank" rel="external">Item2vec中值得品味的8个经典tricks</a></li><li><a href="https://mp.weixin.qq.com/s/joCSQi-Mmuiz0Eejp0dbng" target="_blank" rel="external">Sentence2Vec &amp; GloVe 算法原理、推导与实现</a></li><li><a href="https://mp.weixin.qq.com/s/eskrJxfgfF7xvWRmurz20A" target="_blank" rel="external">Doc2vec的算法原理、代码实现及应用启发</a></li><li><a href="https://mp.weixin.qq.com/s/qaIsyRESwVzkK2Ey18cxkw" target="_blank" rel="external">DeepWalk的算法原理、代码实现和应用说明</a></li><li><a href="https://mp.weixin.qq.com/s/6LlgZfOVhgS-ht8xCL9nxA" target="_blank" rel="external">Node2vec算法原理、代码实战和在微信朋友圈Lookalike的应用</a></li><li><a href="https://mp.weixin.qq.com/s/CEkyHyFP8lgzvfJAWfgruQ" target="_blank" rel="external">LINE算法原理、代码实战和应用</a></li><li><a href="https://mp.weixin.qq.com/s/OcxwZHmqRhMjT6YEcQyFuQ" target="_blank" rel="external">一种基于Embedding和Mapping的跨域推荐方法</a></li><li><a href="https://mp.weixin.qq.com/s/WRZPGVxTR2370mXM03ytMQ" target="_blank" rel="external">粗排阶段性能与效率的权衡：基于可学习特征选择的方法</a></li><li><a href="https://mp.weixin.qq.com/s/QXb-JGGnGMa28qfxzE6RIg" target="_blank" rel="external">结合论文看Youtube推荐系统中召回和排序的演进之路（上）篇</a></li><li><a href="https://mp.weixin.qq.com/s/HasWbP_yMaPaDo92XuPLKQ" target="_blank" rel="external">结合论文看Youtube推荐系统中召回和排序的演进之路（中）篇之深度召回排序</a></li></ul><p>不定期更新，欢迎Follow：</p><ul><li><a href="http://mp.weixin.qq.com/mp/homepage?__biz=MzI2MDU3OTgyOQ==&amp;hid=1&amp;sn=8fd2e718341c2dfb59493084c3ed7a76&amp;scene=18#wechat_redirect" target="_blank" rel="external">http://mp.weixin.qq.com/mp/homepage?__biz=MzI2MDU3OTgyOQ==&amp;hid=1&amp;sn=8fd2e718341c2dfb59493084c3ed7a76&amp;scene=18#wechat_redirect</a></li><li><a href="https://www.zhihu.com/column/c_1225493846701826048" target="_blank" rel="external">https://www.zhihu.com/column/c_1225493846701826048</a></li></ul><hr><center>【技术服务】，详情点击查看：<a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg" target="_blank" rel="external">https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg</a></center><hr><center><img src="/assets/img/gongzhonghao.jpg"><br>扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！</center><hr><center><img src="https://img-blog.csdnimg.cn/20191105121139935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center><p><br></p><center><img src="https://img-blog.csdnimg.cn/20191105121309716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly90aGlua2dhbWVyLmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70" width="80%"></center>]]></content>
     
@@ -467,29 +467,6 @@
     
     
       <category term="随手记" scheme="http://thinkgamer.cn/tags/%E9%9A%8F%E6%89%8B%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>这夏未眠.简介</title>
-    <link href="http://thinkgamer.cn/2016/09/17/%E5%A4%8F%E6%9C%AA%E7%9C%A0/%E8%BF%99%E5%A4%8F%E6%9C%AA%E7%9C%A0-%E7%AE%80%E4%BB%8B/"/>
-    <id>http://thinkgamer.cn/2016/09/17/夏未眠/这夏未眠-简介/</id>
-    <published>2016-09-17T07:02:03.000Z</published>
-    <updated>2022-03-14T17:06:51.738Z</updated>
-    
-    <content type="html"><![CDATA[<p>书整体分为三部分《夏之过往》，《夏之流年》，《夏之未至》。整本书讲的是男主人公顾艾哲（小艾）与莫晨（晨晨）之间的故事，从初中到高中再到大学，从相遇到相知再到相离。</p><p>两人同在陌乘一中念初中，同班同学，在中考来临的那段日子，两人相互鼓励，于是顾艾哲（小艾）考上了他从来都没有想过能考上的孟川一高，而莫晨（晨晨）呢，考上了预料之中的平阳一高，而她在这之前却从来没告诉过顾艾哲（小艾）她要去平阳，就这样，两个人分开了，一些都看起来那么顺理成章，一切又看起来那么暗淡失望。</p><a id="more"></a><p>在经历过高中的二年之后，顾艾哲（小艾）终于联系上了莫晨（晨晨），那天晚上，他用妈妈的电话给莫晨（晨晨）通了两个小时的电话，似乎要把两人两年里没有说的话都说完，可是有太多的话是无法用言语表达的，就这样电话欠费了，终止了聊天，可是那天晚上，小艾高兴的一宿没睡，那一晚上，他的笑容都是幸福的。</p><p>可是事情永远不会那么顺利，在香山公园里，当他拿起他买的情侣戒指送给晨晨时，晨晨没有接受，说了一堆他也没有听进去的话，就这样，又开始了分离，而谁也不知道这次分离竟然时一辈子的再也不见。</p><p>后来的后来，他又遇见了别的女孩，不知道是不是因为后来的女孩都像小艾记忆里的莫晨。只知道，他都很珍惜。</p><hr><center><img src="/assets/img/gongzhonghao.jpg"><br>扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！</center>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;书整体分为三部分《夏之过往》，《夏之流年》，《夏之未至》。整本书讲的是男主人公顾艾哲（小艾）与莫晨（晨晨）之间的故事，从初中到高中再到大学，从相遇到相知再到相离。&lt;/p&gt;
-&lt;p&gt;两人同在陌乘一中念初中，同班同学，在中考来临的那段日子，两人相互鼓励，于是顾艾哲（小艾）考上了他从来都没有想过能考上的孟川一高，而莫晨（晨晨）呢，考上了预料之中的平阳一高，而她在这之前却从来没告诉过顾艾哲（小艾）她要去平阳，就这样，两个人分开了，一些都看起来那么顺理成章，一切又看起来那么暗淡失望。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="夏未眠" scheme="http://thinkgamer.cn/categories/%E5%A4%8F%E6%9C%AA%E7%9C%A0/"/>
-    
-    
-      <category term="这夏未眠" scheme="http://thinkgamer.cn/tags/%E8%BF%99%E5%A4%8F%E6%9C%AA%E7%9C%A0/"/>
     
   </entry>
   

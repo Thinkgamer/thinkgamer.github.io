@@ -8,6 +8,21 @@
   <link rel="dns-prefetch" href="http://thinkgamer.cn">
   <title>2016有感：一切的闹闹哄哄，只是他在水帘洞躲避风沙那晚做的一个梦 | 科技向善 | Thinkgamer的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <style>
+    .pace .pace-progress {
+        background: #6d6d6d; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #6d6d6d; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #6d6d6d;    /*上边框颜色*/
+        border-left-color: #6d6d6d;    /*左边框颜色*/
+    }
+  </style>
   <meta name="description" content="送同学走之后，我在路边默默的站了有五分钟，突然觉得我无处可去，有一种深入骨髓的悲哀和无奈，然后我就想起了一个命题，“如今的你，何去何从！”我不知道为什么会突然想到这样一个命题，或许是我们每个人都是至尊宝吧。其实每个人对《大话》的理解都是有所不同的，同样的人在不同的时期认识也会有偏差，就好比我第一次看的时候，笑得腹背抽筋，呲牙咧嘴，第二次看的时候，笑得少了，想的多了，过后便什么感觉也没有了，第三次看">
 <meta name="keywords" content="随手记">
 <meta property="og:type" content="article">
@@ -46,7 +61,7 @@
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
-<div class="overlay" style="background: #7F7F7F"></div>
+<div class="overlay" style="background: #122A0A"></div>
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
@@ -64,11 +79,9 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/categories/技术篇/">技术篇</a></li>
+				<li><a href="/categories/技术篇">技术篇</a></li>
 	        
-				<li><a href="/categories/随手记/">随手记</a></li>
-	        
-				<li><a href="/categories/夏未眠/">夏未眠</a></li>
+				<li><a href="/categories/随手记">随手记</a></li>
 	        
 				<li><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
 	        
@@ -115,7 +128,7 @@
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       
 <nav id="mobile-nav">
-  	<div class="overlay js-overlay" style="background: #7F7F7F"></div>
+  	<div class="overlay js-overlay" style="background: #122A0A"></div>
 	<div class="btnctn js-mobile-btnctn">
   		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
 	</div>
@@ -131,8 +144,6 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>科技向善，知识无界！<i class="icon icon-quo-right"></i></p>
 			
 			
-			
-				
 			
 				
 			
@@ -168,15 +179,13 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 20%"><a href="/">主页</a></li>
+					<li style="width: 25%"><a href="/">主页</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/技术篇/">技术篇</a></li>
+					<li style="width: 25%"><a href="/categories/技术篇">技术篇</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/随手记/">随手记</a></li>
+					<li style="width: 25%"><a href="/categories/随手记">随手记</a></li>
 		        
-					<li style="width: 20%"><a href="/categories/夏未眠/">夏未眠</a></li>
-		        
-					<li style="width: 20%"><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
+					<li style="width: 25%"><a href="/2088/08/08/合作/商务合作介绍">🔥 商务合作🔥</a></li>
 		        
 				</ul>
 			</nav>
@@ -403,6 +412,27 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#对《大话》的解读"><span class="toc-number">1.</span> <span class="toc-text">对《大话》的解读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#他好像一条狗呀！"><span class="toc-number">2.</span> <span class="toc-text">他好像一条狗呀！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#那句意中人，满足了多少人的少女心"><span class="toc-number">3.</span> <span class="toc-text">那句意中人，满足了多少人的少女心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#我猜中了开头，可是我猜不着这结局"><span class="toc-number">4.</span> <span class="toc-text">我猜中了开头，可是我猜不着这结局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#《大话》把遗憾和难题抛给了时间"><span class="toc-number">5.</span> <span class="toc-text">《大话》把遗憾和难题抛给了时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如今的你，何去何从"><span class="toc-number">6.</span> <span class="toc-text">如今的你，何去何从</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加长版加了什么"><span class="toc-number">7.</span> <span class="toc-text">加长版加了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">8.</span> <span class="toc-text">一切的闹闹哄哄，只是他在水帘洞躲避风沙那晚做的一个梦
+
+
+
+
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+
+
+</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -417,7 +447,6 @@
   
 
   
-
 
           </div>
         </div>
@@ -440,7 +469,7 @@
       </div>
     </div>
 
-  </div>
+  </div>  
 </footer>
     </div>
     <script>
@@ -542,11 +571,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -563,10 +592,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">随手记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">这夏未眠</a>
               </li>
              
               <li class="article-tag-list-item">

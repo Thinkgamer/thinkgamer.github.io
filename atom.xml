@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>文艺与Code | Thinkgamer的博客</title>
+  <title>科技向善 | Thinkgamer的博客</title>
   <icon>https://www.gravatar.com/avatar/1b9c8afc3fc1dc6be26316835c6f4fc4</icon>
-  <subtitle>All In CTR、DL、ML、RL、NLP、KG</subtitle>
+  <subtitle>科技向善，知识无界！</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://thinkgamer.cn/"/>

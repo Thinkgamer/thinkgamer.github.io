@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="科技向善，知识无界！">
+    <meta property="og:type" content="website">
+    <meta name="description" content="科技向善，知识无界！">
+    <meta name="keyword"  content="Python,Django,爬虫,Hadoop,Maching Learning,数据挖掘,机器学习,云计算,大数据,深度学习,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,用户体验">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Hexo-Yilia加入相册功能 - 科技向善 | Thinkgamer&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 科技向善，知识无界！ </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/assets/img/head.jpg" />
+        </div>
+        <div class="name">
+            <i>Thinkgamer</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E9%A1%B5%E6%96%B0%E5%BB%BA%E7%9B%B8%E5%86%8C%E9%93%BE%E6%8E%A5"><span class="toc-text">主页新建相册链接</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E7%9B%AE%E5%BD%95%E5%B9%B6%E6%8B%B7%E8%B4%9D%E7%9B%B8%E5%BA%94%E6%96%87%E4%BB%B6"><span class="toc-text">新建目录并拷贝相应文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9"><span class="toc-text">文件修改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E6%88%90json"><span class="toc-text">生成json</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88%E5%92%8C%E9%83%A8%E7%BD%B2"><span class="toc-text">本地预览和部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88"><span class="toc-text">本地预览</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 科技向善，知识无界！ </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Hexo-Yilia加入相册功能
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-12-14 17:12:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#随手记" title="随手记">随手记</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <p>参考：<a href="http://maker997.com/2017/07/01/hexo-Yilia-%E4%B8%BB%E9%A2%98%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD">点击查看</a></p>
+<span id="more"></span>
+
+<p>但是其中有一些小问题，自己便重新整理了一下（本文适用于使用github存放照片）</p>
+<h1 id="主页新建相册链接"><a href="#主页新建相册链接" class="headerlink" title="主页新建相册链接"></a>主页新建相册链接</h1><p>主题_config.json文件的menu 中加入 相册和对应的链接</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">themes/yilia/_config.json</span><br><span class="line"></span><br><span class="line">menu:</span><br><span class="line">  主页: /</span><br><span class="line">  <span class="string">...</span> <span class="string">...</span></span><br><span class="line">  相册: <span class="string">/photos</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="新建目录并拷贝相应文件"><a href="#新建目录并拷贝相应文件" class="headerlink" title="新建目录并拷贝相应文件"></a>新建目录并拷贝相应文件</h1><p>使用的是litten 大神的博客 photos文件夹，对应的路径为：<br><a href="https://github.com/litten/BlogBackup/tree/master/source/photos">https://github.com/litten/BlogBackup/tree/master/source/photos</a></p>
+<p>自己的项目根目录下的source文件夹下新建photos文件夹，将下载的几个文件放在该文件夹中，或者不用新建，直接将下载的photos文件夹放在source目录下。</p>
+<h1 id="文件修改"><a href="#文件修改" class="headerlink" title="文件修改"></a>文件修改</h1><ol>
+<li>修改 ins.js 文件的 render()函数<br> 这个函数是用来渲染数据的<br>修改图片的路径地址.minSrc 小图的路径. src 大图的路径.修改为自己的图片路径(github的路径)<br>例如我的为：<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> minSrc = <span class="string">&#x27;https://raw.githubusercontent.com/Thinkgamer/GitBlog/master/min_photos/&#x27;</span> + <span class="keyword">data</span>.link[i] + <span class="string">&#x27;.min.jpg&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> src = <span class="string">&#x27;https://raw.githubusercontent.com/Thinkgamer/GitBlog/master/photos/&#x27;</span> + <span class="keyword">data</span>.link[i];</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="生成json"><a href="#生成json" class="headerlink" title="生成json"></a>生成json</h1><p>1：下载相应python工具文件</p>
+<ul>
+<li>tools.py</li>
+<li>ImageProcess.py</li>
+</ul>
+<p>下载地址：<a href="https://github.com/Thinkgamer/GitBlog">https://github.com/Thinkgamer/GitBlog</a></p>
+<p>2：新建photos和min_photos文件夹<br>在项目根目录下创建，用来存放照片和压缩后的照片</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir photos</span><br><span class="line">mkdir min_photos</span><br></pre></td></tr></table></figure>
+<p>3：py文件和文件夹都放在项目根目录下</p>
+<p>4：生成json<br>执行</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">python</span> tools.<span class="keyword">py</span></span><br></pre></td></tr></table></figure>
+<p>如果提示：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Traceback</span> (most recent call last):</span><br><span class="line">  <span class="built_in">File</span> <span class="string">&quot;tools.py&quot;</span>, line <span class="number">13</span>, in &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    from PIL <span class="keyword">import</span> Image</span><br><span class="line">ImportError: No <span class="keyword">module</span> named PIL</span><br></pre></td></tr></table></figure>
+<p>说明你没有安装pillow，执行以下命令安装即可</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> pillow</span><br></pre></td></tr></table></figure>
+
+<p>如果报错：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ValueError: <span class="built_in">time</span> data <span class="string">&#x27;DSC&#x27;</span> does <span class="keyword">not</span> <span class="built_in">match</span> <span class="built_in">format</span> <span class="string">&#x27;%Y-%m-%d&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>说明你照片的命名方式不合格，这里必须命名为以下这样的格式（当然时间是随意的）</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">2016</span>-<span class="number">10</span>-<span class="number">12</span>_xxx.jpg/png</span><br></pre></td></tr></table></figure>
+<p>ok，至此会在min_photos文件夹下生成同名的文件，但是大小会小很多</p>
+<h1 id="本地预览和部署"><a href="#本地预览和部署" class="headerlink" title="本地预览和部署"></a>本地预览和部署</h1><h2 id="本地预览"><a href="#本地预览" class="headerlink" title="本地预览"></a>本地预览</h2><p>项目根目录下执行</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">hexo s</span></span><br></pre></td></tr></table></figure>
+<p>浏览器4000端口访问，按照上边的方式进行配置，正常情况下你是看不到图片的，通过调试可以发现图片的url中后缀变成了 xxx.jpg.jpg，所以我们要去掉一个jpg</p>
+<p>改正方法<br>ins.js&#x2F;render 函数</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> minSrc = <span class="string">&#x27;https://raw.githubusercontent.com/Thinkgamer/GitBlog/master/min_photos/&#x27;</span> + <span class="keyword">data</span>.link[i] + <span class="string">&#x27;.min.jpg&#x27;</span>;</span><br><span class="line"></span><br><span class="line">换成</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> minSrc = <span class="string">&#x27;https://raw.githubusercontent.com/Thinkgamer/GitBlog/master/min_photos/&#x27;</span> + <span class="keyword">data</span>.link[i];</span><br><span class="line"></span><br><span class="line">注释掉该行：</span><br><span class="line">src += <span class="string">&#x27;.jpg&#x27;</span>; </span><br></pre></td></tr></table></figure>
+
+<p>到这里没完，路径都对了，但是在浏览器中还是不能看到图片，调试发现，下载大神的photos文件夹的ins.js中有一行代码，饮用了一张图片，默认情况下，在你的项目中，这张图片是不存在的，改正办法就是在对应目录下放一张图片，并修改相应的名字</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">src</span><span class="operator">=</span><span class="string">&quot;/assets/img/empty.png</span></span><br></pre></td></tr></table></figure>
+
+<p>ok，至此刷新浏览器是可以看到图片的，如果还看不到，应该就是浏览器缓存问题了，如果还有问题，可以加我微信进行沟通：gyt13342445911</p>
+<hr>
+<center>
+<img src="/assets/img/gongzhonghao.jpg">
+<br>
+扫一扫 关注微信公众号！号主 专注于搜索和推荐系统，尝试使用算法去更好的服务于用户，包括但不局限于机器学习，深度学习，强化学习，自然语言理解，知识图谱，还不定时分享技术，资料，思考等文章！
+</center>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/assets/img/weixin.jpeg">
+        <p> 你的支持是我进步的最大动力！ </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/5352480017">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/thinkgamer">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://item.jd.com/12671716.html">处女作：推荐系统开发实战</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/vkDfg3v5C7QPrLOTvTRH2w">搜索与推荐Wiki</a></span>
+        <span>/</span>
+        
+        <span><a href="https://blog.csdn.net/gamer_gyt">CSDN博客</a></span>
+        <span>/</span>
+        
+        <span><a href="https://mp.weixin.qq.com/s/PtX9ukKRBmazAWARprGIAg">商务合作</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
